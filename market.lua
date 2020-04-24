@@ -155,9 +155,12 @@ function callBUY(price ,dt)
 
     count_buy = count_buy + 1;
 
-    transaction.send("BUY", price, 1 );
 
-    transaction.send("SELL", price + SPRED, 1 );
+
+    
+  --  transaction.send("BUY", price, 1 );
+
+ --   transaction.send("SELL", price + SPRED, 1 );
 
 end 
 

@@ -27,16 +27,10 @@ end;
 
 local function show(bid)
       -- https://smart-lab.ru/blog/500526.php
-      
-      -- row = InsertRow(t_id, -1)
-      -- SetCell(t_id, row, 0, arr[j]["short_name"])
-      -- price = arr[j]["price"]
-      -- SetCell(t_id, row, 1, string.format("%.2f", price), price)
-      
-      
+        
       if  #bid > 0  then 
         for j=1,  #bid  do 
-          SetCell(t_id, 1, j, tostring(bid[j]));
+    --      SetCell(t_id, 1, j, tostring(bid[j]));
          end;  
      end; 
 end; 

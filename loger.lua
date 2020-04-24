@@ -1,6 +1,6 @@
 -- scriptTest.lua (in your scripts directory)
 local M = {}
-local log = getScriptPath().."\\TakeprofitLog.txt";
+local log = getScriptPath().."\\log\\TakeprofitLog.txt";
 local function save(text)
         -- Пытается открыть файл в режиме "чтения/записи"
            f = io.open(log,"a");

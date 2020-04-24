@@ -27,6 +27,7 @@ package.path = package.path
         require("table")
 
 setting = {
+         ['emulation'] = false,
          ['status'] = false,
          ['buy'] = true,
          ['sell'] = true,

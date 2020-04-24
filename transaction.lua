@@ -49,9 +49,8 @@ local function send(typeMarket, price, quantity )
 
 	  if res ~= "" then	
 		message(res);
-		
+
 		loger.save( 'Transaction  res ' .. res )
-	 
 	  return nil, res
 	   
 
