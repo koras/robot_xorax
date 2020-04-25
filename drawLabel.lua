@@ -13,9 +13,13 @@ local PicPathBuy = getScriptPath()..'\\images\\myDeals_buy';
 local PicPathEvent = getScriptPath()..'\\images\\myDeals_'; 
 local loger = dofile(getScriptPath() .. "\\loger.lua")
  
-local function set(Operation, Price , datetime, count)
+local function set(Operation, Price , datetime, count, textInfo)
   count = 1;
-  
+
+  if(textInfo == nul)then 
+    textInfo = '';
+  end;
+    
      
   hour = datetime.hour;
 
@@ -67,8 +71,8 @@ local function set(Operation, Price , datetime, count)
             label_params['IMAGE_PATH'] = PicPathSell..count..'.bmp'; 
           end;   
 
-                 
-          if Operation == 'red' then 
+           
+          if Operation == 'red' or Operation == 'green'  then 
             label_params['IMAGE_PATH'] = PicPathEvent..Operation..'.bmp'; 
           else   
         --    label_params['IMAGE_PATH'] = PicPathSell..count..'.bmp'; 
@@ -90,7 +94,9 @@ local function set(Operation, Price , datetime, count)
            label_params['FONT_FACE_NAME'] = "Webdings"; -- 'Verdana'; -- STRING �������� ������ (�������� �Arial�)  
            label_params['FONT_HEIGHT'] = 14; -- DOUBLE ������ ������  
            --   label_params['HINT'] = TradesTmp[j].Hint:gsub("_", "\n"); -- STRING ����� ���������
-          label_params['HINT'] = 'Price ' .. Price; -- STRING ����� ���������
+          label_params['HINT'] = 'Price ' .. Price .. " \n "..textInfo
+
+
         --os.date("%Y%m%d",os.time())
         
       --  loger.save(Operation.. '  '.. Settings['tag'].. '  '..  Price .. " ������� ��� ������� ���� � ����� - "..     label_params['DATE'] ..'   '..label_params['TIME'].. '  '.. label_params['IMAGE_PATH'] )

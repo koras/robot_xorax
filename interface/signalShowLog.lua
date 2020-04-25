@@ -5,8 +5,6 @@ local init = {}
 
 arrTableLog = {};
 
-local limitShow = 4;
-
 local showLabel = true;
 
 
@@ -18,7 +16,6 @@ local label = dofile(getScriptPath() .. "\\drawLabel.lua");
 
 
 createTableLog = false;
-
 local wordTitleTableLog = {
 	['number'] = "№",
 	['time'] = "Time",
@@ -28,7 +25,6 @@ local wordTitleTableLog = {
 	['description'] = "Description",
 	['log_signal'] = 'Log signals'
 };
- 
   
 
 -- dt - current time
@@ -38,9 +34,9 @@ local wordTitleTableLog = {
 
 function getEventLog(_event)
  	arr = {
-		[1] = 'asdfasdfasdf',  
-		[2] = 'a123f',  
-		[3] = 'asdfasdfasdf',  
+		[1] = 'There was a purchase in this range',  
+		[2] = 'We sold at current price',  
+		[3] = 'We do not buy where we bought before',  
 	}
 	
 	loger.save( 'getEventLog(event)  '   );  
@@ -51,9 +47,6 @@ local function addSignal(dt, event, status, price)
 	
 	
 	CreateNewTableLogEvent();
-
-	
---	datetime.year .. '0'.. datetime.month .. datetime.day; .min .hour
 
 	local arr = {
 		['dt'] =  dt,
@@ -77,13 +70,20 @@ end;
  function updateLogSignal(_arr)   
 	if #arrTableLog == 0 then return; end; 
 
-	--limitShow
 	itter = 1
 	if #arrTableLog > 35 then
 		itter = #arrTableLog-35
 	end
 
-	label.set('red', _arr.price , _arr.dt, 1);
+
+	if(showLabel) then
+		if(_arr.status) then
+			label.set('red', _arr.price , _arr.dt, 1, _arr.description);
+		else 
+			label.set('green', _arr.price , _arr.dt, 1, _arr.description);
+		end
+	end
+
 
 --	loger.save(   " ============ " )
 	for i = #arrTableLog+1 , itter, -1 do
@@ -132,7 +132,6 @@ end;
 
  function setLabelTableLog(_arr)  
 if createTableLog == false then return; end;
-
 end;
    
 

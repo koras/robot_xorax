@@ -85,12 +85,7 @@ function long(price, dt, levelLocal , event) -- решение
      --   loger.save(#bid .. '  SPRED ' .. '  buy long ' ..  price )
                         -- просто покупаем
         if  LIMIT >= #bid  then
-
                     local checkRange = true;
-                   
-
-
-
             for j=1,  #bid  do
                         -- здесь узнаю, была ли покупка в этом диапозоне
                 if  price + SPRED_LONG_BUY > bid[j]  then
@@ -117,10 +112,25 @@ function long(price, dt, levelLocal , event) -- решение
                         SPRED_LONG_TREND_DOWN_LAST_PRICE = price; -- записываем последнюю покупку
                          callBUY(price,  dt); 
                         -- SPRED_LONG_TREND_DOWN
-                    end;
-                end;  
 
-            end;       
+                        
+                    else
+                        signalShowLog.addSignal(datetime, 3, true, priceLocal);
+                    
+                    end;
+
+
+
+                    
+                else
+                    signalShowLog.addSignal(datetime, 2, true, priceLocal);
+                end;  
+            else
+                signalShowLog.addSignal(datetime, 1, true, priceLocal);
+            end;  
+            
+            
+
         end;  
     end;  
 end

@@ -188,6 +188,8 @@ basis = 9
     
    function eventTranc( priceLocal , levelLocal ,datetime, event) 
       -- buy or sell
+     
+
       market.decision(event, priceLocal, datetime , levelLocal) 
   --    loger.save( 'price ' .. priceLocal ..' level '.. levelLocal .. ' event '..event   )
    end
@@ -202,96 +204,19 @@ basis = 9
 
 
    function main()
-      local dt = {
-         ['hour'] = 21,
-         ['min'] = 29,
-         ['sec']=30,
-         ['day']=24,
-         ['month']=4,
-         ['year']= 2020,
-      }; 
+      -- local dt = {
+      --    ['hour'] = 21,
+      --    ['min'] = 29,
+      --    ['sec']=30,
+      --    ['day']=24,
+      --    ['month']=4,
+      --    ['year']= 2020,
+      -- }; 
  
-      signalShowLog.addSignal(dt, 1, false, 21.90);
-      signalShowLog.addSignal(dt, 1, true, 21.95);
-      signalShowLog.addSignal(dt, 2, false, 21.20);
-      signalShowLog.addSignal(dt, 3, true, 21.50);
-
-      signalShowLog.addSignal(dt, 1, false, 21.90);
-      signalShowLog.addSignal(dt, 1, true, 21.95);
-      signalShowLog.addSignal(dt, 2, false, 21.20);
-      signalShowLog.addSignal(dt, 3, true, 21.50);
-
-      signalShowLog.addSignal(dt, 1, false, 21.90);
-      signalShowLog.addSignal(dt, 1, true, 21.95);
-      signalShowLog.addSignal(dt, 2, false, 21.20);
-      signalShowLog.addSignal(dt, 3, true, 21.50);
-
-      signalShowLog.addSignal(dt, 1, false, 21.90);
-      signalShowLog.addSignal(dt, 1, true, 21.95);
-      signalShowLog.addSignal(dt, 2, false, 21.20);
-      signalShowLog.addSignal(dt, 3, true, 21.50);
-
-      signalShowLog.addSignal(dt, 1, false, 21.90);
-      signalShowLog.addSignal(dt, 1, true, 21.95);
-      signalShowLog.addSignal(dt, 2, false, 21.20);
-      signalShowLog.addSignal(dt, 3, true, 21.50);
-
-      signalShowLog.addSignal(dt, 1, false, 21.90);
-      signalShowLog.addSignal(dt, 1, true, 21.95);
-      signalShowLog.addSignal(dt, 2, false, 21.20);
-      signalShowLog.addSignal(dt, 3, true, 21.50);
-
-      
-      signalShowLog.addSignal(dt, 1, false, 21.90);
-      signalShowLog.addSignal(dt, 1, true, 21.95);
-      signalShowLog.addSignal(dt, 2, false, 21.20);
-      signalShowLog.addSignal(dt, 3, true, 21.50);
-
-      signalShowLog.addSignal(dt, 1, false, 21.90);
-      signalShowLog.addSignal(dt, 1, true, 21.95);
-      signalShowLog.addSignal(dt, 2, false, 21.20);
-      signalShowLog.addSignal(dt, 3, true, 21.50);
-
-      signalShowLog.addSignal(dt, 1, false, 21.90);
-      signalShowLog.addSignal(dt, 1, true, 21.95);
-      signalShowLog.addSignal(dt, 2, false, 21.20);
-      signalShowLog.addSignal(dt, 3, true, 21.50);
-
-      signalShowLog.addSignal(dt, 1, false, 21.90);
-      signalShowLog.addSignal(dt, 1, true, 21.95);
-      signalShowLog.addSignal(dt, 2, false, 21.20);
-      signalShowLog.addSignal(dt, 3, true, 21.50);
-
-      signalShowLog.addSignal(dt, 1, false, 21.90);
-      signalShowLog.addSignal(dt, 1, true, 21.95);
-      signalShowLog.addSignal(dt, 2, false, 21.20);
-      signalShowLog.addSignal(dt, 3, true, 21.50);
-
-      signalShowLog.addSignal(dt, 1, false, 21.90);
-      signalShowLog.addSignal(dt, 1, true, 21.95);
-      signalShowLog.addSignal(dt, 2, false, 21.20);
-      signalShowLog.addSignal(dt, 2, false, 21.20);
-      signalShowLog.addSignal(dt, 3, true, 21.50);
-
-      signalShowLog.addSignal(dt, 1, false, 21.90);
-      signalShowLog.addSignal(dt, 1, true, 21.95);
-      signalShowLog.addSignal(dt, 2, false, 21.20);
-      signalShowLog.addSignal(dt, 3, true, 21.50);
-
-      signalShowLog.addSignal(dt, 1, false, 21.90);
-      signalShowLog.addSignal(dt, 1, true, 21.95);
-      signalShowLog.addSignal(dt, 2, false, 21.20);
-      signalShowLog.addSignal(dt, 3, true, 21.50);
-
-      signalShowLog.addSignal(dt, 1, false, 21.90);
-      signalShowLog.addSignal(dt, 1, true, 21.95);
-      signalShowLog.addSignal(dt, 2, false, 21.20);
-      signalShowLog.addSignal(dt, 3, true, 21.50);
-
-      signalShowLog.addSignal(dt, 1, false, 21.90);
-      signalShowLog.addSignal(dt, 1, true, 21.95);
-      signalShowLog.addSignal(dt, 2, false, 21.20);
-      signalShowLog.addSignal(dt, 3, true, 21.50);
+      -- signalShowLog.addSignal(dt, 1, false, 21.90);
+      -- signalShowLog.addSignal(dt, 1, true, 21.95);
+      -- signalShowLog.addSignal(dt, 2, false, 21.20);
+      -- signalShowLog.addSignal(dt, 3, true, 21.50);
 
 
   --    addSignal(dt, event, status, price)  
