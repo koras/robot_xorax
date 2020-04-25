@@ -1,11 +1,3 @@
---[[ ������� MA-����� (c)QuikLuaCSharp.ru
-!!! ��� ������������� ������ � ��������������� ����� �� ����-����� !!!
-  
-]]
-
- 
- 
-
 local lua51path = "C:\\Program Files (x86)\\Lua\\5.1\\" -- путь, куда установлен дистрибутив Lua 5.1 for Windows
 
 package.cpath = "./?.dll;./?51.dll;"
@@ -210,6 +202,100 @@ basis = 9
 
 
    function main()
+      local dt = {
+         ['hour'] = 21,
+         ['min'] = 29,
+         ['sec']=30,
+         ['day']=24,
+         ['month']=4,
+         ['year']= 2020,
+      }; 
+ 
+      signalShowLog.addSignal(dt, 1, false, 21.90);
+      signalShowLog.addSignal(dt, 1, true, 21.95);
+      signalShowLog.addSignal(dt, 2, false, 21.20);
+      signalShowLog.addSignal(dt, 3, true, 21.50);
+
+      signalShowLog.addSignal(dt, 1, false, 21.90);
+      signalShowLog.addSignal(dt, 1, true, 21.95);
+      signalShowLog.addSignal(dt, 2, false, 21.20);
+      signalShowLog.addSignal(dt, 3, true, 21.50);
+
+      signalShowLog.addSignal(dt, 1, false, 21.90);
+      signalShowLog.addSignal(dt, 1, true, 21.95);
+      signalShowLog.addSignal(dt, 2, false, 21.20);
+      signalShowLog.addSignal(dt, 3, true, 21.50);
+
+      signalShowLog.addSignal(dt, 1, false, 21.90);
+      signalShowLog.addSignal(dt, 1, true, 21.95);
+      signalShowLog.addSignal(dt, 2, false, 21.20);
+      signalShowLog.addSignal(dt, 3, true, 21.50);
+
+      signalShowLog.addSignal(dt, 1, false, 21.90);
+      signalShowLog.addSignal(dt, 1, true, 21.95);
+      signalShowLog.addSignal(dt, 2, false, 21.20);
+      signalShowLog.addSignal(dt, 3, true, 21.50);
+
+      signalShowLog.addSignal(dt, 1, false, 21.90);
+      signalShowLog.addSignal(dt, 1, true, 21.95);
+      signalShowLog.addSignal(dt, 2, false, 21.20);
+      signalShowLog.addSignal(dt, 3, true, 21.50);
+
+      
+      signalShowLog.addSignal(dt, 1, false, 21.90);
+      signalShowLog.addSignal(dt, 1, true, 21.95);
+      signalShowLog.addSignal(dt, 2, false, 21.20);
+      signalShowLog.addSignal(dt, 3, true, 21.50);
+
+      signalShowLog.addSignal(dt, 1, false, 21.90);
+      signalShowLog.addSignal(dt, 1, true, 21.95);
+      signalShowLog.addSignal(dt, 2, false, 21.20);
+      signalShowLog.addSignal(dt, 3, true, 21.50);
+
+      signalShowLog.addSignal(dt, 1, false, 21.90);
+      signalShowLog.addSignal(dt, 1, true, 21.95);
+      signalShowLog.addSignal(dt, 2, false, 21.20);
+      signalShowLog.addSignal(dt, 3, true, 21.50);
+
+      signalShowLog.addSignal(dt, 1, false, 21.90);
+      signalShowLog.addSignal(dt, 1, true, 21.95);
+      signalShowLog.addSignal(dt, 2, false, 21.20);
+      signalShowLog.addSignal(dt, 3, true, 21.50);
+
+      signalShowLog.addSignal(dt, 1, false, 21.90);
+      signalShowLog.addSignal(dt, 1, true, 21.95);
+      signalShowLog.addSignal(dt, 2, false, 21.20);
+      signalShowLog.addSignal(dt, 3, true, 21.50);
+
+      signalShowLog.addSignal(dt, 1, false, 21.90);
+      signalShowLog.addSignal(dt, 1, true, 21.95);
+      signalShowLog.addSignal(dt, 2, false, 21.20);
+      signalShowLog.addSignal(dt, 2, false, 21.20);
+      signalShowLog.addSignal(dt, 3, true, 21.50);
+
+      signalShowLog.addSignal(dt, 1, false, 21.90);
+      signalShowLog.addSignal(dt, 1, true, 21.95);
+      signalShowLog.addSignal(dt, 2, false, 21.20);
+      signalShowLog.addSignal(dt, 3, true, 21.50);
+
+      signalShowLog.addSignal(dt, 1, false, 21.90);
+      signalShowLog.addSignal(dt, 1, true, 21.95);
+      signalShowLog.addSignal(dt, 2, false, 21.20);
+      signalShowLog.addSignal(dt, 3, true, 21.50);
+
+      signalShowLog.addSignal(dt, 1, false, 21.90);
+      signalShowLog.addSignal(dt, 1, true, 21.95);
+      signalShowLog.addSignal(dt, 2, false, 21.20);
+      signalShowLog.addSignal(dt, 3, true, 21.50);
+
+      signalShowLog.addSignal(dt, 1, false, 21.90);
+      signalShowLog.addSignal(dt, 1, true, 21.95);
+      signalShowLog.addSignal(dt, 2, false, 21.20);
+      signalShowLog.addSignal(dt, 3, true, 21.50);
+
+
+  --    addSignal(dt, event, status, price)  
+
       label.init(tag);
       loger.save(  " start ");
       update();
@@ -244,6 +330,7 @@ basis = 9
    function OnStop()
       Run = false;
       control.deleteTable();
+      signalShowLog.deleteTable();
    end;
     
 

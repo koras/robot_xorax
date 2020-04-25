@@ -10,12 +10,12 @@ local hour = '';
  
 local PicPathSell = getScriptPath()..'\\images\\myDeals_sell';
 local PicPathBuy = getScriptPath()..'\\images\\myDeals_buy'; 
+local PicPathEvent = getScriptPath()..'\\images\\myDeals_'; 
 local loger = dofile(getScriptPath() .. "\\loger.lua")
  
 local function set(Operation, Price , datetime, count)
   count = 1;
- 
- 
+  
      
   hour = datetime.hour;
 
@@ -67,7 +67,13 @@ local function set(Operation, Price , datetime, count)
             label_params['IMAGE_PATH'] = PicPathSell..count..'.bmp'; 
           end;   
 
-          
+                 
+          if Operation == 'red' then 
+            label_params['IMAGE_PATH'] = PicPathEvent..Operation..'.bmp'; 
+          else   
+        --    label_params['IMAGE_PATH'] = PicPathSell..count..'.bmp'; 
+          end;   
+
             
            label_params['YVALUE'] = Price; -- DOUBLE �������� ��������� �� ��� Y, � �������� ����� ��������� �����  
            label_params['DATE'] = datetime.year .. '0'.. datetime.month .. datetime.day; -- DOUBLE ���� � ������� ��������Ļ, � ������� ��������� �����  

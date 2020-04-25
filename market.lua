@@ -6,11 +6,11 @@
 -- 751,97 ₽
 -- 7,5  = 0.01
 
-local loger = dofile(getScriptPath() .. "\\loger.lua")
-local label = dofile(getScriptPath() .. "\\drawLabel.lua")
-local bidTable = dofile(getScriptPath() .. "\\bidTable.lua")
-local transaction = dofile(getScriptPath() .. "\\transaction.lua")
-local signalShowLog = dofile(getScriptPath() .. "\\interface\\signalShowLog.lua")
+local loger = dofile(getScriptPath() .. "\\loger.lua");
+local label = dofile(getScriptPath() .. "\\drawLabel.lua");
+local bidTable = dofile(getScriptPath() .. "\\bidTable.lua");
+local transaction = dofile(getScriptPath() .. "\\transaction.lua");
+local signalShowLog = dofile(getScriptPath() .. "\\interface\\signalShowLog.lua");
  
  
 
@@ -54,7 +54,7 @@ end
 
 function long(price, dt, levelLocal , event) -- решение
      
-    signalShowLog.addSignal(dt, 0, status, price);
+ --   signalShowLog.addSignal(dt, 0, status, price);
 
     getSetting();
 
