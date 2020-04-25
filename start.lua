@@ -48,11 +48,12 @@ setting = {
  local uTransaction = dofile(getScriptPath() .. "\\transaction.lua");
  -- �����������
 local scriptTest = dofile(getScriptPath() .. "\\coutLine.lua");
-local candles = dofile(getScriptPath() .. "\\Signals\\gandle.lua");
+local candles = dofile(getScriptPath() .. "\\Signals\\candle.lua");
 local candles = dofile(getScriptPath() .. "\\Signals\\tradeSignal.lua"); 
 local loger = dofile(getScriptPath() .. "\\loger.lua");
 local label = dofile(getScriptPath() .. "\\drawLabel.lua");
 local control = dofile(getScriptPath() .. "\\interface\\control.lua");
+local signalShowLog = dofile(getScriptPath() .. "\\interface\\signalShowLog.lua");
 local FRACTALS = dofile(getScriptPath() .. "\\LuaIndicators\\FRACTALS.lua");
  
 --dofile(getWorkingFolder().."\\LuaIndicators\\FRACTALS.lua")

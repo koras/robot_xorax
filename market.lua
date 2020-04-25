@@ -10,8 +10,9 @@ local loger = dofile(getScriptPath() .. "\\loger.lua")
 local label = dofile(getScriptPath() .. "\\drawLabel.lua")
 local bidTable = dofile(getScriptPath() .. "\\bidTable.lua")
 local transaction = dofile(getScriptPath() .. "\\transaction.lua")
+local signalShowLog = dofile(getScriptPath() .. "\\interface\\signalShowLog.lua")
  
-
+ 
 
 M = {};
  
@@ -35,8 +36,6 @@ end
 -- event -- продажа или покупка
 
 local function decision(event, price, datetime, levelLocal) -- решение
-  --  label.set(event, price , datetime,levelLocal);
-  --   loger.save( event .. ' long ' ..  price )
     long(price, datetime, levelLocal , event);
 end
 
@@ -55,6 +54,8 @@ end
 
 function long(price, dt, levelLocal , event) -- решение
      
+    signalShowLog.addSignal(dt, 0, status, price);
+
     getSetting();
 
     if event == 'SELL'  then
@@ -124,7 +125,7 @@ function long(price, dt, levelLocal , event) -- решение
     end;  
 end
 
-function callSELL(price ,dt ,j);
+function callSELL(price ,dt ,j)
     -- метод срабатывает когда транкзакция на продажу исполняется
 
     if setting.sell == false  then return; end;
