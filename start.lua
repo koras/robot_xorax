@@ -25,9 +25,14 @@ package.path = package.path
         .. lua51path .. "lua/?.luac;"
 
         require("table")
-
+         
 setting = {
-         ['emulation'] = false,
+ 
+         ['profit_range'] =  0.03; -- минимальная прибыль
+         ['profit'] =  0.05; -- минимальная прибыль
+         ['LIMIT_BID'] = 10,
+         ['use_contract'] = 1,
+         ['emulation'] = true,
          ['status'] = false,
          ['buy'] = true,
          ['sell'] = true,
@@ -40,14 +45,15 @@ setting = {
       
 
  -- �����������
- local uTransaction = dofile(getScriptPath() .. "\\transaction.lua")
+ local uTransaction = dofile(getScriptPath() .. "\\transaction.lua");
  -- �����������
-local scriptTest = dofile(getScriptPath() .. "\\coutLine.lua")
-local candles = dofile(getScriptPath() .. "\\tradeSignal.lua")
-local loger = dofile(getScriptPath() .. "\\loger.lua")
-local label = dofile(getScriptPath() .. "\\drawLabel.lua")
-local control = dofile(getScriptPath() .. "\\interface\\control.lua")
-local FRACTALS = dofile(getScriptPath() .. "\\LuaIndicators\\FRACTALS.lua")
+local scriptTest = dofile(getScriptPath() .. "\\coutLine.lua");
+local candles = dofile(getScriptPath() .. "\\Signals\\gandle.lua");
+local candles = dofile(getScriptPath() .. "\\Signals\\tradeSignal.lua"); 
+local loger = dofile(getScriptPath() .. "\\loger.lua");
+local label = dofile(getScriptPath() .. "\\drawLabel.lua");
+local control = dofile(getScriptPath() .. "\\interface\\control.lua");
+local FRACTALS = dofile(getScriptPath() .. "\\LuaIndicators\\FRACTALS.lua");
  
 --dofile(getWorkingFolder().."\\LuaIndicators\\FRACTALS.lua")
  
@@ -61,7 +67,7 @@ local market = dofile(getScriptPath() .. "\\market.lua")
 
 TimeWork =  {{ '10:00', '13:00'},{ '13:05', '18:45'}, { '19:00', '23:50'}};
   
-  SPRED = 0.05; -- минимальная прибыль
+  --SPRED = 0.05; -- минимальная прибыль
   setting_scalp = true; -- на тихий рынок
   
   
@@ -93,7 +99,6 @@ TimeWork =  {{ '10:00', '13:00'},{ '13:05', '18:45'}, { '19:00', '23:50'}};
 -- LONG = true
  
     
-   LIMIT_BID = 9; -- +1 contract
    
    
    -- Ford Motor Company
@@ -189,27 +194,24 @@ basis = 9
     
     
    function eventTranc( priceLocal , levelLocal ,datetime, event) 
-        
-
       -- buy or sell
       market.decision(event, priceLocal, datetime , levelLocal) 
-
   --    loger.save( 'price ' .. priceLocal ..' level '.. levelLocal .. ' event '..event   )
-   
-
-
    end
     
+
+   function  update()
+      control.stats()
+      show_limit(setting.LIMIT_BID);
+      market.setLitmitBid(setting.LIMIT_BID);
+      use_contract_limit(setting.use_contract);
+   end
+
+
    function main()
- 
-
-
       label.init(tag);
-
-      market.setLitmitBid(LIMIT_BID);
-
       loger.save(  " start ");
-
+      update();
       getPrice();
           CurrentDirect = "SELL" 
             local Price = false; -- ���������� ��� ��������� ���������� �������� ������� (����, ���� ������(false))
@@ -218,7 +220,8 @@ basis = 9
            --  LIMIT_BID = 9; -- +1 contract
            --  bid
       while Run do 
-         control.stats()  
+           update();
+
           if setting.status  then 
             candles.getSignal(tag, eventTranc);
          end;

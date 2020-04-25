@@ -47,7 +47,6 @@ function getSetting()
     
     if setting_scalp then
         SPRED_LONG_BUY = 0.03; -- покупаем если в этом диапозоне небыло покупок
-        local SPRED = 0.05; -- минимальная прибыль
     end   
 end   
 
@@ -62,8 +61,8 @@ function long(price, dt, levelLocal , event) -- решение
     --    loger.save( level..'  ' .. #bid .. '  SELL SELL  SELL SELL  SELL SELL  SELL SELL ' ..  price )
         if  #bid > 0  then 
            for j=1,  #bid  do
-                if  bid[j] + SPRED <  price   then
-
+                if  bid[j] + setting.profit <  price   then
+                     
                     profit =  price - bid[j] + profit;
                      
                 --    loger.save(  ' profit ' ..profit   );
@@ -125,7 +124,9 @@ function long(price, dt, levelLocal , event) -- решение
     end;  
 end
 
-function callSELL(price ,dt ,j)
+function callSELL(price ,dt ,j);
+    -- метод срабатывает когда транкзакция на продажу исполняется
+
     if setting.sell == false  then return; end;
 
      
@@ -139,9 +140,12 @@ function callSELL(price ,dt ,j)
     loger.save('profit:' ..profit..' SELL: ' .. price ..' contracts left: '.. #bid   );
     count_sell = count_sell + 1;
   --  return;
-   --  transaction.send("SELL", price, 1 );
+   --  transaction.send("SELL", price, setting.use_contract);
  
 end
+
+
+
 
 function callBUY(price ,dt)
   if setting.buy == false  then return; end;
@@ -151,16 +155,24 @@ function callBUY(price ,dt)
     bid [#bid+1] = price; 
     label.set("BUY" , price, dt, 0);
     bidTable.show(bid);
-    loger.save('profit:' ..profit..'  BUY: ' .. price ..' contracts left: '.. #bid   );
-
     count_buy = count_buy + 1;
 
+    if setting.emulation == false then
+       local trans_id_buy =  transaction.send("BUY", price, setting.use_contract);
+            if(setting.use_contract > 1 ) then
+                for j=1,  setting.use_contract  do 
+                    local p = setting.profit + price + (setting.profit_range * j) ;
+                trans_id_sell = transaction.send("SELL", p, setting.use_contract );
+                end;
+            else 
+                local p = setting.profit + price;
+                trans_id_sell =  transaction.send("SELL", p, setting.use_contract );
+            end 
+    else
 
 
-    
-  --  transaction.send("BUY", price, 1 );
+    end;
 
- --   transaction.send("SELL", price + SPRED, 1 );
 
 end 
 
