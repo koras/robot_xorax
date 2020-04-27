@@ -37,6 +37,9 @@ function getEventLog(_event)
 		[1] = 'There was a purchase in this range',  
 		[2] = 'We sold at current price',  
 		[3] = 'We do not buy where we bought before',  
+		[4] = 'buy is off',  
+		[5] = 'too high price',  
+		[6] = 'mode emulation',  
 	}
 	
 	loger.save( 'getEventLog(event)  '   );  
@@ -78,9 +81,9 @@ end;
 
 	if(showLabel) then
 		if(_arr.status) then
-			label.set('red', _arr.price , _arr.dt, 1, _arr.description);
-		else 
 			label.set('green', _arr.price , _arr.dt, 1, _arr.description);
+		else  
+			label.set('red', _arr.price , _arr.dt, 1, _arr.description);
 		end
 	end
 
@@ -112,7 +115,6 @@ end;
 					White(t_id_TableLog, keys,3);
 					White(t_id_TableLog, keys,4);
 				end;
-			--	label.set('red', arrTableLog[i].price ,arrTableLog[i].dt, 1);
  
  
 			SetCell(t_id_TableLog, keys, 0, tostring(arrTableLog[i].number)); 

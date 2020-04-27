@@ -57,7 +57,13 @@ local function show()
 		Gray(t_id,14, i);
 		Gray(t_id,16, i);
 		Gray(t_id,18, i);
+		
 	 end; 
+		 
+	 
+	Yellow(t_id, 5, 2);
+
+
 
 	SetCell(t_id, 1, 0,  '')
 	SetCell(t_id, 1, 1, '')

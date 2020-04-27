@@ -36,29 +36,59 @@ local word = {
 	['SPRED'] = " minimal profit:",
 
 	['SPRED_LONG_TREND_DOWN_LAST_PRICE'] = "         last buy:",
+
+	
 	['SPRED_LONG_LOST_SELL'] = "          last sell:",
+
+
+
+	['candles_buy_last'] = "      candles buy last:",
+	['number_of_candles'] = "      number of candle:",-- на какой свече была последняя покупка
+	['candles_buy_last'] = "      candles buy last:",
+	['range_down_price_candles'] = "     range down price candle:",
+	['candle_buy_number_down_price'] = "    candle buy number down price:",  -- сколько свечей должно пройти чтобы отпустить продажу 
+
+
+	['timeWork'] = "    time work:",  -- сколько свечей должно пройти чтобы отпустить продажу 
  
+   
+	['timeWork'] =  {
+	   { '10:00', '14:00'},
+	   { '14:05', '18:45'}, 
+	   { '19:00', '23:50'}
+	},   
+	
+	['closed_buy'] =  {
+	   { '13:00', '14:00'},
+	   { '18:00', '19:02'}, 
+	   { '22:55', '23:55'}
+	},
+
+
+
 };
  
  
 
 local function stats()  
 	 
-	SetCell(t_id, 6, 1,  tostring(#bid)) 
-	SetCell(t_id, 7, 1,  tostring(LIMIT_BID+1)) 
-	SetCell(t_id, 8, 1,  tostring(profit).. ' point') 
-	SetCell(t_id, 8, 2,  tostring(profit*7).. ' ruble') 
+	SetCell(t_information, 6, 1,  tostring(#bid)) 
+	SetCell(t_information, 7, 1,  tostring(LIMIT_BID+1)) 
+	SetCell(t_information, 8, 1,  tostring(profit).. ' point') 
+	SetCell(t_information, 8, 2,  tostring(profit*7).. ' ruble') 
 
-	SetCell(t_id, 10, 1,  tostring(count_sell)) 
-	SetCell(t_id, 11, 1,  tostring(count_buy)) 
+	SetCell(t_information, 10, 1,  tostring(count_sell)) 
+	SetCell(t_information, 11, 1,  tostring(count_buy)) 
 
-	SetCell(t_id, 13, 1,  tostring(SPRED_LONG_TREND_DOWN_LAST_PRICE)) 
-	SetCell(t_id, 14, 1,  tostring(SPRED_LONG_LOST_SELL)) 
-	SetCell(t_id, 17, 1,  tostring(SPRED))  
+	SetCell(t_information, 13, 1,  tostring(SPRED_LONG_TREND_DOWN_LAST_PRICE)) 
+	SetCell(t_information, 14, 1,  tostring(SPRED_LONG_LOST_SELL)) 
+	SetCell(t_information, 17, 1,  tostring(SPRED))  
  
 
+    -- setting.candles_buy_last = setting.number_of_candles;
+
+    -- setting.count_buyin_a_row 
 	-- SPRED_LONG_TREND_DOWN_LAST_PRICE= 0; -- ��������� �������
-  
 	-- SPRED_LONG_PRICE_DOWN = 0.04; -- �� �������� ���� �� ������� �� ������� ����, ����
 	-- SPRED_LONG_PRICE_UP = 0.04; -- �� �������� ���� �� ������� �� ������� ����, �����. ���� �� ���� � ����� ���
 	-- SPRED_LONG_LOST_SELL = 0; -- ��������� ���� ������ �� ������� ����������
@@ -67,164 +97,58 @@ end
 local function show()  
 	CreateNewTable(); 
 	for i = 1, 18 do
-		InsertRow(t_id, -1);
+		InsertRow(t_information, -1);
 	 end;
 
 
-	SetCell(t_id, 1, 0,  '')
-	SetCell(t_id, 1, 1, '')
-	SetCell(t_id, 1, 2, '')
-	SetCell(t_id, 2, 1, word.on) 
-	SetCell(t_id, 2, 2, word.on) 
-	SetCell(t_id, 2, 3, word.off) 
-	SetCell(t_id, 3, 0,  '')
-	SetCell(t_id, 3, 1, '')
-	SetCell(t_id, 3, 2, '')
-	SetCell(t_id, 4, 0,  '')
-	SetCell(t_id, 4, 1, '')
-	SetCell(t_id, 4, 2, '') 
-	button_finish();
-	buy_process();
-	sell_process();
-	close_positions_finish();
-	mode_emulation_off();
+	SetCell(t_information, 1, 0,  '')
+	SetCell(t_information, 1, 1, '')
+	SetCell(t_information, 1, 2, '')
+	SetCell(t_information, 2, 1, word.on) 
+	SetCell(t_information, 2, 2, word.on) 
+	SetCell(t_information, 2, 3, word.off) 
+	SetCell(t_information, 3, 0,  '')
+	SetCell(t_information, 3, 1, '')
+	SetCell(t_information, 3, 2, '')
+	SetCell(t_information, 4, 0,  '')
+	SetCell(t_information, 4, 1, '')
+	SetCell(t_information,4, 2, '') 
+ 
 
+ 
+	SetCell(t_information, 6, 0, word.open_position);
+	SetCell(t_information, 7, 0, word.open_limit);
+	SetCell(t_information,, 8, 0, word.profit);
+ 
 
-	Yellow(5, 0) 
-	Yellow(5, 1) 
-	Yellow(5, 2) 
-	Yellow(5, 3) 
-	SetCell(t_id, 6, 0, word.open_position);
-	SetCell(t_id, 7, 0, word.open_limit);
-	SetCell(t_id, 8, 0, word.profit);
-	Green(8, 1) 
-	Green(8, 0) 
-	Green(8, 2)  
+	SetCell(t_information, 10, 0, word.count_sell);
+	SetCell(t_information, 11, 0, word.count_buy);
 
-	SetCell(t_id, 10, 0, word.count_sell);
-	SetCell(t_id, 11, 0, word.count_buy);
+	SetCell(t_information, 13, 0,  word.SPRED_LONG_TREND_DOWN_LAST_PRICE);
+	SetCell(t_information, 14, 0,  word.SPRED_LONG_LOST_SELL);
 
-	SetCell(t_id, 13, 0,  word.SPRED_LONG_TREND_DOWN_LAST_PRICE);
-	SetCell(t_id, 14, 0,  word.SPRED_LONG_LOST_SELL);
-
-	SetCell(t_id, 17, 0, word.SPRED);
+	SetCell(t_information, 17, 0, word.SPRED);
 
 	  
+
+	SetCell(t_information, 21, 0, word.candles_buy_last);
+	SetCell(t_information, 22, 0, word.number_of_candles);
+	SetCell(t_information, 23, 0, word.range_down_price_candles);
+	SetCell(t_information, 24, 0, word.candle_buy_number_down_price);
+
+
+
+	-- ['candles_buy_last'] = "      candles buy last:",
+	-- ['number_of_candles'] = "      number of candle:",-- на какой свече была последняя покупка
+	-- ['candles_buy_last'] = "      candles buy last:",
+	-- ['range_down_price_candles'] = "     range down price candle:",
+	-- ['candle_buy_number_down_price'] = "    candle buy number down price:",  -- сколько свечей должно пройти чтобы отпустить продажу 
+
+
+
 end
  
-
-function button_start()
-	setting.status=true;
-	SetCell(t_id, 2, 0,  word.finish)
-	SetCell(t_id, 3, 1,  '')
-	SetCell(t_id, 3, 2,  '')
-	SetCell(t_id, 3, 3,  '')
-	Green(1, 0) 
-	Green(2, 0) 
-	Green(3, 0)
-	loger.save('button_start');
-end;
-function button_finish() 
-	setting.status=false;  
-	SetCell(t_id, 2, 0,  word.start)
-	Gray(1, 0);
-	Gray(2, 0);
-	Gray(3, 0);
-	loger.save('button_finish' );
-end;
-
-function button_pause() 
-	setting.status=false;  
-	SetCell(t_id, 2, 0,  word.pause)
-	SetCell(t_id, 3, 1,  word.pause2)
-	SetCell(t_id, 3, 2,  word.pause2)
-	SetCell(t_id, 3, 3,  word.pause2)
-	Red(1, 0);
-	Red(2, 0);
-	Red(3, 0);
-	loger.save('button_finish' );
-end;
-
-
  
-
-
-function mode_emulation_on() 
-	setting.close_positions=true;
-	SetCell(t_id, 2, 3,  word.on)
-	Green(1, 3) 
-	Green(2, 3) 
-	Green(3, 3)
-	loger.save('close_positions _start');
-end;
-
-function mode_emulation_off()
-	setting.close_positions=false;  
-	SetCell(t_id, 2, 3,  word.off)
-	Gray(1, 3);
-	Gray(2, 3);
-	Gray(3, 3);
-	loger.save('close_positions _finish' );
-end;
-
- 
-
-function close_positions_start() 
-	setting.close_positions=true;
-	SetCell(t_id, 2, 3,  word.on)
-	Green(1, 3) 
-	Green(2, 3) 
-	Green(3, 3)
-	loger.save('close_positions _start');
-end;
-
-function close_positions_finish()
-	setting.close_positions=false;  
-	SetCell(t_id, 2, 3,  word.off)
-	Gray(1, 3);
-	Gray(2, 3);
-	Gray(3, 3);
-	loger.save('close_positions _finish' );
-end;
-
-
-
-
-
-function sell_process()
-	setting.sell = true;
-	SetCell(t_id, 2, 2,  word.on)
-	Green(1, 2) 
-	Green(2, 2) 
-	Green(3, 2)
-	loger.save('sell start');
-end;
-function sell_stop()  
-	setting.sell = false;  
-	SetCell(t_id, 2, 2,  word.off)
-	Red(1, 2);
-	Red(2, 2);
-	Red(3, 2);
-	loger.save('sell _finish' );
-end;
-
-
-function buy_process()
-	setting.buy = true;
-	SetCell(t_id, 2, 1,  word.on)
-	Green(1, 1) 
-	Green(2, 1) 
-	Green(3, 1)
-	loger.save('buy_start');
-end;
-function buy_stop()  
-	setting.buy = false;  
-	SetCell(t_id, 2, 1,  word.off)
-	Red(1, 1);
-	Red(2, 1);
-	Red(3,1);
-	loger.save('buy_finish' );
-end;
  
 
 
@@ -235,100 +159,22 @@ if createTable  then return; end;
 
 init.create = true;
 	-- �������� ��������� id ��� ��������
-	t_id = AllocTable();	 
-	AddColumn(t_id, 0, word.status , true, QTABLE_STRING_TYPE, 15);
-	AddColumn(t_id, 1, word.buy, true, QTABLE_STRING_TYPE, 20);
-	AddColumn(t_id, 2, word.sell, true, QTABLE_STRING_TYPE, 20); 
-	AddColumn(t_id, 3, word.close_positions, true,QTABLE_STRING_TYPE, 20); 
+	t_information = AllocTable();	 
+	AddColumn(t_information, 0, word.status , true, QTABLE_STRING_TYPE, 15);
+	AddColumn(t_information, 1, word.buy, true, QTABLE_STRING_TYPE, 20);
+	AddColumn(t_information, 2, word.sell, true, QTABLE_STRING_TYPE, 20); 
+	AddColumn(t_information, 3, word.close_positions, true,QTABLE_STRING_TYPE, 20); 
  
-	t = CreateWindow(t_id); 
-	SetWindowCaption(t_id, word.Trading_Bot_Control_Panel); 
-   SetTableNotificationCallback(t_id, event_callback_message);  
-   SetWindowPos(tt, 0, 70, 292, 140)
+	t = CreateWindow(t_information); 
+	SetWindowCaption(t_information, word.Trading_Bot_Control_Panel);  
+   SetWindowPos(t_information, 0, 70, 292, 140)
 end;
 
-
-function event_callback_message (t_id, msg, par1, par2)
-
-	if par1 == 1 and par2 == 0 or  par1 == 2 and par2 == 0 or par1 == 3 and par2 == 0 then
-		if  msg == 1 and setting.status == false then
-				button_start(); 
-				return;
-		end;
-
-		if  msg == 1 and setting.status == true then
-			--button_finish();
-			button_pause();
-			return;
-		end;
-	end;
-
-	    
-	if par1 == 1 and par2 == 1 or  par1 == 2 and par2 == 1 or par1 == 3 and par2 == 1 then
-		if  msg == 1 and setting.buy == false then
-				buy_process(); 
-				return;
-		end;
-
-		if  msg == 1 and setting.buy == true then
-				buy_stop();
-			return;
-		end;
-	end;
-
-
-
-
-	if par1 == 1 and par2 == 2 or  par1 == 2 and par2 == 2 or par1 == 3 and par2 == 2 then
-		if  msg == 1 and setting.sell == false then
-				sell_process(); 
-				return;
-		end;
-
-		if  msg == 1 and setting.sell == true then
-				sell_stop();
-			return;
-		end;
-	end;
-
-
-	if par1 == 1 and par2 == 3 or  par1 == 2 and par2 == 3 or par1 == 3 and par2 == 3 then
-		if  msg == 1 and setting.close_positions == false then
-				close_positions_start(); 
-				buy_stop();
-				return;
-		end;
-
-		if  msg == 1 and setting.close_positions == true then
-			close_positions_finish(); 
-			return;
-		end;
-	end;
-
-
-
-
-	if par1 == 1 and par2 == 3 or  par1 == 2 and par2 == 3 or par1 == 3 and par2 == 3 then
-		if  msg == 1 and setting.close_positions == false then
-			mode_emulation_on(); 
-				return;
-		end;
-
-		if  msg == 1 and setting.close_positions == true then
-			mode_emulation_off(); 
-			return;
-		end;
-	end;
-
-
-
-  
-	loger.save(msg ..'  '  .. par1 .. '   '.. par2..' QTABLE_LBUTTONUP '.. QTABLE_LBUTTONUP);
-end;
+ 
  
 
- function deleteTable(Line, Col)  -- �������
-	DestroyTable(t_id)
+ function deleteTable()  -- �������
+	DestroyTable(t_information)
  end;
 
  

@@ -11,6 +11,7 @@ local label = dofile(getScriptPath() .. "\\drawLabel.lua");
 local bidTable = dofile(getScriptPath() .. "\\bidTable.lua");
 local transaction = dofile(getScriptPath() .. "\\transaction.lua");
 local signalShowLog = dofile(getScriptPath() .. "\\interface\\signalShowLog.lua");
+local statsPanel = dofile(getScriptPath() .. "\\interface\\stats.lua");
  
  
 
@@ -40,10 +41,8 @@ local function decision(event, price, datetime, levelLocal) -- решение
 end
 
 local level = 1;
- 
-
+  
 function getSetting()
-    
     if setting_scalp then
         SPRED_LONG_BUY = 0.03; -- покупаем если в этом диапозоне небыло покупок
     end   
@@ -52,14 +51,10 @@ end
 
 
 
-function long(price, dt, levelLocal , event) -- решение
-     
- --   signalShowLog.addSignal(dt, 0, status, price);
-
+function long(price, dt, levelLocal , event) -- решение 
     getSetting();
 
-    if event == 'SELL'  then
-    --    loger.save( level..'  ' .. #bid .. '  SELL SELL  SELL SELL  SELL SELL  SELL SELL ' ..  price )
+    if event == 'SELL'  then 
         if  #bid > 0  then 
            for j=1,  #bid  do
                 if  bid[j] + setting.profit <  price   then
@@ -73,7 +68,6 @@ function long(price, dt, levelLocal , event) -- решение
                     -- записываем цену продажи контракта 
                     callSELL(price,  dt, j);
                     SPRED_LONG_LOST_SELL = price;
-
                                 -- продаём 
                     break;
                 end; 
@@ -100,37 +94,32 @@ function long(price, dt, levelLocal , event) -- решение
                       -- SPRED_LONG_BUY
                         -- мы покупаем, если в определённом диапозоне небыло покупок
                  loger.save( 'callBUY  '  .. price  );
-                            -- мы не покупаем, если только что продали по текуще цене
-                if(SPRED_LONG_LOST_SELL - SPRED_LONG_PRICE_DOWN > price or  price > SPRED_LONG_LOST_SELL + SPRED_LONG_PRICE_UP or SPRED_LONG_LOST_SELL ==0 ) then       
+                            -- мы не покупаем, если только что продали по текуще цене setting.profit
+                if(SPRED_LONG_LOST_SELL - SPRED_LONG_PRICE_DOWN > price or  price > SPRED_LONG_LOST_SELL + setting.profit or SPRED_LONG_LOST_SELL == 0 ) then       
                     --    local SPRED_LONG_TREND_DOWN = 0.01; -- рынок падает, увеличиваем растояние между покупками
                     --    local SPRED_LONG_TREND_DOWN_SPRED = 0.01; -- на сколько увеличиваем растояние
                     --    local SPRED_LONG_TREND_DOWN_LAST_PRICE= 0; -- последняя покупка
  
-                    if SPRED_LONG_TREND_DOWN_LAST_PRICE == 0  or  SPRED_LONG_TREND_DOWN_LAST_PRICE - SPRED_LONG_TREND_DOWN > price  or SPRED_LONG_TREND_DOWN_LAST_PRICE  < price  then
+                        if SPRED_LONG_TREND_DOWN_LAST_PRICE == 0  or  SPRED_LONG_TREND_DOWN_LAST_PRICE - SPRED_LONG_TREND_DOWN > price  or SPRED_LONG_TREND_DOWN_LAST_PRICE  < price  then
 
-                        SPRED_LONG_TREND_DOWN  = SPRED_LONG_TREND_DOWN + SPRED_LONG_TREND_DOWN_SPRED;
-                        SPRED_LONG_TREND_DOWN_LAST_PRICE = price; -- записываем последнюю покупку
-                         callBUY(price,  dt); 
-                        -- SPRED_LONG_TREND_DOWN
+                            SPRED_LONG_TREND_DOWN  = SPRED_LONG_TREND_DOWN + SPRED_LONG_TREND_DOWN_SPRED;
+                            SPRED_LONG_TREND_DOWN_LAST_PRICE = price; -- записываем последнюю покупку
+                            callBUY(price,  dt); 
+                            -- SPRED_LONG_TREND_DOWN
 
+                            
+                        else
+                            signalShowLog.addSignal(dt, 3, true, price);
                         
-                    else
-                        signalShowLog.addSignal(datetime, 3, true, priceLocal);
-                    
-                    end;
-
-
-
-                    
+                        end;
+ 
                 else
-                    signalShowLog.addSignal(datetime, 2, true, priceLocal);
+                    signalShowLog.addSignal(dt, 2, true, price);
                 end;  
             else
-                signalShowLog.addSignal(datetime, 1, true, priceLocal);
+                signalShowLog.addSignal(dt, 1, true, price);
             end;  
-            
-            
-
+             
         end;  
     end;  
 end
@@ -140,8 +129,6 @@ function callSELL(price ,dt ,j)
 
     if setting.sell == false  then return; end;
 
-     
-
   --  label.set(event, priceLocal , datetime,levelLocal);
     -- продаём по дешевле
     price = price - 0.01;
@@ -150,6 +137,8 @@ function callSELL(price ,dt ,j)
     bidTable.show(bid);
     loger.save('profit:' ..profit..' SELL: ' .. price ..' contracts left: '.. #bid   );
     count_sell = count_sell + 1;
+
+    setting.count_buyin_a_row = 0;
   --  return;
    --  transaction.send("SELL", price, setting.use_contract);
  
@@ -159,7 +148,9 @@ end
 
 
 function callBUY(price ,dt)
-  if setting.buy == false  then return; end;
+  if setting.buy == false  then 
+    signalShowLog.addSignal(dt, 4, true, price);
+    return; end;
     -- ставим заявку на покупку выше на 0.01
     price  = price + 0.01; -- и надо снять заявку если не отработала
     -- покупаем по дороже (
@@ -168,20 +159,25 @@ function callBUY(price ,dt)
     bidTable.show(bid);
     count_buy = count_buy + 1;
 
+    -- текущаая свеча
+    setting.candles_buy_last = setting.number_of_candles;
+
+    setting.count_buyin_a_row = setting.count_buyin_a_row + 1; -- сколько раз подряд купили и не продали
+
     if setting.emulation == false then
+    --    statsPanel.show();
+
        local trans_id_buy =  transaction.send("BUY", price, setting.use_contract);
             if(setting.use_contract > 1 ) then
                 for j=1,  setting.use_contract  do 
                     local p = setting.profit + price + (setting.profit_range * j) ;
-                trans_id_sell = transaction.send("SELL", p, setting.use_contract );
+                    trans_id_sell = transaction.send("SELL", p, setting.use_contract );
                 end;
             else 
                 local p = setting.profit + price;
                 trans_id_sell =  transaction.send("SELL", p, setting.use_contract );
             end 
     else
-
-
     end;
 
 

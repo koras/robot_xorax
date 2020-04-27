@@ -42,8 +42,8 @@ local oldVolumeRange = 0;
 local countingTicsVolume = 0;
 
 -- свечки
-local number_of_candles = 0;
-local old_number_of_candles  = 0;
+--local number_of_candles = 0;
+--local old_number_of_candles  = 0;
 -- критический уровень объёма
 local CRITICAL_VOLUME= 0;
 
@@ -56,8 +56,8 @@ local rangeVolume = 10
 
 
     -- новая свеча
-    if (old_number_of_candles  ~= number_of_candles ) then 
-        old_number_of_candles = number_of_candles;
+    if (setting.old_number_of_candles  ~= setting.number_of_candles ) then 
+        setting.old_number_of_candles = setting.number_of_candles;
         -- если новая свечка
         volumeRange =  volume;
         return
@@ -185,8 +185,8 @@ local function getSignal(tag, callback)
     collbackFunc = callback;
     shift = 0;
 
-    number_of_candles = getNumCandles(tag); 
-    bars_temp,res,legend = getCandlesByIndex(tag, 0, number_of_candles-2*len-shift,2*len)
+    setting.number_of_candles = getNumCandles(setting.tag); 
+    bars_temp,res,legend = getCandlesByIndex(setting.tag, 0, setting.number_of_candles-2*len-shift,2*len)
 
     local lines_count = getLinesCount(tag) 
     bars={}

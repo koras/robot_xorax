@@ -19,7 +19,6 @@ package.path = package.path
         require("table")
          
 setting = {
- 
          ['profit_range'] =  0.03; -- минимальная прибыль
          ['profit'] =  0.05; -- минимальная прибыль
          ['LIMIT_BID'] = 10,
@@ -29,22 +28,46 @@ setting = {
          ['buy'] = true,
          ['sell'] = true,
          ['close_positions'] = false,
-         ['ACCOUNT'] =  '4105F8Y';  
-         ['CLASS_CODE'] =  "SPBFUT"; 
-         ['SEC_CODE'] =  "BRK0";
+         ['ACCOUNT'] =  '4105F8Y', 
+         ['CLASS_CODE'] =  "SPBFUT", 
+         ['SEC_CODE'] =  "BRK0",
+         ['count_buyin_a_row'] =  0, -- покупки подряд
+         
+         
+         ['tag'] = "my_br",
+         ['number_of_candles'] = 0, -- current a candle
+         ['old_number_of_candles'] = 0, -- old current candle
+
+         ['candles_buy_last'] = 0, -- на какой свече была последняя покупка
+         ['candle_buy_number_down_price'] = 6, -- сколько свечей должно пройти чтобы отпустить продажу 
+         ['range_down_price_candles'] = 0,
+         ['timeWork'] =  {
+            { '10:00', '14:00'},
+            { '14:05', '18:45'}, 
+            { '19:00', '23:50'}
+         },   
+         
+         ['closed_buy'] =  {
+            { '13:00', '14:00'},
+            { '18:00', '19:02'}, 
+            { '22:55', '23:55'}
+         },
       };
 
-      
+
 
  -- �����������
  local uTransaction = dofile(getScriptPath() .. "\\transaction.lua");
  -- �����������
 local scriptTest = dofile(getScriptPath() .. "\\coutLine.lua");
 local candles = dofile(getScriptPath() .. "\\Signals\\candle.lua");
-local candles = dofile(getScriptPath() .. "\\Signals\\tradeSignal.lua"); 
+local tradeSignal = dofile(getScriptPath() .. "\\Signals\\tradeSignal.lua"); 
 local loger = dofile(getScriptPath() .. "\\loger.lua");
 local label = dofile(getScriptPath() .. "\\drawLabel.lua");
 local control = dofile(getScriptPath() .. "\\interface\\control.lua");
+local statsPanel = dofile(getScriptPath() .. "\\interface\\stats.lua");
+
+ 
 local signalShowLog = dofile(getScriptPath() .. "\\interface\\signalShowLog.lua");
 local FRACTALS = dofile(getScriptPath() .. "\\LuaIndicators\\FRACTALS.lua");
  
@@ -58,14 +81,13 @@ local market = dofile(getScriptPath() .. "\\market.lua")
   -- uTransaction.iTransaction()
     
 
-TimeWork =  {{ '10:00', '13:00'},{ '13:05', '18:45'}, { '19:00', '23:50'}};
+ 
   
   --SPRED = 0.05; -- минимальная прибыль
   setting_scalp = true; -- на тихий рынок
   
   
   SPRED_LONG_BUY = 0.02; -- покупаем если в этом диапозоне небыло покупок
-  
   SPRED_LONG_TREND_DOWN = 0.04; -- рынок падает, увеличиваем растояние между покупками
   SPRED_LONG_TREND_DOWN_SPRED = 0.02; -- на сколько увеличиваем растояние
 
@@ -84,7 +106,7 @@ TimeWork =  {{ '10:00', '13:00'},{ '13:05', '18:45'}, { '19:00', '23:50'}};
    bid = {}
    RangeSignal    = 0.1;            -- �������� ����
    ACCOUNT        = '232957';        -- ������������� �����
-   CLASS_CODE     = "SPBFUT"     -- ����� ������
+  -- CLASS_CODE     = "SPBFUT"     -- ����� ������
    SEC_CODE       = "BR-5.20"       -- ��� ������
    tag =  "my_br"; -- �� �������
 
@@ -129,7 +151,7 @@ TimeWork =  {{ '10:00', '13:00'},{ '13:05', '18:45'}, { '19:00', '23:50'}};
     
 function init()
 
-     candles.setRange(RangeSignal);
+   tradeSignal.setRange(RangeSignal);
   --   control.show();
 
 end;
@@ -145,35 +167,30 @@ basis = 9
 
       control.show(); 
 
- 
-      -- �������� ������ � ������ �������
+  
       local Error = '';
-      ds,Error = CreateDataSource(CLASS_CODE, SEC_CODE, INTERVAL);
-      -- ���� ������, � �������� ����� ������������ �� ������ � ���������, �� ������ ������������ � �������, �� �� ��������� ����� �����,
-      -- �� �����, ������������� ��������� ��� ����� ��������, ������, ��� ���������� � DS:
-      -- ����, ���� ������ ����� �������� � ������� (�� ������, ���� ����� ������ �� ������)
+      ds,Error = CreateDataSource(setting.CLASS_CODE, SEC_CODE, INTERVAL); 
     --  while (Error == "" or Error == nil) and DS:Size() == 0 do sleep(1) end
     
        
       -- ������ �������:
        
-     if Error ~= "" and Error ~= nil then message("1111111111111111111111 ������ ����������� � �������: "..Error) return end
+     if Error ~= "" and Error ~= nil then message("1111111111111111111111 : "..Error) return end
     -- GET_GRAFFIC
      
       -- ������������� �� ���������� �������
       GET_GRAFFIC   = ds:SetEmptyCallback();
     --  ds:SetUpdateCallback(MyFuncName);
     
-      Size =ds:Size(); -- ���������� ������� ������ (���������� ������ � ��������� ������) 
-      -- �������� ��� ���� �����������
+      Size =ds:Size();  
       
-        p      = tostring(getParamEx(CLASS_CODE, SEC_CODE, "offer").param_value + 10*getParamEx(CLASS_CODE, SEC_CODE, "SEC_PRICE_STEP").param_value); -- �� ����, ���������� �� 10 ���. ����� ����
-       SEC_PRICE_STEP = tostring(getParamEx2(CLASS_CODE, SEC_CODE, "SEC_PRICE_STEP").param_value);	
+        p      = tostring(getParamEx(setting.CLASS_CODE, SEC_CODE, "offer").param_value + 10*getParamEx(setting.CLASS_CODE, SEC_CODE, "SEC_PRICE_STEP").param_value); -- �� ����, ���������� �� 10 ���. ����� ����
+       SEC_PRICE_STEP = tostring(getParamEx2(setting.CLASS_CODE, SEC_CODE, "SEC_PRICE_STEP").param_value);	
    end;
    
    function getPrice()
    
-       SEC_PRICE_STEP = tostring(getParamEx2(CLASS_CODE, SEC_CODE, "SEC_PRICE_STEP").param_value);
+       SEC_PRICE_STEP = tostring(getParamEx2(setting.CLASS_CODE, SEC_CODE, "SEC_PRICE_STEP").param_value);
          if GET_GRAFFIC then
         -- message(' SEC_PRICE_STEP = ::: '..  p  ); 
       else 
@@ -220,11 +237,17 @@ basis = 9
 
 
   --    addSignal(dt, event, status, price)  
+ 
 
-      label.init(tag);
+
+      label.init(setting.tag);
       loger.save(  " start ");
+      statsPanel.show();
       update();
       getPrice();
+
+
+
           CurrentDirect = "SELL" 
             local Price = false; -- ���������� ��� ��������� ���������� �������� ������� (����, ���� ������(false))
           --  Result = SL_TP(Price, CurrentDirect);
@@ -233,9 +256,14 @@ basis = 9
            --  bid
       while Run do 
            update();
+           statsPanel.stats();
 
           if setting.status  then 
-            candles.getSignal(tag, eventTranc);
+
+            candles.getSignal(tag, callback)
+            
+
+            tradeSignal.getSignal(setting.tag, eventTranc);
          end;
       end;  
    end;
@@ -256,6 +284,7 @@ basis = 9
       Run = false;
       control.deleteTable();
       signalShowLog.deleteTable();
+      statsPanel.deleteTableStats();
    end;
     
 

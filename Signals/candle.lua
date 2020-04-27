@@ -21,8 +21,8 @@ end
     --    local V = t[i].volume; -- Получить значение Volume для указанной свечи (объем сделок в свече)
     --    local T = t[i].datetime; -- Получить значение datetime для указанной свечи
 local function  calculateSignal(object)
-    calculateVolume(object.volume)
-    calculatePrice(object.close, object.datetime) 
+ --   calculateVolume(object.volume)
+  --  calculatePrice(object.close, object.datetime) 
 end;
 
 
