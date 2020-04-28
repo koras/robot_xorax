@@ -12,6 +12,8 @@ local bidTable = dofile(getScriptPath() .. "\\bidTable.lua");
 local transaction = dofile(getScriptPath() .. "\\transaction.lua");
 local signalShowLog = dofile(getScriptPath() .. "\\interface\\signalShowLog.lua");
 local statsPanel = dofile(getScriptPath() .. "\\interface\\stats.lua");
+
+local contitionMarket = dofile(getScriptPath() .. "\\shop\\contition_shop.lua");
  
  
 
@@ -52,64 +54,36 @@ end
 
 
 function long(price, dt, levelLocal , event) -- решение 
-
-
     getSetting();
-
     getfractal(price);
 
-    if event == 'SELL'  then 
-        if  #bid > 0  then 
-           for j=1,  #bid  do
-                if  bid[j] + setting.profit <  price   then
-                     
-                    setting.profit =  price - bid[j] + setting.profit;
-                     
-                --    loger.save(  ' profit ' ..profit   );
-                    if SPRED_LONG_TREND_DOWN  - SPRED_LONG_TREND_DOWN_SPRED > 0  then
-                        SPRED_LONG_TREND_DOWN  = SPRED_LONG_TREND_DOWN - SPRED_LONG_TREND_DOWN_SPRED; 
-                    end; 
-                    -- записываем цену продажи контракта 
-                    SPRED_LONG_LOST_SELL = price;
-                                -- продаём 
-                    break;
-                end; 
-            end;  
-             
-        end; 
-    else 
-        
-     --   loger.save(#bid .. '  SPRED ' .. '  buy long ' ..  price )
-                        -- просто покупаем
-        if  LIMIT >= #bid  then
-                    local checkRange = true;
-            for j=1,  #bid  do
-                        -- здесь узнаю, была ли покупка в этом диапозоне
-                if  price + SPRED_LONG_BUY > bid[j]  then
-                            checkRange = false;
-                            -- продаём 28.22 SPRED_LONG_BUY 28.23
-                      --      loger.save(  price  .. ' SPRED_LONG_BUY ' ..bid[j] ) ;
-                end; 
-            end;  
+
+        -- подсчитаем скольк заявок у нас на продажу
+
+        if  LIMIT >= setting.limit_count_buy  then
+            
+            
+ 
+            -- проверём, покупали здесь или нет, в этом промежутке
+            checkRange = getRandBuy(price, setting.sellTable);
+
 
 
             if checkRange == true then
                       -- SPRED_LONG_BUY
                         -- мы покупаем, если в определённом диапозоне небыло покупок
-                 loger.save( 'callBUY  '  .. price  );
+               --  loger.save( 'callBUY  '  .. price  );
                             -- мы не покупаем, если только что продали по текуще цене setting.profit
-                if(SPRED_LONG_LOST_SELL - SPRED_LONG_PRICE_DOWN > price or  price > SPRED_LONG_LOST_SELL + setting.profit or SPRED_LONG_LOST_SELL == 0 ) then       
+                if(SPRED_LONG_LOST_SELL - SPRED_LONG_PRICE_DOWN > price or  price > SPRED_LONG_LOST_SELL + setting.profit or SPRED_LONG_LOST_SELL == 0 ) then  
+                    
+                    
                     --    local SPRED_LONG_TREND_DOWN = 0.01; -- рынок падает, увеличиваем растояние между покупками
                     --    local SPRED_LONG_TREND_DOWN_SPRED = 0.01; -- на сколько увеличиваем растояние
                     --    local SPRED_LONG_TREND_DOWN_LAST_PRICE= 0; -- последняя покупка
- 
+
                         if SPRED_LONG_TREND_DOWN_LAST_PRICE == 0  or  SPRED_LONG_TREND_DOWN_LAST_PRICE - SPRED_LONG_TREND_DOWN > price  or SPRED_LONG_TREND_DOWN_LAST_PRICE  < price  then
-
                             SPRED_LONG_TREND_DOWN  = SPRED_LONG_TREND_DOWN + SPRED_LONG_TREND_DOWN_SPRED;
-
                             SPRED_LONG_TREND_DOWN_LAST_PRICE = price; -- записываем последнюю покупку
-
- 
                             callBUY(price,  dt); 
                             -- SPRED_LONG_TREND_DOWN
 
@@ -126,9 +100,13 @@ function long(price, dt, levelLocal , event) -- решение
                 signalShowLog.addSignal(dt, 1, true, price);
             end;  
              
-        end;  
+      --  end;  
     end;  
 end
+
+
+
+
 
 
 function getfractal(price)  
@@ -167,61 +145,61 @@ function callSELL(result)
     -- метод срабатывает когда транкзакция на продажу исполняется
  
  --   loger.save('object.price  ' .. result.close  );
+    local statusRange = true;
+
+
 
     if setting.sell == false  then return; end;
 
     if #setting.sellTable > 0 then
         
         for sellT = 1 ,  #setting.sellTable do 
- 
+        
+            if statusRange then
 
-            -- ['price'] = price,
-            -- ['dt']= dt, 
-            -- ['trans_id']= getRand(), 
-            -- ['type']= 'buy',
-            -- ['emulation']=  setting.emulation,
-            -- ['contract']=  setting.use_contract,
-            -- ['buy_contract']= price, -- стоимость продажи
+            if  setting.sellTable[sellT].type == 'sell' and result.close >= setting.sellTable[sellT].price  then 
 
-
-            if setting.sellTable[sellT].price < result.close   then 
                  local price = result.close;
                 setting.count_buyin_a_row = 0;
-                count_sell = count_sell + 1;
-                 loger.save('profit:' ..setting.profit..' SELL: ' .. result.close ..' contracts left: '.. #setting.sellTable   );
+       
+
+              --   loger.save('profit:' ..setting.profit..' SELL: ' .. result.close ..' contracts left: '.. #setting.sellTable   );
 
                  SPRED_LONG_LOST_SELL = price;
 
-
+                 setting.count_sell =  setting.count_sell + 1; 
                  setting.profit =  setting.sellTable[sellT].price - setting.sellTable[sellT].buy_contract + setting.profit;
 
-                 table.remove (setting.sellTable, sellT);
-             end;
+                -- надо удалить контракт по которому мы покупали
+                local buy_contract = setting.sellTable[sellT].buy_contract;
+                table.remove (setting.sellTable, sellT);
 
+
+                for searchBuy = 1 ,  #setting.sellTable do 
+
+                    if setting.sellTable[searchBuy].buy_contract == buy_contract  then 
+                        -- удаляем только 1 элемент
+                        setting.limit_count_buy = setting.limit_count_buy - 1;
+                        table.remove (setting.sellTable, sellT);
+                        
+                        loger.save('table.remove  :'    );
+                   
+                        signalShowLog.addSignal(os.time(), 8, false, price);
+            
+                        statusRange = false;
+                        break;
+                    end;
+                end;
+
+            end;
+
+        end;
 
    --  transaction.send("SELL", price, setting.use_contract);
         --setting.current_price 
          end;
 
     end;
-  --  label.set(event, priceLocal , datetime,levelLocal);
-    -- продаём по дешевле
-
-
-
-  --  price = price - 0.01;
- --   table.remove (bid,j);
- 
-  --  bidTable.show(bid);
- --   loger.save('profit:' ..profit..' SELL: ' .. price ..' contracts left: '.. #bid   );
-  --  count_sell = count_sell + 1;
-
-
-
-  --  setting.count_buyin_a_row = 0;
-
-
-  --  return; 
  
 end
 
@@ -239,7 +217,8 @@ function callBUY(price ,dt)
     bid [#bid+1] = price; 
     label.set("BUY" , price, dt, 0);
     bidTable.show(bid);
-    count_buy = count_buy + 1;
+
+    setting.count_buy = setting.count_buy + 1;
 
     local trans_id = getRand()
  
@@ -249,6 +228,8 @@ function callBUY(price ,dt)
 
     setting.count_buyin_a_row = setting.count_buyin_a_row + 1; -- сколько раз подряд купили и не продали
 
+    setting.limit_count_buy = setting.limit_count_buy + 1;
+
     if setting.emulation == false then
 
        local trans_id =  transaction.send("BUY", price, setting.use_contract);
@@ -257,16 +238,23 @@ function callBUY(price ,dt)
         sellview(price,dt);
     end;
 
-    setting.sellTable[(#setting.sellTable+1)] = {
-        ['price'] = price,
-        ['dt']= dt, 
-        ['trans_id']= getRand(), 
-        ['type']= 'buy',
-        ['emulation']=  setting.emulation,
-        ['contract']=  setting.use_contract,
-        ['buy_contract']= price, -- стоимость продажи
-    };
+ 
+        for j=1,  setting.use_contract  do 
 
+            signalShowLog.addSignal(dt, 6, true, price);
+            signalShowLog.addSignal(dt, 7, false, price);
+            
+            setting.sellTable[(#setting.sellTable+1)] = {
+                ['price'] = price,
+                ['dt']= dt, 
+                ['trans_id']= getRand(), 
+                ['type']= 'buy',
+                ['emulation']=  setting.emulation,
+                ['contract']=  setting.use_contract,
+                ['buy_contract']= price, -- стоимость продажи
+                
+            };
+        end;
 end 
 
 

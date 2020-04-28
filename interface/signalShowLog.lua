@@ -40,6 +40,8 @@ function getEventLog(_event)
 		[4] = 'buy is off',  
 		[5] = 'too high price',  
 		[6] = 'mode emulation',  
+		[7] = 'bye contract',  
+		[8] = 'sell contract',  
 	}
 	 
 	return arr[_event];
@@ -95,18 +97,18 @@ end;
 		 
 --	for key in arrTableLog do
 		if(keys > 0) then 
-				if arrTableLog[i].status then
-					Green(t_id_TableLog, keys,0);
-					Green(t_id_TableLog, keys,1);
-					Green(t_id_TableLog, keys,2);
-					Green(t_id_TableLog, keys,3);
-					Green(t_id_TableLog, keys,4);
-				else
+				if arrTableLog[i].status then 
 					White(t_id_TableLog, keys,0);
 					White(t_id_TableLog, keys,1);
 					White(t_id_TableLog, keys,2);
 					White(t_id_TableLog, keys,3);
 					White(t_id_TableLog, keys,4);
+				else 
+					Green(t_id_TableLog, keys,0);
+					Green(t_id_TableLog, keys,1);
+					Green(t_id_TableLog, keys,2);
+					Green(t_id_TableLog, keys,3);
+					Green(t_id_TableLog, keys,4);
 				end;
  
 			SetCell(t_id_TableLog, keys, 0, tostring(arrTableLog[i].number)); 

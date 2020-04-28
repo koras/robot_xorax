@@ -123,7 +123,7 @@ function current_limit_minus()
 end;
 
 function show_limit(_limit)  
-	SetCell(t_id, 11, 1,   tostring((_limit)) .. ' ('.. #bid ..')'); 
+	SetCell(t_id, 11, 1,   tostring((_limit)) .. ' ('.. setting.use_contract ..')'); 
 end;
 function use_contract_limit(_limit)  
 	SetCell(t_id, 13, 1,   tostring((_limit))); 

@@ -19,8 +19,8 @@ package.path = package.path
         require("table")
          
 setting = {
-         ['profit_range'] =  0.03; -- минимальная прибыль
-         ['profit'] =  0.05; -- минимальная прибыль
+         ['profit_range'] =  0.01; -- минимальная прибыль
+         ['profit'] =  0.01; -- минимальная прибыль
          ['LIMIT_BID'] = 10,
          ['use_contract'] = 1,
          ['emulation'] = true,
@@ -35,6 +35,12 @@ setting = {
          ['count_buyin_a_row'] =  0, -- покупки подряд
          ['current_price'] =  0, -- покупки подряд
          
+         ['count_buy'] = 0, -- сколько куплено
+         ['count_sell'] = 0, -- сколько продано
+         ['limit_count_buy'] = 0, -- лимит на покупку
+          
+         ['SPRED_LONG_BUY_UP'] = 0.02, -- условия, не покупаем если здесь ранее мы купили | вверх диапозон,
+         ['SPRED_LONG_BUY_down'] = 0.00, -- условия, не покупаем если здесь ранее мы купили | вниз диапозон
          
          ['tag'] = "my_br",
          ['number_of_candles'] = 0, -- current a candle
@@ -87,9 +93,8 @@ local FRACTALS = dofile(getScriptPath() .. "\\LuaIndicators\\FRACTALS.lua");
  
 --dofile(getWorkingFolder().."\\LuaIndicators\\FRACTALS.lua")
  
-
--- ��������� ������� � ������� ��� �������
-local market = dofile(getScriptPath() .. "\\market.lua")
+ 
+local market = dofile(getScriptPath() .. "\\shop\\market.lua");
  
  
   -- uTransaction.iTransaction()
@@ -113,8 +118,8 @@ local market = dofile(getScriptPath() .. "\\market.lua")
 
 
 
-   count_buy = 0;
-   count_sell = 0;
+ --  count_buy = 0;
+  -- count_sell = 0;
 
    profit = 0;
    sellTable = {};
@@ -240,7 +245,7 @@ basis = 9
 
       label.init(setting.tag);
       loger.save(  " start ");
-   --   statsPanel.show();
+      statsPanel.show();
       update();
       getPrice();
 
@@ -252,7 +257,7 @@ basis = 9
           
       while Run do 
            update();
-       --    statsPanel.stats();
+           statsPanel.stats();
            fractalSignal.last();
 
             
@@ -262,8 +267,8 @@ basis = 9
           if setting.status  then  
              
             tradeSignal.getSignal(setting.tag, eventTranc);
-            
             candles.getSignal(tag, market.callSELL);
+            
          end;
       end;  
    end;

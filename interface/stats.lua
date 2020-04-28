@@ -95,9 +95,9 @@ end
 	 SetCell(t_stat, 5, 1,  tostring(setting.CLASS_CODE));
 	 SetCell(t_stat, 6, 1,  tostring(setting.tag));
 
-	 SetCell(t_stat, 10, 1,  tostring(profit));   
-	SetCell(t_stat, 11, 1,  tostring( count_buy));  
-	SetCell(t_stat, 12, 1,  tostring(count_sell));  
+	 SetCell(t_stat, 10, 1,  tostring(setting.profit));   
+	SetCell(t_stat, 11, 1,  tostring(setting.count_buy));  
+	SetCell(t_stat, 12, 1,  tostring(setting.count_sell));  
 	SetCell(t_stat, 13, 1,  tostring(setting.use_contract));  
 
 
