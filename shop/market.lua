@@ -74,28 +74,28 @@ function long(price, dt, levelLocal , event) -- решение
                         -- мы покупаем, если в определённом диапозоне небыло покупок
                --  loger.save( 'callBUY  '  .. price  );
                             -- мы не покупаем, если только что продали по текуще цене setting.profit
-                if(SPRED_LONG_LOST_SELL - SPRED_LONG_PRICE_DOWN > price or  price > SPRED_LONG_LOST_SELL + setting.profit or SPRED_LONG_LOST_SELL == 0 ) then  
-                    
-                    
-                    --    local SPRED_LONG_TREND_DOWN = 0.01; -- рынок падает, увеличиваем растояние между покупками
-                    --    local SPRED_LONG_TREND_DOWN_SPRED = 0.01; -- на сколько увеличиваем растояние
-                    --    local SPRED_LONG_TREND_DOWN_LAST_PRICE= 0; -- последняя покупка
-
-                        if SPRED_LONG_TREND_DOWN_LAST_PRICE == 0  or  SPRED_LONG_TREND_DOWN_LAST_PRICE - SPRED_LONG_TREND_DOWN > price  or SPRED_LONG_TREND_DOWN_LAST_PRICE  < price  then
-                            SPRED_LONG_TREND_DOWN  = SPRED_LONG_TREND_DOWN + SPRED_LONG_TREND_DOWN_SPRED;
-                            SPRED_LONG_TREND_DOWN_LAST_PRICE = price; -- записываем последнюю покупку
-                            callBUY(price,  dt); 
-                            -- SPRED_LONG_TREND_DOWN
-
-                            
-                        else
-                            signalShowLog.addSignal(dt, 3, true, price);
+             --       if(SPRED_LONG_LOST_SELL - SPRED_LONG_PRICE_DOWN > price or  price > SPRED_LONG_LOST_SELL + setting.profit or SPRED_LONG_LOST_SELL == 0 ) then  
+                    if(SPRED_LONG_LOST_SELL - setting.profit >= price or  price >= SPRED_LONG_LOST_SELL + setting.profit or SPRED_LONG_LOST_SELL == 0 ) then  
                         
-                        end;
- 
-                else
-                    signalShowLog.addSignal(dt, 2, true, price);
-                end;  
+                        
+                                --    local SPRED_LONG_TREND_DOWN = 0.01; -- рынок падает, увеличиваем растояние между покупками
+                                --    local SPRED_LONG_TREND_DOWN_SPRED = 0.01; -- на сколько увеличиваем растояние
+                                --    local SPRED_LONG_TREND_DOWN_LAST_PRICE= 0; -- последняя покупка
+
+                                    if SPRED_LONG_TREND_DOWN_LAST_PRICE == 0  or  SPRED_LONG_TREND_DOWN_LAST_PRICE - SPRED_LONG_TREND_DOWN > price  or SPRED_LONG_TREND_DOWN_LAST_PRICE  < price  then
+                                        SPRED_LONG_TREND_DOWN  = SPRED_LONG_TREND_DOWN + SPRED_LONG_TREND_DOWN_SPRED;
+                                        SPRED_LONG_TREND_DOWN_LAST_PRICE = price; -- записываем последнюю покупку
+                                        callBUY(price,  dt); 
+                                        -- SPRED_LONG_TREND_DOWN
+
+                                    else
+                                        signalShowLog.addSignal(dt, 3, true, price);
+                                    
+                                    end;
+    
+                    else
+                        signalShowLog.addSignal(dt, 2, true, price);
+                    end;  
             else
                 signalShowLog.addSignal(dt, 1, true, price);
             end;  
@@ -147,15 +147,17 @@ function callSELL(result)
  --   loger.save('object.price  ' .. result.close  );
     local statusRange = true;
 
-
+ 
 
     if setting.sell == false  then return; end;
 
     if #setting.sellTable > 0 then
         
-        for sellT = 1 ,  #setting.sellTable do 
-        
+        for sellT = 1 ,  #setting.sellTable do  
             if statusRange then
+
+
+                --    loger.save('object.price  ' .. result.close  );
 
             if  setting.sellTable[sellT].type == 'sell' and result.close >= setting.sellTable[sellT].price  then 
 
@@ -182,9 +184,9 @@ function callSELL(result)
                         setting.limit_count_buy = setting.limit_count_buy - 1;
                         table.remove (setting.sellTable, sellT);
                         
-                        loger.save('table.remove  :'    );
+                      --  loger.save('table.remove  :'    );
                    
-                        signalShowLog.addSignal(os.time(), 8, false, price);
+                        signalShowLog.addSignal(result.datetime, 8, false, price);
             
                         statusRange = false;
                         break;

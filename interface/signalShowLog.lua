@@ -33,7 +33,7 @@ local wordTitleTableLog = {
 -- (string) price
 
 function getEventLog(_event)
- 	arr = {
+	arr = {
 		[1] = 'There was a purchase in this range',  
 		[2] = 'We sold at current price',  
 		[3] = 'We do not buy where we bought before',  
@@ -42,6 +42,17 @@ function getEventLog(_event)
 		[6] = 'mode emulation',  
 		[7] = 'bye contract',  
 		[8] = 'sell contract',  
+	} 	
+	
+	arr = {
+		[1] = 'В этом промежутке ранее была покупка',  
+		[2] = 'Мы продали по текущей цене в этом промежутке',  
+		[3] = 'Цена падает, поэтому покупка не возможна',  
+		[4] = 'buy is off',  
+		[5] = 'Очень большая цена',  
+		[6] = 'Режим эмуляции',  
+		[7] = 'Купили контракт',  
+		[8] = 'Продали контракт',  
 	}
 	 
 	return arr[_event];
