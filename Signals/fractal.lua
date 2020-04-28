@@ -18,13 +18,14 @@ local M = {}
 
 
 local function last()
+
+      
+    shift = 0;
+    len = 100;
     number_of_candles = getNumCandles(tag); 
     t, n, l  =  getCandlesByIndex(tag, 0, number_of_candles-2*len-shift,2*len)
-    local lines_count = getLinesCount(tag) 
-  --  loger.save( 'null 12313' )   
-   -- message("number_of_candles :".. lines_count) 
- 
-  --  t, n, l = getCandlesByIndex(tag, 0, 0, getNumCandles("tag")-1) 
+    local lines_count = getLinesCount(tag)  
+  
     local Up=false
     local Down=false 
     for i=0,n-1 do
@@ -36,8 +37,7 @@ local function last()
           ['low'] = t[num].low
       };
 
-    --  loger.save( 't[num].high'  .. t[num].high )   
-    --    message("t[num].high :"..t[num].high) 
+   --   loger.save( 't[num].high'  .. t[num].high )    
 
 
       if (t[num].high)>0 then
@@ -54,18 +54,15 @@ local function last()
 
 
     --    local H = t[i].high; -- Получить значение High для указанной свечи (наибольшая цена свечи)
-    --    local L = t[i].low; -- Получить значение Low для указанной свечи (наименьшая цена свечи)
-        --    message("number_of_candles :".. t[num].datetime.hour..":"..t[num].datetime.min)
-
-        --   message("Up=".. t[num].datetime.hour..":"..t[num].datetime.min)
+    --    local L = t[i].low; -- Получить значение Low для указанной свечи (наименьшая цена свечи) 
+ 
       end
       if (t[num].low)>0 then
 
 
           setting.fractals_collection[number_of_candles]['low'] = t[num].low;
 
-          Down=true;
-       ---   message("Down=".. t[num].datetime.hour..":"..t[num].datetime.min)
+          Down=true; 
 
       end
       if Up and Down then

@@ -34,7 +34,7 @@ function getRandBuy(price, bids)
         
             if bids[j].type == 'buy' then
                     -- здесь узнаю, была ли покупка в этом диапозоне
-                    if  price + setting.SPRED_LONG_BUY_UP > bids[j].price  and   bids[j].price > price - setting.SPRED_LONG_BUY_down   then
+                    if   setting.SPRED_LONG_BUY_UP + bids[j].price > price and price >  bids[j].price - setting.SPRED_LONG_BUY_down   then
                         checkRange = false;
                     end; 
             end; 

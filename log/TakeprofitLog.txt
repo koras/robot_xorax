@@ -1,31 +1,84 @@
  my_br   tag 
  start 
-1  13   2 QTABLE_LBU121212TTONUP 11
-1  13   2 QTABLE_LBU121212TTONUP 11
-1  13   2 QTABLE_LBU121212TTONUP 11
-1  13   2 QTABLE_LBU121212TTONUP 11
-1  13   2 QTABLE_LBU121212TTONUP 11
-1  13   2 QTABLE_LBU121212TTONUP 11
-1  13   2 QTABLE_LBU121212TTONUP 11
-1  13   3 QTABLE_LBU121212TTONUP 11
-1  13   3 QTABLE_LBU121212TTONUP 11
-my_br   tag 
- start 
-1  13   2 QTABLE_LBU121212TTONUP 11
-1  13   2 QTABLE_LBU121212TTONUP 11
-1  13   2 QTABLE_LBU121212TTONUP 11
-1  13   3 QTABLE_LBU121212TTONUP 11
-1  13   3 QTABLE_LBU121212TTONUP 11
-1  13   3 QTABLE_LBU121212TTONUP 11
+getRand() :1127170629
+event event :6
+event event :7
+event event :3
+event event :3
+event event :3
+event event :3
+event event :3
+event event :3
+event event :3
+event event :3
+event event :3
+event event :1
+event event :3
+event event :3
+event event :1
+event event :3
+event event :1
+event event :3
+event event :1
+event event :3
+event event :1
+event event :3
 my_br   tag 
  start 
 getRand() :1127170629
+event event :6
+event event :7
 getRand() :959746087
+event event :6
+event event :7
+event event :1
+event event :1
+event event :1
+event event :1
+event event :1
+event event :1
+event event :1
+event event :1
+event event :1
+event event :3
+event event :1
+event event :1
+event event :1
+event event :1
 my_br   tag 
  start 
 getRand() :1127170629
+event event :6
+event event :7
+event event :3
+event event :3
+event event :3
+event event :3
 my_br   tag 
  start 
 getRand() :1127170629
-getRand() :959746087
-table.remove  :
+event event :6
+event event :7
+event event :3
+event event :3
+event event :3
+event event :3
+event event :3
+event event :3
+event event :3
+event event :3
+event event :3
+event event :3
+event event :3
+event event :3
+event event :3
+event event :3
+event event :3
+event event :3
+event event :3
+my_br   tag 
+ start 
+getRand() :1127170629
+event event :6
+event event :7
+event event :3

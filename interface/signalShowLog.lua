@@ -52,6 +52,8 @@ local function addSignal(dt, event, status, price)
 	
 	CreateNewTableLogEvent();
 
+	loger.save('event event :' .. event  );
+	
 	local arr = {
 		['dt'] =  dt,
 		['dtime'] =  dt.hour..':'..dt.min..':'..dt.sec,

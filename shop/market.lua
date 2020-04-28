@@ -160,7 +160,7 @@ function callSELL(result)
             if  setting.sellTable[sellT].type == 'sell' and result.close >= setting.sellTable[sellT].price  then 
 
                  local price = result.close;
-                setting.count_buyin_a_row = 0;
+                setting.count_buyin_a_row = 0; 
        
 
               --   loger.save('profit:' ..setting.profit..' SELL: ' .. result.close ..' contracts left: '.. #setting.sellTable   );
@@ -211,8 +211,12 @@ function callBUY(price ,dt)
   if setting.buy == false  then 
     signalShowLog.addSignal(dt, 4, true, price);
     return; end;
+
     -- ставим заявку на покупку выше на 0.01
-    price  = price + 0.01; -- и надо снять заявку если не отработала
+
+  --  price  = price + 0.01; -- и надо снять заявку если не отработала
+--  price  = price + 0.01; -- и надо снять заявку если не отработала
+
     -- покупаем по дороже (
     bid [#bid+1] = price; 
     label.set("BUY" , price, dt, 0);
