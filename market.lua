@@ -54,6 +54,8 @@ end
 function long(price, dt, levelLocal , event) -- решение 
     getSetting();
 
+    getfractal(price);
+
     if event == 'SELL'  then 
         if  #bid > 0  then 
            for j=1,  #bid  do
@@ -66,7 +68,6 @@ function long(price, dt, levelLocal , event) -- решение
                         SPRED_LONG_TREND_DOWN  = SPRED_LONG_TREND_DOWN - SPRED_LONG_TREND_DOWN_SPRED; 
                     end; 
                     -- записываем цену продажи контракта 
-                    callSELL(price,  dt, j);
                     SPRED_LONG_LOST_SELL = price;
                                 -- продаём 
                     break;
@@ -104,6 +105,8 @@ function long(price, dt, levelLocal , event) -- решение
 
                             SPRED_LONG_TREND_DOWN  = SPRED_LONG_TREND_DOWN + SPRED_LONG_TREND_DOWN_SPRED;
                             SPRED_LONG_TREND_DOWN_LAST_PRICE = price; -- записываем последнюю покупку
+
+ 
                             callBUY(price,  dt); 
                             -- SPRED_LONG_TREND_DOWN
 
@@ -124,23 +127,65 @@ function long(price, dt, levelLocal , event) -- решение
     end;  
 end
 
-function callSELL(price ,dt ,j)
+
+function getfractal(price)  
+
+    if #setting.fractals_collection > 0 then 
+        for k,v in setting.fractals_collection do 
+        --    print(k,v) 
+        
+            label.set("k " , k);
+
+            
+        end
+    end;
+  --  for j=1,  setting.fractals_collection  do 
+
+  --      local p = setting.profit + price + (setting.profit_range * j) ;
+ --       trans_id_sell = transaction.send("SELL", p, setting.use_contract );
+ --   end;
+
+    -- setting.fractals_collection[number_of_candles] = {
+    --     ['high'] = t[num].high,
+end;
+
+
+
+function callSELL()
+    -- setting.current_price
     -- метод срабатывает когда транкзакция на продажу исполняется
-
     if setting.sell == false  then return; end;
+ 
 
+    if #setting.sellTable > 0 then
+        
+        loger.save(' #setting.sellTable ' .. #setting.sellTable ) ;
+        for k,value in #setting.sellTable do 
+            loger.save(    ' kkkkk ' ..k ) ;
+            setting.count_buyin_a_row = 0;
+   --  transaction.send("SELL", price, setting.use_contract);
+        --setting.current_price 
+         end;
+
+    end;
   --  label.set(event, priceLocal , datetime,levelLocal);
     -- продаём по дешевле
-    price = price - 0.01;
-    table.remove (bid,j);
-    label.set("SELL" , price, dt, 0);
-    bidTable.show(bid);
-    loger.save('profit:' ..profit..' SELL: ' .. price ..' contracts left: '.. #bid   );
-    count_sell = count_sell + 1;
 
-    setting.count_buyin_a_row = 0;
-  --  return;
-   --  transaction.send("SELL", price, setting.use_contract);
+
+
+  --  price = price - 0.01;
+ --   table.remove (bid,j);
+ 
+  --  bidTable.show(bid);
+ --   loger.save('profit:' ..profit..' SELL: ' .. price ..' contracts left: '.. #bid   );
+  --  count_sell = count_sell + 1;
+
+
+
+  --  setting.count_buyin_a_row = 0;
+
+
+  --  return; 
  
 end
 
@@ -165,29 +210,68 @@ function callBUY(price ,dt)
     setting.count_buyin_a_row = setting.count_buyin_a_row + 1; -- сколько раз подряд купили и не продали
 
     if setting.emulation == false then
-    --    statsPanel.show();
 
        local trans_id_buy =  transaction.send("BUY", price, setting.use_contract);
-            if(setting.use_contract > 1 ) then
-                for j=1,  setting.use_contract  do 
-                    local p = setting.profit + price + (setting.profit_range * j) ;
-                    trans_id_sell = transaction.send("SELL", p, setting.use_contract );
-                end;
-            else 
-                local p = setting.profit + price;
-                trans_id_sell =  transaction.send("SELL", p, setting.use_contract );
-            end 
+       sellTransaction(price,dt);
     else
+        sellview(price,dt);
     end;
-
-
 end 
 
 
+
+
+
+function sellTransaction(price,dt)
+    if(setting.use_contract > 1 ) then
+        for j=1,  setting.use_contract  do 
+            local p =  price + (setting.profit_range * j);
+
+            trans_id_sell = transaction.send("SELL", p, setting.use_contract );
+            setting.sellTable[trans_id_sell] = p;
+
+        end;
+
+    else 
+            local p = setting.profit + price;
+            trans_id_sell =  transaction.send("SELL", p, setting.use_contract );
+            setting.sellTable[trans_id_sell] = p;
+    end 
+end;
+
+
+
+function sellview(price,dt) 
+
+    if(setting.use_contract > 1 ) then
+        for jprice=1,  setting.use_contract  do 
+            local p =  price + (setting.profit_range * jprice) ;
+            label.set('red', p , dt, 1, 'sell contract '.. jprice);
+            setting.sellTable[getRand()] = p;
+        end;
+    else 
+            local p = setting.profit + price;
+            label.set('red', p , dt, 1, 'sell contract ');
+            loger.save('getRand() :' .. getRand()   );
+            setting.sellTable[getRand()] = p;
+    end 
+end;
+
+
+function getRand()
+
+    return tostring(math.random(2000000000));
+end;
+
+
+
+
+
  
-M.bid   = bid 
-M.decision = decision
-M.setDirect = setDirect
-M.setLitmitBid = setLitmitBid
+M.callSELL   = callSELL;
+M.bid   = bid ;
+M.decision = decision;
+M.setDirect = setDirect;
+M.setLitmitBid = setLitmitBid;
  
 return M

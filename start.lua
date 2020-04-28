@@ -27,11 +27,13 @@ setting = {
          ['status'] = false,
          ['buy'] = true,
          ['sell'] = true,
+         ['sellTable'] = {},
          ['close_positions'] = false,
          ['ACCOUNT'] =  '4105F8Y', 
          ['CLASS_CODE'] =  "SPBFUT", 
          ['SEC_CODE'] =  "BRK0",
          ['count_buyin_a_row'] =  0, -- покупки подряд
+         ['current_price'] =  0, -- покупки подряд
          
          
          ['tag'] = "my_br",
@@ -41,6 +43,17 @@ setting = {
          ['candles_buy_last'] = 0, -- на какой свече была последняя покупка
          ['candle_buy_number_down_price'] = 6, -- сколько свечей должно пройти чтобы отпустить продажу 
          ['range_down_price_candles'] = 0,
+
+
+         ['fractals_collection'] = {},
+         ['fractal_up'] = 0,
+         ['fractal_down'] = 0,
+         ['fractal_down_range'] = 0.05, -- если цена ниже, значит здесб был уровень, а под уровнем не покупаем.
+         ['fractal_candle'] = 3,
+         ['fractal_under_up'] = 0.06, -- под вверхом не покупаем, можем пробить а цена не пойдёт в нашу сторону
+
+
+
          ['timeWork'] =  {
             { '10:00', '14:00'},
             { '14:05', '18:45'}, 
@@ -62,11 +75,12 @@ setting = {
 local scriptTest = dofile(getScriptPath() .. "\\coutLine.lua");
 local candles = dofile(getScriptPath() .. "\\Signals\\candle.lua");
 local tradeSignal = dofile(getScriptPath() .. "\\Signals\\tradeSignal.lua"); 
+local fractalSignal = dofile(getScriptPath() .. "\\Signals\\fractal.lua"); 
 local loger = dofile(getScriptPath() .. "\\loger.lua");
 local label = dofile(getScriptPath() .. "\\drawLabel.lua");
 local control = dofile(getScriptPath() .. "\\interface\\control.lua");
 local statsPanel = dofile(getScriptPath() .. "\\interface\\stats.lua");
-
+ 
  
 local signalShowLog = dofile(getScriptPath() .. "\\interface\\signalShowLog.lua");
 local FRACTALS = dofile(getScriptPath() .. "\\LuaIndicators\\FRACTALS.lua");
@@ -177,8 +191,7 @@ basis = 9
        
      if Error ~= "" and Error ~= nil then message("1111111111111111111111 : "..Error) return end
     -- GET_GRAFFIC
-     
-      -- ������������� �� ���������� �������
+      
       GET_GRAFFIC   = ds:SetEmptyCallback();
     --  ds:SetUpdateCallback(MyFuncName);
     
@@ -221,48 +234,32 @@ basis = 9
 
 
    function main()
-      -- local dt = {
-      --    ['hour'] = 21,
-      --    ['min'] = 29,
-      --    ['sec']=30,
-      --    ['day']=24,
-      --    ['month']=4,
-      --    ['year']= 2020,
-      -- }; 
  
-      -- signalShowLog.addSignal(dt, 1, false, 21.90);
-      -- signalShowLog.addSignal(dt, 1, true, 21.95);
-      -- signalShowLog.addSignal(dt, 2, false, 21.20);
-      -- signalShowLog.addSignal(dt, 3, true, 21.50);
-
-
-  --    addSignal(dt, event, status, price)  
- 
-
+     signalShowLog.CreateNewTableLogEvent();
 
       label.init(setting.tag);
       loger.save(  " start ");
-      statsPanel.show();
+   --   statsPanel.show();
       update();
       getPrice();
 
 
 
           CurrentDirect = "SELL" 
-            local Price = false; -- ���������� ��� ��������� ���������� �������� ������� (����, ���� ������(false))
-          --  Result = SL_TP(Price, CurrentDirect);
-         
-           --  LIMIT_BID = 9; -- +1 contract
-           --  bid
+            local Price = false;
+          
       while Run do 
            update();
-           statsPanel.stats();
+       --    statsPanel.stats();
+           fractalSignal.last();
+ 
+
 
           if setting.status  then 
 
-            candles.getSignal(tag, callback)
+            candles.getSignal(tag, callback);
+            market.callSELL()
             
-
             tradeSignal.getSignal(setting.tag, eventTranc);
          end;
       end;  
