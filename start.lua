@@ -24,6 +24,8 @@ setting = {
          ['LIMIT_BID'] = 10,
          ['use_contract'] = 1,
          ['emulation'] = true,
+         ['candles'] = {}, -- свечи
+         
          ['status'] = false,
          ['buy'] = true,
          ['sell'] = true,
@@ -268,7 +270,7 @@ basis = 9
              
             tradeSignal.getSignal(setting.tag, eventTranc);
             candles.getSignal(tag, market.callSELL);
-            
+
          end;
       end;  
    end;

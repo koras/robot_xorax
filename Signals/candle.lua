@@ -46,8 +46,8 @@ local function getSignal(tag, callback)
     collbackFunc = callback;
     shift = 0;
 
-    number_of_candles = getNumCandles(setting.tag); 
-    bars_temp,res,legend = getCandlesByIndex(setting.tag, 0, number_of_candles-2*len-shift,2*len)
+    setting.number_of_candles = getNumCandles(setting.tag); 
+    bars_temp,res,legend = getCandlesByIndex(setting.tag, 0, setting.number_of_candles-2*len-shift,2*len)
 
     local lines_count = getLinesCount(setting.tag) 
     bars={}
@@ -58,11 +58,14 @@ local function getSignal(tag, callback)
      if(bars_temp[j-1].datetime.hour == nul)then
      end
             if bars_temp[j-1].datetime.hour >= 10 then
+
                     setting.current_price = bars_temp[j-1].price;
+
                     sk=true
                             bars[i]=bars_temp[j-1] 
                           calculateSignal( bars[len] )
                           collbackFunc(bars[len]);
+                 
                           i=i-1
             end
             j=j-1
