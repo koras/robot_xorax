@@ -117,6 +117,7 @@ local market = dofile(getScriptPath() .. "\\market.lua")
    count_sell = 0;
 
    profit = 0;
+   sellTable = {};
    bid = {}
    RangeSignal    = 0.1;            -- �������� ����
    ACCOUNT        = '232957';        -- ������������� �����
@@ -243,6 +244,7 @@ basis = 9
       update();
       getPrice();
 
+ 
 
 
           CurrentDirect = "SELL" 
@@ -252,15 +254,16 @@ basis = 9
            update();
        --    statsPanel.stats();
            fractalSignal.last();
+
+            
  
 
 
-          if setting.status  then 
-
-            candles.getSignal(tag, callback);
-            market.callSELL()
-            
+          if setting.status  then  
+             
             tradeSignal.getSignal(setting.tag, eventTranc);
+            
+            candles.getSignal(tag, market.callSELL);
          end;
       end;  
    end;
