@@ -58,15 +58,17 @@ local function getSignal(tag, callback)
      if(bars_temp[j-1].datetime.hour == nul)then
      end
             if bars_temp[j-1].datetime.hour >= 10 then
+
+                setting.current_price = bars_temp[j-1];
                     sk=true
-                    if bars_temp[j-1].datetime.hour ==18 and bars_temp[j-1].datetime.min==45 then
-                            sk=false
-                    end
-                    if sk then
+                 --   if bars_temp[j-1].datetime.hour ==18 and bars_temp[j-1].datetime.min==45 then
+                --            sk=false
+                  --  end
+                 --   if sk then
                             bars[i]=bars_temp[j-1] 
                           calculateSignal( bars[len] )
                           i=i-1
-                    end
+                   -- end
             end
             j=j-1
     end

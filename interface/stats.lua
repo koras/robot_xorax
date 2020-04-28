@@ -39,7 +39,41 @@ local word = {
 	['last_buy_price'] = "Last buy price",
 	['last_sell_price'] = "Last sell price",
 
-	['use_contract'] = 'use contract:'
+	['use_contract'] = 'use contract:',
+
+	
+	['old_number_of_candles'] = "old number of candles",
+	['number_of_candles'] = "number of candle",-- на какой свече была последняя покупка
+	['candles_buy_last'] = "candles buy last",
+	['range_down_price_candles'] = "range down price candle",
+	['candle_buy_number_down_price'] = "candle buy number down price",  -- сколько свечей должно пройти чтобы отпустить продажу 
+
+
+	['timeWork'] = "    time work:",  -- сколько свечей должно пройти чтобы отпустить продажу 
+ 
+
+
+	
+	['fractal_up'] = 'fractal up',
+	['fractal_down'] = 'fractal down',
+
+	['fractal_candle'] = 'fractal_candle', -- сколько считать за уровень
+
+	['fractal_down_range'] = 'fractal_down_range', -- если цена ниже, значит здесб был уровень, а под уровнем не покупаем.
+	['fractal_under_up'] = 'fractal_under_up', -- под вверхом не покупаем, можем пробить а цена не пойдёт в нашу сторону 
+   
+	['timeWork'] =  {
+	   { '10:00', '14:00'},
+	   { '14:05', '18:45'}, 
+	   { '19:00', '23:50'}
+	},   
+	
+	['closed_buy'] =  {
+	   { '13:00', '14:00'},
+	   { '18:00', '19:02'}, 
+	   { '22:55', '23:55'}
+	},
+
 };
  
  
@@ -71,6 +105,18 @@ end
 	SetCell(t_stat, 15, 1,  tostring(SPRED_LONG_LOST_SELL));  
 	
 
+	SetCell(t_stat, 21, 1, tostring(setting.candles_buy_last)); 
+
+	SetCell(t_stat, 22, 1, tostring(setting.number_of_candles)); 
+	SetCell(t_stat, 23, 1, tostring(setting.range_down_price_candles)); 
+	SetCell(t_stat, 24, 1, tostring(setting.candle_buy_number_down_price)); 
+
+  	
+	SetCell(t_stat, 26, 1, tostring(setting.fractal_up));
+	SetCell(t_stat, 27, 1, tostring(setting.fractal_down));
+	SetCell(t_stat, 28, 1, tostring(setting.fractal_candle));
+	SetCell(t_stat, 29, 1, tostring(setting.fractal_down_range));
+	SetCell(t_stat, 30, 1, tostring(setting.fractal_under_up));
  
 
 end;
@@ -83,9 +129,9 @@ init.create = true;
 	t_stat = AllocTable();	 
 
 
-	AddColumn(t_stat, 0, word.title , true, QTABLE_STRING_TYPE, 25);
+	AddColumn(t_stat, 0, word.title , true, QTABLE_STRING_TYPE, 35);
 	AddColumn(t_stat, 1, word.info, true, QTABLE_STRING_TYPE, 40);
-	AddColumn(t_stat, 2, word.sell, true, QTABLE_STRING_TYPE, 40);  
+--	AddColumn(t_stat, 2, word.sell, true, QTABLE_STRING_TYPE, 40);  
  
  
 
@@ -93,7 +139,7 @@ init.create = true;
 	SetWindowCaption(t_stat, word.Trading_Bot_stat_Panel);  
 	SetWindowPos(tt, 0, 70, 22, 140);
 	
-	for i = 1, 30 do
+	for i = 1, 40 do
 		InsertRow(t_stat, -1);
 	 end; 
 
@@ -138,8 +184,25 @@ init.create = true;
 	SetCell(t_stat, 14, 0,  tostring(word.last_buy_price));  
 	SetCell(t_stat, 15, 0,  tostring(word.last_sell_price));  
 
+	SetCell(t_stat, 21, 0, tostring(word.candles_buy_last));
+	SetCell(t_stat, 22, 0, tostring(word.number_of_candles));
+	SetCell(t_stat, 23, 0, tostring(word.range_down_price_candles));
+	SetCell(t_stat, 24, 0, tostring(word.candle_buy_number_down_price));
 
 
+	
+	SetCell(t_stat, 26, 0, tostring(word.fractal_up));
+	SetCell(t_stat, 27, 0, tostring(word.fractal_down));
+	SetCell(t_stat, 28, 0, tostring(word.fractal_candle));
+	SetCell(t_stat, 29, 0, tostring(word.fractal_down_range));
+	SetCell(t_stat, 30, 0, tostring(word.fractal_under_up));
+	-- ['fractal_up'] = 'fractal up',
+	-- ['fractal_down'] = 'fractal down',
+
+	-- ['fractal_candle'] = 'fractal_candle', -- сколько считать за уровень
+
+	-- ['fractal_down_range'] = 'fractal_down_range', -- если цена ниже, значит здесб был уровень, а под уровнем не покупаем.
+	-- ['fractal_under_up'] = 'fractal_under_up', -- под вверхом не покупаем, можем пробить а цена не пойдёт в нашу сторону 
 
  
 	-- ['last_buy_price'] = "Last buy price",

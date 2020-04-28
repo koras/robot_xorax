@@ -5,11 +5,11 @@ local init = {}
 
 arrTableLog = {};
 
-local showLabel = true;
+local showLabel = false;
 
 
 
-local loger = dofile(getScriptPath() .. "\\interface\\color.lua");
+local color = dofile(getScriptPath() .. "\\interface\\color.lua");
 local loger = dofile(getScriptPath() .. "\\loger.lua");
 local label = dofile(getScriptPath() .. "\\drawLabel.lua");
 
@@ -41,8 +41,7 @@ function getEventLog(_event)
 		[5] = 'too high price',  
 		[6] = 'mode emulation',  
 	}
-	
-	loger.save( 'getEventLog(event)  '   );  
+	 
 	return arr[_event];
 end;
 
@@ -61,7 +60,6 @@ local function addSignal(dt, event, status, price)
 		['number'] =  (#arrTableLog+1),
 	};
 
- 	loger.save( 'getEventLog(event) ' .. tostring(getEventLog(event) )  );  
 	arrTableLog[#arrTableLog+1]  = arr; 
 	updateLogSignal(arr);
 	--table.insert(arrTableLog, (#arrTableLog+1),arr);   
@@ -88,7 +86,6 @@ end;
 	end
 
 
---	loger.save(   " ============ " )
 	for i = #arrTableLog+1 , itter, -1 do
 
 		if i > 0 then 
@@ -97,11 +94,7 @@ end;
 		end 
 		 
 --	for key in arrTableLog do
-	--	loger.save( #arrTableLog.. " ; val == "..i)
 		if(keys > 0) then 
-
-		 
-			
 				if arrTableLog[i].status then
 					Green(t_id_TableLog, keys,0);
 					Green(t_id_TableLog, keys,1);
@@ -115,7 +108,6 @@ end;
 					White(t_id_TableLog, keys,3);
 					White(t_id_TableLog, keys,4);
 				end;
- 
  
 			SetCell(t_id_TableLog, keys, 0, tostring(arrTableLog[i].number)); 
 			SetCell(t_id_TableLog, keys, 1, tostring(arrTableLog[i].dtime)); 
@@ -203,7 +195,7 @@ end;
 M.addSignal = addSignal;
 M.stats = stats;
 M.deleteTable = deleteTable;
-M.CreateTable = CreateTable;
+M. CreateNewTableLogEvent =  CreateNewTableLogEvent;
 M.show = show;
 
 return M

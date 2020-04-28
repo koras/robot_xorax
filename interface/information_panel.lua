@@ -13,7 +13,7 @@ local word = {
 	['status'] = "Status",
 	['buy'] = "Buy",
 	['sell'] = "Sell",
-	['close_positions'] = "�lose positions",
+--	['close_positions'] = "�lose positions",
 	
 	['start'] = "      START",
 	['finish'] = "      STOP",
@@ -44,14 +44,12 @@ local word = {
 
 	['candles_buy_last'] = "      candles buy last:",
 	['number_of_candles'] = "      number of candle:",-- на какой свече была последняя покупка
-	['candles_buy_last'] = "      candles buy last:",
 	['range_down_price_candles'] = "     range down price candle:",
 	['candle_buy_number_down_price'] = "    candle buy number down price:",  -- сколько свечей должно пройти чтобы отпустить продажу 
 
 
 	['timeWork'] = "    time work:",  -- сколько свечей должно пройти чтобы отпустить продажу 
  
-   
 	['timeWork'] =  {
 	   { '10:00', '14:00'},
 	   { '14:05', '18:45'}, 
@@ -63,9 +61,6 @@ local word = {
 	   { '18:00', '19:02'}, 
 	   { '22:55', '23:55'}
 	},
-
-
-
 };
  
  
@@ -84,6 +79,36 @@ local function stats()
 	SetCell(t_information, 14, 1,  tostring(SPRED_LONG_LOST_SELL)) 
 	SetCell(t_information, 17, 1,  tostring(SPRED))  
  
+
+
+	-- SetCell(t_information, 21, 0, word.candles_buy_last);
+	-- SetCell(t_information, 22, 0, word.number_of_candles);
+	-- SetCell(t_information, 23, 0, word.range_down_price_candles);
+	-- SetCell(t_information, 24, 0, word.candle_buy_number_down_price);
+
+
+	-- SetCell(t_information, 21, 1,  tostring(setting.candles_buy_last)) ;
+	-- SetCell(t_information, 22, 1,  tostring(setting.number_of_candles) ; 
+	-- SetCell(t_information, 23, 1,  tostring(setting.range_down_price_candles)) ;  
+	-- SetCell(t_information, 24, 1,  tostring(setting.candle_buy_number_down_price)) ;  
+	 
+
+	-- ['candles_buy_last'] = 0, -- на какой свече была последняя покупка
+	-- ['candle_buy_number_down_price'] = 6, -- сколько свечей должно пройти чтобы отпустить продажу 
+	-- ['range_down_price_candles'] = 0,
+	-- ['timeWork'] =  {
+	--    { '10:00', '14:00'},
+	--    { '14:05', '18:45'}, 
+	--    { '19:00', '23:50'}
+	-- },   
+	
+	-- ['closed_buy'] =  {
+	--    { '13:00', '14:00'},
+	--    { '18:00', '19:02'}, 
+	--    { '22:55', '23:55'}
+	-- },
+
+
 
     -- setting.candles_buy_last = setting.number_of_candles;
 
@@ -131,10 +156,13 @@ local function show()
 
 	  
 
-	SetCell(t_information, 21, 0, word.candles_buy_last);
-	SetCell(t_information, 22, 0, word.number_of_candles);
-	SetCell(t_information, 23, 0, word.range_down_price_candles);
-	SetCell(t_information, 24, 0, word.candle_buy_number_down_price);
+	-- SetCell(t_information, 21, 0, word.candles_buy_last);
+	-- SetCell(t_information, 22, 0, word.number_of_candles);
+	-- SetCell(t_information, 23, 0, word.range_down_price_candles);
+	-- SetCell(t_information, 24, 0, word.candle_buy_number_down_price);
+
+
+
 
 
 
