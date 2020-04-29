@@ -22,17 +22,16 @@ M = {};
 
 -- не покупаем если продали в текущем состоянии
 
-function getRandBuy(price, bids)
+function getRandBuy(price)
           
     -- ['SPRED_LONG_BUY_UP'] = 0.02, -- условия, не покупаем если здесь ранее мы купили | вверх диапозон,
     -- ['SPRED_LONG_BUY_down'] = 0.00, -- условия, не покупаем если здесь ранее мы купили | вниз диапозон
      local checkRange = true;
-             for j_checkRange=1, #bids  do
-                     if bids[j_checkRange].type == 'buy' then
+             for j_checkRange=1, #setting.sellTable  do
+                     if setting.sellTable[j_checkRange].type == 'buy' then
                              -- здесь узнаю, была ли покупка в этом диапозоне
-                             if   setting.SPRED_LONG_BUY_UP + bids[j_checkRange].price >= price and price >= bids[j_checkRange].price - setting.SPRED_LONG_BUY_down   then
+                             if   setting.SPRED_LONG_BUY_UP + setting.sellTable[j_checkRange].price >= price and price >= setting.sellTable[j_checkRange].price - setting.SPRED_LONG_BUY_down   then
                                  checkRange = false;
-                              --   signalShowLog.addSignal(bids[j_checkRange].dt, 11, false, price);
                      end; 
              end; 
      end;  
@@ -41,16 +40,16 @@ function getRandBuy(price, bids)
  
  
  -- пвисит ли заявка на продажу в этом промежутке
-function getRandSell(price, bids)
+function getRandSell(price)
 
      local checkRange = true;
-             for j_checkRange=1, #bids  do
-                     if bids[j_checkRange].type == 'sell' then
+             for j_checkRange=1, #setting.sellTable  do
+                     if setting.sellTable[j_checkRange].type == 'sell' then
                              -- здесь узнаю, была ли покупка в этом диапозоне
-                             if   setting.profit + bids[j_checkRange].price >= price and price >= bids[j_checkRange].price - setting.profit   then
+                             if   setting.profit + setting.sellTable[j_checkRange].price >= price and price >= setting.sellTable[j_checkRange].price - setting.profit   then
                                  checkRange = false;
-                                 signalShowLog.addSignal(bids[j_checkRange].dt, 12, false, #bids);
-                                 signalShowLog.addSignal(bids[j_checkRange].dt, 12, false, price);
+                                 signalShowLog.addSignal(setting.sellTable[j_checkRange].dt, 12, false, #setting.sellTable);
+                                 signalShowLog.addSignal(setting.sellTable[j_checkRange].dt, 12, false, price);
                      end; 
              end; 
      end;  

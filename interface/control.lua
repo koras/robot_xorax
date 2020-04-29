@@ -464,7 +464,7 @@ end;
 
  
 
- function deleteTable(Line, Col)  -- �������
+ function deleteTable()  -- �������
 	DestroyTable(t_id)
  end;
 

@@ -191,7 +191,7 @@ init.create = true;
 	AddColumn(t_information, 0, word.status , true, QTABLE_STRING_TYPE, 15);
 	AddColumn(t_information, 1, word.buy, true, QTABLE_STRING_TYPE, 20);
 	AddColumn(t_information, 2, word.sell, true, QTABLE_STRING_TYPE, 20); 
-	AddColumn(t_information, 3, word.close_positions, true,QTABLE_STRING_TYPE, 20); 
+	AddColumn(t_information, 3, word.close_positions, true,QTABLE_STRING_TYPE, 40); 
  
 	t = CreateWindow(t_information); 
 	SetWindowCaption(t_information, word.Trading_Bot_Control_Panel);  

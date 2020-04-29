@@ -20,7 +20,7 @@ package.path = package.path
          
 setting = {
          ['profit_range'] =  0.01; -- минимальная прибыль
-         ['profit'] =  0; -- минимальная прибыль
+         ['profit'] =  0.01; -- минимальная прибыль
          ['LIMIT_BID'] = 10,
          ['use_contract'] = 1,
          ['emulation'] = true,
@@ -87,12 +87,14 @@ local tradeSignal = dofile(getScriptPath() .. "\\Signals\\tradeSignal.lua");
 local fractalSignal = dofile(getScriptPath() .. "\\Signals\\fractal.lua"); 
 local loger = dofile(getScriptPath() .. "\\loger.lua");
 local label = dofile(getScriptPath() .. "\\drawLabel.lua");
+
 local control = dofile(getScriptPath() .. "\\interface\\control.lua");
 local statsPanel = dofile(getScriptPath() .. "\\interface\\stats.lua");
- 
- 
+local interfaceBids = dofile(getScriptPath() .. "\\interface\\bids.lua");
 local signalShowLog = dofile(getScriptPath() .. "\\interface\\signalShowLog.lua");
-local FRACTALS = dofile(getScriptPath() .. "\\LuaIndicators\\FRACTALS.lua");
+
+
+local FRACTALS = dofile(getScriptPath() .. "\\LuaIndicators\\FRACTALS.lua"); 
  
 --dofile(getWorkingFolder().."\\LuaIndicators\\FRACTALS.lua")
  
@@ -249,16 +251,20 @@ basis = 9
       label.init(setting.tag);
       loger.save(  " start ");
       statsPanel.show();
+
+      interfaceBids.show(setting.sellTable);
+
       update();
       getPrice();
 
  
-
-
-          CurrentDirect = "SELL" 
-            local Price = false;
+       CurrentDirect = "SELL" 
+       local Price = false;
           
       while Run do 
+         
+         
+          interfaceBids.show(setting.sellTable);
            update();
            statsPanel.stats();
            fractalSignal.last();
@@ -293,6 +299,7 @@ basis = 9
       control.deleteTable();
       signalShowLog.deleteTable();
       statsPanel.deleteTableStats();
+      interfaceBids.deleteTable();
    end;
     
 

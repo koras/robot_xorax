@@ -134,69 +134,88 @@ function getfractal(price)
 
 end;
 
-
+buy_contract  = 0;
+statusRange = true;
 function callSELL(result)
-
-    local statusRange = true;
-
- 
+    
+    statusRange = true;
 
     if setting.sell == false  then return; end;
 
     if #setting.sellTable > 0 then
-        
-        for sellT = 1 ,  #setting.sellTable do  
-            if statusRange then
-
-
-                --    loger.save('object.price  ' .. result.close  );
-
-            if  setting.sellTable[sellT].type == 'sell' and result.close >= setting.sellTable[sellT].price  then 
-
-                 local price = result.close;
-                setting.count_buyin_a_row = 0; 
+  
+        deleteSell(result);
        
-
-              --   loger.save('profit:' ..setting.profit..' SELL: ' .. result.close ..' contracts left: '.. #setting.sellTable   );
-
-                 SPRED_LONG_LOST_SELL = price;
-
-                 setting.count_sell =  setting.count_sell + 1; 
-                 setting.profit =  setting.sellTable[sellT].price - setting.sellTable[sellT].buy_contract + setting.profit;
-
-                -- надо удалить контракт по которому мы покупали
-                local buy_contract = setting.sellTable[sellT].buy_contract;
-                table.remove (setting.sellTable, sellT);
-                loger.save('setting.sellTable  1 :'  .. #setting.sellTable  );
+    end;
+end
 
 
-                for searchBuy = 1 ,  #setting.sellTable do 
-                    if setting.sellTable[searchBuy].type == 'buy' and setting.sellTable[sellT].buy_contract == buy_contract  then 
-                            -- удаляем только 1 элемент
-                            setting.limit_count_buy = setting.limit_count_buy - 1;
-                            table.remove (setting.sellTable, sellT);
-                            
-                            loger.save('setting.sellTable 2 :'  .. #setting.sellTable  );
-                    
-                            signalShowLog.addSignal(result.datetime, 8, false, price);
-                
-                            statusRange = false;
-                         
-                            
-                        return;
-                    end;
-                end;
+function deleteSell(result)
+    local buy_contract = 0;
+    local deleteKey = 0;
+        for sellT = 1 ,  #setting.sellTable do 
+        --   if statusRange then
+         --   loger.save(' #setting.sellTable  ' ..  #setting.sellTable  );
+                if  setting.sellTable[sellT].type == 'sell' and result.close >= setting.sellTable[sellT].price  then 
 
+                    local price = result.close;
+                    setting.count_buyin_a_row = 0; 
+
+                    SPRED_LONG_LOST_SELL = price;
+
+                    setting.count_sell =  setting.count_sell + 1; 
+                    setting.profit =  setting.sellTable[sellT].price - setting.sellTable[sellT].buy_contract + setting.profit;
+
+                    -- надо удалить контракт по которому мы покупали
+                    buy_contract = setting.sellTable[sellT].buy_contract; 
+                    deleteKey = sellT;
+ 
+                    signalShowLog.addSignal(result.datetime, 8, false, price);
             end;
-
         end;
 
-   --  transaction.send("SELL", price, setting.use_contract);
-        --setting.current_price 
-         end;
+        if deleteKey == 0  then 
+        
+        else
 
+            loger.save(' #setting.sellTable #setting.sellTable #setting.sellTable #setting.sellTable  ' ..  #setting.sellTable  );
+            table.remove (setting.sellTable, deleteKey);
+            loger.save(' #setting.sellTable #setting.sellTable #setting.sellTable #setting.sellTable  ' ..  #setting.sellTable  );
+
+            deleteBuy(result,buy_contract);
+        end;
+end
+
+
+function deleteBuy(result,buy_contract)
+    local deleteKey = 0;
+    loger.save(' 1 deleteKeydeleteKeydeleteKeydeleteKeydeleteKeydeleteKeydeleteKeydeleteKeydeleteKey  ' ..  #setting.sellTable  );
+    for searchBuy = 1 ,  #setting.sellTable do 
+        loger.save(' 5 deleteKeydeleteKeydeleteKeydeleteKeydeleteKeydeleteKeydeleteKeydeleteKeydeleteKey  ' ..  #setting.sellTable  );
+        loger.save(' setting.sellTable[searchBuy].typey  ' ..  setting.sellTable[searchBuy].type );
+        loger.save(' setting.sellTable[searchBuy].price  ' ..  setting.sellTable[searchBuy].price );
+        loger.save('buy_contract  ' ..  buy_contract );
+
+
+        if setting.sellTable[searchBuy].type == 'buy' and setting.sellTable[searchBuy].price == ( buy_contract + 0.01 )  then 
+                -- удаляем только 1 элемент
+                setting.limit_count_buy = setting.limit_count_buy - 1;
+                deleteKey = searchBuy;
+                loger.save(' 6 deleteKey  ' ..  deleteKey  );
+            --    table.remove (setting.sellTable, searchBuy);
+             --   loger.save('setting.sellTable 2 : == '  .. #setting.sellTable  );
+                signalShowLog.addSignal(result.datetime, 8, false, setting.sellTable[searchBuy].price); 
+        end;
     end;
- 
+    
+    if deleteKey == 0  then 
+        
+    else
+        loger.save('2  deleteKeydeleteKeydeleteKeydeleteKeydeleteKeydeleteKeydeleteKeydeleteKeydeleteKey  ' ..  #setting.sellTable  );
+        table.remove (setting.sellTable, deleteKey);
+        loger.save('3  deleteKeydeleteKeydeleteKeydeleteKeydeleteKeydeleteKeydeleteKeydeleteKeydeleteKeydeleteKey  ' ..  #setting.sellTable  );
+    end;
+
 end
 
 

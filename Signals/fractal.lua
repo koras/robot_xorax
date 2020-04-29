@@ -44,9 +44,13 @@ local function last()
         
         setting.fractals_collection[number_of_candles] = {
             ['high'] = t[num].high,
+ 
             ['low'] = t[num].low
           };
   
+          setting.fractal_up = t[num].high;
+          setting.fractal_down = t[num].low;
+          
         Up=true;
           
 

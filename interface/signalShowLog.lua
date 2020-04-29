@@ -17,7 +17,7 @@ local label = dofile(getScriptPath() .. "\\drawLabel.lua");
 
 createTableLog = false;
 local wordTitleTableLog = {
-	['number'] = "â„–",
+	['number'] = "¹",
 	['time'] = "Time",
 	['event'] = "Event",
 	['status'] = "Status",
@@ -174,7 +174,7 @@ function CreateNewTableLogEvent()
 	 
 
 	-- local wordTitleTableLog = {
-	-- 	['number'] = "â„–",
+	-- 	['number'] = "¹",
 	-- 	['time'] = "Time",
 	-- 	['event'] = "Event",
 	-- 	['status'] = "Status",
@@ -220,7 +220,7 @@ end;
  
  
 
- function deleteTable(Line, Col)  -- ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ function deleteTable(Line, Col)  -- ˜˜˜˜˜˜˜
 	DestroyTable(t_id_TableLog)
  end;
  
