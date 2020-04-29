@@ -9,7 +9,7 @@
 local loger = dofile(getScriptPath() .. "\\loger.lua");
 local label = dofile(getScriptPath() .. "\\drawLabel.lua");
 local bidTable = dofile(getScriptPath() .. "\\bidTable.lua");
-local transaction = dofile(getScriptPath() .. "\\transaction.lua");
+local transaction = dofile(getScriptPath() .. "\\shop\\transaction.lua");
 local signalShowLog = dofile(getScriptPath() .. "\\interface\\signalShowLog.lua");
 local statsPanel = dofile(getScriptPath() .. "\\interface\\stats.lua");
 
@@ -65,28 +65,37 @@ function long(price, dt, levelLocal , event) -- решение
             
  
             -- проверём, покупали здесь или нет, в этом промежутке
-            checkRange = getRandBuy(price, setting.sellTable);
+            checkRangeBuy = contitionMarket.getRandBuy(price, setting.sellTable);
+            -- проверём, стоит ли продажа в этом промежутке
+            checkRangeSell = contitionMarket.getRandSell(price, setting.sellTable);
 
 
 
-            if checkRange == true then
+            if checkRangeBuy == true and checkRangeSell == true then
                       -- SPRED_LONG_BUY
                         -- мы покупаем, если в определённом диапозоне небыло покупок
                --  loger.save( 'callBUY  '  .. price  );
                             -- мы не покупаем, если только что продали по текуще цене setting.profit
              --       if(SPRED_LONG_LOST_SELL - SPRED_LONG_PRICE_DOWN > price or  price > SPRED_LONG_LOST_SELL + setting.profit or SPRED_LONG_LOST_SELL == 0 ) then  
-                    if(SPRED_LONG_LOST_SELL - setting.profit >= price or  price >= SPRED_LONG_LOST_SELL + setting.profit or SPRED_LONG_LOST_SELL == 0 ) then  
+
+                    if(SPRED_LONG_LOST_SELL + setting.profit_range >= price or  price >= SPRED_LONG_LOST_SELL - setting.profit_range or SPRED_LONG_LOST_SELL == 0 ) then  
                         
                         
                                 --    local SPRED_LONG_TREND_DOWN = 0.01; -- рынок падает, увеличиваем растояние между покупками
                                 --    local SPRED_LONG_TREND_DOWN_SPRED = 0.01; -- на сколько увеличиваем растояние
                                 --    local SPRED_LONG_TREND_DOWN_LAST_PRICE= 0; -- последняя покупка
 
-                                    if SPRED_LONG_TREND_DOWN_LAST_PRICE == 0  or  SPRED_LONG_TREND_DOWN_LAST_PRICE - SPRED_LONG_TREND_DOWN > price  or SPRED_LONG_TREND_DOWN_LAST_PRICE  < price  then
+                                    if SPRED_LONG_TREND_DOWN_LAST_PRICE == 0  or  
+                                    SPRED_LONG_TREND_DOWN_LAST_PRICE - SPRED_LONG_TREND_DOWN > price  
+                                    or SPRED_LONG_TREND_DOWN_LAST_PRICE  < price  then
+
+
                                         SPRED_LONG_TREND_DOWN  = SPRED_LONG_TREND_DOWN + SPRED_LONG_TREND_DOWN_SPRED;
                                         SPRED_LONG_TREND_DOWN_LAST_PRICE = price; -- записываем последнюю покупку
                                         callBUY(price,  dt); 
                                         -- SPRED_LONG_TREND_DOWN
+
+                                        signalShowLog.addSignal(dt, 10, false, price);
 
                                     else
                                         signalShowLog.addSignal(dt, 3, true, price);
@@ -120,31 +129,12 @@ function getfractal(price)
             
         end
     end;
-  --  for j=1,  setting.fractals_collection  do 
 
-  --      local p = setting.profit + price + (setting.profit_range * j) ;
- --       trans_id_sell = transaction.send("SELL", p, setting.use_contract );
- --   end;
-
-    -- setting.fractals_collection[number_of_candles] = {
-    --     ['high'] = t[num].high,
 end;
 
 
-
-
-    --    local O = t[i].open; -- Получить значение Open для указанной свечи (цена открытия свечи)
-    --    local H = t[i].high; -- Получить значение High для указанной свечи (наибольшая цена свечи)
-    --    local L = t[i].low; -- Получить значение Low для указанной свечи (наименьшая цена свечи)
-    --    local C = t[i].close; -- Получить значение Close для указанной свечи (цена закрытия свечи)
-    --    local V = t[i].volume; -- Получить значение Volume для указанной свечи (объем сделок в свече)
-    --    local T = t[i].datetime; -- Получить значение datetime для указанной свечи
-
 function callSELL(result)
-    -- setting.current_price
-    -- метод срабатывает когда транкзакция на продажу исполняется
- 
- --   loger.save('object.price  ' .. result.close  );
+
     local statusRange = true;
 
  
@@ -209,18 +199,18 @@ end
 
 
 function callBUY(price ,dt)
- 
+    local priceLocal = price;
   if setting.buy == false  then 
     signalShowLog.addSignal(dt, 4, true, price);
     return; end;
 
     -- ставим заявку на покупку выше на 0.01
 
-  --  price  = price + 0.01; -- и надо снять заявку если не отработала
+   price  = price + 0.01; -- и надо снять заявку если не отработала
 --  price  = price + 0.01; -- и надо снять заявку если не отработала
 
     -- покупаем по дороже (
-    bid [#bid+1] = price; 
+ 
     label.set("BUY" , price, dt, 0);
     bidTable.show(bid);
 
@@ -234,20 +224,21 @@ function callBUY(price ,dt)
 
     setting.count_buyin_a_row = setting.count_buyin_a_row + 1; -- сколько раз подряд купили и не продали
 
-    setting.limit_count_buy = setting.limit_count_buy + 1;
+    setting.limit_count_buy = setting.limit_count_buy + 1; -- отметка для лимита
 
     if setting.emulation == false then
-
        local trans_id =  transaction.send("BUY", price, setting.use_contract);
-       sellTransaction(price,dt);
-    else
-        sellview(price,dt);
     end;
+   
+    sellTransaction(priceLocal,dt);
+   -- else
+   --     sellview(price,dt);
+  --  end;
 
  
         for j=1,  setting.use_contract  do 
 
-            signalShowLog.addSignal(dt, 6, true, price);
+            --signalShowLog.addSignal(dt, 6, true, price);
             signalShowLog.addSignal(dt, 7, false, price);
             
             setting.sellTable[(#setting.sellTable+1)] = {
@@ -267,86 +258,67 @@ end
 
 
 
-function sellTransaction(price,dt)
+function sellTransaction(priceLocal,dt)
+    local p = 0;
+    
+    signalShowLog.addSignal(dt, 9, false, priceLocal);
+
+    priceLocal = priceLocal + 0.01;
     if(setting.use_contract > 1 ) then
         for j=1,  setting.use_contract  do 
-            local p =  price + (setting.profit_range * j);
+            local  trans_id_sell =  getRand();
+             p =  priceLocal + (setting.profit_range * j);
 
-            trans_id_sell = transaction.send("SELL", p, setting.use_contract );
+          --  trans_id_sell = transaction.send("SELL", p, setting.use_contract );
+
+            if setting.emulation == false then
+                 trans_id_sell =  transaction.send("SELL", p, setting.use_contract );
+            end
+
+            label.set('red', p , dt, 1, 'sell contract '.. 1);
+            signalShowLog.addSignal(dt, 9, false, p);
             setting.sellTable[(#setting.sellTable+1)] = {
                                                             ['price'] = p,
                                                             ['dt']= dt, 
                                                             ['trans_id']= trans_id_sell, 
                                                             ['type']= 'sell',
-                                                            ['emulation']= false,
+                                                            ['emulation']= setting.emulation,
                                                             ['contract']=  1,
-                                                            ['buy_contract']= price, -- стоимость продажи
+                                                            ['buy_contract']= priceLocal, -- стоимость продажи
                                                         };
-
-    end;
-    else 
-            local p = setting.profit + price;
-            trans_id_sell =  transaction.send("SELL", p, setting.use_contract );
-
-            setting.sellTable[(#setting.sellTable+1)] = {
-                                                            ['price'] = p,
-                                                            ['dt']= dt, 
-                                                            ['trans_id']= trans_id_sell, 
-                                                            ['type']= 'sell',
-                                                            ['emulation']= false,
-                                                            ['contract']=  1,
-                                                            ['buy_contract']= price, -- стоимость продажи
-                                                        };
-    end 
-end;
-
-
-
-function sellview(price,dt) 
-
-    if(setting.use_contract > 1 ) then
-        for jprice=1,  setting.use_contract  do 
-            local p =  price + (setting.profit_range * jprice) ;
-            label.set('red', p , dt, 1, 'sell contract '.. jprice);
-     
-            setting.sellTable[(#setting.sellTable+1)] = {
-                ['price'] = p,
-                ['dt']= dt, 
-                ['trans_id']= getRand(), 
-                ['type']= 'sell',
-                ['emulation']=  true,
-                ['contract']=  1,
-                ['buy_contract']= price, -- стоимость продажи
-            };
-            
+           
         end;
     else 
-            local p = setting.profit + price;
-            label.set('red', p , dt, 1, 'sell contract ');
-            loger.save('getRand() :' .. getRand()   );
+        --------------###########################################---------------------
+            p = setting.profit_range + priceLocal;
+            local  trans_id_sell =  getRand();
+
+            if setting.emulation == false then
+                trans_id_sell =  transaction.send("SELL", p, setting.use_contract );
+            end;
+
+            signalShowLog.addSignal(dt, 9, false, p);
+             label.set('red', p , dt, 1, 'sell contract ');
+             
             setting.sellTable[(#setting.sellTable+1)] = {
-                ['price'] = p,
-                ['dt']= dt, 
-                ['trans_id']= getRand(), 
-                ['type']= 'sell',
-                ['emulation']=  true,
-                ['contract']=  1,
-                ['buy_contract']= price, -- стоимость продажи
-            };
-   
+                                                            ['price'] = p,
+                                                            ['dt']= dt, 
+                                                            ['trans_id']= trans_id_sell, 
+                                                            ['type']= 'sell',
+                                                            ['emulation']= setting.emulation,
+                                                            ['contract']=  1,
+                                                            ['buy_contract']= priceLocal, -- стоимость продажи
+                                                        };
     end 
 end;
 
+ 
 
 function getRand()
-
     return tostring(math.random(2000000000));
 end;
 
-
-
-
-
+ 
  
 M.callSELL   = callSELL;
 M.bid   = bid ;

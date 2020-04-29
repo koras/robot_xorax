@@ -18,6 +18,12 @@ local function send(typeMarket, price, quantity )
 
 	  local trans_id = random_max();
 
+
+
+--	  Transaction SECCODE BRK0
+-- Transaction CLASS_CODE SPBFUT
+-- Transaction ACCOUNT 4105F8Y
+
 	local Transaction={
 		['TRANS_ID']   = tostring(trans_id),
 		['ACTION']     = 'NEW_ORDER',
@@ -29,14 +35,18 @@ local function send(typeMarket, price, quantity )
 		['TYPE']       = 'L', -- по рынку (MARKET)
 		['QUANTITY']   = tostring(quantity), -- количество 
 		['PRICE']      = tostring(price),
-		['CLIENT_CODE']= '12робот',
+		['CLIENT_CODE']= 'Robot XoraX',
 	--	["COMMENT"]    = "скрипт"
 	 }
    -- Отправляет транзакцию на установку ТЭЙК-ПРОФИТ и СТОП-ЛОСС
 
 
+   loger.save(' setting.CLASS_CODE '..setting.CLASS_CODE);
+   loger.save(' setting.SEC_CODE '..setting.SEC_CODE);
+   loger.save(' setting.ACCOUNT '..setting.ACCOUNT);
+   
    loger.save( 'Transaction ' .. Transaction.OPERATION .. ' tostring(price) ' ..'  ' .. tostring(price).. ' ' .. ' '.. Transaction.TRANS_ID );
-   loger.save( 'SEC_CODE ' .. SEC_CODE );
+   loger.save( 'SEC_CODE ' .. setting.SEC_CODE );
    loger.save( 'Transaction SECCODE ' .. Transaction['SECCODE'] );
    loger.save( 'Transaction CLASS_CODE ' .. Transaction.CLASSCODE  );
    loger.save( 'Transaction ACCOUNT ' .. Transaction.ACCOUNT );
@@ -49,6 +59,10 @@ local function send(typeMarket, price, quantity )
 
 	  if res ~= "" then	
 		message(res);
+
+		loger.save(' setting.CLASS_CODE '..setting.CLASS_CODE);
+		loger.save(' setting.SEC_CODE '..setting.SEC_CODE);
+		loger.save(' setting.ACCOUNT '..setting.ACCOUNT);
 
 		loger.save( 'Transaction  res ' .. res )
 	  return nil, res

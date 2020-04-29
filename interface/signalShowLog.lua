@@ -42,6 +42,10 @@ function getEventLog(_event)
 		[6] = 'mode emulation',  
 		[7] = 'bye contract',  
 		[8] = 'sell contract',  
+		[9] = 'Set a order for to sale', 
+		[10] = 'bye',  
+		[11] = 'bye', 
+		[11] = 'sell', 
 	} 	
 	
 	arr = {
@@ -53,6 +57,10 @@ function getEventLog(_event)
 		[6] = 'Режим эмуляции',  
 		[7] = 'Купили контракт',  
 		[8] = 'Продали контракт',  
+		[9] = 'Поставили заявку на продажу',  
+		[10] = 'на продажу',  
+		[11] = 'Мы покупали по текущей цене в этом промежутке', 
+		[12] = 'У нас стоит заявка на продажу по текущей цене',   
 	}
 	 
 	return arr[_event];
@@ -63,7 +71,7 @@ local function addSignal(dt, event, status, price)
 	
 	CreateNewTableLogEvent();
 
-	loger.save('event event :' .. event  );
+	loger.save('event :' .. event    ..' price '..price );
 	
 	local arr = {
 		['dt'] =  dt,
@@ -123,6 +131,16 @@ end;
 					Green(t_id_TableLog, keys,3);
 					Green(t_id_TableLog, keys,4);
 				end;
+				
+			
+			if arrTableLog[i].event == 8 or  arrTableLog[i].event == 9 then 
+
+				Red(t_id_TableLog, keys,0);
+				Red(t_id_TableLog, keys,1);
+				Red(t_id_TableLog, keys,2);
+				Red(t_id_TableLog, keys,3);
+				Red(t_id_TableLog, keys,4);
+			end;
  
 			SetCell(t_id_TableLog, keys, 0, tostring(arrTableLog[i].number)); 
 			SetCell(t_id_TableLog, keys, 1, tostring(arrTableLog[i].dtime)); 

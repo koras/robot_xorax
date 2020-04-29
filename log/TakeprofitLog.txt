@@ -1,585 +1,1317 @@
  my_br   tag 
  start 
+ setting.CLASS_CODE SPBFUT
+ setting.SEC_CODE BRK0
+ setting.ACCOUNT 4105F8Y
+Transaction B tostring(price)   23.23  157377912
+SEC_CODE BR-5.20
+Transaction SECCODE BRK0
+Transaction CLASS_CODE SPBFUT
+Transaction ACCOUNT 4105F8Y
+event :9 price 23.22
+ setting.CLASS_CODE SPBFUT
+ setting.SEC_CODE BRK0
+ setting.ACCOUNT 4105F8Y
+Transaction S tostring(price)   23.28  1498197527
+SEC_CODE BR-5.20
+Transaction SECCODE BRK0
+Transaction CLASS_CODE SPBFUT
+Transaction ACCOUNT 4105F8Y
+event :9 price 23.28
+event :7 price 23.23
+event :10 price 23.22
 my_br   tag 
  start 
-getRand() :1127170629
-event event :6
-event event :7
-event event :1
-event event :3
-event event :1
-event event :3
-getRand() :959746087
-event event :6
-event event :7
-event event :8
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
+event :9 price 23.27
+event :9 price 23.33
+event :7 price 23.28
+event :10 price 23.27
+event :12 price 23.28
+event :1 price 23.28
+event :1 price 23.27
+event :3 price 23.26
+event :1 price 23.27
+event :3 price 23.26
+event :1 price 23.27
+event :12 price 23.28
+event :1 price 23.28
 my_br   tag 
  start 
-getRand() :1127170629
-event event :6
-event event :7
-event event :3
-event event :3
-event event :3
-event event :3
-event event :1
-event event :8
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
+ setting.CLASS_CODE SPBFUT
+ setting.SEC_CODE BRK0
+ setting.ACCOUNT 4105F8Y
+Transaction B tostring(price)   23.32  157377912
+SEC_CODE BR-5.20
+Transaction SECCODE BRK0
+Transaction CLASS_CODE SPBFUT
+Transaction ACCOUNT 4105F8Y
+event :9 price 23.31
+ setting.CLASS_CODE SPBFUT
+ setting.SEC_CODE BRK0
+ setting.ACCOUNT 4105F8Y
+Transaction S tostring(price)   23.37  1498197527
+SEC_CODE BR-5.20
+Transaction SECCODE BRK0
+Transaction CLASS_CODE SPBFUT
+Transaction ACCOUNT 4105F8Y
+event :9 price 23.37
+event :7 price 23.32
+event :10 price 23.31
+event :3 price 23.3
+event :12 price 23.32
+event :1 price 23.32
+event :1 price 23.31
+event :3 price 23.3
+event :1 price 23.31
+event :3 price 23.3
+event :12 price 23.32
+event :1 price 23.32
+event :3 price 23.3
+event :3 price 23.28
+event :3 price 23.3
+event :3 price 23.28
+event :3 price 23.3
+event :3 price 23.29
+event :3 price 23.3
+event :3 price 23.29
+event :3 price 23.3
+event :3 price 23.29
+event :3 price 23.3
+event :3 price 23.29
+event :3 price 23.3
+event :3 price 23.29
+event :3 price 23.3
+event :3 price 23.28
+event :3 price 23.3
+event :12 price 23.32
+event :1 price 23.32
+event :1 price 23.31
+event :12 price 23.32
+event :1 price 23.32
+event :1 price 23.31
+event :12 price 23.32
+event :1 price 23.32
+event :3 price 23.3
+event :1 price 23.31
+event :12 price 23.32
+event :1 price 23.32
+event :1 price 23.31
+event :12 price 23.32
+event :1 price 23.32
+event :12 price 23.33
+event :1 price 23.33
+event :12 price 23.32
+event :1 price 23.32
+event :1 price 23.31
+event :3 price 23.3
+event :12 price 23.32
+event :1 price 23.32
+event :1 price 23.31
+event :12 price 23.32
+event :1 price 23.32
+event :1 price 23.31
+event :12 price 23.32
+event :1 price 23.32
+event :12 price 23.35
+event :1 price 23.35
+event :12 price 23.36
+event :1 price 23.36
+event :12 price 23.35
+event :1 price 23.35
+event :12 price 23.36
+event :1 price 23.36
+event :12 price 23.35
+event :1 price 23.35
+event :12 price 23.36
+event :1 price 23.36
+event :12 price 23.35
+event :1 price 23.35
+event :12 price 23.36
+event :1 price 23.36
+event :12 price 23.34
+event :1 price 23.34
+event :12 price 23.33
+event :1 price 23.33
+event :12 price 23.34
+event :1 price 23.34
+event :12 price 23.35
+event :1 price 23.35
+event :12 price 23.34
+event :1 price 23.34
+event :12 price 23.35
+event :1 price 23.35
+event :12 price 23.34
+event :1 price 23.34
+event :12 price 23.33
+event :1 price 23.33
+event :12 price 23.35
+event :1 price 23.35
+event :12 price 23.36
+event :1 price 23.36
+event :8 price 23.37
+ setting.CLASS_CODE SPBFUT
+ setting.SEC_CODE BRK0
+ setting.ACCOUNT 4105F8Y
+Transaction B tostring(price)   23.36  960075214
+SEC_CODE BR-5.20
+Transaction SECCODE BRK0
+Transaction CLASS_CODE SPBFUT
+Transaction ACCOUNT 4105F8Y
+event :9 price 23.35
+ setting.CLASS_CODE SPBFUT
+ setting.SEC_CODE BRK0
+ setting.ACCOUNT 4105F8Y
+Transaction S tostring(price)   23.41  1939481787
+SEC_CODE BR-5.20
+Transaction SECCODE BRK0
+Transaction CLASS_CODE SPBFUT
+Transaction ACCOUNT 4105F8Y
+event :9 price 23.41
+event :7 price 23.36
+event :10 price 23.35
+event :12 price 23.37
+event :1 price 23.37
+event :12 price 23.36
+event :1 price 23.36
+event :12 price 23.37
+event :1 price 23.37
+event :12 price 23.35
+event :1 price 23.35
+event :12 price 23.36
+event :1 price 23.36
+event :12 price 23.37
+event :1 price 23.37
+event :12 price 23.36
+event :1 price 23.36
+event :12 price 23.35
+event :1 price 23.35
+event :12 price 23.35
+event :1 price 23.35
+event :12 price 23.37
+event :1 price 23.37
+event :12 price 23.35
+event :1 price 23.35
+event :12 price 23.37
+event :1 price 23.37
+event :12 price 23.36
+event :1 price 23.36
+event :12 price 23.37
+event :1 price 23.37
+event :12 price 23.36
+event :1 price 23.36
+event :12 price 23.37
+event :1 price 23.37
+event :12 price 23.36
+event :1 price 23.36
+event :12 price 23.35
+event :1 price 23.35
+event :12 price 23.36
+event :1 price 23.36
+event :12 price 23.36
+event :1 price 23.36
+event :12 price 23.35
+event :1 price 23.35
+event :12 price 23.37
+event :1 price 23.37
+event :12 price 23.36
+event :1 price 23.36
+event :12 price 23.35
+event :1 price 23.35
+event :12 price 23.34
+event :1 price 23.34
+event :12 price 23.32
+event :1 price 23.32
+event :12 price 23.34
+event :1 price 23.34
+event :12 price 23.35
+event :1 price 23.35
+event :12 price 23.34
+event :1 price 23.34
+event :12 price 23.33
+event :1 price 23.33
+event :12 price 23.34
+event :1 price 23.34
+event :12 price 23.33
+event :1 price 23.33
+event :12 price 23.35
+event :1 price 23.35
+event :12 price 23.34
+event :1 price 23.34
+event :12 price 23.33
+event :1 price 23.33
+event :12 price 23.34
+event :1 price 23.34
+event :12 price 23.35
+event :1 price 23.35
+event :12 price 23.34
+event :1 price 23.34
+event :12 price 23.33
+event :1 price 23.33
+event :12 price 23.34
+event :1 price 23.34
+event :12 price 23.33
+event :1 price 23.33
+event :12 price 23.34
+event :1 price 23.34
+event :12 price 23.33
+event :1 price 23.33
+event :12 price 23.34
+event :1 price 23.34
+event :12 price 23.34
+event :1 price 23.34
+event :12 price 23.33
+event :1 price 23.33
+event :12 price 23.34
+event :1 price 23.34
+event :12 price 23.32
+event :1 price 23.32
+event :12 price 23.33
+event :1 price 23.33
+event :12 price 23.32
+event :1 price 23.32
+event :12 price 23.35
+event :1 price 23.35
+event :12 price 23.36
+event :1 price 23.36
+event :12 price 23.42
+event :1 price 23.42
+event :8 price 23.42
+ setting.CLASS_CODE SPBFUT
+ setting.SEC_CODE BRK0
+ setting.ACCOUNT 4105F8Y
+Transaction B tostring(price)   23.44  216116296
+SEC_CODE BR-5.20
+Transaction SECCODE BRK0
+Transaction CLASS_CODE SPBFUT
+Transaction ACCOUNT 4105F8Y
+event :9 price 23.43
+ setting.CLASS_CODE SPBFUT
+ setting.SEC_CODE BRK0
+ setting.ACCOUNT 4105F8Y
+Transaction S tostring(price)   23.49  871739795
+SEC_CODE BR-5.20
+Transaction SECCODE BRK0
+Transaction CLASS_CODE SPBFUT
+Transaction ACCOUNT 4105F8Y
+event :9 price 23.49
+event :7 price 23.44
+event :10 price 23.43
+event :12 price 23.43
+event :1 price 23.43
+event :12 price 23.42
+event :1 price 23.42
+event :12 price 23.41
+event :1 price 23.41
+event :12 price 23.42
+event :1 price 23.42
+event :12 price 23.43
+event :1 price 23.43
+event :12 price 23.44
+event :1 price 23.44
+event :12 price 23.42
+event :1 price 23.42
+event :12 price 23.43
+event :1 price 23.43
+event :12 price 23.44
+event :1 price 23.44
+event :12 price 23.42
+event :1 price 23.42
+event :12 price 23.43
+event :1 price 23.43
+event :12 price 23.42
+event :1 price 23.42
+event :12 price 23.43
+event :1 price 23.43
+event :12 price 23.44
+event :1 price 23.44
+event :12 price 23.42
+event :1 price 23.42
+event :12 price 23.44
+event :1 price 23.44
+event :12 price 23.43
+event :1 price 23.43
+event :12 price 23.44
+event :1 price 23.44
+event :12 price 23.45
+event :1 price 23.45
+event :12 price 23.44
+event :1 price 23.44
+event :12 price 23.46
+event :1 price 23.46
+event :12 price 23.46
+event :1 price 23.46
+event :12 price 23.45
+event :1 price 23.45
+event :12 price 23.46
+event :1 price 23.46
+event :12 price 23.45
+event :1 price 23.45
+event :12 price 23.46
+event :1 price 23.46
+event :12 price 23.44
+event :1 price 23.44
+event :12 price 23.46
+event :1 price 23.46
+event :12 price 23.44
+event :1 price 23.44
+event :12 price 23.46
+event :1 price 23.46
+event :12 price 23.45
+event :1 price 23.45
+event :12 price 23.46
+event :1 price 23.46
+event :12 price 23.45
+event :1 price 23.45
+event :12 price 23.46
+event :1 price 23.46
+event :12 price 23.45
+event :1 price 23.45
+event :12 price 23.44
+event :1 price 23.44
+event :12 price 23.43
+event :1 price 23.43
+event :12 price 23.44
+event :1 price 23.44
+event :12 price 23.43
+event :1 price 23.43
+event :12 price 23.44
+event :1 price 23.44
+event :12 price 23.43
+event :1 price 23.43
+event :12 price 23.42
+event :1 price 23.42
+event :12 price 23.44
+event :1 price 23.44
+event :12 price 23.42
+event :1 price 23.42
+event :12 price 23.4
+event :1 price 23.4
+event :12 price 23.42
+event :1 price 23.42
+event :12 price 23.4
+event :1 price 23.4
+event :12 price 23.4
+event :1 price 23.4
+event :12 price 23.42
+event :1 price 23.42
+event :12 price 23.4
+event :1 price 23.4
+event :12 price 23.39
+event :1 price 23.39
+event :12 price 23.38
+event :1 price 23.38
+event :12 price 23.39
+event :1 price 23.39
+event :12 price 23.38
+event :1 price 23.38
+event :12 price 23.39
+event :1 price 23.39
+event :12 price 23.38
+event :1 price 23.38
+event :12 price 23.39
+event :1 price 23.39
+event :12 price 23.38
+event :1 price 23.38
+event :12 price 23.39
+event :1 price 23.39
+event :12 price 23.38
+event :1 price 23.38
+event :12 price 23.4
+event :1 price 23.4
+event :12 price 23.38
+event :1 price 23.38
+event :12 price 23.39
+event :1 price 23.39
+event :12 price 23.38
+event :1 price 23.38
+event :12 price 23.38
+event :1 price 23.38
+event :12 price 23.37
+event :1 price 23.37
+event :12 price 23.39
+event :1 price 23.39
+event :12 price 23.37
+event :1 price 23.37
+event :12 price 23.38
+event :1 price 23.38
+event :12 price 23.37
+event :1 price 23.37
+event :12 price 23.38
+event :1 price 23.38
+event :12 price 23.37
+event :1 price 23.37
+event :12 price 23.38
+event :1 price 23.38
+event :12 price 23.37
+event :1 price 23.37
+event :12 price 23.38
+event :1 price 23.38
+event :12 price 23.37
+event :1 price 23.37
+event :12 price 23.36
+event :1 price 23.36
+event :12 price 23.37
+event :1 price 23.37
+event :12 price 23.36
+event :1 price 23.36
+event :12 price 23.37
+event :1 price 23.37
+event :12 price 23.36
+event :1 price 23.36
+event :12 price 23.37
+event :1 price 23.37
+event :12 price 23.36
+event :1 price 23.36
+event :12 price 23.38
+event :1 price 23.38
+event :12 price 23.37
+event :1 price 23.37
+event :12 price 23.39
+event :1 price 23.39
+event :12 price 23.37
+event :1 price 23.37
+event :12 price 23.38
+event :1 price 23.38
+event :12 price 23.37
+event :1 price 23.37
+event :12 price 23.39
+event :1 price 23.39
+event :12 price 23.39
+event :1 price 23.39
+event :12 price 23.38
+event :1 price 23.38
+event :12 price 23.39
+event :1 price 23.39
+event :12 price 23.38
+event :1 price 23.38
+event :12 price 23.4
+event :1 price 23.4
+event :12 price 23.42
+event :1 price 23.42
+event :12 price 23.42
+event :1 price 23.42
+event :12 price 23.43
+event :1 price 23.43
+event :12 price 23.43
+event :1 price 23.43
+event :12 price 23.42
+event :1 price 23.42
+event :12 price 23.43
+event :1 price 23.43
+event :12 price 23.42
+event :1 price 23.42
+event :12 price 23.43
+event :1 price 23.43
+event :12 price 23.38
+event :1 price 23.38
+event :12 price 23.39
+event :1 price 23.39
+event :12 price 23.4
+event :1 price 23.4
+event :12 price 23.38
+event :1 price 23.38
+event :12 price 23.4
+event :1 price 23.4
+event :12 price 23.4
+event :1 price 23.4
+event :12 price 23.43
+event :1 price 23.43
+event :12 price 23.42
+event :1 price 23.42
+event :12 price 23.42
+event :1 price 23.42
+event :12 price 23.43
+event :1 price 23.43
+event :12 price 23.42
+event :1 price 23.42
+event :12 price 23.44
+event :1 price 23.44
+event :12 price 23.42
+event :1 price 23.42
+event :12 price 23.44
+event :1 price 23.44
+event :12 price 23.42
+event :1 price 23.42
+event :12 price 23.41
+event :1 price 23.41
+event :12 price 23.4
+event :1 price 23.4
+event :12 price 23.41
+event :1 price 23.41
+event :12 price 23.39
+event :1 price 23.39
+event :12 price 23.41
+event :1 price 23.41
+event :12 price 23.39
+event :1 price 23.39
+event :12 price 23.38
+event :1 price 23.38
+event :12 price 23.39
+event :1 price 23.39
+event :12 price 23.39
+event :1 price 23.39
+event :12 price 23.38
+event :1 price 23.38
+event :12 price 23.4
+event :1 price 23.4
+event :12 price 23.39
+event :1 price 23.39
+event :12 price 23.4
+event :1 price 23.4
+event :12 price 23.39
+event :1 price 23.39
+event :12 price 23.4
+event :1 price 23.4
+event :12 price 23.41
+event :1 price 23.41
+event :12 price 23.38
+event :1 price 23.38
+event :12 price 23.38
+event :1 price 23.38
+event :12 price 23.37
+event :1 price 23.37
+event :12 price 23.38
+event :1 price 23.38
+event :12 price 23.38
+event :1 price 23.38
+event :12 price 23.39
+event :1 price 23.39
+event :12 price 23.38
+event :1 price 23.38
+event :12 price 23.37
+event :1 price 23.37
+event :12 price 23.36
+event :1 price 23.36
+event :12 price 23.38
+event :1 price 23.38
+event :12 price 23.36
+event :1 price 23.36
+event :12 price 23.35
+event :1 price 23.35
+event :12 price 23.34
+event :1 price 23.34
+event :12 price 23.35
+event :1 price 23.35
+event :12 price 23.34
+event :1 price 23.34
+event :3 price 23.33
+ setting.CLASS_CODE SPBFUT
+ setting.SEC_CODE BRK0
+ setting.ACCOUNT 4105F8Y
+Transaction B tostring(price)   23.33  1197294731
+SEC_CODE BR-5.20
+Transaction SECCODE BRK0
+Transaction CLASS_CODE SPBFUT
+Transaction ACCOUNT 4105F8Y
+event :9 price 23.32
+ setting.CLASS_CODE SPBFUT
+ setting.SEC_CODE BRK0
+ setting.ACCOUNT 4105F8Y
+Transaction S tostring(price)   23.38  1010771527
+SEC_CODE BR-5.20
+Transaction SECCODE BRK0
+Transaction CLASS_CODE SPBFUT
+Transaction ACCOUNT 4105F8Y
+event :9 price 23.38
+event :7 price 23.33
+event :10 price 23.32
+event :12 price 23.34
+event :12 price 23.34
+event :1 price 23.34
+event :12 price 23.32
+event :1 price 23.32
+event :12 price 23.34
+event :12 price 23.34
+event :1 price 23.34
+event :12 price 23.35
+event :12 price 23.35
+event :1 price 23.35
+event :12 price 23.33
+event :1 price 23.33
+event :12 price 23.35
+event :12 price 23.35
+event :1 price 23.35
+event :12 price 23.33
+event :1 price 23.33
+event :12 price 23.34
+event :12 price 23.34
+event :1 price 23.34
+event :12 price 23.33
+event :1 price 23.33
+event :12 price 23.35
+event :12 price 23.35
+event :1 price 23.35
+event :12 price 23.34
+event :12 price 23.34
+event :1 price 23.34
+event :12 price 23.34
+event :12 price 23.34
+event :1 price 23.34
+event :12 price 23.35
+event :12 price 23.35
+event :1 price 23.35
+event :12 price 23.34
+event :12 price 23.34
+event :1 price 23.34
+event :12 price 23.34
+event :12 price 23.34
+event :1 price 23.34
+event :12 price 23.33
+event :1 price 23.33
+event :12 price 23.34
+event :12 price 23.34
+event :1 price 23.34
+event :12 price 23.35
+event :12 price 23.35
+event :1 price 23.35
+event :12 price 23.34
+event :12 price 23.34
+event :1 price 23.34
+event :12 price 23.35
+event :12 price 23.35
+event :1 price 23.35
+event :12 price 23.33
+event :1 price 23.33
+event :12 price 23.35
+event :12 price 23.35
+event :1 price 23.35
+event :12 price 23.33
+event :1 price 23.33
+event :12 price 23.34
+event :12 price 23.34
+event :1 price 23.34
+event :12 price 23.35
+event :12 price 23.35
+event :1 price 23.35
+event :12 price 23.34
+event :12 price 23.34
+event :1 price 23.34
+event :12 price 23.33
+event :1 price 23.33
+event :12 price 23.34
+event :12 price 23.34
+event :1 price 23.34
+event :12 price 23.33
+event :1 price 23.33
+event :12 price 23.34
+event :12 price 23.34
+event :1 price 23.34
+event :12 price 23.33
+event :1 price 23.33
+event :12 price 23.32
+event :1 price 23.32
+event :12 price 23.33
+event :1 price 23.33
+event :12 price 23.32
+event :1 price 23.32
+event :12 price 23.33
+event :1 price 23.33
+event :12 price 23.32
+event :1 price 23.32
+event :12 price 23.33
+event :1 price 23.33
+event :12 price 23.34
+event :12 price 23.34
+event :1 price 23.34
+event :12 price 23.33
+event :1 price 23.33
+event :12 price 23.34
+event :12 price 23.34
+event :1 price 23.34
+event :12 price 23.35
+event :12 price 23.35
+event :1 price 23.35
+event :12 price 23.36
+event :12 price 23.36
+event :1 price 23.36
+event :12 price 23.39
+event :12 price 23.39
+event :1 price 23.39
+event :8 price 23.39
+event :12 price 23.37
+event :1 price 23.37
+event :12 price 23.39
+event :1 price 23.39
+event :12 price 23.38
+event :1 price 23.38
+event :12 price 23.39
+event :1 price 23.39
+event :12 price 23.38
+event :1 price 23.38
+event :12 price 23.37
+event :1 price 23.37
+event :12 price 23.36
+event :1 price 23.36
+event :12 price 23.35
+event :1 price 23.35
 my_br   tag 
  start 
-getRand() :1127170629
-event event :6
-event event :7
-getRand() :959746087
-event event :6
-event event :7
-event event :8
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :1
-event event :8
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :3
-event event :3
-event event :3
-event event :3
-event event :3
-event event :3
-event event :3
-event event :2
-event event :3
-event event :3
-event event :3
-event event :3
-event event :3
-event event :3
-event event :3
-event event :3
-event event :3
-event event :3
-event event :3
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :3
-event event :3
-event event :3
-event event :3
-event event :3
-event event :3
-event event :3
-event event :3
-event event :2
-event event :2
-event event :2
-getRand() :1493209632
-event event :6
-event event :7
-getRand() :1027069918
-event event :6
-event event :7
-event event :3
-event event :2
-event event :3
-event event :1
-event event :1
-event event :3
-event event :3
-event event :1
-getRand() :728904081
-event event :6
-event event :7
-event event :8
-event event :8
-event event :1
-event event :2
-event event :1
-event event :2
-event event :1
-event event :2
-event event :1
-event event :2
-event event :2
-event event :2
-event event :8
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-event event :2
-getRand() :891384625
-event event :6
-event event :7
-event event :3
-event event :2
-event event :3
-event event :2
-event event :3
-event event :1
-event event :2
-event event :1
-event event :3
-event event :1
-event event :3
-event event :1
-event event :3
-event event :1
-getRand() :755760369
-event event :6
-event event :7
-event event :1
-event event :3
-event event :1
-event event :3
-event event :1
-event event :3
-event event :1
-event event :3
-event event :1
-event event :3
-event event :3
-event event :1
-event event :3
-event event :1
-event event :1
-event event :3
-event event :1
-event event :2
-event event :2
-event event :2
-event event :3
-event event :2
-event event :2
-event event :2
-event event :3
-event event :1
-event event :3
-event event :3
-event event :3
-event event :1
-event event :3
-event event :3
-event event :3
-event event :1
-event event :1
-event event :2
-event event :1
-event event :2
-event event :3
-event event :2
-event event :3
-event event :1
-event event :3
-event event :1
-event event :3
-event event :1
-event event :2
-event event :3
-event event :2
-event event :2
-event event :3
-event event :2
-event event :3
-event event :2
-event event :3
-event event :2
-event event :3
-event event :2
-event event :3
-event event :2
-event event :1
-event event :3
-event event :3
-event event :3
+ setting.CLASS_CODE SPBFUT
+ setting.SEC_CODE BR-6.20
+ setting.ACCOUNT 4105F8Y
+Transaction B tostring(price)   23.36  157377912
+SEC_CODE BR-5.20
+Transaction SECCODE BR-6.20
+Transaction CLASS_CODE SPBFUT
+Transaction ACCOUNT 4105F8Y
+ setting.CLASS_CODE SPBFUT
+ setting.SEC_CODE BR-6.20
+ setting.ACCOUNT 4105F8Y
+Transaction  res  ”казанный инструмент не найден: "BR-6.20"
+event :9 price 23.35
+ setting.CLASS_CODE SPBFUT
+ setting.SEC_CODE BR-6.20
+ setting.ACCOUNT 4105F8Y
+Transaction S tostring(price)   23.41  1498197527
+SEC_CODE BR-5.20
+Transaction SECCODE BR-6.20
+Transaction CLASS_CODE SPBFUT
+Transaction ACCOUNT 4105F8Y
+ setting.CLASS_CODE SPBFUT
+ setting.SEC_CODE BR-6.20
+ setting.ACCOUNT 4105F8Y
+Transaction  res  ”казанный инструмент не найден: "BR-6.20"
+event :9 price 23.41
+event :7 price 23.36
+event :10 price 23.35
+event :1 price 23.36
+event :12 price 23.37
+event :1 price 23.37
+my_br   tag 
+ start 
+my_br   tag 
+ start 
+ setting.CLASS_CODE SPBFUT
+ setting.SEC_CODE BR620
+ setting.ACCOUNT 4105F8Y
+Transaction B tostring(price)   23.44  157377912
+SEC_CODE BR-6.20
+Transaction SECCODE BR620
+Transaction CLASS_CODE SPBFUT
+Transaction ACCOUNT 4105F8Y
+ setting.CLASS_CODE SPBFUT
+ setting.SEC_CODE BR620
+ setting.ACCOUNT 4105F8Y
+Transaction  res  ”казанный инструмент не найден: "BR620"
+event :9 price 23.43
+ setting.CLASS_CODE SPBFUT
+ setting.SEC_CODE BR620
+ setting.ACCOUNT 4105F8Y
+Transaction S tostring(price)   23.49  1498197527
+SEC_CODE BR-6.20
+Transaction SECCODE BR620
+Transaction CLASS_CODE SPBFUT
+Transaction ACCOUNT 4105F8Y
+ setting.CLASS_CODE SPBFUT
+ setting.SEC_CODE BR620
+ setting.ACCOUNT 4105F8Y
+Transaction  res  ”казанный инструмент не найден: "BR620"
+event :9 price 23.49
+event :7 price 23.44
+event :10 price 23.43
+event :3 price 23.42
+event :12 price 23.45
+event :1 price 23.45
+event :12 price 23.46
+event :1 price 23.46
+event :12 price 23.44
+event :1 price 23.44
+event :1 price 23.43
+event :12 price 23.44
+event :1 price 23.44
+event :1 price 23.43
+event :12 price 23.45
+event :1 price 23.45
+event :12 price 23.44
+event :1 price 23.44
+event :1 price 23.43
+event :12 price 23.45
+event :1 price 23.45
+event :1 price 23.43
+event :3 price 23.42
+event :1 price 23.43
+event :3 price 23.42
+event :3 price 23.41
+event :3 price 23.4
+event :3 price 23.42
+event :3 price 23.41
+event :3 price 23.39
+event :3 price 23.4
+event :3 price 23.39
+event :3 price 23.4
+event :3 price 23.39
+event :3 price 23.4
+event :3 price 23.39
+event :3 price 23.4
+event :3 price 23.39
+event :3 price 23.38
+event :3 price 23.39
+event :3 price 23.39
+event :3 price 23.4
+event :3 price 23.38
+event :3 price 23.39
+event :3 price 23.4
+event :3 price 23.39
+event :3 price 23.38
+event :3 price 23.4
+event :3 price 23.39
+event :3 price 23.38
+my_br   tag 
+ start 
+event :9 price 23.38
+event :9 price 23.44
+event :7 price 23.39
+event :10 price 23.38
+event :12 price 23.39
+event :1 price 23.39
+event :1 price 23.38
+event :12 price 23.4
+event :1 price 23.4
+my_br   tag 
+ start 
+event :9 price 23.38
+event :9 price 23.44
+event :7 price 23.39
+event :10 price 23.38
+event :3 price 23.37
+my_br   tag 
+ start 
+ setting.CLASS_CODE SPBFUT
+ setting.SEC_CODE BR-6.20
+ setting.ACCOUNT 4105F8Y
+Transaction B tostring(price)   23.38  157377912
+SEC_CODE BR-6.20
+Transaction SECCODE BR-6.20
+Transaction CLASS_CODE SPBFUT
+Transaction ACCOUNT 4105F8Y
+ setting.CLASS_CODE SPBFUT
+ setting.SEC_CODE BR-6.20
+ setting.ACCOUNT 4105F8Y
+Transaction  res  ”казанный инструмент не найден: "BR-6.20"
+event :9 price 23.37
+ setting.CLASS_CODE SPBFUT
+ setting.SEC_CODE BR-6.20
+ setting.ACCOUNT 4105F8Y
+Transaction S tostring(price)   23.43  1498197527
+SEC_CODE BR-6.20
+Transaction SECCODE BR-6.20
+Transaction CLASS_CODE SPBFUT
+Transaction ACCOUNT 4105F8Y
+ setting.CLASS_CODE SPBFUT
+ setting.SEC_CODE BR-6.20
+ setting.ACCOUNT 4105F8Y
+Transaction  res  ”казанный инструмент не найден: "BR-6.20"
+event :9 price 23.43
+event :7 price 23.38
+event :10 price 23.37
+event :3 price 23.36
+event :3 price 23.36
+event :3 price 23.35
+event :3 price 23.36
+event :3 price 23.35
+event :3 price 23.34
+event :3 price 23.34
+event :3 price 23.36
+event :3 price 23.34
+event :3 price 23.35
+event :3 price 23.34
+event :3 price 23.33
+event :3 price 23.34
+event :3 price 23.33
+event :3 price 23.35
+event :3 price 23.33
+event :3 price 23.34
+event :3 price 23.33
+event :3 price 23.34
+event :3 price 23.33
+event :3 price 23.34
+event :3 price 23.35
+event :3 price 23.34
+event :3 price 23.35
+event :3 price 23.34
+event :3 price 23.33
+event :3 price 23.35
+event :3 price 23.33
+event :3 price 23.34
+event :3 price 23.33
+event :3 price 23.34
+event :3 price 23.33
+event :3 price 23.34
+event :3 price 23.33
+event :3 price 23.33
+event :3 price 23.32
+ setting.CLASS_CODE SPBFUT
+ setting.SEC_CODE BR-6.20
+ setting.ACCOUNT 4105F8Y
+Transaction B tostring(price)   23.32  960075214
+SEC_CODE BR-6.20
+Transaction SECCODE BR-6.20
+Transaction CLASS_CODE SPBFUT
+Transaction ACCOUNT 4105F8Y
+ setting.CLASS_CODE SPBFUT
+ setting.SEC_CODE BR-6.20
+ setting.ACCOUNT 4105F8Y
+Transaction  res  ”казанный инструмент не найден: "BR-6.20"
+event :9 price 23.31
+ setting.CLASS_CODE SPBFUT
+ setting.SEC_CODE BR-6.20
+ setting.ACCOUNT 4105F8Y
+Transaction S tostring(price)   23.37  1939481787
+SEC_CODE BR-6.20
+Transaction SECCODE BR-6.20
+Transaction CLASS_CODE SPBFUT
+Transaction ACCOUNT 4105F8Y
+ setting.CLASS_CODE SPBFUT
+ setting.SEC_CODE BR-6.20
+ setting.ACCOUNT 4105F8Y
+Transaction  res  ”казанный инструмент не найден: "BR-6.20"
+event :9 price 23.37
+event :7 price 23.32
+event :10 price 23.31
+event :1 price 23.31
+event :3 price 23.3
+event :1 price 23.31
+event :3 price 23.3
+event :1 price 23.31
+event :3 price 23.3
+event :1 price 23.31
+event :3 price 23.29
+event :3 price 23.3
+event :3 price 23.3
+event :3 price 23.29
+event :1 price 23.31
+event :3 price 23.3
+event :12 price 23.32
+event :1 price 23.32
+event :12 price 23.35
+event :1 price 23.35
+event :12 price 23.36
+event :1 price 23.36
+event :12 price 23.34
+event :1 price 23.34
+event :12 price 23.36
+event :1 price 23.36
+event :12 price 23.35
+event :1 price 23.35
+event :12 price 23.34
+event :1 price 23.34
+event :12 price 23.35
+event :1 price 23.35
+event :12 price 23.34
+event :1 price 23.34
+event :12 price 23.34
+event :1 price 23.34
+event :12 price 23.35
+event :1 price 23.35
+event :12 price 23.36
+event :1 price 23.36
+event :12 price 23.35
+event :1 price 23.35
+event :12 price 23.36
+event :1 price 23.36
+event :12 price 23.35
+event :1 price 23.35
+event :12 price 23.36
+event :1 price 23.36
+event :12 price 23.35
+event :1 price 23.35
+event :12 price 23.36
+event :1 price 23.36
+event :12 price 23.35
+event :1 price 23.35
+event :12 price 23.36
+event :1 price 23.36
+event :12 price 23.37
+event :1 price 23.37
+event :8 price 23.37
+event :12 price 23.36
+event :1 price 23.36
+event :12 price 23.38
+event :1 price 23.38
+event :12 price 23.39
+event :1 price 23.39
+event :12 price 23.4
+event :1 price 23.4
+event :12 price 23.4
+event :1 price 23.4
+event :12 price 23.39
+event :1 price 23.39
+event :12 price 23.38
+event :1 price 23.38
+event :12 price 23.37
+event :1 price 23.37
+event :12 price 23.38
+event :1 price 23.38
+event :12 price 23.36
+event :1 price 23.36
+event :12 price 23.35
+event :1 price 23.35
+event :12 price 23.36
+event :1 price 23.36
+event :12 price 23.35
+event :1 price 23.35
+event :12 price 23.36
+event :1 price 23.36
+event :12 price 23.35
+event :1 price 23.35
+ setting.CLASS_CODE SPBFUT
+ setting.SEC_CODE BR-6.20
+ setting.ACCOUNT 4105F8Y
+Transaction B tostring(price)   23.34  216116296
+SEC_CODE BR-6.20
+Transaction SECCODE BR-6.20
+Transaction CLASS_CODE SPBFUT
+Transaction ACCOUNT 4105F8Y
+ setting.CLASS_CODE SPBFUT
+ setting.SEC_CODE BR-6.20
+ setting.ACCOUNT 4105F8Y
+Transaction  res  ”казанный инструмент не найден: "BR-6.20"
+event :9 price 23.33
+ setting.CLASS_CODE SPBFUT
+ setting.SEC_CODE BR-6.20
+ setting.ACCOUNT 4105F8Y
+Transaction S tostring(price)   23.39  871739795
+SEC_CODE BR-6.20
+Transaction SECCODE BR-6.20
+Transaction CLASS_CODE SPBFUT
+Transaction ACCOUNT 4105F8Y
+ setting.CLASS_CODE SPBFUT
+ setting.SEC_CODE BR-6.20
+ setting.ACCOUNT 4105F8Y
+Transaction  res  ”казанный инструмент не найден: "BR-6.20"
+event :9 price 23.39
+event :7 price 23.34
+event :10 price 23.33
+event :12 price 23.36
+event :12 price 23.36
+event :1 price 23.36
+event :12 price 23.39
+event :12 price 23.39
+event :1 price 23.39
+event :8 price 23.39
+my_br   tag 
+ start 
+ setting.CLASS_CODE SPBFUT
+ setting.SEC_CODE BRM0
+ setting.ACCOUNT 4105F8Y
+Transaction B tostring(price)   23.4  157377912
+SEC_CODE BRM0
+Transaction SECCODE BRM0
+Transaction CLASS_CODE SPBFUT
+Transaction ACCOUNT 4105F8Y
+event :9 price 23.39
+ setting.CLASS_CODE SPBFUT
+ setting.SEC_CODE BRM0
+ setting.ACCOUNT 4105F8Y
+Transaction S tostring(price)   23.45  1498197527
+SEC_CODE BRM0
+Transaction SECCODE BRM0
+Transaction CLASS_CODE SPBFUT
+Transaction ACCOUNT 4105F8Y
+event :9 price 23.45
+event :7 price 23.4
+event :10 price 23.39
+event :3 price 23.38
+event :1 price 23.4
+event :12 price 23.41
+event :1 price 23.41
+event :12 price 23.41
+event :1 price 23.41
+event :12 price 23.42
+event :1 price 23.42
+event :12 price 23.43
+event :1 price 23.43
+event :1 price 23.4
+event :12 price 23.42
+event :1 price 23.42
+event :12 price 23.41
+event :1 price 23.41
+event :12 price 23.42
+event :1 price 23.42
+event :12 price 23.41
+event :1 price 23.41
+event :12 price 23.42
+event :1 price 23.42
+event :12 price 23.43
+event :1 price 23.43
+event :12 price 23.42
+event :1 price 23.42
+event :12 price 23.41
+event :1 price 23.41
+event :12 price 23.42
+event :1 price 23.42
+event :12 price 23.42
+event :1 price 23.42
+event :12 price 23.41
+event :1 price 23.41
+event :12 price 23.41
+event :1 price 23.41
+event :12 price 23.42
+event :1 price 23.42
+event :12 price 23.43
+event :1 price 23.43
+event :12 price 23.42
+event :1 price 23.42
+event :12 price 23.41
+event :1 price 23.41
+event :12 price 23.43
+event :1 price 23.43
+event :12 price 23.42
+event :1 price 23.42
+event :12 price 23.41
+event :1 price 23.41
+event :12 price 23.43
+event :1 price 23.43
+event :12 price 23.41
+event :1 price 23.41
+event :12 price 23.42
+event :1 price 23.42
+event :12 price 23.41
+event :1 price 23.41
+event :12 price 23.43
+event :1 price 23.43
+event :12 price 23.41
+event :1 price 23.41
+event :12 price 23.42
+event :1 price 23.42
+event :12 price 23.41
+event :1 price 23.41
+event :12 price 23.42
+event :1 price 23.42
+event :12 price 23.41
+event :1 price 23.41
+event :12 price 23.42
+event :1 price 23.42
+event :12 price 23.43
+event :1 price 23.43
+event :12 price 23.41
+event :1 price 23.41
+event :12 price 23.44
+event :1 price 23.44
+event :12 price 23.43
+event :1 price 23.43
+event :12 price 23.44
+event :1 price 23.44
+event :12 price 23.45
+event :1 price 23.45
+event :12 price 23.44
+event :1 price 23.44
+event :12 price 23.45
+event :1 price 23.45
+event :12 price 23.44
+event :1 price 23.44
+event :12 price 23.45
+event :1 price 23.45
+event :12 price 23.43
+event :1 price 23.43
+event :12 price 23.45
+event :1 price 23.45
+event :12 price 23.43
+event :1 price 23.43
+event :12 price 23.44
+event :1 price 23.44
+event :12 price 23.43
+event :1 price 23.43
+event :12 price 23.46
+event :1 price 23.46
+event :8 price 23.46
+ setting.CLASS_CODE SPBFUT
+ setting.SEC_CODE BRM0
+ setting.ACCOUNT 4105F8Y
+Transaction B tostring(price)   23.45  960075214
+SEC_CODE BRM0
+Transaction SECCODE BRM0
+Transaction CLASS_CODE SPBFUT
+Transaction ACCOUNT 4105F8Y
+event :9 price 23.44
+ setting.CLASS_CODE SPBFUT
+ setting.SEC_CODE BRM0
+ setting.ACCOUNT 4105F8Y
+Transaction S tostring(price)   23.5  1939481787
+SEC_CODE BRM0
+Transaction SECCODE BRM0
+Transaction CLASS_CODE SPBFUT
+Transaction ACCOUNT 4105F8Y
+event :9 price 23.5
+event :7 price 23.45
+event :10 price 23.44
+event :12 price 23.42
+event :1 price 23.42
+event :12 price 23.43
+event :1 price 23.43
+event :12 price 23.41
+event :1 price 23.41
+event :3 price 23.4
+event :12 price 23.41
+event :1 price 23.41
+event :3 price 23.4
+event :12 price 23.41
+event :1 price 23.41
+event :3 price 23.4
+event :12 price 23.41
+event :1 price 23.41
+event :12 price 23.43
+event :1 price 23.43
+event :12 price 23.42
+event :1 price 23.42
+event :3 price 23.39
+event :3 price 23.4
+event :3 price 23.39
+event :3 price 23.39
+event :3 price 23.38
+event :3 price 23.39
+event :3 price 23.38
+event :3 price 23.38
+event :3 price 23.37
+event :3 price 23.38
+event :3 price 23.39
+event :3 price 23.38
+event :3 price 23.39
+event :3 price 23.38
+my_br   tag 
+ start 
+my_br   tag 
+ start 
+ setting.CLASS_CODE SPBFUT
+ setting.SEC_CODE BRM0
+ setting.ACCOUNT 4105F8Y
+Transaction B tostring(price)   23.4  157377912
+SEC_CODE BRM0
+Transaction SECCODE BRM0
+Transaction CLASS_CODE SPBFUT
+Transaction ACCOUNT 4105F8Y
+event :9 price 23.39
+ setting.CLASS_CODE SPBFUT
+ setting.SEC_CODE BRM0
+ setting.ACCOUNT 4105F8Y
+Transaction S tostring(price)   23.45  1498197527
+SEC_CODE BRM0
+Transaction SECCODE BRM0
+Transaction CLASS_CODE SPBFUT
+Transaction ACCOUNT 4105F8Y
+event :9 price 23.45
+event :7 price 23.4
+event :10 price 23.39
+event :1 price 23.4
+event :1 price 23.39
+event :1 price 23.4
+event :3 price 23.38
+event :1 price 23.4
+event :3 price 23.38
+event :1 price 23.4
+event :1 price 23.39
+event :1 price 23.4
+event :12 price 23.41
+event :1 price 23.41
+event :12 price 23.42
+event :1 price 23.42
+event :12 price 23.41
+event :1 price 23.41
+event :12 price 23.44
+event :1 price 23.44
+event :12 price 23.42
+event :1 price 23.42
+event :12 price 23.41
+event :1 price 23.41
+event :12 price 23.42
+event :1 price 23.42

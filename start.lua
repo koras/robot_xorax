@@ -19,8 +19,8 @@ package.path = package.path
         require("table")
          
 setting = {
-         ['profit_range'] =  0.01; -- минимальная прибыль
-         ['profit'] =  0.01; -- минимальная прибыль
+         ['profit_range'] =  0.05; -- минимальная прибыль
+         ['profit'] =  0.05; -- минимальная прибыль
          ['LIMIT_BID'] = 10,
          ['use_contract'] = 1,
          ['emulation'] = true,
@@ -33,7 +33,8 @@ setting = {
          ['close_positions'] = false,
          ['ACCOUNT'] =  '4105F8Y', 
          ['CLASS_CODE'] =  "SPBFUT", 
-         ['SEC_CODE'] =  "BRK0",
+         ['SEC_CODE'] =  "BRM0" ,
+          
          ['count_buyin_a_row'] =  0, -- покупки подряд
          ['current_price'] =  0, -- покупки подряд
          
@@ -42,7 +43,7 @@ setting = {
          ['limit_count_buy'] = 0, -- лимит на покупку
           
          ['SPRED_LONG_BUY_UP'] = 0.02, -- условия, не покупаем если здесь ранее мы купили | вверх диапозон,
-         ['SPRED_LONG_BUY_down'] = 0.00, -- условия, не покупаем если здесь ранее мы купили | вниз диапозон
+         ['SPRED_LONG_BUY_down'] = 0.01, -- условия, не покупаем если здесь ранее мы купили | вниз диапозон
          
          ['tag'] = "my_br",
          ['number_of_candles'] = 0, -- current a candle
@@ -78,7 +79,7 @@ setting = {
 
 
  -- �����������
- local uTransaction = dofile(getScriptPath() .. "\\transaction.lua");
+ local uTransaction = dofile(getScriptPath() .. "\\shop\\transaction.lua");
  -- �����������
 local scriptTest = dofile(getScriptPath() .. "\\coutLine.lua");
 local candles = dofile(getScriptPath() .. "\\Signals\\candle.lua");
@@ -129,7 +130,7 @@ local market = dofile(getScriptPath() .. "\\shop\\market.lua");
    RangeSignal    = 0.1;            -- �������� ����
    ACCOUNT        = '232957';        -- ������������� �����
   -- CLASS_CODE     = "SPBFUT"     -- ����� ������
-   SEC_CODE       = "BR-5.20"       -- ��� ������
+ --  SEC_CODE       = "BR-6.20"       -- ��� ������
    tag =  "my_br"; -- �� �������
 
 -- SHORT  = FALSE
@@ -191,7 +192,7 @@ basis = 9
 
   
       local Error = '';
-      ds,Error = CreateDataSource(setting.CLASS_CODE, SEC_CODE, INTERVAL); 
+      ds,Error = CreateDataSource(setting.CLASS_CODE, setting.SEC_CODE, INTERVAL); 
     --  while (Error == "" or Error == nil) and DS:Size() == 0 do sleep(1) end
     
        
@@ -205,13 +206,13 @@ basis = 9
     
       Size =ds:Size();  
       
-        p      = tostring(getParamEx(setting.CLASS_CODE, SEC_CODE, "offer").param_value + 10*getParamEx(setting.CLASS_CODE, SEC_CODE, "SEC_PRICE_STEP").param_value); -- �� ����, ���������� �� 10 ���. ����� ����
-       SEC_PRICE_STEP = tostring(getParamEx2(setting.CLASS_CODE, SEC_CODE, "SEC_PRICE_STEP").param_value);	
+        p      = tostring(getParamEx(setting.CLASS_CODE, setting.SEC_CODE, "offer").param_value + 10*getParamEx(setting.CLASS_CODE, setting.SEC_CODE, "SEC_PRICE_STEP").param_value); -- �� ����, ���������� �� 10 ���. ����� ����
+       SEC_PRICE_STEP = tostring(getParamEx2(setting.CLASS_CODE, setting.SEC_CODE, "SEC_PRICE_STEP").param_value);	
    end;
    
    function getPrice()
    
-       SEC_PRICE_STEP = tostring(getParamEx2(setting.CLASS_CODE, SEC_CODE, "SEC_PRICE_STEP").param_value);
+       SEC_PRICE_STEP = tostring(getParamEx2(setting.CLASS_CODE, setting.SEC_CODE, "SEC_PRICE_STEP").param_value);
          if GET_GRAFFIC then
         -- message(' SEC_PRICE_STEP = ::: '..  p  ); 
       else 
