@@ -19,8 +19,8 @@ package.path = package.path
         require("table")
          
 setting = {
-         ['profit_range'] =  0.05; -- минимальная прибыль
-         ['profit'] =  0.05; -- минимальная прибыль
+         ['profit_range'] =  0.01; -- минимальная прибыль
+         ['profit'] =  0; -- минимальная прибыль
          ['LIMIT_BID'] = 10,
          ['use_contract'] = 1,
          ['emulation'] = true,

@@ -42,17 +42,19 @@ function getRandBuy(price, bids)
  
  -- пвисит ли заявка на продажу в этом промежутке
 function getRandSell(price, bids)
-          
+
      local checkRange = true;
              for j_checkRange=1, #bids  do
                      if bids[j_checkRange].type == 'sell' then
                              -- здесь узнаю, была ли покупка в этом диапозоне
                              if   setting.profit + bids[j_checkRange].price >= price and price >= bids[j_checkRange].price - setting.profit   then
                                  checkRange = false;
+                                 signalShowLog.addSignal(bids[j_checkRange].dt, 12, false, #bids);
                                  signalShowLog.addSignal(bids[j_checkRange].dt, 12, false, price);
                      end; 
              end; 
      end;  
+
      return checkRange;
  end;
  

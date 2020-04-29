@@ -77,8 +77,9 @@ function long(price, dt, levelLocal , event) -- решение
                --  loger.save( 'callBUY  '  .. price  );
                             -- мы не покупаем, если только что продали по текуще цене setting.profit
              --       if(SPRED_LONG_LOST_SELL - SPRED_LONG_PRICE_DOWN > price or  price > SPRED_LONG_LOST_SELL + setting.profit or SPRED_LONG_LOST_SELL == 0 ) then  
+                        local sell_lost =  SPRED_LONG_LOST_SELL + setting.profit_range >= price and  price >= SPRED_LONG_LOST_SELL - setting.profit_range;
 
-                    if(SPRED_LONG_LOST_SELL + setting.profit_range >= price or  price >= SPRED_LONG_LOST_SELL - setting.profit_range or SPRED_LONG_LOST_SELL == 0 ) then  
+                    if  sell_lost == false or  SPRED_LONG_LOST_SELL == 0   then  
                         
                         
                                 --    local SPRED_LONG_TREND_DOWN = 0.01; -- рынок падает, увеличиваем растояние между покупками
@@ -103,6 +104,7 @@ function long(price, dt, levelLocal , event) -- решение
                                     end;
     
                     else
+                        signalShowLog.addSignal(dt, 2, true, SPRED_LONG_LOST_SELL);
                         signalShowLog.addSignal(dt, 2, true, price);
                     end;  
             else
@@ -165,21 +167,23 @@ function callSELL(result)
                 -- надо удалить контракт по которому мы покупали
                 local buy_contract = setting.sellTable[sellT].buy_contract;
                 table.remove (setting.sellTable, sellT);
+                loger.save('setting.sellTable  1 :'  .. #setting.sellTable  );
 
 
                 for searchBuy = 1 ,  #setting.sellTable do 
-
-                    if setting.sellTable[searchBuy].buy_contract == buy_contract  then 
-                        -- удаляем только 1 элемент
-                        setting.limit_count_buy = setting.limit_count_buy - 1;
-                        table.remove (setting.sellTable, sellT);
-                        
-                      --  loger.save('table.remove  :'    );
-                   
-                        signalShowLog.addSignal(result.datetime, 8, false, price);
-            
-                        statusRange = false;
-                        break;
+                    if setting.sellTable[searchBuy].type == 'buy' and setting.sellTable[sellT].buy_contract == buy_contract  then 
+                            -- удаляем только 1 элемент
+                            setting.limit_count_buy = setting.limit_count_buy - 1;
+                            table.remove (setting.sellTable, sellT);
+                            
+                            loger.save('setting.sellTable 2 :'  .. #setting.sellTable  );
+                    
+                            signalShowLog.addSignal(result.datetime, 8, false, price);
+                
+                            statusRange = false;
+                         
+                            
+                        return;
                     end;
                 end;
 
@@ -261,9 +265,9 @@ end
 function sellTransaction(priceLocal,dt)
     local p = 0;
     
-    signalShowLog.addSignal(dt, 9, false, priceLocal);
+    
 
-    priceLocal = priceLocal + 0.01;
+    priceLocal = priceLocal ;
     if(setting.use_contract > 1 ) then
         for j=1,  setting.use_contract  do 
             local  trans_id_sell =  getRand();
