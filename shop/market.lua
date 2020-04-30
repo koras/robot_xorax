@@ -77,7 +77,7 @@ function long(price, dt, levelLocal , event) -- решение
                --  loger.save( 'callBUY  '  .. price  );
                             -- мы не покупаем, если только что продали по текуще цене setting.profit
              --       if(SPRED_LONG_LOST_SELL - SPRED_LONG_PRICE_DOWN > price or  price > SPRED_LONG_LOST_SELL + setting.profit or SPRED_LONG_LOST_SELL == 0 ) then  
-                        local sell_lost =  SPRED_LONG_LOST_SELL + setting.profit_range >= price and  price >= SPRED_LONG_LOST_SELL - setting.profit_range;
+                        local sell_lost =  SPRED_LONG_LOST_SELL + setting.profit_range - setting.profit_infelicity >= price and  price >= SPRED_LONG_LOST_SELL - setting.profit_range + setting.profit_infelicity;
 
                     if  sell_lost == false or  SPRED_LONG_LOST_SELL == 0   then  
                         
@@ -105,7 +105,7 @@ function long(price, dt, levelLocal , event) -- решение
     
                     else
                         signalShowLog.addSignal(dt, 2, true, SPRED_LONG_LOST_SELL);
-                        signalShowLog.addSignal(dt, 2, true, price);
+                     --   signalShowLog.addSignal(dt, 2, true, price);
                     end;  
             else
                 signalShowLog.addSignal(dt, 1, true, price);
@@ -151,12 +151,12 @@ end
 
 
 function deleteSell(result)
-    local buy_contract = 0;
-    local deleteKey = 0;
+    local buyContractSell = 0;
+    local deleteKeySell = 0;
         for sellT = 1 ,  #setting.sellTable do 
         --   if statusRange then
-         --   loger.save(' #setting.sellTable  ' ..  #setting.sellTable  );
-                if  setting.sellTable[sellT].type == 'sell' and result.close >= setting.sellTable[sellT].price  then 
+
+                if  setting.sellTable[sellT].type == 'sell' and result.close + setting.profit_infelicity >= setting.sellTable[sellT].price  then 
 
                     local price = result.close;
                     setting.count_buyin_a_row = 0; 
@@ -167,34 +167,28 @@ function deleteSell(result)
                     setting.profit =  setting.sellTable[sellT].price - setting.sellTable[sellT].buy_contract + setting.profit;
 
                     -- надо удалить контракт по которому мы покупали
-                    buy_contract = setting.sellTable[sellT].buy_contract; 
-                    deleteKey = sellT;
+                    buyContractSell = setting.sellTable[sellT].buy_contract; 
+                    deleteKeySell = sellT;
  
                     signalShowLog.addSignal(result.datetime, 8, false, price);
             end;
         end;
 
-        if deleteKey == 0  then 
+        if deleteKeySell == 0  then 
         
         else
 
             loger.save(' #setting.sellTable #setting.sellTable #setting.sellTable #setting.sellTable  ' ..  #setting.sellTable  );
-            table.remove (setting.sellTable, deleteKey);
-            loger.save(' #setting.sellTable #setting.sellTable #setting.sellTable #setting.sellTable  ' ..  #setting.sellTable  );
+            table.remove (setting.sellTable, deleteKeySell); 
 
-            deleteBuy(result,buy_contract);
+            deleteBuy(result,buyContractSell);
         end;
 end
 
 
 function deleteBuy(result,buy_contract)
     local deleteKey = 0;
-    loger.save(' 1 deleteKeydeleteKeydeleteKeydeleteKeydeleteKeydeleteKeydeleteKeydeleteKeydeleteKey  ' ..  #setting.sellTable  );
     for searchBuy = 1 ,  #setting.sellTable do 
-        loger.save(' 5 deleteKeydeleteKeydeleteKeydeleteKeydeleteKeydeleteKeydeleteKeydeleteKeydeleteKey  ' ..  #setting.sellTable  );
-        loger.save(' setting.sellTable[searchBuy].typey  ' ..  setting.sellTable[searchBuy].type );
-        loger.save(' setting.sellTable[searchBuy].price  ' ..  setting.sellTable[searchBuy].price );
-        loger.save('buy_contract  ' ..  buy_contract );
 
 
         if setting.sellTable[searchBuy].type == 'buy' and setting.sellTable[searchBuy].price == ( buy_contract + 0.01 )  then 

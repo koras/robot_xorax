@@ -46,9 +46,8 @@ function getRandSell(price)
              for j_checkRange=1, #setting.sellTable  do
                      if setting.sellTable[j_checkRange].type == 'sell' then
                              -- здесь узнаю, была ли покупка в этом диапозоне
-                             if   setting.profit + setting.sellTable[j_checkRange].price >= price and price >= setting.sellTable[j_checkRange].price - setting.profit   then
-                                 checkRange = false;
-                                 signalShowLog.addSignal(setting.sellTable[j_checkRange].dt, 12, false, #setting.sellTable);
+                             if   setting.profit_range + setting.sellTable[j_checkRange].price >= price and price >= setting.sellTable[j_checkRange].price - setting.profit_range   then
+                                 checkRange = false; 
                                  signalShowLog.addSignal(setting.sellTable[j_checkRange].dt, 12, false, price);
                      end; 
              end; 

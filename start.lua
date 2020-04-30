@@ -19,8 +19,10 @@ package.path = package.path
         require("table")
          
 setting = {
-         ['profit_range'] =  0.01; -- минимальная прибыль
-         ['profit'] =  0.01; -- минимальная прибыль
+         ['profit_range'] =  0.05; -- минимальная прибыль
+         ['profit_range_array'] =  0.05; -- минимальная прибыль при больших заявках
+         ['profit_infelicity'] =  0.01; -- минимальная прибыль при больших заявках
+         ['profit'] =  0.01; -- подсчёт прибыли
          ['LIMIT_BID'] = 10,
          ['use_contract'] = 1,
          ['emulation'] = true,
@@ -231,8 +233,7 @@ basis = 9
       -- buy or sell
      
 
-      market.decision(event, priceLocal, datetime , levelLocal) 
-  --    loger.save( 'price ' .. priceLocal ..' level '.. levelLocal .. ' event '..event   )
+      market.decision(event, priceLocal, datetime , levelLocal) ;
    end
     
 
@@ -252,7 +253,7 @@ basis = 9
       loger.save(  " start ");
       statsPanel.show();
 
-      interfaceBids.show(setting.sellTable);
+      interfaceBids.updateLogSignal();
 
       update();
       getPrice();
@@ -264,7 +265,7 @@ basis = 9
       while Run do 
          
          
-          interfaceBids.show(setting.sellTable);
+          interfaceBids.updateLogSignal();
            update();
            statsPanel.stats();
            fractalSignal.last();
