@@ -97,15 +97,24 @@ end;
 				end;
 				
 			
-			if arrTableLog[i].event == 8 or  arrTableLog[i].event == 9 then 
+				if arrTableLog[i].event == 9 then 
 
-				Red(t_id_TableLog, keys,0);
-				Red(t_id_TableLog, keys,1);
-				Red(t_id_TableLog, keys,2);
-				Red(t_id_TableLog, keys,3);
-				Red(t_id_TableLog, keys,4);
-			end;
- 
+					Red(t_id_TableLog, keys,0);
+					Red(t_id_TableLog, keys,1);
+					Red(t_id_TableLog, keys,2);
+					Red(t_id_TableLog, keys,3);
+					Red(t_id_TableLog, keys,4);
+				end;
+	
+				if arrTableLog[i].event == 8  then 
+
+					Yellow(t_id_TableLog, keys,0);
+					Yellow(t_id_TableLog, keys,1);
+					Yellow(t_id_TableLog, keys,2);
+					Yellow(t_id_TableLog, keys,3);
+					Yellow(t_id_TableLog, keys,4);
+				end;
+	  
 			SetCell(t_id_TableLog, keys, 0, tostring(arrTableLog[i].number)); 
 			SetCell(t_id_TableLog, keys, 1, tostring(arrTableLog[i].dtime)); 
 			SetCell(t_id_TableLog, keys, 2, tostring(arrTableLog[i].event)); 
@@ -153,7 +162,7 @@ function CreateNewTableLogEvent()
 	AddColumn(t_id_TableLog, 1, wordTitleTableLog.time, true, QTABLE_STRING_TYPE, 10);
 	AddColumn(t_id_TableLog, 2,  wordTitleTableLog.event, true, QTABLE_STRING_TYPE, 5); 
 	AddColumn(t_id_TableLog, 3,  wordTitleTableLog.price, true,QTABLE_STRING_TYPE, 10); 
-	AddColumn(t_id_TableLog, 4,  wordTitleTableLog.description, true,QTABLE_STRING_TYPE, 40); 
+	AddColumn(t_id_TableLog, 4,  wordTitleTableLog.description, true,QTABLE_STRING_TYPE, 60); 
  
  
 

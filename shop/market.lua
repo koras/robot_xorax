@@ -140,7 +140,7 @@ function callSELL(result)
     
     statusRange = true;
 
-    if setting.sell == false  then return; end;
+    
 
     if #setting.sellTable > 0 then
   
@@ -178,7 +178,7 @@ function deleteSell(result)
         
         else
 
-            loger.save(' #setting.sellTable #setting.sellTable #setting.sellTable #setting.sellTable  ' ..  #setting.sellTable  );
+         --   loger.save(' #setting.sellTable #setting.sellTable #setting.sellTable #setting.sellTable  ' ..  #setting.sellTable  );
             table.remove (setting.sellTable, deleteKeySell); 
 
             deleteBuy(result,buyContractSell);
@@ -204,10 +204,8 @@ function deleteBuy(result,buy_contract)
     
     if deleteKey == 0  then 
         
-    else
-        loger.save('2  deleteKeydeleteKeydeleteKeydeleteKeydeleteKeydeleteKeydeleteKeydeleteKeydeleteKey  ' ..  #setting.sellTable  );
+    else 
         table.remove (setting.sellTable, deleteKey);
-        loger.save('3  deleteKeydeleteKeydeleteKeydeleteKeydeleteKeydeleteKeydeleteKeydeleteKeydeleteKeydeleteKey  ' ..  #setting.sellTable  );
     end;
 
 end

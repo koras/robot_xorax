@@ -20,8 +20,8 @@ package.path = package.path
          
 setting = {
          ['profit_range'] =  0.05; -- минимальная прибыль
-         ['profit_range_array'] =  0.05; -- минимальная прибыль при больших заявках
-         ['profit_infelicity'] =  0.01; -- минимальная прибыль при больших заявках
+         ['profit_range_array'] =  0.03; -- минимальная прибыль при больших заявках
+         ['profit_infelicity'] =  0.01; -- погрешность
          ['profit'] =  0.01; -- подсчёт прибыли
          ['LIMIT_BID'] = 10,
          ['use_contract'] = 1,
@@ -270,31 +270,25 @@ basis = 9
            statsPanel.stats();
            fractalSignal.last();
 
-            
- 
-
-
+         
           if setting.status  then  
-             
             tradeSignal.getSignal(setting.tag, eventTranc);
             candles.getSignal(tag, market.callSELL);
-
          end;
       end;  
    end;
-    
-   -- ������� ���������� ���������� QUIK ��� ��������� ������ �� ���������� ������������
-   function OnTransReply(trans_reply)
-      -- ���� ��������� ���������� �� ������� ����������
-      if trans_reply.trans_id == trans_id then
-         -- �������� ������ � ���������� ����������
-         trans_Status = trans_reply.status;
-         -- �������� ��������� � ���������� ����������
+     
+
+
+   function OnTransReply(trans_reply) 
+      if trans_reply.trans_id == trans_id then 
+         trans_Status = trans_reply.status; 
          trans_result_msg  = trans_reply.result_msg;
       end;
    end;
-    
-   -- ������� ���������� ���������� QUIK ��� ��������� �������
+     
+
+   
    function OnStop()
       Run = false;
       control.deleteTable();

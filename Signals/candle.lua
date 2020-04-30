@@ -47,6 +47,7 @@ local function getSignal(tag, callback)
     shift = 0;
 
     setting.number_of_candles = getNumCandles(setting.tag); 
+
     bars_temp,res,legend = getCandlesByIndex(setting.tag, 0, setting.number_of_candles-2*len-shift,2*len)
 
     local lines_count = getLinesCount(setting.tag) 
@@ -59,10 +60,13 @@ local function getSignal(tag, callback)
      end
             if bars_temp[j-1].datetime.hour >= 10 then
 
-                    setting.current_price = bars_temp[j-1].price;
+                  setting.current_price = bars_temp[j-1].close;
 
-                    sk=true
-                            bars[i]=bars_temp[j-1] 
+               --   setting.fractals_collection[#setting.fractals_collection + 1]  = bars_temp[j-1].close;
+
+            --    loger.save(countingTicsVolume .."  -  объёмов "..  lastTickVolume .. ' '.. updateValue..' rand ' );
+                    loger.save( " bars_temp[j-1].price ".. bars_temp[j-1].close );
+                           bars[i]=bars_temp[j-1] 
                           calculateSignal( bars[len] )
                           collbackFunc(bars[len]);
                  
