@@ -5,8 +5,9 @@ local init = {}
 
 arrTableLog = {};
 
-local showLabel = true;
-
+local showLabel = false;
+local showLabelPrice = true;
+ 
 
 
 local color = dofile(getScriptPath() .. "\\interface\\color.lua");
@@ -73,6 +74,21 @@ end;
 	end
 
 
+	if(showLabelPrice) then
+		if(_arr.event == 7) then
+			label.set('green', _arr.price , _arr.dt, 1, _arr.description);
+		end
+		if(_arr.event == 1) then
+			label.set('red', _arr.price , _arr.dt, 1, _arr.description);
+		end
+		if(_arr.event == 8) then
+			label.set('sell', _arr.price , _arr.dt, 1, _arr.description);
+		end
+ 
+		
+	end
+
+
 	for i = #arrTableLog+1 , itter, -1 do
 
 		if i > 0 then 
@@ -130,8 +146,8 @@ end;
 
 
  function setLabelTableLog(_arr)  
-if createTableLog == false then return; end;
-end;
+	if createTableLog == false then return; end;
+	end;
    
 
 
@@ -142,8 +158,6 @@ function CreateNewTableLogEvent()
 	
 	t_id_TableLog = AllocTable();	 
  
-
-
 	AddColumn(t_id_TableLog, 0, wordTitleTableLog.number , true, QTABLE_STRING_TYPE, 5);
 	AddColumn(t_id_TableLog, 1, wordTitleTableLog.time, true, QTABLE_STRING_TYPE, 10);
 	AddColumn(t_id_TableLog, 2,  wordTitleTableLog.event, true, QTABLE_STRING_TYPE, 5); 

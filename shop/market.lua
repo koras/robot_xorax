@@ -70,46 +70,18 @@ function long(price, dt, levelLocal , event) -- решение
             checkRangeSell = contitionMarket.getRandSell(price, setting.sellTable);
             -- уровень свечи 
             randCandle = contitionMarket.getRandCandle(price, dt);
+            failMarket = contitionMarket.getFailMarket(price, datetime) 
+
+            if checkRangeBuy and checkRangeSell and randCandle  and failMarket  then
 
 
-            if checkRangeBuy == true and checkRangeSell == true and randCandle == true then
-                      -- SPRED_LONG_BUY
-                        -- мы покупаем, если в определённом диапозоне небыло покупок
-               --  loger.save( 'callBUY  '  .. price  );
-                            -- мы не покупаем, если только что продали по текуще цене setting.profit
-             --       if(SPRED_LONG_LOST_SELL - SPRED_LONG_PRICE_DOWN > price or  price > SPRED_LONG_LOST_SELL + setting.profit or SPRED_LONG_LOST_SELL == 0 ) then  
-                    local sell_lost =  SPRED_LONG_LOST_SELL + setting.profit_range - setting.profit_infelicity >= price and  price >= SPRED_LONG_LOST_SELL - setting.profit_range + setting.profit_infelicity;
+                SPRED_LONG_TREND_DOWN  = SPRED_LONG_TREND_DOWN + SPRED_LONG_TREND_DOWN_SPRED;
+                SPRED_LONG_TREND_DOWN_LAST_PRICE = price; -- записываем последнюю покупку
 
-                    if  sell_lost == false or  SPRED_LONG_LOST_SELL == 0   then  
-                        
-                        
-                                --    local SPRED_LONG_TREND_DOWN = 0.01; -- рынок падает, увеличиваем растояние между покупками
-                                --    local SPRED_LONG_TREND_DOWN_SPRED = 0.01; -- на сколько увеличиваем растояние
-                                --    local SPRED_LONG_TREND_DOWN_LAST_PRICE= 0; -- последняя покупка
-
-                                    if SPRED_LONG_TREND_DOWN_LAST_PRICE == 0  or  
-                                    SPRED_LONG_TREND_DOWN_LAST_PRICE - SPRED_LONG_TREND_DOWN > price  
-                                    or SPRED_LONG_TREND_DOWN_LAST_PRICE  < price  then
-
-
-                                        SPRED_LONG_TREND_DOWN  = SPRED_LONG_TREND_DOWN + SPRED_LONG_TREND_DOWN_SPRED;
-                                        SPRED_LONG_TREND_DOWN_LAST_PRICE = price; -- записываем последнюю покупку
-                                        callBUY(price,  dt); 
-                                        -- SPRED_LONG_TREND_DOWN
-
-                                        signalShowLog.addSignal(dt, 10, false, price);
-
-                                    else
-                                        signalShowLog.addSignal(dt, 3, true, SPRED_LONG_TREND_DOWN_LAST_PRICE - SPRED_LONG_TREND_DOWN);
-                                    
-                                    end;
-    
-                    else
-                        signalShowLog.addSignal(dt, 2, true, SPRED_LONG_LOST_SELL);
-                     --   signalShowLog.addSignal(dt, 2, true, price);
-                    end;  
-         --   else
-           --     signalShowLog.addSignal(dt, 1, true, price);
+                callBUY(price,  dt); 
+        
+                signalShowLog.addSignal(dt, 10, false, price); 
+                
             end;  
              
       --  end;  
@@ -173,7 +145,7 @@ function deleteSell(result)
                     buyContractSell = setting.sellTable[sellT].buy_contract; 
                     deleteKeySell = sellT;
  
-                    signalShowLog.addSignal(result.datetime, 8, false, price);
+                    signalShowLog.addSignal(result.datetime, 8, false, sellT);
             end;
         end;
         

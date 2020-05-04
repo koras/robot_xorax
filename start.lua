@@ -19,7 +19,7 @@ package.path = package.path
         require("table")
          
 setting = {
-         ['profit_range'] =  0.01; -- минимальная прибыль
+         ['profit_range'] =  0.05; -- минимальная прибыль
          ['profit_range_array'] =  0.03; -- минимальная прибыль при больших заявках
          ['profit_infelicity'] =  0.01; -- погрешность
          ['profit'] =  0.01; -- подсчёт прибыли

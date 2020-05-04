@@ -77,10 +77,20 @@ local function set(Operation, Price , datetime, count, textInfo)
           else   
         --    label_params['IMAGE_PATH'] = PicPathSell..count..'.bmp'; 
           end;   
+          
+          local day  = datetime.day ;
+          if datetime.day < 10  then 
+            day  = '0'..datetime.day ;
+          end;   
+
+          local month = datetime.month ;
+          if datetime.month < 10  then 
+            month  = '0'..datetime.month ;
+          end;   
 
             
            label_params['YVALUE'] = Price; -- DOUBLE �������� ��������� �� ��� Y, � �������� ����� ��������� �����  
-           label_params['DATE'] = datetime.year .. '0'.. datetime.month .. datetime.day; -- DOUBLE ���� � ������� ��������Ļ, � ������� ��������� �����  
+           label_params['DATE'] = datetime.year .. month ..  day; -- DOUBLE ���� � ������� ��������Ļ, � ������� ��������� �����  
           
           
            label_params['TIME'] = hour ..   minute  .. '00'; -- DOUBLE ����� � ������� ������ѻ, � �������� ����� ��������� �����  
@@ -99,7 +109,7 @@ local function set(Operation, Price , datetime, count, textInfo)
 
         --os.date("%Y%m%d",os.time())
         
-      --  loger.save(Operation.. '  '.. Settings['tag'].. '  '..  Price .. " ������� ��� ������� ���� � ����� - "..     label_params['DATE'] ..'   '..label_params['TIME'].. '  '.. label_params['IMAGE_PATH'] )
+      -- loger.save(Operation.. '  '.. Settings['tag'].. '  '..  Price .. " ������� ��� ������� ���� � ����� - "..     label_params['DATE'] ..'   '..label_params['TIME'].. '  '.. label_params['IMAGE_PATH'] )
        -- loger.save(  datetime.hour ..'   '..datetime.min.. '  '.. '00' )
 
           AddLabel(Settings['tag'], label_params);

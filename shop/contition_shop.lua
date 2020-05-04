@@ -61,7 +61,7 @@ function getRandSell(price)
 
  
  -- Не покупаем если промежуток на свече соответствуют высокой цене
-function getRandCandle(price, datetime)
+ function getRandCandle(price, datetime)
         local range_candle = setting.candle_current_high - setting.candle_current_low;
 
 
@@ -72,22 +72,42 @@ function getRandCandle(price, datetime)
                         checkRange = false;
                         signalShowLog.addSignal(datetime, 13, false, range_candle);
                 end;  
-
                 local priceMinimum =  setting.candle_current_high - setting.profit_range ;
-
                 if checkRange == true and priceMinimum > price   then
- 
-
                         return checkRange;
                 else
                                 -- свечка меньше текущего профита  
                                 --	[14] = 'Цена на свече выше профита, покупка на верху невозможна',   
                         checkRange = false;
                         signalShowLog.addSignal(datetime, 14, false, priceMinimum );
- 
                 end; 
-      
-   
+        return checkRange;
+end;
+    
+     
+ 
+
+
+ -- Падение рынка
+function getFailMarket(price, datetime) 
+                                --    local SPRED_LONG_TREND_DOWN = 0.01; -- рынок падает, увеличиваем растояние между покупками
+                                --    local SPRED_LONG_TREND_DOWN_SPRED = 0.01; -- на сколько увеличиваем растояние
+                                --    local SPRED_LONG_TREND_DOWN_LAST_PRICE= 0; -- последняя покупка
+
+        local checkRange = true;
+
+                if SPRED_LONG_TREND_DOWN_LAST_PRICE == 0  or  
+                SPRED_LONG_TREND_DOWN_LAST_PRICE - SPRED_LONG_TREND_DOWN  > price  - setting.profit_infelicity  or SPRED_LONG_TREND_DOWN_LAST_PRICE  < price  then
+  
+                -- SPRED_LONG_TREND_DOWN 
+                       checkRange = false;
+                else
+
+                signalShowLog.addSignal(dt, 3, true, SPRED_LONG_TREND_DOWN_LAST_PRICE - SPRED_LONG_TREND_DOWN);
+                
+                end;
+
+
         return checkRange;
 end;
     
@@ -96,6 +116,7 @@ end;
  
 
  
+M.getFailMarket = getFailMarket;
 M.getRandCandle = getRandCandle;
 M.getRandSell = getRandSell;
 M.getRandBuy = getRandBuy;
