@@ -3,6 +3,7 @@ local M = {}
 
 local loger = dofile(getScriptPath() .. "\\loger.lua")
  
+local signalShowLog = dofile(getScriptPath() .. "\\interface\\signalShowLog.lua");
    
 
 local function  calculateVolume( volume)
@@ -38,20 +39,28 @@ local function  getRange()
     return rangeLocal;
 end;
 
- 
+
+bigCandle = 0;
 
 local function getSignal(tag, callback)
-    seconds = os.time(datetime); -- в seconds будет значение 1427052491
 
+       
+    shift = 0;
+    len = 100
+    basis = 9
+
+
+    seconds = os.time(datetime); -- в seconds будет значение 1427052491
     collbackFunc = callback;
     shift = 0;
-
     setting.number_of_candles = getNumCandles(setting.tag); 
 
-    bars_temp,res,legend = getCandlesByIndex(setting.tag, 0, setting.number_of_candles-2*len-shift,2*len)
+   bars_temp,res,legend = getCandlesByIndex(setting.tag, 0, setting.number_of_candles-2*len-shift,2*len)
 
-    local lines_count = getLinesCount(setting.tag) 
+  --  local lines_count = getLinesCount(setting.tag) 
     bars={}
+
+ 
 
     i=len
     j=2*len
@@ -61,14 +70,22 @@ local function getSignal(tag, callback)
             if bars_temp[j-1].datetime.hour >= 10 then
 
                   setting.current_price = bars_temp[j-1].close;
+                
+                  if bigCandle <= i  then
+                    bigCandle  = i; 
+                    setting.candle_current_high = bars_temp[j-1].high;
+                    setting.candle_current_low = bars_temp[j-1].low; 
+                    calculateSignal(bars[len]);
+                    collbackFunc(bars[len]);
+                end
+ 
+
 
                --   setting.fractals_collection[#setting.fractals_collection + 1]  = bars_temp[j-1].close;
 
             --    loger.save(countingTicsVolume .."  -  объёмов "..  lastTickVolume .. ' '.. updateValue..' rand ' );
-                    loger.save( " bars_temp[j-1].price ".. bars_temp[j-1].close );
-                           bars[i]=bars_temp[j-1] 
-                          calculateSignal( bars[len] )
-                          collbackFunc(bars[len]);
+                --    loger.save( " bars_temp[j-1].price ".. bars_temp[j-1].close );
+                           bars[i]=bars_temp[j-1]  
                  
                           i=i-1
             end

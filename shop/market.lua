@@ -68,16 +68,17 @@ function long(price, dt, levelLocal , event) -- решение
             checkRangeBuy = contitionMarket.getRandBuy(price, setting.sellTable);
             -- проверём, стоит ли продажа в этом промежутке
             checkRangeSell = contitionMarket.getRandSell(price, setting.sellTable);
+            -- уровень свечи 
+            randCandle = contitionMarket.getRandCandle(price, dt);
 
 
-
-            if checkRangeBuy == true and checkRangeSell == true then
+            if checkRangeBuy == true and checkRangeSell == true and randCandle == true then
                       -- SPRED_LONG_BUY
                         -- мы покупаем, если в определённом диапозоне небыло покупок
                --  loger.save( 'callBUY  '  .. price  );
                             -- мы не покупаем, если только что продали по текуще цене setting.profit
              --       if(SPRED_LONG_LOST_SELL - SPRED_LONG_PRICE_DOWN > price or  price > SPRED_LONG_LOST_SELL + setting.profit or SPRED_LONG_LOST_SELL == 0 ) then  
-                        local sell_lost =  SPRED_LONG_LOST_SELL + setting.profit_range - setting.profit_infelicity >= price and  price >= SPRED_LONG_LOST_SELL - setting.profit_range + setting.profit_infelicity;
+                    local sell_lost =  SPRED_LONG_LOST_SELL + setting.profit_range - setting.profit_infelicity >= price and  price >= SPRED_LONG_LOST_SELL - setting.profit_range + setting.profit_infelicity;
 
                     if  sell_lost == false or  SPRED_LONG_LOST_SELL == 0   then  
                         
@@ -99,7 +100,7 @@ function long(price, dt, levelLocal , event) -- решение
                                         signalShowLog.addSignal(dt, 10, false, price);
 
                                     else
-                                        signalShowLog.addSignal(dt, 3, true, price);
+                                        signalShowLog.addSignal(dt, 3, true, SPRED_LONG_TREND_DOWN_LAST_PRICE - SPRED_LONG_TREND_DOWN);
                                     
                                     end;
     
@@ -107,8 +108,8 @@ function long(price, dt, levelLocal , event) -- решение
                         signalShowLog.addSignal(dt, 2, true, SPRED_LONG_LOST_SELL);
                      --   signalShowLog.addSignal(dt, 2, true, price);
                     end;  
-            else
-                signalShowLog.addSignal(dt, 1, true, price);
+         --   else
+           --     signalShowLog.addSignal(dt, 1, true, price);
             end;  
              
       --  end;  
@@ -157,12 +158,13 @@ function deleteSell(result)
         --   if statusRange then
 
                 if  setting.sellTable[sellT].type == 'sell' and result.close + setting.profit_infelicity >= setting.sellTable[sellT].price  then 
-
                     local price = result.close;
                     setting.count_buyin_a_row = 0; 
 
                     SPRED_LONG_LOST_SELL = price;
 
+                    SPRED_LONG_TREND_DOWN  = SPRED_LONG_TREND_DOWN - SPRED_LONG_TREND_DOWN_SPRED;
+                    
                     setting.count_sell =  setting.count_sell + 1; 
                     setting.profit =  setting.sellTable[sellT].price - setting.sellTable[sellT].buy_contract + setting.profit;
 

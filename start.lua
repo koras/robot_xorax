@@ -63,6 +63,11 @@ setting = {
          ['fractal_candle'] = 3,
          ['fractal_under_up'] = 0.06, -- под вверхом не покупаем, можем пробить а цена не пойдёт в нашу сторону
 
+          
+         ['candle_current_high'] = 0.00, -- верхняя граница свечи, для промежутка покупки
+         ['candle_current_low'] = 0.00, -- верхняя граница свечи, для промежутка покупки
+ 
+
 
 
          ['timeWork'] =  {
@@ -135,7 +140,7 @@ local market = dofile(getScriptPath() .. "\\shop\\market.lua");
    ACCOUNT        = '232957';        -- ������������� �����
   -- CLASS_CODE     = "SPBFUT"     -- ����� ������
  --  SEC_CODE       = "BR-6.20"       -- ��� ������
-   tag =  "my_br"; -- �� �������
+   tag =  "my_br"; -- 
 
 -- SHORT  = FALSE
 -- LONG = true

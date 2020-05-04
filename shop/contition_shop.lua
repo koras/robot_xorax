@@ -31,6 +31,8 @@ function getRandBuy(price)
                      if setting.sellTable[j_checkRange].type == 'buy' then
                              -- здесь узнаю, была ли покупка в этом диапозоне
                              if   setting.SPRED_LONG_BUY_UP + setting.sellTable[j_checkRange].price >= price and price >= setting.sellTable[j_checkRange].price - setting.SPRED_LONG_BUY_down   then
+                                
+                                signalShowLog.addSignal(setting.sellTable[j_checkRange].dt, 11, false, price);
                                  checkRange = false;
                      end; 
              end; 
@@ -56,10 +58,47 @@ function getRandSell(price)
      return checkRange;
  end;
  
+
+ 
+ -- Не покупаем если промежуток на свече соответствуют высокой цене
+function getRandCandle(price, datetime)
+        local range_candle = setting.candle_current_high - setting.candle_current_low;
+
+    --    signalShowLog.addSignal(datetime, 15, false, setting.candle_current_low);
+   --     signalShowLog.addSignal(datetime, 15, false, setting.candle_current_high);
+   --     signalShowLog.addSignal(datetime, 15, false, range_candle);
+
+        local checkRange = true;
+                if range_candle < setting.profit_range then 
+                        -- свечка меньше текущего профита 
+	                --	[13] = 'Текущая свеча меньше преполагаемого профита, низкая волатильность',   
+                        checkRange = false;
+                        signalShowLog.addSignal(datetime, 13, false, range_candle);
+                end;  
+
+                local priceMinimum =  setting.candle_current_high - setting.profit_range - setting.profit_infelicity ;
+
+                if checkRange == false and priceMinimum > price   then
+ 
+
+                        return checkRange;
+                else
+                                -- свечка меньше текущего профита  
+                                --	[14] = 'Цена на свече выше профита, покупка на верху невозможна',   
+                        checkRange = false;
+                        signalShowLog.addSignal(datetime, 14, false, (setting.candle_current_high - setting.profit_range - setting.profit_infelicity  ));
+                end; 
+      
+   
+        return checkRange;
+end;
+    
+     
   
  
 
  
+M.getRandCandle = getRandCandle;
 M.getRandSell = getRandSell;
 M.getRandBuy = getRandBuy;
  

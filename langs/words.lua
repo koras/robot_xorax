@@ -14,7 +14,10 @@ function wSignal(_event)
 		[9] = 'Set a order for to sale', 
 		[10] = 'bye',  
 		[11] = 'bye', 
-		[11] = 'sell', 
+		[12] = 'sell', 
+		[13] = 'the current candle is less than the expected profit, low volatility', 
+		[14] = 'the price of the candle is higher than the profit; buying at the top is impossible', 
+		[15] = 'Error logging',   
 	} 	
 	
 	
@@ -31,6 +34,9 @@ function wSignal(_event)
 		[10] = 'на продажу',  
 		[11] = 'Мы покупали по текущей цене в этом промежутке', 
 		[12] = 'У нас стоит заявка на продажу по текущей цене',   
+		[13] = 'Текущая свеча меньше преполагаемого профита, низкая волатильность',  
+		[14] = 'Цена на свече выше профита, покупка на верху невозможна',   
+		[15] = 'Логирование ошибок',   
 	}
 	 
 	return arr[_event];
