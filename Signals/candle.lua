@@ -71,22 +71,66 @@ local function getSignal(tag, callback)
 
                   setting.current_price = bars_temp[j-1].close;
                 
+                  
                   if bigCandle <= i  then
                     bigCandle  = i; 
-                    setting.candle_current_high = bars_temp[j-1].high;
-                    setting.candle_current_low = bars_temp[j-1].low; 
-                    calculateSignal(bars[len]);
-                    collbackFunc(bars[len]);
+                     
+                        if  setting.old_number_of_candles ~= setting.number_of_candles then
+                            setting.old_number_of_candles = setting.number_of_candles;
+
+                            
+                            if  setting.old_candle_price_high < bars_temp[j-1].high  then
+                                --------setting.candle_current_high - setting.candle_current_low
+                                setting.candle_current_high = setting.buffer_old_candles_high;
+                                setting.candle_current_low = setting.candle_current_low;
+                            end
+                                            
+                    --     ['old_candle_price_high'] = 0.00, -- верхняя граница свечи, для промежутка покупки
+                        --    ['old_candle_price_low'] = 0.00, -- верхняя граница свечи, для промежутка покупки
+                        else
+
+
+                            if setting.candle_current_high < bars_temp[j-1].high then
+                                setting.candle_current_high = bars_temp[j-1].high;
+                            end
+                            
+                            if setting.candle_current_low > bars_temp[j-1].low or setting.candle_current_low == 0 then
+                            setting.candle_current_low = bars_temp[j-1].low;
+                            end
+                                         
+
+                        end
+
+                        
+              --      signalShowLog.addSignal(bars_temp[j-1].datetime, 14, false, setting.candle_current_high );
+              --      signalShowLog.addSignal(bars_temp[j-1].datetime, 15, false, setting.candle_current_low );
+              --     signalShowLog.addSignal(bars_temp[j-1].datetime, 15, false, setting.candle_current_high );
+                --    signalShowLog.addSignal(bars_temp[j-1].datetime, 15, false, bars_temp[j-1].high );
+                     
+            --     signalShowLog.addSignal(datetime, 15, false, setting.candle_current_high);
+
+
+                --    signalShowLog.addSignal(bars_temp[j-1].datetime, 15, false, setting.number_of_candles);
+                  
+
+
+
+                        setting.buffer_old_candles_high = bars_temp[j-1].high;
+                        setting.buffer_old_candles_low = bars_temp[j-1].low; 
+
+ 
+                        calculateSignal(bars_temp[j-1]);
+                        collbackFunc(bars_temp[j-1]);
                 end
  
 
+                        bars[i]=bars_temp[j-1]   
+                    --   setting.fractals_collection[#setting.fractals_collection + 1]  = bars_temp[j-1].close;
 
-               --   setting.fractals_collection[#setting.fractals_collection + 1]  = bars_temp[j-1].close;
-
-            --    loger.save(countingTicsVolume .."  -  объёмов "..  lastTickVolume .. ' '.. updateValue..' rand ' );
-                --    loger.save( " bars_temp[j-1].price ".. bars_temp[j-1].close );
-                           bars[i]=bars_temp[j-1]  
-                 
+                    --    loger.save(countingTicsVolume .."  -  объёмов "..  lastTickVolume .. ' '.. updateValue..' rand ' );
+                        --    loger.save( " bars_temp[j-1].price ".. bars_temp[j-1].close );
+                                
+                        
                           i=i-1
             end
             j=j-1

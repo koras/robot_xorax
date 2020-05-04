@@ -64,9 +64,6 @@ function getRandSell(price)
 function getRandCandle(price, datetime)
         local range_candle = setting.candle_current_high - setting.candle_current_low;
 
-    --    signalShowLog.addSignal(datetime, 15, false, setting.candle_current_low);
-   --     signalShowLog.addSignal(datetime, 15, false, setting.candle_current_high);
-   --     signalShowLog.addSignal(datetime, 15, false, range_candle);
 
         local checkRange = true;
                 if range_candle < setting.profit_range then 
@@ -76,9 +73,9 @@ function getRandCandle(price, datetime)
                         signalShowLog.addSignal(datetime, 13, false, range_candle);
                 end;  
 
-                local priceMinimum =  setting.candle_current_high - setting.profit_range - setting.profit_infelicity ;
+                local priceMinimum =  setting.candle_current_high - setting.profit_range ;
 
-                if checkRange == false and priceMinimum > price   then
+                if checkRange == true and priceMinimum > price   then
  
 
                         return checkRange;
@@ -86,7 +83,8 @@ function getRandCandle(price, datetime)
                                 -- свечка меньше текущего профита  
                                 --	[14] = 'Цена на свече выше профита, покупка на верху невозможна',   
                         checkRange = false;
-                        signalShowLog.addSignal(datetime, 14, false, (setting.candle_current_high - setting.profit_range - setting.profit_infelicity  ));
+                        signalShowLog.addSignal(datetime, 14, false, priceMinimum );
+ 
                 end; 
       
    

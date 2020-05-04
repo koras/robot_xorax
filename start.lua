@@ -19,7 +19,7 @@ package.path = package.path
         require("table")
          
 setting = {
-         ['profit_range'] =  0.05; -- минимальная прибыль
+         ['profit_range'] =  0.01; -- минимальная прибыль
          ['profit_range_array'] =  0.03; -- минимальная прибыль при больших заявках
          ['profit_infelicity'] =  0.01; -- погрешность
          ['profit'] =  0.01; -- подсчёт прибыли
@@ -48,8 +48,15 @@ setting = {
          ['SPRED_LONG_BUY_down'] = 0.01, -- условия, не покупаем если здесь ранее мы купили | вниз диапозон
          
          ['tag'] = "my_br",
+         
          ['number_of_candles'] = 0, -- current a candle
          ['old_number_of_candles'] = 0, -- old current candle
+       
+         ['buffer_old_candles_high'] = 0, -- current a candle
+         ['buffer_old_candles_low'] = 0, -- old current candle
+
+
+
 
          ['candles_buy_last'] = 0, -- на какой свече была последняя покупка
          ['candle_buy_number_down_price'] = 6, -- сколько свечей должно пройти чтобы отпустить продажу 
@@ -66,6 +73,11 @@ setting = {
           
          ['candle_current_high'] = 0.00, -- верхняя граница свечи, для промежутка покупки
          ['candle_current_low'] = 0.00, -- верхняя граница свечи, для промежутка покупки
+
+
+
+         ['old_candle_price_high'] = 0.00, -- верхняя граница свечи, для промежутка покупки
+         ['old_candle_price_low'] = 0.00, -- верхняя граница свечи, для промежутка покупки
  
 
 
@@ -134,7 +146,7 @@ local market = dofile(getScriptPath() .. "\\shop\\market.lua");
   -- count_sell = 0;
 
    profit = 0;
-   sellTable = {};
+   --sellTable = {};
    bid = {}
    RangeSignal    = 0.1;            -- �������� ����
    ACCOUNT        = '232957';        -- ������������� �����

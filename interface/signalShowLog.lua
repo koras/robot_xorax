@@ -5,7 +5,7 @@ local init = {}
 
 arrTableLog = {};
 
-local showLabel = false;
+local showLabel = true;
 
 
 
@@ -77,7 +77,6 @@ end;
 
 		if i > 0 then 
 			keys =  (#arrTableLog - i  );
-		--	keys = 18 - (#arrTableLog - i );
 		end 
 		 
 --	for key in arrTableLog do
@@ -142,20 +141,7 @@ function CreateNewTableLogEvent()
 	createTableLog = true; 
 	
 	t_id_TableLog = AllocTable();	 
-
-
-	 
-
-	-- local wordTitleTableLog = {
-	-- 	['number'] = "�",
-	-- 	['time'] = "Time",
-	-- 	['event'] = "Event",
-	-- 	['status'] = "Status",
-	-- 	['price'] = "Price",
-	-- 	['description'] = "Description",
-	 
-	-- };
-	 
+ 
 
 
 	AddColumn(t_id_TableLog, 0, wordTitleTableLog.number , true, QTABLE_STRING_TYPE, 5);

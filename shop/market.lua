@@ -156,6 +156,7 @@ function deleteSell(result)
     local deleteKeySell = 0;
         for sellT = 1 ,  #setting.sellTable do 
         --   if statusRange then
+  
 
                 if  setting.sellTable[sellT].type == 'sell' and result.close + setting.profit_infelicity >= setting.sellTable[sellT].price  then 
                     local price = result.close;
@@ -175,6 +176,7 @@ function deleteSell(result)
                     signalShowLog.addSignal(result.datetime, 8, false, price);
             end;
         end;
+        
 
         if deleteKeySell == 0  then 
         
