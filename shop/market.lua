@@ -53,7 +53,7 @@ end
 
 
 
-function long(price, dt, levelLocal , event) -- решение 
+function long(price, datetime, levelLocal , event) -- решение 
     getSetting();
     getfractal(price);
 
@@ -69,7 +69,7 @@ function long(price, dt, levelLocal , event) -- решение
             -- проверём, стоит ли продажа в этом промежутке
             checkRangeSell = contitionMarket.getRandSell(price, setting.sellTable);
             -- уровень свечи 
-            randCandle = contitionMarket.getRandCandle(price, dt);
+            randCandle = contitionMarket.getRandCandle(price, datetime);
             failMarket = contitionMarket.getFailMarket(price, datetime) 
 
             if checkRangeBuy and checkRangeSell and randCandle  and failMarket  then
@@ -78,9 +78,9 @@ function long(price, dt, levelLocal , event) -- решение
                 SPRED_LONG_TREND_DOWN  = SPRED_LONG_TREND_DOWN + SPRED_LONG_TREND_DOWN_SPRED;
                 SPRED_LONG_TREND_DOWN_LAST_PRICE = price; -- записываем последнюю покупку
 
-                callBUY(price,  dt); 
+                callBUY(price,  datetime); 
         
-                signalShowLog.addSignal(dt, 10, false, price); 
+                signalShowLog.addSignal(datetime, 10, false, price); 
                 
             end;  
              

@@ -30,7 +30,7 @@ function getRandBuy(price)
              for j_checkRange=1, #setting.sellTable  do
                      if setting.sellTable[j_checkRange].type == 'buy' then
                              -- здесь узнаю, была ли покупка в этом диапозоне
-                             if   setting.SPRED_LONG_BUY_UP + setting.sellTable[j_checkRange].price >= price and price >= setting.sellTable[j_checkRange].price - setting.SPRED_LONG_BUY_down   then
+                             if   setting.SPRED_LONG_BUY_UP + setting.sellTable[j_checkRange].price >= price + setting.profit_infelicity   and price >= setting.sellTable[j_checkRange].price - setting.SPRED_LONG_BUY_down   then
                                 
                                 signalShowLog.addSignal(setting.sellTable[j_checkRange].dt, 11, false, price);
                                  checkRange = false;
@@ -45,15 +45,17 @@ function getRandBuy(price)
 function getRandSell(price)
 
      local checkRange = true;
-             for j_checkRange=1, #setting.sellTable  do
-                     if setting.sellTable[j_checkRange].type == 'sell' then
-                             -- здесь узнаю, была ли покупка в этом диапозоне
-                             if   setting.profit_range + setting.sellTable[j_checkRange].price >= price and price >= setting.sellTable[j_checkRange].price - setting.profit_range   then
-                                 checkRange = false; 
-                                 signalShowLog.addSignal(setting.sellTable[j_checkRange].dt, 12, false, price);
-                     end; 
-             end; 
-     end;  
+        if #setting.sellTable > 0  then
+                for j_checkRange=1, #setting.sellTable  do
+                        if setting.sellTable[j_checkRange].type == 'sell' then
+                                -- здесь узнаю, была ли покупка в этом диапозоне
+                                if   setting.profit_range + setting.sellTable[j_checkRange].price >= price and price >= setting.sellTable[j_checkRange].price - setting.profit_range   then
+                                        checkRange = false; 
+                                        signalShowLog.addSignal(setting.sellTable[j_checkRange].dt, 12, false, price);
+                        end; 
+                end; 
+                end;  
+        end;  
 
      return checkRange;
  end;
@@ -72,9 +74,11 @@ function getRandSell(price)
                         checkRange = false;
                         signalShowLog.addSignal(datetime, 13, false, range_candle);
                 end;  
+
                 local priceMinimum =  setting.candle_current_high - setting.profit_range ;
-                if checkRange == true and priceMinimum > price   then
-                        return checkRange;
+
+                if checkRange == true and priceMinimum > price + setting.profit_infelicity    then
+                 
                 else
                                 -- свечка меньше текущего профита  
                                 --	[14] = 'Цена на свече выше профита, покупка на верху невозможна',   
@@ -99,11 +103,11 @@ function getFailMarket(price, datetime)
                 if SPRED_LONG_TREND_DOWN_LAST_PRICE == 0  or  
                 SPRED_LONG_TREND_DOWN_LAST_PRICE - SPRED_LONG_TREND_DOWN  > price  - setting.profit_infelicity  or SPRED_LONG_TREND_DOWN_LAST_PRICE  < price  then
   
-                -- SPRED_LONG_TREND_DOWN 
-                       checkRange = false;
+                -- SPRED_LONG_TREND_DOWN  
                 else
 
-                signalShowLog.addSignal(dt, 3, true, SPRED_LONG_TREND_DOWN_LAST_PRICE - SPRED_LONG_TREND_DOWN);
+                        checkRange = false;
+                signalShowLog.addSignal(datetime, 3, true, SPRED_LONG_TREND_DOWN_LAST_PRICE - SPRED_LONG_TREND_DOWN);
                 
                 end;
 
