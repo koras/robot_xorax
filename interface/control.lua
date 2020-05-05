@@ -46,7 +46,7 @@ local word = {
  
 local function show()  
 	CreateNewTable(); 
-	for i = 1, 18 do
+	for i = 1, 25 do
 		InsertRow(t_id, -1);
 	 end;
 	for i = 0, 3 do
@@ -57,6 +57,9 @@ local function show()
 		Gray(t_id,14, i);
 		Gray(t_id,16, i);
 		Gray(t_id,18, i);
+		Gray(t_id,20, i);
+		Gray(t_id,22, i);
+		Gray(t_id,24, i);
 		
 	 end; 
 		 

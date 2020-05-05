@@ -53,9 +53,9 @@ local function getSignal(tag, callback)
     seconds = os.time(datetime); -- в seconds будет значение 1427052491
     collbackFunc = callback;
     shift = 0;
-    setting.number_of_candles = getNumCandles(setting.tag); 
+    setting.number_of_candle = getNumCandles(setting.tag); 
 
-   bars_temp,res,legend = getCandlesByIndex(setting.tag, 0, setting.number_of_candles-2*len-shift,2*len)
+   bars_temp,res,legend = getCandlesByIndex(setting.tag, 0, setting.number_of_candle-2*len-shift,2*len)
 
   --  local lines_count = getLinesCount(setting.tag) 
     bars={}
@@ -70,54 +70,30 @@ local function getSignal(tag, callback)
             if bars_temp[j-1].datetime.hour >= 10 then
 
                   setting.current_price = bars_temp[j-1].close;
-                
+                  local bar = bars_temp[j-1];
                   
                   if bigCandle <= i  then
                     bigCandle  = i; 
-                     
-                        if  setting.old_number_of_candles ~= setting.number_of_candles then
-                            setting.old_number_of_candles = setting.number_of_candles;
+                    -- candle_current_high - setting.candle_current_low
 
-                            
-                            if  setting.old_candle_price_high < bars_temp[j-1].high  then
-                                --------setting.candle_current_high - setting.candle_current_low
-                                setting.candle_current_high = setting.buffer_old_candles_high;
-                                setting.candle_current_low = setting.candle_current_low;
+                        if  setting.old_number_of_candle == setting.number_of_candle then
+               
+                            if setting.candle_current_high < bar.high or  setting.candle_current_high == 0 then
+                                setting.candle_current_high = bar.high;
                             end
-                                            
-                    --     ['old_candle_price_high'] = 0.00, -- верхняя граница свечи, для промежутка покупки
-                        --    ['old_candle_price_low'] = 0.00, -- верхняя граница свечи, для промежутка покупки
+                            
+                            if setting.candle_current_low > bar.low or setting.candle_current_low == 0 then
+                            setting.candle_current_low = bar.low;
+                            end
+                                    
+                            setting.buffer_old_candles_high = bar.high;
+                            setting.buffer_old_candles_low = bar.low; 
                         else
+                            setting.old_number_of_candle = setting.number_of_candle;
 
-
-                            if setting.candle_current_high < bars_temp[j-1].high then
-                                setting.candle_current_high = bars_temp[j-1].high;
-                            end
-                            
-                            if setting.candle_current_low > bars_temp[j-1].low or setting.candle_current_low == 0 then
-                            setting.candle_current_low = bars_temp[j-1].low;
-                            end
-                                         
-
+                            setting.candle_current_high = setting.buffer_old_candles_high;
+                            setting.candle_current_low = setting.buffer_old_candles_low;
                         end
-
-                        
-              --      signalShowLog.addSignal(bars_temp[j-1].datetime, 14, false, setting.candle_current_high );
-              --      signalShowLog.addSignal(bars_temp[j-1].datetime, 15, false, setting.candle_current_low );
-              --     signalShowLog.addSignal(bars_temp[j-1].datetime, 15, false, setting.candle_current_high );
-                --    signalShowLog.addSignal(bars_temp[j-1].datetime, 15, false, bars_temp[j-1].high );
-                     
-            --     signalShowLog.addSignal(datetime, 15, false, setting.candle_current_high);
-
-
-                --    signalShowLog.addSignal(bars_temp[j-1].datetime, 15, false, setting.number_of_candles);
-                  
-
-
-
-                        setting.buffer_old_candles_high = bars_temp[j-1].high;
-                        setting.buffer_old_candles_low = bars_temp[j-1].low; 
-
  
                         calculateSignal(bars_temp[j-1]);
                         collbackFunc(bars_temp[j-1]);

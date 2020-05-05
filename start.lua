@@ -51,6 +51,9 @@ setting = {
          
          ['number_of_candles'] = 0, -- current a candle
          ['old_number_of_candles'] = 0, -- old current candle
+         
+         ['number_of_candle'] = 0, -- current a candle
+         ['old_number_of_candle'] = 0, -- old current candle
        
          ['buffer_old_candles_high'] = 0, -- current a candle
          ['buffer_old_candles_low'] = 0, -- old current candle
