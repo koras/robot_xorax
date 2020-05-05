@@ -236,7 +236,7 @@ end
 function sellTransaction(priceLocal,dt)
     local p = 0;
     local  trans_id_sell  =  getRand();
-    priceLocal = priceLocal ;
+ 
     -- if(setting.use_contract > 1 ) then
     --         for j=1,  setting.use_contract  do 
                 
@@ -262,7 +262,7 @@ function sellTransaction(priceLocal,dt)
     --         end;
     -- else 
         --------------###########################################---------------------
-            p = setting.profit_range + priceLocal;
+            p = setting.profit_range + priceLocal  + setting.profit_infelicity;
 
             if setting.emulation == false then
                 trans_id_sell =  transaction.send("SELL", p, setting.use_contract );

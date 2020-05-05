@@ -20,23 +20,26 @@ M = {};
 --    ['contract']=  setting.use_contract,
 --    ['buy_contract']= price, -- стоимость продажи
 
--- не покупаем если продали в текущем состоянии
+-- не покупаем если купили в текущем состоянии
 
 function getRandBuy(price)
           
     -- ['SPRED_LONG_BUY_UP'] = 0.02, -- условия, не покупаем если здесь ранее мы купили | вверх диапозон,
     -- ['SPRED_LONG_BUY_down'] = 0.00, -- условия, не покупаем если здесь ранее мы купили | вниз диапозон
      local checkRange = true;
-             for j_checkRange=1, #setting.sellTable  do
-                     if setting.sellTable[j_checkRange].type == 'buy' then
-                             -- здесь узнаю, была ли покупка в этом диапозоне
-                             if   setting.SPRED_LONG_BUY_UP + setting.sellTable[j_checkRange].price >= price + setting.profit_infelicity   and price >= setting.sellTable[j_checkRange].price - setting.SPRED_LONG_BUY_down   then
-                                
-                                signalShowLog.addSignal(setting.sellTable[j_checkRange].dt, 11, false, price);
-                                 checkRange = false;
-                     end; 
-             end; 
-     end;  
+                if #setting.sellTable > 0  then
+                        for j_checkRangBuy=1, #setting.sellTable  do
+                                if setting.sellTable[j_checkRangBuy].type == 'buy' then
+                                -- здесь узнаю, была ли покупка в этом диапозоне
+                                --   if   setting.profit_range + setting.sellTable[j_checkRangBuy].price >= price + setting.profit_infelicity  and 
+                                        if   setting.profit_range + setting.sellTable[j_checkRangBuy].price >= price + setting.profit_infelicity  and 
+                                        price >= setting.sellTable[j_checkRangBuy].price - setting.SPRED_LONG_BUY_down   then
+                                        signalShowLog.addSignal(setting.sellTable[j_checkRangBuy].dt, 11, false, price);
+                                        checkRange = false;
+                                        end; 
+                                end; 
+                        end;  
+                end;  
      return checkRange;
  end;
  
