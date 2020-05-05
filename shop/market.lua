@@ -57,7 +57,6 @@ function long(price, datetime, levelLocal , event) -- решение
     getSetting();
     getfractal(price);
 
-
         -- подсчитаем скольк заявок у нас на продажу
         if  LIMIT >= setting.limit_count_buy  then
             -- проверём, покупали здесь или нет, в этом промежутке
@@ -67,7 +66,7 @@ function long(price, datetime, levelLocal , event) -- решение
             -- уровень свечи 
             randCandle = contitionMarket.getRandCandle(price, datetime);
             failMarket = contitionMarket.getFailMarket(price, datetime) ;
-
+            
             if checkRangeBuy and checkRangeSell and randCandle  and failMarket  then
 
 
@@ -144,7 +143,6 @@ function deleteSell(result)
                     -- надо удалить контракт по которому мы покупали
                     buyContractSell = setting.sellTable[sellT].buy_contract; 
                     deleteKeySell = sellT;
- 
                     signalShowLog.addSignal(result.datetime, 8, false, sellT);
             end;
         end;
@@ -164,8 +162,6 @@ end
 function deleteBuy(result,buy_contract)
     local deleteKey = 0;
     for searchBuy = 1 ,  #setting.sellTable do 
-
-
         if setting.sellTable[searchBuy].type == 'buy' and setting.sellTable[searchBuy].price == ( buy_contract + 0.01 )  then 
                 -- удаляем только 1 элемент
                 setting.limit_count_buy = setting.limit_count_buy - 1;
@@ -217,7 +213,7 @@ function callBUY(price ,dt)
    -- else
    --     sellview(price,dt);
   --  end;
-        for j=1,  setting.use_contract  do 
+      --  for j=1,  setting.use_contract  do 
             --signalShowLog.addSignal(dt, 6, true, price);
             signalShowLog.addSignal(dt, 7, false, price);
             setting.sellTable[(#setting.sellTable+1)] = {
@@ -230,7 +226,7 @@ function callBUY(price ,dt)
                 ['buy_contract']= price, -- стоимость продажи
                 
             };
-        end;
+     --   end;
 end 
 
 
@@ -241,30 +237,30 @@ function sellTransaction(priceLocal,dt)
     local p = 0;
     local  trans_id_sell  =  getRand();
     priceLocal = priceLocal ;
-    if(setting.use_contract > 1 ) then
-            for j=1,  setting.use_contract  do 
+    -- if(setting.use_contract > 1 ) then
+    --         for j=1,  setting.use_contract  do 
                 
-                trans_id_sell =  getRand();
-                p =  priceLocal + (setting.profit_range * j);
+    --             trans_id_sell =  getRand();
+    --             p =  priceLocal + (setting.profit_range * j);
     
 
-                if setting.emulation == false then
-                    trans_id_sell =  transaction.send("SELL", p, setting.use_contract );
-                end
+    --             if setting.emulation == false then
+    --                 trans_id_sell =  transaction.send("SELL", p, setting.use_contract );
+    --             end
     
-                signalShowLog.addSignal(dt, 9, false, p);
-                setting.sellTable[(#setting.sellTable+1)] = {
-                                                                ['price'] = p,
-                                                                ['dt']= dt, 
-                                                                ['trans_id']= trans_id_sell, 
-                                                                ['type']= 'sell',
-                                                                ['emulation']= setting.emulation,
-                                                                ['contract']=  1,
-                                                                ['buy_contract']= priceLocal, -- стоимость продажи
-                                                            };
+    --             signalShowLog.addSignal(dt, 9, false, p);
+    --             setting.sellTable[(#setting.sellTable+1)] = {
+    --                                                             ['price'] = p,
+    --                                                             ['dt']= dt, 
+    --                                                             ['trans_id']= trans_id_sell, 
+    --                                                             ['type']= 'sell',
+    --                                                             ['emulation']= setting.emulation,
+    --                                                             ['contract']=  1,
+    --                                                             ['buy_contract']= priceLocal, -- стоимость продажи
+    --                                                         };
             
-            end;
-    else 
+    --         end;
+    -- else 
         --------------###########################################---------------------
             p = setting.profit_range + priceLocal;
 
@@ -283,7 +279,7 @@ function sellTransaction(priceLocal,dt)
                                                             ['contract']=  setting.use_contract,
                                                             ['buy_contract']= priceLocal, -- стоимость продажи
                                                         };
-    end 
+   -- end 
 
     label.set('red', p , dt, 1, 'sell contract '.. 1);
 

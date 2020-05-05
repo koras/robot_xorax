@@ -24,7 +24,7 @@ setting = {
          ['profit_infelicity'] =  0.01; -- погрешность
          ['profit'] =  0.01; -- подсчёт прибыли
          ['LIMIT_BID'] = 10,
-         ['use_contract'] = 1,
+         ['use_contract'] = 2,
          ['emulation'] = true,
          ['candles'] = {}, -- свечи
          

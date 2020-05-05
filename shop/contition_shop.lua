@@ -64,18 +64,23 @@ function getRandSell(price)
  
  -- Не покупаем если промежуток на свече соответствуют высокой цене
  function getRandCandle(price, datetime)
+
+       -- local Gap = setting.profit_range - 0.02
+        local Gap = setting.profit_range ;
+
+
         local range_candle = setting.candle_current_high - setting.candle_current_low;
 
 
         local checkRange = true;
-                if range_candle < setting.profit_range then 
+                if range_candle < Gap  then 
                         -- свечка меньше текущего профита 
 	                --	[13] = 'Текущая свеча меньше преполагаемого профита, низкая волатильность',   
                         checkRange = false;
                         signalShowLog.addSignal(datetime, 13, false, range_candle);
                 end;  
 
-                local priceMinimum =  setting.candle_current_high - setting.profit_range ;
+                local priceMinimum =  setting.candle_current_high - Gap  ;
 
                 if checkRange == true and priceMinimum > price + setting.profit_infelicity    then
                  
