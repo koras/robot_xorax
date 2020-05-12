@@ -3,7 +3,7 @@
    setting.profit_infelicity =  0.01; -- погрешность
    setting.profit =  0.01; -- подсчёт прибыли
    setting.LIMIT_BID = 10,
-   setting.use_contract = 2,
+   setting.use_contract = 1,
    setting.emulation = true,
    setting.candles = {}, -- свечи
          
