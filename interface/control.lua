@@ -436,7 +436,7 @@ function event_callback_message (t_id, msg, par1, par2)
  
 	if par1 == 15 and par2 == 2  and  msg == 1 then
 		setting.profit_range_array = setting.profit_range_array + 0.01; 
-		use_contract_limit();
+			use_contract_limit();
 		return;
 	end;
 	if par1 == 15 and par2 == 3  and  msg == 1 then
