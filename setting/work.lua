@@ -1,7 +1,9 @@
-   setting.profit_range =  0.05; -- минимальная прибыль
+   setting.profit_range =  0.01; -- минимальная прибыль
    setting.profit_range_array =  0.03; -- минимальная прибыль при больших заявках
    setting.profit_infelicity =  0.01; -- погрешность
+   
    setting.profit =  0.01; -- подсчёт прибыли
+
    setting.LIMIT_BID = 10;
    setting.use_contract = 1;
    setting.emulation = true;

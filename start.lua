@@ -174,9 +174,9 @@ basis = 9
 
    function  update()
       control.stats()
-      show_limit(setting.LIMIT_BID);
+
       market.setLitmitBid(setting.LIMIT_BID);
-      use_contract_limit(setting.use_contract);
+      use_contract_limit();
    end
 
 
