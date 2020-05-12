@@ -56,6 +56,7 @@ local function show()
 
 	if #setting.sellTable > 0  then  
 		updateBidsSignal();     
+		
 	end;
 
 end;
