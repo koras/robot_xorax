@@ -36,7 +36,7 @@ local wordTitleTableBids = {
 	['type'] = "type", 
 	['emulation'] = "emulation",
 	['buy_contract'] = 'buy contract',
-	['title'] = 'Bids'
+	['title'] = 'Current bids  sell/buy'
 };
   
 
@@ -157,21 +157,6 @@ function CreateNewTableBids()
 	t_id_TableBids = AllocTable();	 
  
 	 
-	local wordTitleTableBids = {
-		['number'] = "№",
-		['price'] = "Price",
-		['time'] = "Time", 
-		['trans_id'] = "trans_id",
-		['status'] = "Status", 
-		['type'] = "type", 
-		['emulation'] = "emulation",
-		['buy_contract'] = 'buy'
-	};
-
-
-
-
-
 	AddColumn(t_id_TableBids, 0, wordTitleTableBids.number , true, QTABLE_STRING_TYPE, 5);
 	AddColumn(t_id_TableBids, 1, wordTitleTableBids.price, true, QTABLE_STRING_TYPE, 10);
 	AddColumn(t_id_TableBids, 2,  wordTitleTableBids.time, true, QTABLE_STRING_TYPE, 10); 
@@ -181,15 +166,10 @@ function CreateNewTableBids()
 	AddColumn(t_id_TableBids, 6,  wordTitleTableBids.buy_contract, true,QTABLE_STRING_TYPE, 10); 
  
  
- 
-
-
-
-
-	t = CreateWindow(t_id_TableBids); 
+	CreateWindow(t_id_TableBids); 
 	SetWindowCaption(t_id_TableBids, wordTitleTableBids.title);  
-
-   SetWindowPos(tt, 0, 70, 50, 140);
+	message(wordTitleTableBids.title);
+   	SetWindowPos(tt, 0, 70, 50, 140);
 
 
 	for i = 1, 35 do
@@ -204,7 +184,7 @@ end;
  
  
 
- function deleteTable()  -- �������
+ function deleteTable()   
 	DestroyTable(t_id_TableBids)
  end;
  
@@ -213,6 +193,5 @@ M.show =  show;
 M.updateBidsSignal= updateBidsSignal;
 M.deleteTable = deleteTable;
 M.CreateNewTableBids =  CreateNewTableBids;
-
 
 return M
