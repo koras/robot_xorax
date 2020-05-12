@@ -166,15 +166,10 @@ function CreateNewTableBids()
 	AddColumn(t_id_TableBids, 6,  wordTitleTableBids.buy_contract, true,QTABLE_STRING_TYPE, 10); 
  
  
- 
-
-
-
-
-	 CreateWindow(t_id_TableBids); 
+	CreateWindow(t_id_TableBids); 
 	SetWindowCaption(t_id_TableBids, wordTitleTableBids.title);  
 	message(wordTitleTableBids.title);
-   SetWindowPos(tt, 0, 70, 50, 140);
+   	SetWindowPos(tt, 0, 70, 50, 140);
 
 
 	for i = 1, 35 do
@@ -189,7 +184,7 @@ end;
  
  
 
- function deleteTable()  -- �������
+ function deleteTable()   
 	DestroyTable(t_id_TableBids)
  end;
  
@@ -198,6 +193,5 @@ M.show =  show;
 M.updateBidsSignal= updateBidsSignal;
 M.deleteTable = deleteTable;
 M.CreateNewTableBids =  CreateNewTableBids;
-
 
 return M
