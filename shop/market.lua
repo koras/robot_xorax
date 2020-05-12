@@ -12,6 +12,7 @@ local bidTable = dofile(getScriptPath() .. "\\bidTable.lua");
 local transaction = dofile(getScriptPath() .. "\\shop\\transaction.lua");
 local signalShowLog = dofile(getScriptPath() .. "\\interface\\signalShowLog.lua");
 local statsPanel = dofile(getScriptPath() .. "\\interface\\stats.lua");
+local panelBids = dofile(getScriptPath() .. "\\interface\\bids.lua");
 
 local contitionMarket = dofile(getScriptPath() .. "\\shop\\contition_shop.lua");
  
@@ -31,8 +32,8 @@ local function setDirect(localDirect) -- решение
     bidTable.create();
 end
 
-local function setLitmitBid(_limit) -- решение
-    LIMIT = _limit;
+local function setLitmitBid() -- решение
+    LIMIT = setting.LIMIT_BID;
 end
 -- price текущая цена
 -- levelLocal  сила сигнала
@@ -148,35 +149,35 @@ function deleteSell(result)
         end;
         
 
-        if deleteKeySell == 0  then 
-        else
+        if deleteKeySell ~= 0  then 
 
          --   loger.save(' #setting.sellTable #setting.sellTable #setting.sellTable #setting.sellTable  ' ..  #setting.sellTable  );
             table.remove (setting.sellTable, deleteKeySell); 
-
             deleteBuy(result,buyContractSell);
+            signalShowLog.addSignal(result.datetime, 8, false, deleteKeySell);
+            panelBids.show()
         end;
 end
 
 
 function deleteBuy(result,buy_contract)
     local deleteKey = 0;
+    local buyPrice = 0;
     for searchBuy = 1 ,  #setting.sellTable do 
         if setting.sellTable[searchBuy].type == 'buy' and setting.sellTable[searchBuy].price == ( buy_contract + 0.01 )  then 
                 -- удаляем только 1 элемент
                 setting.limit_count_buy = setting.limit_count_buy - 1;
                 deleteKey = searchBuy;
                 loger.save(' 6 deleteKey  ' ..  deleteKey  );
-            --    table.remove (setting.sellTable, searchBuy);
-             --   loger.save('setting.sellTable 2 : == '  .. #setting.sellTable  );
-                signalShowLog.addSignal(result.datetime, 8, false, setting.sellTable[searchBuy].price); 
+                buyPrice = setting.sellTable[searchBuy].price;
+         
         end;
     end;
     
-    if deleteKey == 0  then 
-        
-    else 
+    if deleteKey  ~= 0  then 
         table.remove (setting.sellTable, deleteKey);
+        signalShowLog.addSignal(result.datetime, 8, false, buyPrice); 
+        panelBids.show()
     end;
 
 end

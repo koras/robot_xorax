@@ -51,12 +51,11 @@ end;
 
 local function show() 
 	CreateNewTableBids();
+	-- очищаем табличку
+	updateBidsClear();
+
 	if #setting.sellTable > 0  then  
-		updateLogSignal();   
-	else 
-		-- если заявок нет, то очищаем табличку
-		updateBidsClear();   
-	
+		updateBidsSignal();     
 	end;
 
 end;
@@ -94,7 +93,7 @@ end;
 
 
 
- function updateLogSignal()  
+ function updateBidsSignal()  
 	CreateNewTableBids();
 --	if #_arr == 0 then return; end; 
 	for b = 1 , #setting.sellTable do
@@ -210,7 +209,7 @@ end;
  
   
 M.show =  show; 
-M.updateLogSignal= updateLogSignal;
+M.updateBidsSignal= updateBidsSignal;
 M.deleteTable = deleteTable;
 M.CreateNewTableBids =  CreateNewTableBids;
 

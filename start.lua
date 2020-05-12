@@ -69,18 +69,7 @@ local market = dofile(getScriptPath() .. "\\shop\\market.lua");
    --sellTable = {};
    bid = {}
    RangeSignal    = 0.1;            -- �������� ����
-   ACCOUNT        = '232957';        -- ������������� �����
-  -- CLASS_CODE     = "SPBFUT"     -- ����� ������
- --  SEC_CODE       = "BR-6.20"       -- ��� ������
-   tag =  "my_br"; -- 
 
--- SHORT  = FALSE
--- LONG = true
- 
-    
-   
-   
-   -- Ford Motor Company
    --require (modname)
    
    log =  "take_log.log"
@@ -175,7 +164,7 @@ basis = 9
    function  update()
       control.stats()
 
-      market.setLitmitBid(setting.LIMIT_BID);
+      market.setLitmitBid();
       use_contract_limit();
    end
 
@@ -188,7 +177,7 @@ basis = 9
       loger.save(  " start ");
       statsPanel.show();
 
-      interfaceBids.updateLogSignal();
+      interfaceBids.show();
 
       update();
       getPrice();
@@ -200,7 +189,7 @@ basis = 9
       while Run do 
          
          
-          interfaceBids.updateLogSignal();
+          interfaceBids.show();
            update();
            statsPanel.stats();
            fractalSignal.last();
