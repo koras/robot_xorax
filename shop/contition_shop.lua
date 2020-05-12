@@ -47,22 +47,36 @@ function getRandBuy(price)
  -- пвисит ли заявка на продажу в этом промежутке
 function getRandSell(price)
 
-     local checkRange = true;
-        if #setting.sellTable > 0  then
-                for j_checkRange=1, #setting.sellTable  do
-                        if setting.sellTable[j_checkRange].type == 'sell' then
-                                -- здесь узнаю, была ли покупка в этом диапозоне
-                                if   setting.profit_range + setting.sellTable[j_checkRange].price >= price and price >= setting.sellTable[j_checkRange].price - setting.profit_range   then
-                                        checkRange = false; 
-                                        signalShowLog.addSignal(setting.sellTable[j_checkRange].dt, 12, false, price);
-                        end; 
-                end; 
-                end;  
-        end;  
-
-     return checkRange;
- end;
+        local checkRange = true;
+           if #setting.sellTable > 0  then
+                   for j_checkRange=1, #setting.sellTable  do
+                           if setting.sellTable[j_checkRange].type == 'sell' then
+                                   -- здесь узнаю, была ли покупка в этом диапозоне
+                                   if   setting.profit_range + setting.sellTable[j_checkRange].price >= price and price >= setting.sellTable[j_checkRange].price - setting.profit_range   then
+                                           checkRange = false; 
+                                           signalShowLog.addSignal(setting.sellTable[j_checkRange].dt, 12, false, price);
+                           end; 
+                   end; 
+                   end;  
+           end;  
+        return checkRange;
+    end;
  
+
+
+
+ -- Лимит заявок на покупку
+function getLimitBuy(dt)
+
+        local checkRange = true;
+           if setting.LIMIT_BID <= setting.limit_count_buy  then
+
+                signalShowLog.addSignal(dt, 16, false, setting.limit_count_buy);
+                checkRange = false; 
+        end;  
+        return checkRange;
+end;
+       
 
  
  -- Не покупаем если промежуток на свече соответствуют высокой цене
@@ -126,8 +140,9 @@ end;
      
   
  
-
  
+ 
+M.getLimitBuy = getLimitBuy;
 M.getFailMarket = getFailMarket;
 M.getRandCandle = getRandCandle;
 M.getRandSell = getRandSell;

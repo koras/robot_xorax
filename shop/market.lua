@@ -14,6 +14,7 @@ local signalShowLog = dofile(getScriptPath() .. "\\interface\\signalShowLog.lua"
 local statsPanel = dofile(getScriptPath() .. "\\interface\\stats.lua");
 local panelBids = dofile(getScriptPath() .. "\\interface\\bids.lua");
 
+local interfaceBids = dofile(getScriptPath() .. "\\interface\\bids.lua");
 local contitionMarket = dofile(getScriptPath() .. "\\shop\\contition_shop.lua");
  
  
@@ -59,7 +60,7 @@ function long(price, datetime, levelLocal , event) -- решение
     getfractal(price);
 
         -- подсчитаем скольк заявок у нас на продажу
-        if  LIMIT >= setting.limit_count_buy  then
+      
             -- проверём, покупали здесь или нет, в этом промежутке
             checkRangeBuy = contitionMarket.getRandBuy(price, setting.sellTable);
             -- проверём, стоит ли продажа в этом промежутке
@@ -67,25 +68,23 @@ function long(price, datetime, levelLocal , event) -- решение
             -- уровень свечи 
             randCandle = contitionMarket.getRandCandle(price, datetime);
             failMarket = contitionMarket.getFailMarket(price, datetime) ;
+
+            limitBuy = contitionMarket.getLimitBuy(datetime);
+
             
-            if checkRangeBuy and checkRangeSell and randCandle  and failMarket  then
 
-
+            if limitBuy and checkRangeBuy and checkRangeSell and randCandle  and failMarket  then
                 SPRED_LONG_TREND_DOWN  = SPRED_LONG_TREND_DOWN + SPRED_LONG_TREND_DOWN_SPRED;
                 SPRED_LONG_TREND_DOWN_LAST_PRICE = price; -- записываем последнюю покупку
-
 
                 if setting.buy == false  then 
                     signalShowLog.addSignal(dt, 4, true, price);
                 return; end;
-                callBUY(price,  datetime); 
-        
+                callBUY(price,  datetime);
                 signalShowLog.addSignal(datetime, 10, false, price); 
                 
             end;  
-             
-      --  end;  
-    end;  
+              
 end
 
 
@@ -155,7 +154,7 @@ function deleteSell(result)
             table.remove (setting.sellTable, deleteKeySell); 
             deleteBuy(result,buyContractSell);
             signalShowLog.addSignal(result.datetime, 8, false, deleteKeySell);
-            panelBids.show()
+             
         end;
 end
 
@@ -177,7 +176,7 @@ function deleteBuy(result,buy_contract)
     if deleteKey  ~= 0  then 
         table.remove (setting.sellTable, deleteKey);
         signalShowLog.addSignal(result.datetime, 8, false, buyPrice); 
-        panelBids.show()
+        panelBids.show();
     end;
 
 end
@@ -210,12 +209,7 @@ function callBUY(price ,dt)
        local trans_id =  transaction.send("BUY", price, setting.use_contract);
     end;
    
-    sellTransaction(priceLocal,dt);
-   -- else
-   --     sellview(price,dt);
-  --  end;
-      --  for j=1,  setting.use_contract  do 
-            --signalShowLog.addSignal(dt, 6, true, price);
+    sellTransaction(priceLocal,dt); 
             signalShowLog.addSignal(dt, 7, false, price);
             setting.sellTable[(#setting.sellTable+1)] = {
                 ['price'] = price,
@@ -227,7 +221,7 @@ function callBUY(price ,dt)
                 ['buy_contract']= price, -- стоимость продажи
                 
             };
-     --   end;
+    panelBids.show();
 end 
 
 

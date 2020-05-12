@@ -188,8 +188,7 @@ basis = 9
           
       while Run do 
          
-         
-          interfaceBids.show();
+          
            update();
            statsPanel.stats();
            fractalSignal.last();

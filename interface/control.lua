@@ -127,7 +127,7 @@ end;
 
  
 function use_contract_limit()  
-	SetCell(t_id, 11, 1,   tostring( setting.LIMIT_BID ) .. '  /'.. setting.use_contract ..' '); 
+	SetCell(t_id, 11, 1,   tostring( setting.LIMIT_BID ) .. '/'.. setting.limit_count_buy .. '/'.. setting.use_contract ..' '); 
 	SetCell(t_id, 13, 1,   tostring(setting.use_contract)); 
 	SetCell(t_id, 15, 1,   tostring(setting.profit_range_array)); 
 	SetCell(t_id, 17, 1,   tostring(setting.profit_range)); 

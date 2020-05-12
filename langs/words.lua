@@ -18,6 +18,8 @@ function wSignal(_event)
 		[13] = 'the current candle is less than the expected profit, low volatility', 
 		[14] = 'the price of the candle is higher than the profit; buying at the top is impossible', 
 		[15] = 'Error logging',   
+		[16] = 'We do not have free purchase contracts, high limit',
+		[17] = 'We sold a lot of contracts in a row, went into the sales limit',
 	} 	
 	
 	
@@ -37,6 +39,8 @@ function wSignal(_event)
 		[13] = 'Текущая свеча меньше преполагаемого профита, низкая волатильность',  
 		[14] = 'Цена на свече выше профита, покупка на верху невозможна',   
 		[15] = 'Логирование ошибок',   
+		[16] = 'У нас нет свободных контрактов на покупку, высокий лимит',   
+		[17] = 'Мы продали много контрактов подряд, ушли в лимит продажи',   
 	}
 	 
 	return arr[_event];

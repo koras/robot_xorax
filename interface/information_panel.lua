@@ -80,43 +80,6 @@ local function stats()
 	SetCell(t_information, 17, 1,  tostring(SPRED))  
  
 
-
-	-- SetCell(t_information, 21, 0, word.candles_buy_last);
-	-- SetCell(t_information, 22, 0, word.number_of_candles);
-	-- SetCell(t_information, 23, 0, word.range_down_price_candles);
-	-- SetCell(t_information, 24, 0, word.candle_buy_number_down_price);
-
-
-	-- SetCell(t_information, 21, 1,  tostring(setting.candles_buy_last)) ;
-	-- SetCell(t_information, 22, 1,  tostring(setting.number_of_candles) ; 
-	-- SetCell(t_information, 23, 1,  tostring(setting.range_down_price_candles)) ;  
-	-- SetCell(t_information, 24, 1,  tostring(setting.candle_buy_number_down_price)) ;  
-	 
-
-	-- ['candles_buy_last'] = 0, -- на какой свече была последняя покупка
-	-- ['candle_buy_number_down_price'] = 6, -- сколько свечей должно пройти чтобы отпустить продажу 
-	-- ['range_down_price_candles'] = 0,
-	-- ['timeWork'] =  {
-	--    { '10:00', '14:00'},
-	--    { '14:05', '18:45'}, 
-	--    { '19:00', '23:50'}
-	-- },   
-	
-	-- ['closed_buy'] =  {
-	--    { '13:00', '14:00'},
-	--    { '18:00', '19:02'}, 
-	--    { '22:55', '23:55'}
-	-- },
-
-
-
-    -- setting.candles_buy_last = setting.number_of_candles;
-
-    -- setting.count_buyin_a_row 
-	-- SPRED_LONG_TREND_DOWN_LAST_PRICE= 0; -- ��������� �������
-	-- SPRED_LONG_PRICE_DOWN = 0.04; -- �� �������� ���� �� ������� �� ������� ����, ����
-	-- SPRED_LONG_PRICE_UP = 0.04; -- �� �������� ���� �� ������� �� ������� ����, �����. ���� �� ���� � ����� ���
-	-- SPRED_LONG_LOST_SELL = 0; -- ��������� ���� ������ �� ������� ����������
 end
 
 local function show()  
