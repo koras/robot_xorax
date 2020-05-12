@@ -23,8 +23,8 @@ package.path = package.path
 
 setting = {};
 
-local uTransaction = dofile(getScriptPath() .. "\\setting\\account.lua");
-local uTransaction = dofile(getScriptPath() .. "\\setting\\work.lua");
+dofile(getScriptPath() .. "\\setting\\account.lua");
+dofile(getScriptPath() .. "\\setting\\work.lua");
  
 local uTransaction = dofile(getScriptPath() .. "\\shop\\transaction.lua");
 local scriptTest = dofile(getScriptPath() .. "\\coutLine.lua");
