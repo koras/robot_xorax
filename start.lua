@@ -117,8 +117,7 @@ basis = 9
     
     Size = 0;
    function OnInit()
-
-      control.show(); 
+ 
 
   
       local Error = '';
@@ -175,10 +174,6 @@ basis = 9
       -- setting.ACCOUNT =  '4105F8Y'; 
       -- setting.CLASS_CODE =  "SPBFUT"; 
       -- setting.SEC_CODE =  "BRM0" ; 
- --tostring(tonumber(getParamEx(CLASS_CODE, SEC_CODE, 'NUMCONTRACTS')))
-      --local res = getParamEx(setting.CLASS_CODE, setting.SEC_CODE, 'NUMCONTRACTS')
-      local res =getFuturesHolding("", setting.ACCOUNT, setting.SEC_CODE, 4)
-      message(' Sres = ::: '.. res.totalnet  ); 
 
      signalShowLog.CreateNewTableLogEvent();
 
@@ -190,15 +185,14 @@ basis = 9
 
       update();
       getPrice();
+      control.show(); 
 
  
        CurrentDirect = "SELL" 
        local Price = false;
           
       while Run do 
-         
-          
-           update();
+         update();
            statsPanel.stats();
            fractalSignal.last();
 
