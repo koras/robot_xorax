@@ -53,16 +53,21 @@ local function set(Operation, Price , datetime, count, textInfo)
               label_params['ALIGNMENT'] = 'BOTTOM'; -- STRING ������������ �������� ������������ ������ (�������� 4 ��������: LEFT, RIGHT, TOP, BOTTOM)  
            else 
               if NumberInTriangles == -1 then
-          --       label_params['IMAGE_PATH'] = PicPathBuy; -- STRING ���� � ��������, ������� ����� ������������ � �������� ����� (������ ������, ���� �������� �� ���������)  
+        
               else
-                -- local PicPath = getScriptPath()..'\\�����������\\���������_sell'..NumberInTriangles..'.bmp';
-             --    label_params['IMAGE_PATH'] = PicPath;
-             label_params['IMAGE_PATH'] = PicPathSell
+                label_params['IMAGE_PATH'] = PicPathSell
               end;
               label_params['ALIGNMENT'] = 'TOP'; -- STRING ������������ �������� ������������ ������ (�������� 4 ��������: LEFT, RIGHT, TOP, BOTTOM)  
            end;         
  
       
+          
+
+
+
+
+
+
            label_params['ALIGNMENT'] = 'BOTTOM'; 
            
            if Operation == 'BUY' then 
@@ -114,11 +119,6 @@ local function set(Operation, Price , datetime, count, textInfo)
 
           AddLabel(Settings['tag'], label_params);
  
-
-           --local LabelID = AddLabel(Settings['tag'], label_params);
-         --  if LabelID ~= nil then Labels[#Labels+1] = LabelID; end;
-     --   end;
-   --  end;
 	 
 	  
 end

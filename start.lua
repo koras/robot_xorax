@@ -171,6 +171,15 @@ basis = 9
 
    function main()
  
+
+      -- setting.ACCOUNT =  '4105F8Y'; 
+      -- setting.CLASS_CODE =  "SPBFUT"; 
+      -- setting.SEC_CODE =  "BRM0" ; 
+ --tostring(tonumber(getParamEx(CLASS_CODE, SEC_CODE, 'NUMCONTRACTS')))
+      --local res = getParamEx(setting.CLASS_CODE, setting.SEC_CODE, 'NUMCONTRACTS')
+      local res =getFuturesHolding("", setting.ACCOUNT, setting.SEC_CODE, 4)
+      message(' Sres = ::: '.. res.totalnet  ); 
+
      signalShowLog.CreateNewTableLogEvent();
 
       label.init(setting.tag);

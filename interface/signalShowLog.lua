@@ -81,11 +81,10 @@ end;
 		if(_arr.event == 1) then
 			label.set('red', _arr.price , _arr.dt, 1, _arr.description);
 		end
+
 		if(_arr.event == 8) then
 			label.set('sell', _arr.price , _arr.dt, 1, _arr.description);
 		end
- 
-		
 	end
 
 
@@ -104,30 +103,30 @@ end;
 					White(t_id_TableLog, keys,3);
 					White(t_id_TableLog, keys,4);
 				else 
+					White(t_id_TableLog, keys,0);
+					White(t_id_TableLog, keys,1);
+					White(t_id_TableLog, keys,2);
+					White(t_id_TableLog, keys,3);
+					White(t_id_TableLog, keys,4);
+				end;
+				
+			
+				if arrTableLog[i].event == 9 then 
+
 					Green(t_id_TableLog, keys,0);
 					Green(t_id_TableLog, keys,1);
 					Green(t_id_TableLog, keys,2);
 					Green(t_id_TableLog, keys,3);
 					Green(t_id_TableLog, keys,4);
 				end;
-				
-			
-				if arrTableLog[i].event == 9 then 
-
-					Red(t_id_TableLog, keys,0);
-					Red(t_id_TableLog, keys,1);
-					Red(t_id_TableLog, keys,2);
-					Red(t_id_TableLog, keys,3);
-					Red(t_id_TableLog, keys,4);
-				end;
 	
 				if arrTableLog[i].event == 8  then 
 
-					Yellow(t_id_TableLog, keys,0);
-					Yellow(t_id_TableLog, keys,1);
-					Yellow(t_id_TableLog, keys,2);
-					Yellow(t_id_TableLog, keys,3);
-					Yellow(t_id_TableLog, keys,4);
+					Green(t_id_TableLog, keys,0);
+					Green(t_id_TableLog, keys,1);
+					Green(t_id_TableLog, keys,2);
+					Green(t_id_TableLog, keys,3);
+					Green(t_id_TableLog, keys,4);
 				end;
 	  
 			SetCell(t_id_TableLog, keys, 0, tostring(arrTableLog[i].number)); 

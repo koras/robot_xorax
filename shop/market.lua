@@ -140,10 +140,13 @@ function deleteSell(result)
                     setting.count_sell =  setting.count_sell + 1; 
                     setting.profit =  setting.sellTable[sellT].price - setting.sellTable[sellT].buy_contract + setting.profit;
 
+
+
+                    signalShowLog.addSignal(result.datetime, 8, false, setting.sellTable[sellT].price); 
+
                     -- надо удалить контракт по которому мы покупали
                     buyContractSell = setting.sellTable[sellT].buy_contract; 
-                    deleteKeySell = sellT;
-                    signalShowLog.addSignal(result.datetime, 8, false, sellT);
+                    deleteKeySell = sellT; 
             end;
         end;
         
@@ -152,8 +155,7 @@ function deleteSell(result)
 
          --   loger.save(' #setting.sellTable #setting.sellTable #setting.sellTable #setting.sellTable  ' ..  #setting.sellTable  );
             table.remove (setting.sellTable, deleteKeySell); 
-            deleteBuy(result,buyContractSell);
-            signalShowLog.addSignal(result.datetime, 8, false, deleteKeySell);
+            deleteBuy(result,buyContractSell); 
              
         end;
 end
@@ -166,8 +168,7 @@ function deleteBuy(result,buy_contract)
         if setting.sellTable[searchBuy].type == 'buy' and setting.sellTable[searchBuy].price == ( buy_contract + 0.01 )  then 
                 -- удаляем только 1 элемент
                 setting.limit_count_buy = setting.limit_count_buy - 1;
-                deleteKey = searchBuy;
-                loger.save(' 6 deleteKey  ' ..  deleteKey  );
+                deleteKey = searchBuy; 
                 buyPrice = setting.sellTable[searchBuy].price;
          
         end;
@@ -175,7 +176,7 @@ function deleteBuy(result,buy_contract)
     
     if deleteKey  ~= 0  then 
         table.remove (setting.sellTable, deleteKey);
-        signalShowLog.addSignal(result.datetime, 8, false, buyPrice); 
+     
         panelBids.show();
     end;
 
