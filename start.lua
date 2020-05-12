@@ -1,3 +1,5 @@
+-- https://www.lua.org/ftp/
+
 local lua51path = "C:\\Program Files (x86)\\Lua\\5.1\\" -- путь, куда установлен дистрибутив Lua 5.1 for Windows
 
 package.cpath = "./?.dll;./?51.dll;"
@@ -17,110 +19,25 @@ package.path = package.path
         .. lua51path .. "lua/?.luac;"
 
         require("table")
-         
-setting = {
-         ['profit_range'] =  0.05; -- минимальная прибыль
-         ['profit_range_array'] =  0.03; -- минимальная прибыль при больших заявках
-         ['profit_infelicity'] =  0.01; -- погрешность
-         ['profit'] =  0.01; -- подсчёт прибыли
-         ['LIMIT_BID'] = 10,
-         ['use_contract'] = 2,
-         ['emulation'] = true,
-         ['candles'] = {}, -- свечи
-         
-         ['status'] = false,
-         ['buy'] = true,
-         ['sell'] = true,
-         ['sellTable'] = {},
-         ['close_positions'] = false,
-         ['ACCOUNT'] =  '4105F8Y', 
-         ['CLASS_CODE'] =  "SPBFUT", 
-         ['SEC_CODE'] =  "BRM0" ,
-          
-         ['count_buyin_a_row'] =  0, -- покупки подряд
-         ['current_price'] =  0, -- покупки подряд
-         
-         ['count_buy'] = 0, -- сколько куплено
-         ['count_sell'] = 0, -- сколько продано
-         ['limit_count_buy'] = 0, -- лимит на покупку
-          
-         ['SPRED_LONG_BUY_UP'] = 0.02, -- условия, не покупаем если здесь ранее мы купили | вверх диапозон,
-         ['SPRED_LONG_BUY_down'] = 0.01, -- условия, не покупаем если здесь ранее мы купили | вниз диапозон
-         
-         ['tag'] = "my_br",
-         
-         ['number_of_candles'] = 0, -- current a candle
-         ['old_number_of_candles'] = 0, -- old current candle
-         
-         ['number_of_candle'] = 0, -- current a candle
-         ['old_number_of_candle'] = 0, -- old current candle
-       
-         ['buffer_old_candles_high'] = 0, -- current a candle
-         ['buffer_old_candles_low'] = 0, -- old current candle
-
-
-
-
-         ['candles_buy_last'] = 0, -- на какой свече была последняя покупка
-         ['candle_buy_number_down_price'] = 6, -- сколько свечей должно пройти чтобы отпустить продажу 
-         ['range_down_price_candles'] = 0,
-
-
-         ['fractals_collection'] = {},
-         ['fractal_up'] = 0,
-         ['fractal_down'] = 0,
-         ['fractal_down_range'] = 0.05, -- если цена ниже, значит здесб был уровень, а под уровнем не покупаем.
-         ['fractal_candle'] = 3,
-         ['fractal_under_up'] = 0.06, -- под вверхом не покупаем, можем пробить а цена не пойдёт в нашу сторону
-
-          
-         ['candle_current_high'] = 0.00, -- верхняя граница свечи, для промежутка покупки
-         ['candle_current_low'] = 0.00, -- верхняя граница свечи, для промежутка покупки
-
-
-
-         ['old_candle_price_high'] = 0.00, -- верхняя граница свечи, для промежутка покупки
-         ['old_candle_price_low'] = 0.00, -- верхняя граница свечи, для промежутка покупки
  
 
+setting = {};
 
-
-         ['timeWork'] =  {
-            { '10:00', '14:00'},
-            { '14:05', '18:45'}, 
-            { '19:00', '23:50'}
-         },   
-         
-         ['closed_buy'] =  {
-            { '13:00', '14:00'},
-            { '18:00', '19:02'}, 
-            { '22:55', '23:55'}
-         },
-      };
-
-
-
- -- �����������
- local uTransaction = dofile(getScriptPath() .. "\\shop\\transaction.lua");
- -- �����������
+dofile(getScriptPath() .. "\\setting\\account.lua");
+dofile(getScriptPath() .. "\\setting\\work.lua");
+ 
+local uTransaction = dofile(getScriptPath() .. "\\shop\\transaction.lua");
 local scriptTest = dofile(getScriptPath() .. "\\coutLine.lua");
 local candles = dofile(getScriptPath() .. "\\Signals\\candle.lua");
 local tradeSignal = dofile(getScriptPath() .. "\\Signals\\tradeSignal.lua"); 
 local fractalSignal = dofile(getScriptPath() .. "\\Signals\\fractal.lua"); 
 local loger = dofile(getScriptPath() .. "\\loger.lua");
 local label = dofile(getScriptPath() .. "\\drawLabel.lua");
-
 local control = dofile(getScriptPath() .. "\\interface\\control.lua");
 local statsPanel = dofile(getScriptPath() .. "\\interface\\stats.lua");
 local interfaceBids = dofile(getScriptPath() .. "\\interface\\bids.lua");
 local signalShowLog = dofile(getScriptPath() .. "\\interface\\signalShowLog.lua");
-
-
 local FRACTALS = dofile(getScriptPath() .. "\\LuaIndicators\\FRACTALS.lua"); 
- 
---dofile(getWorkingFolder().."\\LuaIndicators\\FRACTALS.lua")
- 
- 
 local market = dofile(getScriptPath() .. "\\shop\\market.lua");
  
  
@@ -251,8 +168,6 @@ basis = 9
     
    function eventTranc( priceLocal , levelLocal ,datetime, event) 
       -- buy or sell
-     
-
       market.decision(event, priceLocal, datetime , levelLocal) ;
    end
     
