@@ -171,7 +171,7 @@ function CreateNewTableBids()
 
 
 
-	tasdasd = CreateWindow(t_id_TableBids); 
+	 CreateWindow(t_id_TableBids); 
 	SetWindowCaption(t_id_TableBids, wordTitleTableBids.title);  
 	message(wordTitleTableBids.title);
    SetWindowPos(tt, 0, 70, 50, 140);
