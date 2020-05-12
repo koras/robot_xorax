@@ -125,12 +125,11 @@ function current_limit_minus()
 	Red(t_id,17, 3);
 end;
 
-function show_limit(_limit)  
-	SetCell(t_id, 11, 1,   tostring((_limit)) .. ' ('.. setting.use_contract ..')'); 
-end;
-function use_contract_limit(_limit)  
-	SetCell(t_id, 13, 1,   tostring((_limit))); 
-	SetCell(t_id, 15, 1,   tostring(setting.profit)); 
+ 
+function use_contract_limit()  
+	SetCell(t_id, 11, 1,   tostring( setting.LIMIT_BID ) .. '  /'.. setting.use_contract ..' '); 
+	SetCell(t_id, 13, 1,   tostring(setting.use_contract)); 
+	SetCell(t_id, 15, 1,   tostring(setting.profit_range_array)); 
 	SetCell(t_id, 17, 1,   tostring(setting.profit_range)); 
 end;
 
@@ -398,14 +397,15 @@ function event_callback_message (t_id, msg, par1, par2)
 	if par1 == 11 and par2 == 2  and  msg == 1 then
 		
 		setting.LIMIT_BID = setting.LIMIT_BID + 1;
-		show_limit(setting.LIMIT_BID); 
+		
+		use_contract_limit();
 		return;
 	end;
 	if par1 == 11 and par2 == 3  and  msg == 1 then
 		
 		if(setting.LIMIT_BID > 0) then
 				setting.LIMIT_BID = setting.LIMIT_BID - 1;
-				show_limit(setting.LIMIT_BID);
+				use_contract_limit();
 			end; 
 		return;
 	end;
@@ -416,8 +416,8 @@ function event_callback_message (t_id, msg, par1, par2)
  
 	if par1 == 13 and par2 == 2  and  msg == 1 then
 		
-		setting.use_contract = setting.use_contract + 1;
-		loger.save(msg ..'  '  .. par1 .. '   '.. par2..' QTABLE_LBU121212TTONUP '.. QTABLE_LBUTTONUP);
+		setting.use_contract = setting.use_contract + 1; 
+		use_contract_limit();
 		return;
 	end;
 
@@ -425,8 +425,8 @@ function event_callback_message (t_id, msg, par1, par2)
 		
 		if(setting.use_contract > 1) then
 				setting.use_contract = setting.use_contract - 1;
-			end;
-		loger.save(msg ..'  '  .. par1 .. '   '.. par2..' QTABLE_LBU121212TTONUP '.. QTABLE_LBUTTONUP);
+				use_contract_limit();
+			end; 
 		return;
 	end;
 
@@ -435,13 +435,15 @@ function event_callback_message (t_id, msg, par1, par2)
 
  
 	if par1 == 15 and par2 == 2  and  msg == 1 then
-		setting.profit = setting.profit + 0.01; 
+		setting.profit_range_array = setting.profit_range_array + 0.01; 
+		use_contract_limit();
 		return;
 	end;
 	if par1 == 15 and par2 == 3  and  msg == 1 then
 		
 		if(setting.profit > 0.01) then
-				setting.profit = setting.profit - 0.01;
+			setting.profit_range_array = setting.profit_range_array - 0.01;
+				use_contract_limit();
 			end; 
 		return;
 	end;
@@ -451,12 +453,14 @@ function event_callback_message (t_id, msg, par1, par2)
 
 	if par1 == 17 and par2 == 2  and  msg == 1 then
 		setting.profit_range = setting.profit_range + 0.01; 
+		use_contract_limit();
 		return;
 	end;
 
 	if par1 == 17 and par2 == 3  and  msg == 1 then
 		if setting.profit_range > 0.01 then
 			setting.profit_range = setting.profit_range - 0.01;
+			use_contract_limit();
 			end; 
 		return;
 	end;
