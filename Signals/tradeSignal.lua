@@ -3,6 +3,7 @@ local M = {}
 
 local loger = dofile(getScriptPath() .. "\\loger.lua");
 local label = dofile(getScriptPath() .. "\\drawLabel.lua");
+local words = dofile(getScriptPath() .. "\\langs\\words.lua");
 
 M.status = 0;
 
@@ -165,19 +166,7 @@ end;
 local function  getRange()
     return rangeLocal;
 end;
-
-
-
-    --    local O = t[i].open; -- Получить значение Open для указанной свечи (цена открытия свечи)
-    --    local H = t[i].high; -- Получить значение High для указанной свечи (наибольшая цена свечи)
-    --    local L = t[i].low; -- Получить значение Low для указанной свечи (наименьшая цена свечи)
-    --    local C = t[i].close; -- Получить значение Close для указанной свечи (цена закрытия свечи)
-    --    local V = t[i].volume; -- Получить значение Volume для указанной свечи (объем сделок в свече)
-    --    local T = t[i].datetime; -- Получить значение datetime для указанной свечи
-
-    -- обрабатываем сигналы каждый тик
-    -- Обязательное условие это подключение к графику по тегу
-
+  
 
 local function getSignal(tag, callback)
     seconds = os.time(datetime); -- в seconds будет значение 1427052491
@@ -196,8 +185,8 @@ local function getSignal(tag, callback)
  
     while i>=1 do
 
-     if(bars_temp[j-1].datetime.hour == nul)then
-
+     if bars_temp[j-1] == nul then
+        message(words.word('not_found_tag'));
      end
             if bars_temp[j-1].datetime.hour >= 10 then
                     sk=true

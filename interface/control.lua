@@ -16,7 +16,7 @@ local word = {
 	['sell'] = "",
 	['close_positions'] = "",
 
-	['profit_size'] = "Profit size:",
+ 
 	['profit_range'] = "Profit range:",
 	
 	['start'] = "      START",
@@ -51,7 +51,6 @@ local function show()
 	 end;
 	for i = 0, 3 do
 		Blue(t_id,4, i);
-		Blue(t_id,8, i);
 		Gray(t_id,10, i);
 		Gray(t_id,12, i);
 		Gray(t_id,14, i);
@@ -96,7 +95,7 @@ end
 function current_limit() 
 	SetCell(t_id, 11, 0,  word.current_limit); 
 	SetCell(t_id, 13, 0,  word.Use_contract_limit); 
-	SetCell(t_id, 15, 0,  word.profit_size); 
+
 	SetCell(t_id, 17, 0,  word.profit_range); 
 
 	 
@@ -104,21 +103,21 @@ end;
 function current_limit_plus()  
 	SetCell(t_id, 11, 2,  word.current_limit_plus); 
 	SetCell(t_id, 13, 2,  word.current_limit_plus); 
-	SetCell(t_id, 15, 2,  word.current_limit_plus); 
+
 	SetCell(t_id, 17, 2,  word.current_limit_plus); 
 	Green(t_id,11, 2);
 	Green(t_id,13, 2);
-	Green(t_id,15, 2);
+
 	Green(t_id,17, 2);
 end;
 function current_limit_minus()  
 	SetCell(t_id, 11, 3,  word.current_limit_minus); 
 	SetCell(t_id, 13, 3,  word.current_limit_minus); 
-	SetCell(t_id, 15, 3,  word.current_limit_minus); 
+ 
 	SetCell(t_id, 17, 3,  word.current_limit_minus); 
 	Red(t_id,11, 3);
 	Red(t_id,13, 3);
-	Red(t_id,15, 3);
+
 	Red(t_id,17, 3);
 end;
 
@@ -126,41 +125,28 @@ end;
 function use_contract_limit()  
 	SetCell(t_id, 11, 1,   tostring( setting.LIMIT_BID ) .. '/'.. setting.limit_count_buy .. '/'.. setting.use_contract ..' '); 
 	SetCell(t_id, 13, 1,   tostring(setting.use_contract)); 
-	SetCell(t_id, 15, 1,   tostring(setting.profit_range_array)); 
+ 
 	SetCell(t_id, 17, 1,   tostring(setting.profit_range)); 
 end;
 
  
-
-
-
-
-
-
-
-
-
-
-
-
-
  
 function mode_emulation_on() 
 	setting.emulation=true;
-	SetCell(t_id, 5, 0,  word.emulation)
-	SetCell(t_id, 6, 0,  word.on)
-	Green(t_id,5, 0) 
-	Green(t_id,6, 0) 
-	Green(t_id,7, 0)
+	SetCell(t_id, 2, 2,  word.emulation)
+	SetCell(t_id, 3, 2,  word.on)
+	Green(t_id,1, 2) 
+	Green(t_id,2, 2) 
+	Green(t_id,3, 2)
 end;
 
 function mode_emulation_off() 
 	setting.emulation=false;  
-	SetCell(t_id, 5, 0,  word.emulation)
-	SetCell(t_id, 6, 0,  word.off)
-	Gray(t_id,5, 0);
-	Gray(t_id,6, 0);
-	Gray(t_id,7, 0);
+	SetCell(t_id, 2, 2,  word.emulation)
+	SetCell(t_id, 3, 2,  word.off)
+	Gray(t_id,1, 2);
+	Gray(t_id,2, 2);
+	Gray(t_id,3, 2);
 end;
  
 
@@ -193,7 +179,7 @@ function button_pause()
 	SetCell(t_id, 2, 0,  word.pause)
 	SetCell(t_id, 3, 1,  word.pause2)
 	SetCell(t_id, 3, 2,  word.pause2)
-	SetCell(t_id, 3, 3,  word.pause2)
+	 
 	Red(t_id,1, 0);
 	Red(t_id,2, 0);
 	Red(t_id,3, 0);
@@ -248,7 +234,7 @@ function event_callback_message (t_id, msg, par1, par2)
 
 
 
-	if par1 == 5 and par2 == 0 or  par1 == 6 and par2 == 0 or par1 == 7 and par2 == 0 then
+	if par1 == 1 and par2 == 2 or  par1 == 2 and par2 == 2 or par1 == 3 and par2 == 2 then
 		if  msg == 1 and setting.emulation == false then
 			mode_emulation_on(); 
 			return; 
@@ -339,20 +325,6 @@ function event_callback_message (t_id, msg, par1, par2)
 
 
  
-	if par1 == 15 and par2 == 2  and  msg == 1 then
-		setting.profit_range_array = setting.profit_range_array + 0.01; 
-			use_contract_limit();
-		return;
-	end;
-	if par1 == 15 and par2 == 3  and  msg == 1 then
-		
-		if(setting.profit > 0.01) then
-			setting.profit_range_array = setting.profit_range_array - 0.01;
-				use_contract_limit();
-			end; 
-		return;
-	end;
-
  
 
 
