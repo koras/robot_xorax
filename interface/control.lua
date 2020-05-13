@@ -13,8 +13,8 @@ local word = {
 	['status'] = "Status",
 	['buy'] = "Buy",
 	['Buyplus'] = "Buy",
-	['sell'] = "Sell",
-	['close_positions'] = "Close positions",
+	['sell'] = "",
+	['close_positions'] = "",
 
 	['profit_size'] = "Profit size:",
 	['profit_range'] = "Profit range:",
@@ -63,17 +63,14 @@ local function show()
 		
 	 end; 
 		 
-	 
-	Yellow(t_id, 5, 2);
-
+	  
 
 
 	SetCell(t_id, 1, 0,  '')
 	SetCell(t_id, 1, 1, '')
 	SetCell(t_id, 1, 2, '')
 	SetCell(t_id, 2, 1, word.on) 
-	SetCell(t_id, 2, 2, word.on) 
-	SetCell(t_id, 2, 3, word.off) 
+
 	SetCell(t_id, 3, 0,  '')
 	SetCell(t_id, 3, 1, '')
 	SetCell(t_id, 3, 2, '')
@@ -83,11 +80,11 @@ local function show()
 
 	button_finish();
 	buy_process();
-	sell_process();
-	close_positions_finish();
+
+
 	mode_emulation_on();
-	buy_by_hand_ready();
-	sell_by_hand_ready();
+
+	
 	current_limit();
 	current_limit_plus();
 	current_limit_minus();
@@ -139,44 +136,12 @@ end;
 
 
 
---['buy_by_hand'] = "buy by hand",
---['sell_by_hand'] = "           sell by hand",
-
-function buy_by_hand_ready() 
-	setting.buy_by_hand=true;
-	SetCell(t_id, 6, 1,  word.buy_by_hand);
-	White(t_id,5, 1);
-	White(t_id,6, 1);
-	White(t_id,7, 1);
-end;
 
 
 
-function buy_by_hand_oK() 
-	setting.buy_by_hand=false;  
-	SetCell(t_id, 6, 1,  word.off)
-	Yellow(t_id,5, 1);
-	Yellow(t_id,6, 1);
-	Yellow(t_id,7, 1);
-end;
 
 
-function sell_by_hand_ready() 
-	setting.sell_by_hand=true;
-	SetCell(t_id, 6, 2,  word.sell_by_hand)
-	SetCell(t_id, 7, 2,  word.on)
-	White(t_id,5, 2) 
-	White(t_id,6, 2) 
-	White(t_id,7, 2)
-end;
 
-function selly_by_hand_oK()  
-	setting.sell_by_hand=false;  
-	SetCell(t_id, 7, 2,  word.off)
-	Yellow(t_id,5, 2);
-	Yellow(t_id,6, 2);
-	Yellow(t_id,7, 2);
-end;
 
 
  
@@ -237,44 +202,6 @@ end;
 
  
 
- 
- 
-
-function close_positions_start() 
-	setting.close_positions=true;
-	SetCell(t_id, 2, 3,  word.on)
-	Green(t_id,1, 3) 
-	Green(t_id,2, 3) 
-	Green(t_id,3, 3)
-end;
-
-function close_positions_finish()
-	setting.close_positions=false;  
-	SetCell(t_id, 2, 3,  word.off)
-	Gray(t_id,1, 3);
-	Gray(t_id,2, 3);
-	Gray(t_id,3, 3);
-end;
-
-
-
-
-
-function sell_process()
-	setting.sell = true;
-	SetCell(t_id, 2, 2,  word.on)
-	Green(t_id,1, 2) 
-	Green(t_id,2, 2) 
-	Green(t_id,3, 2)
-end;
-function sell_stop()  
-	setting.sell = false;  
-	SetCell(t_id, 2, 2,  word.off)
-	Red(t_id,1, 2);
-	Red(t_id,2, 2);
-	Red(t_id,3, 2);
-end;
-
 
 function buy_process()
 	setting.buy = true;
@@ -334,20 +261,8 @@ function event_callback_message (t_id, msg, par1, par2)
 
 
 
--- selly_by_hand_oK()  sell_by_hand_ready() 
 
-	if par1 == 5 and par2 == 2 or  par1 == 6 and par2 == 2 or par1 == 7 and par2 == 2 then
-		if  msg == 1 and setting.sell_by_hand == false then
-			sell_by_hand_ready() ;  
-			return; 
-		end;
-		if  msg == 1 and setting.sell_by_hand == true then 
-			selly_by_hand_oK();
-			return;
-		end;
-	end;
-
-
+	
 
 
 
@@ -379,33 +294,7 @@ function event_callback_message (t_id, msg, par1, par2)
 
 
 
-
-	if par1 == 1 and par2 == 2 or  par1 == 2 and par2 == 2 or par1 == 3 and par2 == 2 then
-		if  msg == 1 and setting.sell == false then
-				sell_process(); 
-				return;
-		end;
-
-		if  msg == 1 and setting.sell == true then
-				sell_stop();
-			return;
-		end;
-	end;
-
-
-	if par1 == 1 and par2 == 3 or  par1 == 2 and par2 == 3 or par1 == 3 and par2 == 3 then
-		if  msg == 1 and setting.close_positions == false then
-				close_positions_start(); 
-				buy_stop();
-				return;
-		end;
-
-		if  msg == 1 and setting.close_positions == true then
-			close_positions_finish(); 
-			return;
-		end;
-	end;
-
+ 
 
 
 	
