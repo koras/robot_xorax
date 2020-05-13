@@ -115,33 +115,46 @@ end;
 
 
  -- Падение рынка
-function getFailMarket(price, datetime) 
-                                --    local SPRED_LONG_TREND_DOWN = 0.01; -- рынок падает, увеличиваем растояние между покупками
-                                --    local SPRED_LONG_TREND_DOWN_SPRED = 0.01; -- на сколько увеличиваем растояние
-                                --    local SPRED_LONG_TREND_DOWN_LAST_PRICE= 0; -- последняя покупка
+ function getFailMarket(price, datetime) 
+        --    local SPRED_LONG_TREND_DOWN = 0.01; -- рынок падает, увеличиваем растояние между покупками
+        --    local SPRED_LONG_TREND_DOWN_SPRED = 0.01; -- на сколько увеличиваем растояние
+        --    local SPRED_LONG_TREND_DOWN_LAST_PRICE= 0; -- последняя покупка
+
+local checkRange = true;
+
+if SPRED_LONG_TREND_DOWN_LAST_PRICE == 0  or  
+SPRED_LONG_TREND_DOWN_LAST_PRICE - SPRED_LONG_TREND_DOWN  > price  - setting.profit_infelicity  or SPRED_LONG_TREND_DOWN_LAST_PRICE  < price  then
+
+-- SPRED_LONG_TREND_DOWN  
+else
+
+checkRange = false;
+signalShowLog.addSignal(datetime, 3, true, SPRED_LONG_TREND_DOWN_LAST_PRICE - SPRED_LONG_TREND_DOWN);
+
+end;
+
+
+return checkRange;
+end;
+
+
+ -- Запрет на покупку
+ function getFailBuy(price, datetime) 
 
         local checkRange = true;
-
-                if SPRED_LONG_TREND_DOWN_LAST_PRICE == 0  or  
-                SPRED_LONG_TREND_DOWN_LAST_PRICE - SPRED_LONG_TREND_DOWN  > price  - setting.profit_infelicity  or SPRED_LONG_TREND_DOWN_LAST_PRICE  < price  then
-  
-                -- SPRED_LONG_TREND_DOWN  
-                else
-
-                        checkRange = false;
-                signalShowLog.addSignal(datetime, 3, true, SPRED_LONG_TREND_DOWN_LAST_PRICE - SPRED_LONG_TREND_DOWN);
-                
-                end;
-
-
+        if setting.buy == false  then
+                signalShowLog.addSignal(dt, 4, true, price);
+                checkRange = false; 
+        end;
         return checkRange;
 end;
-    
+
      
-  
  
  
  
+ 
+M.getFailBuy = getFailBuy;
 M.getLimitBuy = getLimitBuy;
 M.getFailMarket = getFailMarket;
 M.getRandCandle = getRandCandle;

@@ -32,7 +32,7 @@ local word = {
 
 	['emulation'] = "     Emulation",
 	['buy_by_hand'] = "        BUY (now)",
-	['sell_by_hand'] = "       SELL (now)",
+	['sell_by_hand'] = "        MODE",
 
 
 
@@ -164,14 +164,15 @@ end;
 function sell_by_hand_ready() 
 	setting.sell_by_hand=true;
 	SetCell(t_id, 6, 2,  word.sell_by_hand)
+	SetCell(t_id, 7, 2,  word.on)
 	White(t_id,5, 2) 
 	White(t_id,6, 2) 
 	White(t_id,7, 2)
 end;
 
-function selly_by_hand_oK() 
+function selly_by_hand_oK()  
 	setting.sell_by_hand=false;  
-	SetCell(t_id, 6, 2,  word.off)
+	SetCell(t_id, 7, 2,  word.off)
 	Yellow(t_id,5, 2);
 	Yellow(t_id,6, 2);
 	Yellow(t_id,7, 2);
@@ -299,8 +300,7 @@ end;
 function CreateNewTable() 
 if createTable  then return; end;
 
-init.create = true;
-	-- �������� ��������� id ��� ��������
+init.create = true; 
 	t_id = AllocTable();	 
 
 
@@ -320,6 +320,7 @@ function event_callback_message (t_id, msg, par1, par2)
 
 
 
+
 	if par1 == 5 and par2 == 0 or  par1 == 6 and par2 == 0 or par1 == 7 and par2 == 0 then
 		if  msg == 1 and setting.emulation == false then
 			mode_emulation_on(); 
@@ -327,6 +328,21 @@ function event_callback_message (t_id, msg, par1, par2)
 		end;
 		if  msg == 1 and setting.emulation == true then
 			mode_emulation_off();
+			return;
+		end;
+	end;
+
+
+
+-- selly_by_hand_oK()  sell_by_hand_ready() 
+
+	if par1 == 5 and par2 == 2 or  par1 == 6 and par2 == 2 or par1 == 7 and par2 == 2 then
+		if  msg == 1 and setting.sell_by_hand == false then
+			sell_by_hand_ready() ;  
+			return; 
+		end;
+		if  msg == 1 and setting.sell_by_hand == true then 
+			selly_by_hand_oK();
 			return;
 		end;
 	end;
