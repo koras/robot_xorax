@@ -8,7 +8,6 @@
 
 local loger = dofile(getScriptPath() .. "\\loger.lua");
 local label = dofile(getScriptPath() .. "\\drawLabel.lua");
---local bidTable = dofile(getScriptPath() .. "\\bidTable.lua");
 local transaction = dofile(getScriptPath() .. "\\shop\\transaction.lua");
 local signalShowLog = dofile(getScriptPath() .. "\\interface\\signalShowLog.lua");
 local statsPanel = dofile(getScriptPath() .. "\\interface\\stats.lua");

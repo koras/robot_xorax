@@ -43,9 +43,6 @@ local market = dofile(getScriptPath() .. "\\shop\\market.lua");
  
   -- uTransaction.iTransaction()
     
-
- 
-  
   --SPRED = 0.05; -- минимальная прибыль
   setting_scalp = true; -- на тихий рынок
   
@@ -113,11 +110,12 @@ end;
 shift = 0;
 len = 100
 basis = 9
- 
+
+
+
     
     Size = 0;
    function OnInit()
- 
 
   
       local Error = '';
@@ -165,7 +163,7 @@ basis = 9
 
 
    function main()
- 
+   
       tradeSignal.getSignal(setting.tag, eventTranc);
 
      signalShowLog.CreateNewTableLogEvent();
