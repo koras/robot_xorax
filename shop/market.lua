@@ -8,7 +8,6 @@
 
 local loger = dofile(getScriptPath() .. "\\loger.lua");
 local label = dofile(getScriptPath() .. "\\drawLabel.lua");
---local bidTable = dofile(getScriptPath() .. "\\bidTable.lua");
 local transaction = dofile(getScriptPath() .. "\\shop\\transaction.lua");
 local signalShowLog = dofile(getScriptPath() .. "\\interface\\signalShowLog.lua");
 local statsPanel = dofile(getScriptPath() .. "\\interface\\stats.lua");
@@ -78,15 +77,8 @@ function long(price, datetime, levelLocal , event) -- решение
             if limitBuy and checkRangeBuy and checkRangeSell and randCandle  and failMarket and getFailBuy then
                 SPRED_LONG_TREND_DOWN  = SPRED_LONG_TREND_DOWN + SPRED_LONG_TREND_DOWN_SPRED;
                 SPRED_LONG_TREND_DOWN_LAST_PRICE = price; -- записываем последнюю покупку
-
-                if(setting.sell_by_hand)  then
-                    harpBuy(price,  datetime);
-                else
                     callBUY(price,  datetime);
                     signalShowLog.addSignal(datetime, 10, false, price); 
-                end; 
-
-
             end;  
               
 end
@@ -222,43 +214,7 @@ function callBUY(price ,dt)
     panelBids.show();
 end 
 
- 
-
-
-function  harpBuy(price,  datetime)
-
-
-    local priceLocal = price;
-    local trans_id = getRand()
- 
-    -- ставим заявку на покупку выше на 0.01
-    price  = price + setting.profit_infelicity; -- и надо снять заявку если не отработал
- 
-   
-    commonBUY(price ,dt);
- 
-    if setting.emulation == false then
-       local trans_id =  transaction.send("BUY", price, setting.use_contract);
-    end;
-   
-    sellTransaction(priceLocal,dt);  
-            setting.sellTable[(#setting.sellTable+1)] = {
-                ['price'] = price,
-                ['dt']= dt, 
-                ['trans_id']= getRand(), 
-                ['type']= 'buy',
-                ['emulation']=  setting.emulation,
-                ['contract']=  setting.use_contract,
-                ['buy_contract']= price, -- стоимость продажи
-                
-            };
-    panelBids.show();
-
-end;
-
-
-
-
+  
 function sellTransaction(priceLocal,dt)
     local p = 0;
     local  trans_id_sell  =  getRand();

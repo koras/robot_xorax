@@ -37,8 +37,7 @@ local function send(typeMarket, price, quantity )
 		['PRICE']      = tostring(price),
 		['CLIENT_CODE']= 'Robot XoraX',
 	--	["COMMENT"]    = "скрипт"
-	 }
-   -- Отправляет транзакцию на установку ТЭЙК-ПРОФИТ и СТОП-ЛОСС
+	 } 
 
 
    loger.save(' setting.CLASS_CODE '..setting.CLASS_CODE);

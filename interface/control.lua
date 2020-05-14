@@ -13,10 +13,10 @@ local word = {
 	['status'] = "Status",
 	['buy'] = "Buy",
 	['Buyplus'] = "Buy",
-	['sell'] = "Sell",
-	['close_positions'] = "Close positions",
+	['sell'] = "",
+	['close_positions'] = "",
 
-	['profit_size'] = "Profit size:",
+ 
 	['profit_range'] = "Profit range:",
 	
 	['start'] = "      START",
@@ -51,7 +51,6 @@ local function show()
 	 end;
 	for i = 0, 3 do
 		Blue(t_id,4, i);
-		Blue(t_id,8, i);
 		Gray(t_id,10, i);
 		Gray(t_id,12, i);
 		Gray(t_id,14, i);
@@ -63,17 +62,14 @@ local function show()
 		
 	 end; 
 		 
-	 
-	Yellow(t_id, 5, 2);
-
+	  
 
 
 	SetCell(t_id, 1, 0,  '')
 	SetCell(t_id, 1, 1, '')
 	SetCell(t_id, 1, 2, '')
 	SetCell(t_id, 2, 1, word.on) 
-	SetCell(t_id, 2, 2, word.on) 
-	SetCell(t_id, 2, 3, word.off) 
+
 	SetCell(t_id, 3, 0,  '')
 	SetCell(t_id, 3, 1, '')
 	SetCell(t_id, 3, 2, '')
@@ -83,11 +79,11 @@ local function show()
 
 	button_finish();
 	buy_process();
-	sell_process();
-	close_positions_finish();
+
+
 	mode_emulation_on();
-	buy_by_hand_ready();
-	sell_by_hand_ready();
+
+	
 	current_limit();
 	current_limit_plus();
 	current_limit_minus();
@@ -99,7 +95,7 @@ end
 function current_limit() 
 	SetCell(t_id, 11, 0,  word.current_limit); 
 	SetCell(t_id, 13, 0,  word.Use_contract_limit); 
-	SetCell(t_id, 15, 0,  word.profit_size); 
+
 	SetCell(t_id, 17, 0,  word.profit_range); 
 
 	 
@@ -107,21 +103,21 @@ end;
 function current_limit_plus()  
 	SetCell(t_id, 11, 2,  word.current_limit_plus); 
 	SetCell(t_id, 13, 2,  word.current_limit_plus); 
-	SetCell(t_id, 15, 2,  word.current_limit_plus); 
+
 	SetCell(t_id, 17, 2,  word.current_limit_plus); 
 	Green(t_id,11, 2);
 	Green(t_id,13, 2);
-	Green(t_id,15, 2);
+
 	Green(t_id,17, 2);
 end;
 function current_limit_minus()  
 	SetCell(t_id, 11, 3,  word.current_limit_minus); 
 	SetCell(t_id, 13, 3,  word.current_limit_minus); 
-	SetCell(t_id, 15, 3,  word.current_limit_minus); 
+ 
 	SetCell(t_id, 17, 3,  word.current_limit_minus); 
 	Red(t_id,11, 3);
 	Red(t_id,13, 3);
-	Red(t_id,15, 3);
+
 	Red(t_id,17, 3);
 end;
 
@@ -129,73 +125,28 @@ end;
 function use_contract_limit()  
 	SetCell(t_id, 11, 1,   tostring( setting.LIMIT_BID ) .. '/'.. setting.limit_count_buy .. '/'.. setting.use_contract ..' '); 
 	SetCell(t_id, 13, 1,   tostring(setting.use_contract)); 
-	SetCell(t_id, 15, 1,   tostring(setting.profit_range_array)); 
+ 
 	SetCell(t_id, 17, 1,   tostring(setting.profit_range)); 
 end;
 
  
-
-
-
-
-
---['buy_by_hand'] = "buy by hand",
---['sell_by_hand'] = "           sell by hand",
-
-function buy_by_hand_ready() 
-	setting.buy_by_hand=true;
-	SetCell(t_id, 6, 1,  word.buy_by_hand);
-	White(t_id,5, 1);
-	White(t_id,6, 1);
-	White(t_id,7, 1);
-end;
-
-
-
-function buy_by_hand_oK() 
-	setting.buy_by_hand=false;  
-	SetCell(t_id, 6, 1,  word.off)
-	Yellow(t_id,5, 1);
-	Yellow(t_id,6, 1);
-	Yellow(t_id,7, 1);
-end;
-
-
-function sell_by_hand_ready() 
-	setting.sell_by_hand=true;
-	SetCell(t_id, 6, 2,  word.sell_by_hand)
-	SetCell(t_id, 7, 2,  word.on)
-	White(t_id,5, 2) 
-	White(t_id,6, 2) 
-	White(t_id,7, 2)
-end;
-
-function selly_by_hand_oK()  
-	setting.sell_by_hand=false;  
-	SetCell(t_id, 7, 2,  word.off)
-	Yellow(t_id,5, 2);
-	Yellow(t_id,6, 2);
-	Yellow(t_id,7, 2);
-end;
-
-
  
 function mode_emulation_on() 
 	setting.emulation=true;
-	SetCell(t_id, 5, 0,  word.emulation)
-	SetCell(t_id, 6, 0,  word.on)
-	Green(t_id,5, 0) 
-	Green(t_id,6, 0) 
-	Green(t_id,7, 0)
+	SetCell(t_id, 2, 2,  word.emulation)
+	SetCell(t_id, 3, 2,  word.on)
+	Green(t_id,1, 2) 
+	Green(t_id,2, 2) 
+	Green(t_id,3, 2)
 end;
 
 function mode_emulation_off() 
 	setting.emulation=false;  
-	SetCell(t_id, 5, 0,  word.emulation)
-	SetCell(t_id, 6, 0,  word.off)
-	Gray(t_id,5, 0);
-	Gray(t_id,6, 0);
-	Gray(t_id,7, 0);
+	SetCell(t_id, 2, 2,  word.emulation)
+	SetCell(t_id, 3, 2,  word.off)
+	Gray(t_id,1, 2);
+	Gray(t_id,2, 2);
+	Gray(t_id,3, 2);
 end;
  
 
@@ -228,7 +179,7 @@ function button_pause()
 	SetCell(t_id, 2, 0,  word.pause)
 	SetCell(t_id, 3, 1,  word.pause2)
 	SetCell(t_id, 3, 2,  word.pause2)
-	SetCell(t_id, 3, 3,  word.pause2)
+	 
 	Red(t_id,1, 0);
 	Red(t_id,2, 0);
 	Red(t_id,3, 0);
@@ -236,44 +187,6 @@ end;
 
 
  
-
- 
- 
-
-function close_positions_start() 
-	setting.close_positions=true;
-	SetCell(t_id, 2, 3,  word.on)
-	Green(t_id,1, 3) 
-	Green(t_id,2, 3) 
-	Green(t_id,3, 3)
-end;
-
-function close_positions_finish()
-	setting.close_positions=false;  
-	SetCell(t_id, 2, 3,  word.off)
-	Gray(t_id,1, 3);
-	Gray(t_id,2, 3);
-	Gray(t_id,3, 3);
-end;
-
-
-
-
-
-function sell_process()
-	setting.sell = true;
-	SetCell(t_id, 2, 2,  word.on)
-	Green(t_id,1, 2) 
-	Green(t_id,2, 2) 
-	Green(t_id,3, 2)
-end;
-function sell_stop()  
-	setting.sell = false;  
-	SetCell(t_id, 2, 2,  word.off)
-	Red(t_id,1, 2);
-	Red(t_id,2, 2);
-	Red(t_id,3, 2);
-end;
 
 
 function buy_process()
@@ -321,7 +234,7 @@ function event_callback_message (t_id, msg, par1, par2)
 
 
 
-	if par1 == 5 and par2 == 0 or  par1 == 6 and par2 == 0 or par1 == 7 and par2 == 0 then
+	if par1 == 1 and par2 == 2 or  par1 == 2 and par2 == 2 or par1 == 3 and par2 == 2 then
 		if  msg == 1 and setting.emulation == false then
 			mode_emulation_on(); 
 			return; 
@@ -334,20 +247,8 @@ function event_callback_message (t_id, msg, par1, par2)
 
 
 
--- selly_by_hand_oK()  sell_by_hand_ready() 
 
-	if par1 == 5 and par2 == 2 or  par1 == 6 and par2 == 2 or par1 == 7 and par2 == 2 then
-		if  msg == 1 and setting.sell_by_hand == false then
-			sell_by_hand_ready() ;  
-			return; 
-		end;
-		if  msg == 1 and setting.sell_by_hand == true then 
-			selly_by_hand_oK();
-			return;
-		end;
-	end;
-
-
+	
 
 
 
@@ -379,33 +280,7 @@ function event_callback_message (t_id, msg, par1, par2)
 
 
 
-
-	if par1 == 1 and par2 == 2 or  par1 == 2 and par2 == 2 or par1 == 3 and par2 == 2 then
-		if  msg == 1 and setting.sell == false then
-				sell_process(); 
-				return;
-		end;
-
-		if  msg == 1 and setting.sell == true then
-				sell_stop();
-			return;
-		end;
-	end;
-
-
-	if par1 == 1 and par2 == 3 or  par1 == 2 and par2 == 3 or par1 == 3 and par2 == 3 then
-		if  msg == 1 and setting.close_positions == false then
-				close_positions_start(); 
-				buy_stop();
-				return;
-		end;
-
-		if  msg == 1 and setting.close_positions == true then
-			close_positions_finish(); 
-			return;
-		end;
-	end;
-
+ 
 
 
 	
@@ -450,20 +325,6 @@ function event_callback_message (t_id, msg, par1, par2)
 
 
  
-	if par1 == 15 and par2 == 2  and  msg == 1 then
-		setting.profit_range_array = setting.profit_range_array + 0.01; 
-			use_contract_limit();
-		return;
-	end;
-	if par1 == 15 and par2 == 3  and  msg == 1 then
-		
-		if(setting.profit > 0.01) then
-			setting.profit_range_array = setting.profit_range_array - 0.01;
-				use_contract_limit();
-			end; 
-		return;
-	end;
-
  
 
 

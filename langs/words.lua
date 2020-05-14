@@ -46,7 +46,17 @@ function wSignal(_event)
 	return arr[_event];
 end;
 
+    
+function word(key)
  
+	
+	arr = {
+		['not_found_tag'] = "В своиство графика необходимо добавить \"" .. setting.tag .."\".  Откройте график и в области Price перейдите в вкладку дополнительно, в самом низу есть поле 'Идентификатор', туда и добавьте " .. setting.tag ..". После нажмите Применить и перезапустите робота" ,  
+	}
+	 
+	return arr[key];
+end;
  
+M.word = word; 
 M.wSignal = wSignal; 
 return M

@@ -43,9 +43,6 @@ local market = dofile(getScriptPath() .. "\\shop\\market.lua");
  
   -- uTransaction.iTransaction()
     
-
- 
-  
   --SPRED = 0.05; -- минимальная прибыль
   setting_scalp = true; -- на тихий рынок
   
@@ -113,19 +110,18 @@ end;
 shift = 0;
 len = 100
 basis = 9
- 
+
+
+
     
     Size = 0;
    function OnInit()
- 
 
   
       local Error = '';
       ds,Error = CreateDataSource(setting.CLASS_CODE, setting.SEC_CODE, INTERVAL); 
     --  while (Error == "" or Error == nil) and DS:Size() == 0 do sleep(1) end
     
-       
-      -- ������ �������:
        
      if Error ~= "" and Error ~= nil then message("1111111111111111111111 : "..Error) return end
     -- GET_GRAFFIC
@@ -143,10 +139,8 @@ basis = 9
    
        SEC_PRICE_STEP = tostring(getParamEx2(setting.CLASS_CODE, setting.SEC_CODE, "SEC_PRICE_STEP").param_value);
          if GET_GRAFFIC then
-        -- message(' SEC_PRICE_STEP = ::: '..  p  ); 
       else 
        Run  = false;
-     --    message('�� ���� �������� ������ � ������� ������ �� ������� ');
         end;
         
    end;
@@ -169,11 +163,8 @@ basis = 9
 
 
    function main()
- 
-
-      -- setting.ACCOUNT =  '4105F8Y'; 
-      -- setting.CLASS_CODE =  "SPBFUT"; 
-      -- setting.SEC_CODE =  "BRM0" ; 
+   
+      tradeSignal.getSignal(setting.tag, eventTranc);
 
      signalShowLog.CreateNewTableLogEvent();
 
