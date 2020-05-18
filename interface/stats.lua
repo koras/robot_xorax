@@ -10,12 +10,11 @@ local loger = dofile(getScriptPath() .. "\\loger.lua");
 init.create = false;
 
 
--- SPRED_LONG_BUY = 0.02; -- покупаем если в этом диапозоне небыло покупок
+
   
 
--- SPRED_LONG_PRICE_DOWN = 0.04; -- не покупать если мы продали по текущей цене, вниз
--- SPRED_LONG_PRICE_UP = 0.04; -- не покупать если мы продали по текущей цене, вверх. Если мы явно в росто идём
--- SPRED_LONG_LOST_SELL = 0; -- Последняя цена сделки по продаже констракта
+
+
   
 local word = {
 	['title'] = "title",
@@ -97,8 +96,8 @@ end
 	SetCell(t_stat, 13, 1,  tostring(setting.use_contract));  
 
 
-	SetCell(t_stat, 14, 1,  tostring(SPRED_LONG_TREND_DOWN_LAST_PRICE));  
-	SetCell(t_stat, 15, 1,  tostring(SPRED_LONG_LOST_SELL));  
+	SetCell(t_stat, 14, 1,  tostring(setting.SPRED_LONG_TREND_DOWN_LAST_PRICE));  
+	SetCell(t_stat, 15, 1,  tostring(setting.SPRED_LONG_LOST_SELL));  
 	
 
 	SetCell(t_stat, 21, 1, tostring(setting.candles_buy_last)); 

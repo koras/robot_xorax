@@ -75,8 +75,8 @@ local function stats()
 	SetCell(t_information, 10, 1,  tostring(count_sell)) 
 	SetCell(t_information, 11, 1,  tostring(count_buy)) 
 
-	SetCell(t_information, 13, 1,  tostring(SPRED_LONG_TREND_DOWN_LAST_PRICE)) 
-	SetCell(t_information, 14, 1,  tostring(SPRED_LONG_LOST_SELL)) 
+	SetCell(t_information, 13, 1,  tostring(setting.SPRED_LONG_TREND_DOWN_LAST_PRICE)) 
+	SetCell(t_information, 14, 1,  tostring(setting.SPRED_LONG_LOST_SELL)) 
 	SetCell(t_information, 17, 1,  tostring(SPRED))  
  
 

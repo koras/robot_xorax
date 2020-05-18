@@ -24,7 +24,14 @@
           
    setting.SPRED_LONG_BUY_UP = 0.02; -- условия; не покупаем если здесь ранее мы купили | вверх диапозон;
    setting.SPRED_LONG_BUY_down = 0.01; -- условия; не покупаем если здесь ранее мы купили | вниз диапозон
+
+
+
+   setting.take_profit_offset = 0.01;   
+   setting.take_profit_spread = 0.01;  
           
+ 
+   setting.INTERVAL = INTERVAL_M1;
          
    setting.number_of_candles = 0; -- current a candle
    setting.old_number_of_candles = 0; -- old current candle
@@ -58,9 +65,14 @@
 
    setting.old_candle_price_high = 0.00; -- верхняя граница свечи; для промежутка покупки
    setting.old_candle_price_low = 0.00; -- верхняя граница свечи; для промежутка покупки
- 
 
 
+
+   setting.SPRED_LONG_LOST_SELL = 0.00; -- Последняя цена сделки по продаже констракта
+   setting.SPRED_LONG_TREND_DOWN = 0.01;  -- рынок падает, увеличиваем растояние между покупками
+   setting.SPRED_LONG_TREND_DOWN_SPRED = 0.02; -- на сколько увеличиваем растояние
+
+   setting.SPRED_LONG_TREND_DOWN_LAST_PRICE = 0.00; -- 
 
    setting.timeWork =  {
             { '10:00', '14:00'};

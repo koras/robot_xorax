@@ -34,7 +34,7 @@ function getRandBuy(price)
                                 --   if   setting.profit_range + setting.sellTable[j_checkRangBuy].price >= price + setting.profit_infelicity  and 
                                         if   setting.profit_range + setting.sellTable[j_checkRangBuy].price >= price + setting.profit_infelicity  and 
                                         price >= setting.sellTable[j_checkRangBuy].price - setting.SPRED_LONG_BUY_down   then
-                                        signalShowLog.addSignal(setting.sellTable[j_checkRangBuy].dt, 11, false, price);
+                                        signalShowLog.addSignal(setting.sellTable[j_checkRangBuy].datetime, 11, false, price);
                                         checkRange = false;
                                         end; 
                                 end; 
@@ -54,7 +54,7 @@ function getRandSell(price)
                                    -- здесь узнаю, была ли покупка в этом диапозоне
                                    if   setting.profit_range + setting.sellTable[j_checkRange].price >= price and price >= setting.sellTable[j_checkRange].price - setting.profit_range   then
                                            checkRange = false; 
-                                           signalShowLog.addSignal(setting.sellTable[j_checkRange].dt, 12, false, price);
+                                           signalShowLog.addSignal(setting.sellTable[j_checkRange].datetime, 12, false, price);
                            end; 
                    end; 
                    end;  
@@ -116,24 +116,18 @@ end;
 
  -- Падение рынка
  function getFailMarket(price, datetime) 
-        --    local SPRED_LONG_TREND_DOWN = 0.01; -- рынок падает, увеличиваем растояние между покупками
-        --    local SPRED_LONG_TREND_DOWN_SPRED = 0.01; -- на сколько увеличиваем растояние
-        --    local SPRED_LONG_TREND_DOWN_LAST_PRICE= 0; -- последняя покупка
-
+ 
 local checkRange = true;
 
-if SPRED_LONG_TREND_DOWN_LAST_PRICE == 0  or  
-SPRED_LONG_TREND_DOWN_LAST_PRICE - SPRED_LONG_TREND_DOWN  > price  - setting.profit_infelicity  or SPRED_LONG_TREND_DOWN_LAST_PRICE  < price  then
-
--- SPRED_LONG_TREND_DOWN  
+if setting.SPRED_LONG_TREND_DOWN_LAST_PRICE == 0  or  
+        setting.SPRED_LONG_TREND_DOWN_LAST_PRICE - setting.SPRED_LONG_TREND_DOWN  > price  - setting.profit_infelicity  or 
+        setting.SPRED_LONG_TREND_DOWN_LAST_PRICE  < price  then
+ 
 else
-
-checkRange = false;
-signalShowLog.addSignal(datetime, 3, true, SPRED_LONG_TREND_DOWN_LAST_PRICE - SPRED_LONG_TREND_DOWN);
+        checkRange = false;
+        signalShowLog.addSignal(datetime, 3, true, setting.SPRED_LONG_TREND_DOWN_LAST_PRICE - setting.SPRED_LONG_TREND_DOWN);
 
 end;
-
-
 return checkRange;
 end;
 
@@ -149,11 +143,7 @@ end;
         return checkRange;
 end;
 
-     
- 
- 
- 
- 
+
 M.getFailBuy = getFailBuy;
 M.getLimitBuy = getLimitBuy;
 M.getFailMarket = getFailMarket;

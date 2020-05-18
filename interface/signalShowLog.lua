@@ -19,7 +19,7 @@ local label = dofile(getScriptPath() .. "\\drawLabel.lua");
 
 createTableLog = false;
 local wordTitleTableLog = {
-	['number'] = "�",
+	['number'] = "N",
 	['time'] = "Time",
 	['event'] = "Event",
 	['status'] = "Status",
@@ -36,7 +36,7 @@ local function addSignal(dt, event, status, price)
 	
 	CreateNewTableLogEvent();
 
-	--loger.save('event :' .. event    ..' price '..price );
+	 loger.save('event :' .. event    ..' price '..price );
 	
 	local arr = {
 		['dt'] =  dt,
@@ -76,7 +76,7 @@ end;
 
 	if(showLabelPrice) then
 		if(_arr.event == 7) then
-			label.set('green', _arr.price , _arr.dt, 1, _arr.description);
+		--	label.set('green', _arr.price , _arr.dt, 1, _arr.description);
 		end
 		if(_arr.event == 1) then
 			label.set('red', _arr.price , _arr.dt, 1, _arr.description);
@@ -192,7 +192,7 @@ end;
  
  
 
- function deleteTable(Line, Col)  -- �������
+ function deleteTable(Line, Col)   
 	DestroyTable(t_id_TableLog)
  end;
  

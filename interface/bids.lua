@@ -79,6 +79,7 @@ function updateBidsClear()
 		SetCell(t_id_TableBids, b, 3, tostring('')); 
 		SetCell(t_id_TableBids, b, 5, tostring('')); 
 		SetCell(t_id_TableBids, b, 6, tostring('')); 
+		SetCell(t_id_TableBids, b, 7, tostring('')); 
 
 		White(t_id_TableBids, b, 0);
 		White(t_id_TableBids, b, 1);
@@ -100,14 +101,16 @@ end;
 	for b = 1 , #setting.sellTable do
 		bid = setting.sellTable[b];
 
-		time = bid.dt.hour..':'..bid.dt.min..':'..bid.dt.sec;
+		time = bid.datetime.hour..':'..bid.datetime.min..':'..bid.datetime.sec;
 		SetCell(t_id_TableBids, b, 0, tostring(b));  
 		SetCell(t_id_TableBids, b, 1, tostring(bid.price));  
-		SetCell(t_id_TableBids, b, 2,  tostring(time));  
+		SetCell(t_id_TableBids, b, 2, tostring(time));  
 		SetCell(t_id_TableBids, b, 3, tostring(bid.trans_id)); 
 		SetCell(t_id_TableBids, b, 5, tostring(bid.type)); 
 		SetCell(t_id_TableBids, b, 6, tostring(bid.buy_contract)); 
 
+		SetCell(t_id_TableBids, b, 7, tostring(bid.emulation)); 
+		 
 
 		if bid.type == 'sell' then
 			Red(t_id_TableBids, b, 0);
@@ -163,12 +166,12 @@ function CreateNewTableBids()
 	AddColumn(t_id_TableBids, 3,  wordTitleTableBids.trans_id, true,QTABLE_STRING_TYPE, 15); 
 	AddColumn(t_id_TableBids, 4,  wordTitleTableBids.status, true,QTABLE_STRING_TYPE, 10); 
 	AddColumn(t_id_TableBids, 5,  wordTitleTableBids.type, true,QTABLE_STRING_TYPE, 10); 
-	AddColumn(t_id_TableBids, 6,  wordTitleTableBids.buy_contract, true,QTABLE_STRING_TYPE, 10); 
+	AddColumn(t_id_TableBids, 6,  wordTitleTableBids.buy_contract, true,QTABLE_STRING_TYPE, 15); 
+	AddColumn(t_id_TableBids, 7,  wordTitleTableBids.emulation, true,QTABLE_STRING_TYPE, 15); 
  
- 
+	 
 	CreateWindow(t_id_TableBids); 
 	SetWindowCaption(t_id_TableBids, wordTitleTableBids.title);  
-	message(wordTitleTableBids.title);
    	SetWindowPos(tt, 0, 70, 50, 140);
 
 
