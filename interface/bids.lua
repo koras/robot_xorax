@@ -10,8 +10,8 @@ local showLabel = false;
 
 
 local color = dofile(getScriptPath() .. "\\interface\\color.lua");
-local loger = dofile(getScriptPath() .. "\\loger.lua");
-local label = dofile(getScriptPath() .. "\\drawLabel.lua");
+local loger = dofile(getScriptPath() .. "\\modules\\loger.lua");
+local label = dofile(getScriptPath() .. "\\modules\\drawLabel.lua");
 
  
 

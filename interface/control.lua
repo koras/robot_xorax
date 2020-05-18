@@ -4,7 +4,7 @@ local M = {}
 local init = {}
   
 local loger = dofile(getScriptPath() .. "\\interface\\color.lua");
-local loger = dofile(getScriptPath() .. "\\loger.lua");
+local loger = dofile(getScriptPath() .. "\\modules\\loger.lua");
 
 
 init.create = false;

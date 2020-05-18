@@ -1,7 +1,7 @@
 -- scriptTest.lua (in your scripts directory)
 local M = {}
 
-local loger = dofile(getScriptPath() .. "\\loger.lua")
+local loger = dofile(getScriptPath() .. "\\modules\\loger.lua")
  
 local signalShowLog = dofile(getScriptPath() .. "\\interface\\signalShowLog.lua");
    

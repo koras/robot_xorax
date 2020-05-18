@@ -1,5 +1,5 @@
 
-local loger = dofile(getScriptPath() .. "\\loger.lua");
+local loger = dofile(getScriptPath() .. "\\modules\\loger.lua");
 
 -- scriptTest.lua (in your scripts directory)
 local M = {}

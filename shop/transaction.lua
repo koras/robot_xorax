@@ -2,7 +2,7 @@
 local M = {}
  
  
-local loger = dofile(getScriptPath() .. "\\loger.lua")
+local loger = dofile(getScriptPath() .. "\\modules\\loger.lua")
 
 local function send(typeMarket, price, quantity,type )
 	

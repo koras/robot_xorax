@@ -6,8 +6,8 @@
 -- 751,97 ₽
 -- 7,5  = 0.01
 
-local loger = dofile(getScriptPath() .. "\\loger.lua");
-local label = dofile(getScriptPath() .. "\\drawLabel.lua");
+local loger = dofile(getScriptPath() .. "\\modules\\loger.lua");
+local label = dofile(getScriptPath() .. "\\modules\\drawLabel.lua");
 local transaction = dofile(getScriptPath() .. "\\shop\\transaction.lua");
 local signalShowLog = dofile(getScriptPath() .. "\\interface\\signalShowLog.lua");
 local statsPanel = dofile(getScriptPath() .. "\\interface\\stats.lua");

@@ -1,8 +1,8 @@
 -- scriptTest.lua (in your scripts directory)
 local M = {}
 
-local loger = dofile(getScriptPath() .. "\\loger.lua");
-local label = dofile(getScriptPath() .. "\\drawLabel.lua");
+local loger = dofile(getScriptPath() .. "\\modules\\loger.lua");
+local label = dofile(getScriptPath() .. "\\modules\\drawLabel.lua");
 local words = dofile(getScriptPath() .. "\\langs\\words.lua");
 
 M.status = 0;

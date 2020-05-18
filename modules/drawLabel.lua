@@ -11,7 +11,7 @@ local hour = '';
 local PicPathSell = getScriptPath()..'\\images\\myDeals_sell';
 local PicPathBuy = getScriptPath()..'\\images\\myDeals_buy'; 
 local PicPathEvent = getScriptPath()..'\\images\\myDeals_'; 
-local loger = dofile(getScriptPath() .. "\\loger.lua")
+local loger = dofile(getScriptPath() .. "\\modules\\loger.lua")
  
 local function set(Operation, Price , datetime, count, textInfo)
   count = 1;

@@ -12,8 +12,8 @@ local showLabelPrice = true;
 
 local color = dofile(getScriptPath() .. "\\interface\\color.lua");
 local words = dofile(getScriptPath() .. "\\langs\\words.lua");
-local loger = dofile(getScriptPath() .. "\\loger.lua");
-local label = dofile(getScriptPath() .. "\\drawLabel.lua");
+local loger = dofile(getScriptPath() .. "\\modules\\loger.lua");
+local label = dofile(getScriptPath() .. "\\modules\\drawLabel.lua");
 
 
 
