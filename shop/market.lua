@@ -93,8 +93,7 @@ function getfractal(price)
 
     if #setting.fractals_collection > 0 then 
         for k,v in setting.fractals_collection do 
-        --    print(k,v) 
-        
+
             label.set("k " , k);
 
         end
@@ -104,12 +103,12 @@ end;
 
 buy_contract  = 0;
 
-function callSELL(result)
+-- function callSELL(result)
     
-    -- if #setting.sellTable > 0 then
-    --     deleteSell(result);
-    -- end;
-end
+--     -- if #setting.sellTable > 0 then
+--     --     deleteSell(result);
+--     -- end;
+-- end
 
 
 -- function deleteSell(result)
@@ -202,7 +201,7 @@ function callBUY(price ,dt)
     sellTransaction(priceLocal,dt);  
             setting.sellTable[(#setting.sellTable+1)] = {
                 ['price'] = price,
-                ['dt']= dt, 
+                ['datetime']= dt, 
                 ['trans_id']=  trans_id, 
                 ['type']= 'buy',
                 ['emulation']=  setting.emulation,
@@ -232,7 +231,7 @@ function sellTransaction(priceLocal,dt)
 
             setting.sellTable[(#setting.sellTable+1)] = {
                                                             ['price'] = p,
-                                                            ['dt']= dt, 
+                                                            ['datetime']= dt, 
                                                             ['trans_id']= trans_id_sell, 
                                                             ['type']= 'sell',
                                                             ['emulation']= setting.emulation,
@@ -252,7 +251,7 @@ end;
  
  
 M.transCallback   = transCallback;
-M.callSELL   = callSELL;
+-- M.callSELL   = callSELL;
 M.bid   = bid ;
 M.decision = decision;
 M.setDirect = setDirect;

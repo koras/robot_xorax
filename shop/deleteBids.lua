@@ -22,6 +22,38 @@ M = {};
  
 
 
+-- продажа в режиме симуляции
+function callSELLEmulation(result)
+    if #setting.sellTable > 0 then
+        local buyContractSell = 0;
+        local deleteKeySell = 0;
+        
+            for sellT = 1 ,  #setting.sellTable do 
+    
+                if  setting.sellTable[sellT].type == 'sell' and setting.sellTable[sellT].trans_id == result.trans_id  then 
+                        local price = result.price;
+                        setting.count_buyin_a_row = 0; 
+                        SPRED_LONG_LOST_SELL = price;
+                        SPRED_LONG_TREND_DOWN  = SPRED_LONG_TREND_DOWN - SPRED_LONG_TREND_DOWN_SPRED;
+    
+                        -- сколько исполнилось продаж
+                        setting.count_sell =  setting.count_sell + 1; 
+                        setting.profit =  setting.sellTable[sellT].price - setting.sellTable[sellT].buy_contract + setting.profit;
+    
+                        signalShowLog.addSignal(result.datetime, 8, false, setting.sellTable[sellT].price); 
+                        -- надо удалить контракт по которому мы покупали
+                        buyContractSell = setting.sellTable[sellT].buy_contract; 
+                        deleteKeySell = sellT; 
+                end;
+            end;
+    
+            if deleteKeySell ~= 0  then 
+                table.remove (setting.sellTable, deleteKeySell); 
+                deleteBuy(result,buyContractSell); 
+                 
+            end;
+    end;
+end
 
 
 function callSELL(result)
@@ -31,6 +63,7 @@ function callSELL(result)
 end
 
 
+--реальные продажы
 function deleteSell(result)
     local buyContractSell = 0;
     local deleteKeySell = 0;
@@ -42,11 +75,10 @@ function deleteSell(result)
                     setting.count_buyin_a_row = 0; 
                     SPRED_LONG_LOST_SELL = price;
                     SPRED_LONG_TREND_DOWN  = SPRED_LONG_TREND_DOWN - SPRED_LONG_TREND_DOWN_SPRED;
-                    
+
+                    -- сколько исполнилось продаж
                     setting.count_sell =  setting.count_sell + 1; 
                     setting.profit =  setting.sellTable[sellT].price - setting.sellTable[sellT].buy_contract + setting.profit;
-
-
 
                     signalShowLog.addSignal(result.datetime, 8, false, setting.sellTable[sellT].price); 
                     -- надо удалить контракт по которому мы покупали
@@ -55,13 +87,7 @@ function deleteSell(result)
             end;
         end;
 
-
-
-        
-
         if deleteKeySell ~= 0  then 
-
-         --   loger.save(' #setting.sellTable #setting.sellTable #setting.sellTable #setting.sellTable  ' ..  #setting.sellTable  );
             table.remove (setting.sellTable, deleteKeySell); 
             deleteBuy(result,buyContractSell); 
              
@@ -102,8 +128,7 @@ function transCallback(trans_reply)
      
            
      -- http://luaq.ru/OnTransReply.html
-    if #setting.sellTable > 0 then
-        loger.save('deleteSelldeleteSelldeleteSelldeleteSell'  );
+    if #setting.sellTable > 0 then 
         deleteSell(trans_reply);
     end;
 
@@ -124,6 +149,8 @@ end;
  
 M.transCallback   = transCallback;
 M.callSELL   = callSELL;
+M.callSELLEmulation   = callSELLEmulation;
+ 
 M.bid   = bid ;
 M.decision = decision;
 M.setDirect = setDirect;

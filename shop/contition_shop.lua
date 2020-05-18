@@ -34,7 +34,7 @@ function getRandBuy(price)
                                 --   if   setting.profit_range + setting.sellTable[j_checkRangBuy].price >= price + setting.profit_infelicity  and 
                                         if   setting.profit_range + setting.sellTable[j_checkRangBuy].price >= price + setting.profit_infelicity  and 
                                         price >= setting.sellTable[j_checkRangBuy].price - setting.SPRED_LONG_BUY_down   then
-                                        signalShowLog.addSignal(setting.sellTable[j_checkRangBuy].dt, 11, false, price);
+                                        signalShowLog.addSignal(setting.sellTable[j_checkRangBuy].datetime, 11, false, price);
                                         checkRange = false;
                                         end; 
                                 end; 
@@ -54,7 +54,7 @@ function getRandSell(price)
                                    -- здесь узнаю, была ли покупка в этом диапозоне
                                    if   setting.profit_range + setting.sellTable[j_checkRange].price >= price and price >= setting.sellTable[j_checkRange].price - setting.profit_range   then
                                            checkRange = false; 
-                                           signalShowLog.addSignal(setting.sellTable[j_checkRange].dt, 12, false, price);
+                                           signalShowLog.addSignal(setting.sellTable[j_checkRange].datetime, 12, false, price);
                            end; 
                    end; 
                    end;  

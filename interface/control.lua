@@ -25,10 +25,9 @@ local word = {
 	['current_limit_minus'] = "          Minus",
 	['current_limit_plus'] = "          Add", 
 
-	['finish'] = "           STOP",
-	['pause'] = "           PAUSE",
+	['finish'] = "           PAUSE",
+	['pause'] = "          CONTINUE",
 	['pause2'] = "           PAUSE",
-
 
 	['emulation'] = "     Emulation",
 	['buy_by_hand'] = "        BUY (now)",

@@ -74,12 +74,10 @@ local deleteBids = dofile(getScriptPath() .. "\\shop\\deleteBids.lua");
   
   -- SHORT  = FALSE
    -- LONG = true
-   CurrentDirect     = 'LONG';                -- ������� ����������� ['BUY', ��� 'SELL']
-   LastOpenBarIndex  =  0;                   -- ������ �����, �� ������� ���� ������� ��������� ������� (����� ��� ����, ����� ����� �������� �� ����� ��� �� �� ������� ��� ���� �������)
-   Run               = true;                 -- ���� ����������� ������ ������������ ����� � main
+  LastOpenBarIndex  =  0;                   -- ������ �����, �� ������� ���� ������� ��������� ������� (����� ��� ����, ����� ����� �������� �� ����� ��� �� �� ������� ��� ���� �������)
+   Run               = true;  
      
-   Array5Min = {}      -- ������� ������ ��� �������� ������� �������/������ �� ��������� 5-�� 1-�������� ������ 
-    
+
 function init()
 
    tradeSignal.setRange(RangeSignal);
@@ -160,7 +158,6 @@ basis = 9
       control.show(); 
 
  
-       CurrentDirect = "SELL" 
        local Price = false;
           
       while Run do 
@@ -171,7 +168,7 @@ basis = 9
          
           if setting.status  then  
             tradeSignal.getSignal(setting.tag, eventTranc);
-            candles.getSignal(tag, market.callSELL);
+            candles.getSignal(tag, deleteBids.callSELLEmulation);
          end;
       end;  
    end;
@@ -184,16 +181,6 @@ basis = 9
    -- Функция вызывается терминалом когда с сервера приходит информация по заявке 
    function OnOrder(order)
       if  bit.band(order.flags,3) == 0 then
-
-
-         loger.save('OnOrder trade.price '.. order.price )  
-         loger.save('OnOrder trade.order_num '.. order.order_num )
-         
-         loger.save('OnOrder trade.trans_id '.. order.trans_id )
-         loger.save('OnOrder trade.value '.. order.value )
-         loger.save('OnOrder trade.balance '.. order.balance )
-         
-         loger.save('=====================================================' )
          deleteBids.transCallback(order);
         -- trans_id
       end;
@@ -209,19 +196,6 @@ basis = 9
 -- OnTransReply -> OnTrade -> OnOrder 
    -- Функция вызывается терминалом когда с сервера приходит информация по сделке
    function OnTrade(trade)
-      loger.save('OnTrade' )
-      loger.save(tostring(trade.flags).." | SD | "..trade.sec_code.." | "..trade.price.." | "..trade.qty.." | "..trade.value.." |on "..trade.order_num.." |tn "..trade.trade_num.."",1)
-      
-      loger.save('OnTrade trade.price '.. trade.price )  
-      loger.save('OnTrade trade.order_num '.. trade.order_num )
-      loger.save('OnTrade trade.trade_num '.. trade.trade_num )
-      loger.save('OnTrade trade.trans_id '.. trade.trans_id )
-      loger.save('OnTrade trade.kind '.. trade.kind )
-      loger.save('OnTrade trade.flags '.. trade.flags )
-      loger.save('OnTrade trade.firmid '.. trade.firmid )
-
-        
-      
    local test = CheckBit(trade.flags, 3);
    if (test == 0) then
       -- если бит 0 и 1 не установлены -- заявка выполнена
@@ -275,14 +249,6 @@ end
             loger.save('Заявка 11111 №'..trade.order_num..' appruve')
          end
 
-      loger.save(' trade.flags '.. trade.flags )
-      loger.save(' trade.price '.. trade.price )
-      loger.save(' trade.stop_order_type '.. trade.stop_order_type )
-      loger.save(' trade.filled_qty '.. trade.filled_qty )
-      loger.save(' trade.order_num '.. trade.order_num )
-      loger.save(' trade.trans_id '.. trade.trans_id )
-       
-      loger.save(' OnStopOrder end' )
    end
 
 
@@ -309,21 +275,6 @@ end
 
    function OnTransReply(trans_reply) 
 
-
-      loger.save('  OnTransReply start '  ) 
-
-      loger.save(' OnTransReply.trans_id '.. trans_reply.trans_id ) 
-      loger.save(' OnTransReply.status '.. trans_reply.status  ) 
-      loger.save(' OnTransReply.balance '.. trans_reply.balance  )   
-      loger.save(' OnTransReply.order_num '..trans_reply.order_num  ) 
-      loger.save(' OnTransReply.price '.. trans_reply.price  ) 
-      loger.save(' OnTransReply.server_trans_id '..trans_reply.server_trans_id  ) 
-      loger.save(' OnTransReply.result_msg'.. trans_reply.result_msg ) 
-      
-      loger.save('  OnTransReply end '  ) 
-
-
-    --  deleteBids.transCallback(trans_reply);
    end;
      
 
