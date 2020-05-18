@@ -56,8 +56,8 @@ end
 
 -- автоматическая торговля
 function long(price, datetime, levelLocal , event) -- решение 
-    getSetting();
-    getfractal(price);
+            getSetting();
+            getfractal(price);
 
             -- подсчитаем скольк заявок у нас на продажу
             -- проверём, покупали здесь или нет, в этом промежутке
@@ -76,8 +76,8 @@ function long(price, datetime, levelLocal , event) -- решение
             
 
             if limitBuy and checkRangeBuy and checkRangeSell and randCandle  and failMarket and getFailBuy then
-                SPRED_LONG_TREND_DOWN  = SPRED_LONG_TREND_DOWN + SPRED_LONG_TREND_DOWN_SPRED;
-                SPRED_LONG_TREND_DOWN_LAST_PRICE = price; -- записываем последнюю покупку
+                setting.SPRED_LONG_TREND_DOWN  = setting.SPRED_LONG_TREND_DOWN + setting.SPRED_LONG_TREND_DOWN_SPRED;
+                setting.SPRED_LONG_TREND_DOWN_LAST_PRICE = price; -- записываем последнюю покупку
                     callBUY(price,  datetime);
                     signalShowLog.addSignal(datetime, 10, false, price); 
             end;  
@@ -102,71 +102,7 @@ function getfractal(price)
 end;
 
 buy_contract  = 0;
-
--- function callSELL(result)
-    
---     -- if #setting.sellTable > 0 then
---     --     deleteSell(result);
---     -- end;
--- end
-
-
--- function deleteSell(result)
---     local buyContractSell = 0;
---     local deleteKeySell = 0;
---         for sellT = 1 ,  #setting.sellTable do 
---         --   if statusRange then
---                 if  setting.sellTable[sellT].type == 'sell' and result.close + setting.profit_infelicity >= setting.sellTable[sellT].price  then 
---                     local price = result.close;
---                     setting.count_buyin_a_row = 0; 
-
---                     SPRED_LONG_LOST_SELL = price;
-
---                     SPRED_LONG_TREND_DOWN  = SPRED_LONG_TREND_DOWN - SPRED_LONG_TREND_DOWN_SPRED;
-                    
---                     setting.count_sell =  setting.count_sell + 1; 
---                     setting.profit =  setting.sellTable[sellT].price - setting.sellTable[sellT].buy_contract + setting.profit;
-
-
-
---                     signalShowLog.addSignal(result.datetime, 8, false, setting.sellTable[sellT].price); 
-
---                     -- надо удалить контракт по которому мы покупали
---                     buyContractSell = setting.sellTable[sellT].buy_contract; 
---                     deleteKeySell = sellT; 
---             end;
---         end;
-        
-
---         if deleteKeySell ~= 0  then 
-
---          --   loger.save(' #setting.sellTable #setting.sellTable #setting.sellTable #setting.sellTable  ' ..  #setting.sellTable  );
---             table.remove (setting.sellTable, deleteKeySell); 
---             deleteBuy(result,buyContractSell); 
-             
---         end;
--- end
-
-
--- function deleteBuy(result,buy_contract)
---     local deleteKey = 0;
---     local buyPrice = 0;
---     for searchBuy = 1 ,  #setting.sellTable do 
---         if setting.sellTable[searchBuy].type == 'buy' and setting.sellTable[searchBuy].price == ( buy_contract + setting.profit_infelicity)  then 
---                 -- удаляем только 1 элемент
---                 setting.limit_count_buy = setting.limit_count_buy - 1;
---                 deleteKey = searchBuy; 
---                 buyPrice = setting.sellTable[searchBuy].price;
---         end;
---     end;
---     if deleteKey  ~= 0  then 
---         table.remove (setting.sellTable, deleteKey);
-     
---         panelBids.show();
---     end;
-
--- end
-
+ 
 
 
 

@@ -51,30 +51,11 @@ local deleteBids = dofile(getScriptPath() .. "\\shop\\deleteBids.lua");
      
   setting_scalp = true; -- на тихий рынок
   
-  
-  SPRED_LONG_BUY = 0.02; -- покупаем если в этом диапозоне небыло покупок
-  SPRED_LONG_TREND_DOWN = 0.04; -- рынок падает, увеличиваем растояние между покупками
-  SPRED_LONG_TREND_DOWN_SPRED = 0.02; -- на сколько увеличиваем растояние
-
-  SPRED_LONG_TREND_DOWN_LAST_PRICE= 0; -- последняя покупка
-  
-  SPRED_LONG_PRICE_DOWN = 0.04; -- не покупать если мы продали по текущей цене, вниз
-  SPRED_LONG_PRICE_UP = 0.04; -- не покупать если мы продали по текущей цене, вверх. Если мы явно в росто идём
-  SPRED_LONG_LOST_SELL = 0; -- Последняя цена сделки по продаже констракта
-
-
-
-
+   
    --require (modname)
    
    log =  "take_log.log"
    
-   
- 
-  
-  -- SHORT  = FALSE
-   -- LONG = true
-  LastOpenBarIndex  =  0;                   -- ������ �����, �� ������� ���� ������� ��������� ������� (����� ��� ����, ����� ����� �������� �� ����� ��� �� �� ������� ��� ���� �������)
    Run               = true;  
      
 
@@ -90,9 +71,6 @@ shift = 0;
 len = 100
 basis = 9
 
-
-
-    
     Size = 0;
    function OnInit()
 

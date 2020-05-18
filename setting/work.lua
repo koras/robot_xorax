@@ -65,9 +65,14 @@
 
    setting.old_candle_price_high = 0.00; -- верхняя граница свечи; для промежутка покупки
    setting.old_candle_price_low = 0.00; -- верхняя граница свечи; для промежутка покупки
- 
 
 
+
+   setting.SPRED_LONG_LOST_SELL = 0.00; -- Последняя цена сделки по продаже констракта
+   setting.SPRED_LONG_TREND_DOWN = 0.01;  -- рынок падает, увеличиваем растояние между покупками
+   setting.SPRED_LONG_TREND_DOWN_SPRED = 0.02; -- на сколько увеличиваем растояние
+
+   setting.SPRED_LONG_TREND_DOWN_LAST_PRICE = 0.00; -- 
 
    setting.timeWork =  {
             { '10:00', '14:00'};

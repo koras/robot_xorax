@@ -116,24 +116,18 @@ end;
 
  -- Падение рынка
  function getFailMarket(price, datetime) 
-        --    local SPRED_LONG_TREND_DOWN = 0.01; -- рынок падает, увеличиваем растояние между покупками
-        --    local SPRED_LONG_TREND_DOWN_SPRED = 0.01; -- на сколько увеличиваем растояние
-        --    local SPRED_LONG_TREND_DOWN_LAST_PRICE= 0; -- последняя покупка
-
+ 
 local checkRange = true;
 
-if SPRED_LONG_TREND_DOWN_LAST_PRICE == 0  or  
-SPRED_LONG_TREND_DOWN_LAST_PRICE - SPRED_LONG_TREND_DOWN  > price  - setting.profit_infelicity  or SPRED_LONG_TREND_DOWN_LAST_PRICE  < price  then
-
--- SPRED_LONG_TREND_DOWN  
+if setting.SPRED_LONG_TREND_DOWN_LAST_PRICE == 0  or  
+        setting.SPRED_LONG_TREND_DOWN_LAST_PRICE - setting.SPRED_LONG_TREND_DOWN  > price  - setting.profit_infelicity  or 
+        setting.SPRED_LONG_TREND_DOWN_LAST_PRICE  < price  then
+ 
 else
-
-checkRange = false;
-signalShowLog.addSignal(datetime, 3, true, SPRED_LONG_TREND_DOWN_LAST_PRICE - SPRED_LONG_TREND_DOWN);
+        checkRange = false;
+        signalShowLog.addSignal(datetime, 3, true, setting.SPRED_LONG_TREND_DOWN_LAST_PRICE - setting.SPRED_LONG_TREND_DOWN);
 
 end;
-
-
 return checkRange;
 end;
 
@@ -149,11 +143,7 @@ end;
         return checkRange;
 end;
 
-     
- 
- 
- 
- 
+
 M.getFailBuy = getFailBuy;
 M.getLimitBuy = getLimitBuy;
 M.getFailMarket = getFailMarket;

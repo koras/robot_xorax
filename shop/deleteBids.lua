@@ -33,8 +33,8 @@ function callSELLEmulation(result)
                 if  setting.sellTable[sellT].type == 'sell' and setting.sellTable[sellT].trans_id == result.trans_id  then 
                         local price = result.price;
                         setting.count_buyin_a_row = 0; 
-                        SPRED_LONG_LOST_SELL = price;
-                        SPRED_LONG_TREND_DOWN  = SPRED_LONG_TREND_DOWN - SPRED_LONG_TREND_DOWN_SPRED;
+                        setting.SPRED_LONG_LOST_SELL = price;
+                        setting.SPRED_LONG_TREND_DOWN  = setting.SPRED_LONG_TREND_DOWN - setting.SPRED_LONG_TREND_DOWN_SPRED;
     
                         -- сколько исполнилось продаж
                         setting.count_sell =  setting.count_sell + 1; 
@@ -56,6 +56,8 @@ function callSELLEmulation(result)
 end
 
 
+
+
 function callSELL(result)
     if #setting.sellTable > 0 then
         deleteSell(result);
@@ -73,8 +75,8 @@ function deleteSell(result)
             if  setting.sellTable[sellT].type == 'sell' and setting.sellTable[sellT].trans_id == result.trans_id  then 
                     local price = result.price;
                     setting.count_buyin_a_row = 0; 
-                    SPRED_LONG_LOST_SELL = price;
-                    SPRED_LONG_TREND_DOWN  = SPRED_LONG_TREND_DOWN - SPRED_LONG_TREND_DOWN_SPRED;
+                    setting.SPRED_LONG_LOST_SELL = price;
+                    setting.SPRED_LONG_TREND_DOWN  = setting.SPRED_LONG_TREND_DOWN - setting.SPRED_LONG_TREND_DOWN_SPRED;
 
                     -- сколько исполнилось продаж
                     setting.count_sell =  setting.count_sell + 1; 
