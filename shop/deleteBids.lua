@@ -16,10 +16,7 @@ local panelBids = dofile(getScriptPath() .. "\\interface\\bids.lua");
 local interfaceBids = dofile(getScriptPath() .. "\\interface\\bids.lua");
 local contitionMarket = dofile(getScriptPath() .. "\\shop\\contition_shop.lua");
  
- 
-
-M = {};
- 
+  
 
 
 -- продажа в режиме симуляции
@@ -30,7 +27,7 @@ function callSELLEmulation(result)
         
             for sellT = 1 ,  #setting.sellTable do 
     
-                if  setting.sellTable[sellT].type == 'sell' and setting.sellTable[sellT].trans_id == result.trans_id  then 
+                if  setting.sellTable[sellT].type == 'sell' and  result.close + setting.profit_infelicity >= setting.sellTable[sellT].price   then 
                         local price = result.price;
                         setting.count_buyin_a_row = 0; 
                         setting.SPRED_LONG_LOST_SELL = price;
@@ -40,7 +37,7 @@ function callSELLEmulation(result)
                         setting.count_sell =  setting.count_sell + 1; 
                         setting.profit =  setting.sellTable[sellT].price - setting.sellTable[sellT].buy_contract + setting.profit;
     
-                        signalShowLog.addSignal(result.datetime, 8, false, setting.sellTable[sellT].price); 
+                        signalShowLog.addSignal(result.datetime, 8, false, setting.sellTable[sellT].price  + setting.profit_infelicity); 
                         -- надо удалить контракт по которому мы покупали
                         buyContractSell = setting.sellTable[sellT].buy_contract; 
                         deleteKeySell = sellT; 
@@ -71,7 +68,6 @@ function deleteSell(result)
     local deleteKeySell = 0;
     
         for sellT = 1 ,  #setting.sellTable do 
-
             if  setting.sellTable[sellT].type == 'sell' and setting.sellTable[sellT].trans_id == result.trans_id  then 
                     local price = result.price;
                     setting.count_buyin_a_row = 0; 
@@ -91,13 +87,13 @@ function deleteSell(result)
 
         if deleteKeySell ~= 0  then 
             table.remove (setting.sellTable, deleteKeySell); 
-            deleteBuy(result,buyContractSell); 
+            deleteBuy(result, buyContractSell); 
              
         end;
 end
 
 
-function deleteBuy(result,buy_contract)
+function deleteBuy(result, buy_contract)
     local deleteKey = 0;
     local buyPrice = 0;
     for searchBuy = 1 ,  #setting.sellTable do 
@@ -108,9 +104,9 @@ function deleteBuy(result,buy_contract)
                 buyPrice = setting.sellTable[searchBuy].price;
         end;
     end;
+
     if deleteKey  ~= 0  then 
         table.remove (setting.sellTable, deleteKey);
-     
         panelBids.show();
     end;
 
@@ -142,13 +138,12 @@ function transCallback(trans_reply)
 end;
 
 
-
 function getRand()
     return tostring(math.random(2000000000));
 end;
 
- 
- 
+
+M = {};
 M.transCallback   = transCallback;
 M.callSELL   = callSELL;
 M.callSELLEmulation   = callSELLEmulation;

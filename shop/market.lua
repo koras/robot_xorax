@@ -30,7 +30,6 @@ local DIRECT = 'LONG';
 
 local function setDirect(localDirect) -- решение
     DIRECT = localDirect;
-  --  bidTable.create();
 end
 
 local function setLitmitBid() -- решение
@@ -160,7 +159,7 @@ function sellTransaction(priceLocal,dt)
 
             signalShowLog.addSignal(dt, 9, false, p); 
 
-            signalShowLog.addSignal(dt, 9, false,trans_id_sell); 
+            signalShowLog.addSignal(dt, 9, false, trans_id_sell); 
 
             loger.save('trans_id_sell = ' ..  trans_id_sell ); 
 

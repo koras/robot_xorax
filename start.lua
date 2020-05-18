@@ -33,7 +33,7 @@ dofile(getScriptPath() .. "\\setting\\account.lua");
 dofile(getScriptPath() .. "\\setting\\work.lua");
  
 local uTransaction = dofile(getScriptPath() .. "\\shop\\transaction.lua");
-local scriptTest = dofile(getScriptPath() .. "\\coutLine.lua");
+
 local candles = dofile(getScriptPath() .. "\\Signals\\candle.lua");
 local tradeSignal = dofile(getScriptPath() .. "\\Signals\\tradeSignal.lua"); 
 local fractalSignal = dofile(getScriptPath() .. "\\Signals\\fractal.lua"); 
@@ -88,7 +88,7 @@ basis = 9
     
       Size =ds:Size();  
       
-        p      = tostring(getParamEx(setting.CLASS_CODE, setting.SEC_CODE, "offer").param_value + 10*getParamEx(setting.CLASS_CODE, setting.SEC_CODE, "SEC_PRICE_STEP").param_value); -- �� ����, ���������� �� 10 ���. ����� ����
+        p      = tostring(getParamEx(setting.CLASS_CODE, setting.SEC_CODE, "offer").param_value + 10*getParamEx(setting.CLASS_CODE, setting.SEC_CODE, "SEC_PRICE_STEP").param_value); 
        SEC_PRICE_STEP = tostring(getParamEx2(setting.CLASS_CODE, setting.SEC_CODE, "SEC_PRICE_STEP").param_value);	
    end;
    

@@ -102,11 +102,9 @@ end
   
 local function delete(text)
       
-	 
 	  
 end
 
-  
 local function init(tag)
     loger.save( tag..'   tag ')
 
