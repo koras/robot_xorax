@@ -14,7 +14,11 @@
 - остановка и возобновление торговли в момент времени
 
 скачать https://github.com/koras/robot_xorax/archive/master.zip 
-— Необходимо указать номер счёта. Его надо прописать в файле setting/account.lua  ( setting.ACCOUNT)
-— setting.SEC_CODE текущий код бумаги
+
+установка:
+- Необходимо указать номер счёта. Его надо прописать в файле setting/account.lua  ( setting.ACCOUNT="")
+- Прописать  текущий код бумаги setting.SEC_CODE в файле setting/account.lua 
+- В графике надо указать Идентификатор my_br
+
 
 Группы в телеграмм https://t.me/robots_xorax
