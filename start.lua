@@ -1,5 +1,11 @@
 -- https://www.lua.org/ftp/
 
+
+-- Бесплатный робот торгующий в боковике "robot XoraX"
+-- https://t.me/robots_xorax
+-- https://smart-lab.ru/blog/621155.php
+
+
 local lua51path = "C:\\Program Files (x86)\\Lua\\5.1\\" -- путь, куда установлен дистрибутив Lua 5.1 for Windows
 
 package.cpath = "./?.dll;./?51.dll;"
@@ -39,11 +45,10 @@ local interfaceBids = dofile(getScriptPath() .. "\\interface\\bids.lua");
 local signalShowLog = dofile(getScriptPath() .. "\\interface\\signalShowLog.lua");
 local FRACTALS = dofile(getScriptPath() .. "\\LuaIndicators\\FRACTALS.lua"); 
 local market = dofile(getScriptPath() .. "\\shop\\market.lua");
+local deleteBids = dofile(getScriptPath() .. "\\shop\\deleteBids.lua");
  
- 
-  -- uTransaction.iTransaction()
-    
-  --SPRED = 0.05; -- минимальная прибыль
+  
+     
   setting_scalp = true; -- на тихий рынок
   
   
@@ -59,37 +64,13 @@ local market = dofile(getScriptPath() .. "\\shop\\market.lua");
 
 
 
- --  count_buy = 0;
-  -- count_sell = 0;
-
-   profit = 0;
-   --sellTable = {};
-   bid = {}
-   RangeSignal    = 0.1;            -- �������� ����
 
    --require (modname)
    
    log =  "take_log.log"
    
    
-   INTERVAL          = INTERVAL_M1;          -- ��������� ������� (��� ���������� ����������)
-   SLOW_MA_PERIOD    = 12;                   -- ������ ��������� ����������
-   SLOW_MA_SOURCE    = 'C';                  -- �������� ��������� ���������� [O - open, C - close, H - hi, L - low]
-   FAST_MA_PERIOD    = 4;                    -- ������ ������� ����������
-   FAST_MA_SOURCE    = 'C';                  -- �������� ������� ���������� [O - open, C - close, H - hi, L - low]
-   STOP_LOSS         = 10;                   -- ������ ����-����� (� ����� ����)
-   TAKE_PROFIT       = 30;                   -- ������ ����-������� (� ����� ����)
-   GET_GRAFFIC       = FALSE;                   -- ������ ����-������� (� ����� ����)
-    
-   --/*������� ���������� ������ (������ �� �����)*/
-   SEC_PRICE_STEP    = 0;                    -- ��� ���� �����������
-   SEC_NO_SHORT      = false;                -- ����, ��� �� ������� ����������� ��������� �������� ����
-   DS                = nil;                  -- �������� ������ ������� (DataSource)
-   ROBOT_STATE       ='� ������ ����� �����';-- ��������� ������ ['� �������� ������', ���� '� ������ ����� �����']
-   trans_id          = os.time();            -- ������ ��������� ����� ID ����������
-   trans_Status      = nil;                  -- ������ ������� ���������� �� ������� OnTransPeply
-   trans_result_msg  = '';                   -- ��������� �� ������� ���������� �� ������� OnTransPeply
-  
+ 
   
   -- SHORT  = FALSE
    -- LONG = true
@@ -119,7 +100,7 @@ basis = 9
 
   
       local Error = '';
-      ds,Error = CreateDataSource(setting.CLASS_CODE, setting.SEC_CODE, INTERVAL); 
+      ds,Error = CreateDataSource(setting.CLASS_CODE, setting.SEC_CODE, setting.INTERVAL); 
     --  while (Error == "" or Error == nil) and DS:Size() == 0 do sleep(1) end
     
        
@@ -194,14 +175,155 @@ basis = 9
          end;
       end;  
    end;
-     
+   
+   
+   
+   -- https://quikluacsharp.ru/quik-qlua/primer-prostogo-torgovogo-dvizhka-simple-engine-qlua-lua/
+
+   -- OnTrade показывает статусы сделок.
+   -- Функция вызывается терминалом когда с сервера приходит информация по заявке 
+   function OnOrder(order)
+      if  bit.band(order.flags,3) == 0 then
+
+
+         loger.save('OnOrder trade.price '.. order.price )  
+         loger.save('OnOrder trade.order_num '.. order.order_num )
+         
+         loger.save('OnOrder trade.trans_id '.. order.trans_id )
+         loger.save('OnOrder trade.value '.. order.value )
+         loger.save('OnOrder trade.balance '.. order.balance )
+         
+         loger.save('=====================================================' )
+         deleteBids.transCallback(order);
+        -- trans_id
+      end;
+
+
+      if bit.band(order.flags,1) + bit.band(order.flags,2) == 0  then loger.save("исполнена loger.save(") end;
+      loger.save('OnOrder' )
+
+   end
+
+
+
+-- OnTransReply -> OnTrade -> OnOrder 
+   -- Функция вызывается терминалом когда с сервера приходит информация по сделке
+   function OnTrade(trade)
+      loger.save('OnTrade' )
+      loger.save(tostring(trade.flags).." | SD | "..trade.sec_code.." | "..trade.price.." | "..trade.qty.." | "..trade.value.." |on "..trade.order_num.." |tn "..trade.trade_num.."",1)
+      
+      loger.save('OnTrade trade.price '.. trade.price )  
+      loger.save('OnTrade trade.order_num '.. trade.order_num )
+      loger.save('OnTrade trade.trade_num '.. trade.trade_num )
+      loger.save('OnTrade trade.trans_id '.. trade.trans_id )
+      loger.save('OnTrade trade.kind '.. trade.kind )
+      loger.save('OnTrade trade.flags '.. trade.flags )
+      loger.save('OnTrade trade.firmid '.. trade.firmid )
+
+        
+      
+   local test = CheckBit(trade.flags, 3);
+   if (test == 0) then
+      -- если бит 0 и 1 не установлены -- заявка выполнена
+      loger.save('CheckBit(order.flags, 3)  ' )
+    --  self:OnStatusChanged(ST_FILLED);
+
+   --   self:InternalDelete();
+   else
+      local sell = CheckBit(trade.flags, 4) ~= 0;
+   --   assert((sell == (self.request.OPERATION == "S")) and (not sell == (self.request.OPERATION == "B")));
+      -- if (test == 2) then
+      -- --   self:OnStatusChanged(ST_REJECTED);
+      -- --   self:InternalDelete();
+      -- else
+      -- --   self:UpdateTiming();
+      -- end
+   end
+
+
+      loger.save('OnTrade end' )
+       
+   end
+
+
+-- Функция возвращает true, если бит с номером index флагов flags установлен в 1
+function bit_set( flags, index )
+   local n=1;
+   n=bit.lshift(1, index);
+   if bit.band(flags, n) ~=0 then
+       return true;
+   else
+       return false;
+   end;
+end
+
+
+   -- Функция вызывается терминалом когда с сервера приходит информация по сделке
+   function OnStopOrder(trade)
+      loger.save(' OnStopOrder' )
+
+      if  bit.band(trade.flags,4)>0
+         then
+         -- заявка на продажу
+      loger.save(' trade.flags Sell ')
+         else
+         -- заявка на покупку
+      loger.save(' trade.flags Buy ')
+         end
+      
+         if not CheckBit(trade.flags, 0) and not CheckBit(trade.flags, 1) then
+            loger.save('Заявка 11111 №'..trade.order_num..' appruve')
+         end
+
+      loger.save(' trade.flags '.. trade.flags )
+      loger.save(' trade.price '.. trade.price )
+      loger.save(' trade.stop_order_type '.. trade.stop_order_type )
+      loger.save(' trade.filled_qty '.. trade.filled_qty )
+      loger.save(' trade.order_num '.. trade.order_num )
+      loger.save(' trade.trans_id '.. trade.trans_id )
+       
+      loger.save(' OnStopOrder end' )
+   end
+
+
+   
+
+   
+
+      -- Вызывается движком при полном, или частичном ИСПОЛНЕНИИ ЗАЯВКИ
+   function SE_OnExecutionOrder(order)
+      -- Здесь Ваш код для действий при полном, или частичном исполнении заявки
+      -- ...
+      -- Выводит сообщение
+      loger.save('SE_OnExecutionOrder() БАЛАНС заявки №'..order.order_num..' изменился с '..(order.qty - (order.last_execution_count or 0))..' на '..order.balance)
+   end
+
+   -- успешное ВЫПОЛНЕНИИ ТРАНЗАКЦИИ
+   function SE_OnTransOK(trans)
+      -- Здесь Ваш код для действий при успешном выполнении транзакции
+      -- ...
+      -- Выводит сообщение
+      loger.save('SE_OnTransOK() Транзакция №'..trans.trans_id..' УСПЕШНО выполнена')
+   end
 
 
    function OnTransReply(trans_reply) 
-      if trans_reply.trans_id == trans_id then 
-         trans_Status = trans_reply.status; 
-         trans_result_msg  = trans_reply.result_msg;
-      end;
+
+
+      loger.save('  OnTransReply start '  ) 
+
+      loger.save(' OnTransReply.trans_id '.. trans_reply.trans_id ) 
+      loger.save(' OnTransReply.status '.. trans_reply.status  ) 
+      loger.save(' OnTransReply.balance '.. trans_reply.balance  )   
+      loger.save(' OnTransReply.order_num '..trans_reply.order_num  ) 
+      loger.save(' OnTransReply.price '.. trans_reply.price  ) 
+      loger.save(' OnTransReply.server_trans_id '..trans_reply.server_trans_id  ) 
+      loger.save(' OnTransReply.result_msg'.. trans_reply.result_msg ) 
+      
+      loger.save('  OnTransReply end '  ) 
+
+
+    --  deleteBids.transCallback(trans_reply);
    end;
      
 
@@ -215,4 +337,35 @@ basis = 9
    end;
     
 
-   
+   -- Функция проверяет установлен бит, или нет (возвращает true, или false)
+  function CheckBit(flags, _bit)
+   -- Проверяет, что переданные аргументы являются числами
+   if type(flags) ~= "number" then loger.save("Ошибка!!! Checkbit: 1-й аргумент не число!") end
+   if type(_bit) ~= "number" then loger.save("Ошибка!!! Checkbit: 2-й аргумент не число!") end
+ 
+   if _bit == 0 then _bit = 0x1
+   elseif _bit == 1 then _bit = 0x2
+   elseif _bit == 2 then _bit = 0x4
+   elseif _bit == 3 then _bit  = 0x8
+   elseif _bit == 4 then _bit = 0x10
+   elseif _bit == 5 then _bit = 0x20
+   elseif _bit == 6 then _bit = 0x40
+   elseif _bit == 7 then _bit  = 0x80
+   elseif _bit == 8 then _bit = 0x100
+   elseif _bit == 9 then _bit = 0x200
+   elseif _bit == 10 then _bit = 0x400
+   elseif _bit == 11 then _bit = 0x800
+   elseif _bit == 12 then _bit  = 0x1000
+   elseif _bit == 13 then _bit = 0x2000
+   elseif _bit == 14 then _bit  = 0x4000
+   elseif _bit == 15 then _bit  = 0x8000
+   elseif _bit == 16 then _bit = 0x10000
+   elseif _bit == 17 then _bit = 0x20000
+   elseif _bit == 18 then _bit = 0x40000
+   elseif _bit == 19 then _bit = 0x80000
+   elseif _bit == 20 then _bit = 0x100000
+   end
+ 
+   if bit.band(flags,_bit ) == _bit then return true
+   else return false end
+end

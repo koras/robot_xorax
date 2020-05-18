@@ -24,7 +24,14 @@
           
    setting.SPRED_LONG_BUY_UP = 0.02; -- условия; не покупаем если здесь ранее мы купили | вверх диапозон;
    setting.SPRED_LONG_BUY_down = 0.01; -- условия; не покупаем если здесь ранее мы купили | вниз диапозон
+
+
+
+   setting.take_profit_offset = 0.01;   
+   setting.take_profit_spread = 0.01;  
           
+ 
+   setting.INTERVAL = INTERVAL_M1;
          
    setting.number_of_candles = 0; -- current a candle
    setting.old_number_of_candles = 0; -- old current candle

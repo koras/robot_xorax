@@ -19,14 +19,14 @@ local word = {
  
 	['profit_range'] = "Profit range:",
 	
-	['start'] = "      START",
+	['start'] = "           BABLO",
 	['current_limit'] = "Current limit:",
 	['Use_contract_limit'] = "Use contract:",
 	['current_limit_minus'] = "          Minus",
 	['current_limit_plus'] = "          Add", 
 
-	['finish'] = "      STOP",
-	['pause'] = "      PAUSE",
+	['finish'] = "           STOP",
+	['pause'] = "           PAUSE",
 	['pause2'] = "           PAUSE",
 
 
@@ -34,6 +34,9 @@ local word = {
 	['buy_by_hand'] = "        BUY (now)",
 	['sell_by_hand'] = "        MODE",
 
+	['take_profit_offset'] = "take profit offset:",
+	['take_profit_spread'] = "take profit spread:",
+	['on'] = "          ON      ",
 
 
 	['on'] = "          ON      ",
@@ -42,7 +45,7 @@ local word = {
 
 };
  
- 
+-- OFFSET SPREAD
  
 local function show()  
 	CreateNewTable(); 
@@ -97,6 +100,8 @@ function current_limit()
 	SetCell(t_id, 13, 0,  word.Use_contract_limit); 
 
 	SetCell(t_id, 17, 0,  word.profit_range); 
+	SetCell(t_id, 19, 0,  word.take_profit_offset); 
+	SetCell(t_id, 21, 0,  word.take_profit_spread); 
 
 	 
 end;
@@ -105,20 +110,28 @@ function current_limit_plus()
 	SetCell(t_id, 13, 2,  word.current_limit_plus); 
 
 	SetCell(t_id, 17, 2,  word.current_limit_plus); 
+	SetCell(t_id, 19, 2,  word.current_limit_plus); 
+	SetCell(t_id, 21, 2,  word.current_limit_plus); 
 	Green(t_id,11, 2);
 	Green(t_id,13, 2);
 
 	Green(t_id,17, 2);
+	Green(t_id,19, 2);
+	Green(t_id,21, 2);
 end;
 function current_limit_minus()  
 	SetCell(t_id, 11, 3,  word.current_limit_minus); 
 	SetCell(t_id, 13, 3,  word.current_limit_minus); 
  
 	SetCell(t_id, 17, 3,  word.current_limit_minus); 
+	SetCell(t_id, 19, 3,  word.current_limit_minus); 
+	SetCell(t_id, 21, 3,  word.current_limit_minus); 
 	Red(t_id,11, 3);
 	Red(t_id,13, 3);
 
 	Red(t_id,17, 3);
+	Red(t_id,19, 3);
+	Red(t_id,21, 3);
 end;
 
  
@@ -127,6 +140,11 @@ function use_contract_limit()
 	SetCell(t_id, 13, 1,   tostring(setting.use_contract)); 
  
 	SetCell(t_id, 17, 1,   tostring(setting.profit_range)); 
+	SetCell(t_id, 19, 1,   tostring(setting.take_profit_offset)); 
+	SetCell(t_id, 21, 1,   tostring(setting.take_profit_spread)); 
+
+
+ 
 end;
 
  
@@ -217,7 +235,7 @@ init.create = true;
 	t_id = AllocTable();	 
 
 
-	AddColumn(t_id, 0, word.status , true, QTABLE_STRING_TYPE, 15);
+	AddColumn(t_id, 0, word.status , true, QTABLE_STRING_TYPE, 25);
 	AddColumn(t_id, 1, word.buy, true, QTABLE_STRING_TYPE, 20);
 	AddColumn(t_id, 2, word.sell, true, QTABLE_STRING_TYPE, 20); 
 	AddColumn(t_id, 3, word.close_positions, true,QTABLE_STRING_TYPE, 20); 
@@ -323,8 +341,6 @@ function event_callback_message (t_id, msg, par1, par2)
 
 
 
-
- 
  
 
 
@@ -337,6 +353,38 @@ function event_callback_message (t_id, msg, par1, par2)
 	if par1 == 17 and par2 == 3  and  msg == 1 then
 		if setting.profit_range > 0.01 then
 			setting.profit_range = setting.profit_range - 0.01;
+			use_contract_limit();
+			end; 
+		return;
+	end;
+
+
+	if par1 == 19 and par2 == 2  and  msg == 1 then
+		setting.take_profit_offset = setting.take_profit_offset + 0.01; 
+		use_contract_limit();
+		return;
+	end;
+
+	if par1 == 19 and par2 == 3  and  msg == 1 then
+		if setting.take_profit_offset > 0.01 then
+			setting.take_profit_offset = setting.take_profit_offset - 0.01;
+			use_contract_limit();
+			end; 
+		return;
+	end;
+
+
+
+
+	if par1 == 21 and par2 == 2  and  msg == 1 then
+		setting.take_profit_spread = setting.take_profit_spread + 0.01; 
+		use_contract_limit();
+		return;
+	end;
+
+	if par1 == 21 and par2 == 3  and  msg == 1 then
+		if setting.take_profit_spread > 0.01 then
+			setting.take_profit_spread = setting.take_profit_spread - 0.01;
 			use_contract_limit();
 			end; 
 		return;
