@@ -137,7 +137,7 @@ end;
 
         local checkRange = true;
         if setting.buy == false  then
-                signalShowLog.addSignal(dt, 4, true, price);
+                signalShowLog.addSignal(datetime, 4, true, price);
                 checkRange = false; 
         end;
         return checkRange;

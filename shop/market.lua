@@ -70,7 +70,7 @@ function long(price, datetime, levelLocal , event) -- решение
             -- лимит по заявкам
             limitBuy = contitionMarket.getLimitBuy(datetime);
             -- лимит по заявкам
-            getFailBuy = contitionMarket.getFailBuy(datetime);
+            getFailBuy = contitionMarket.getFailBuy(price,datetime);
 
             
 
