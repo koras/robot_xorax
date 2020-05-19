@@ -34,6 +34,8 @@ local wordTitleTableBids = {
 	['trans_id'] = "trans_id",
 	['status'] = "Status", 
 	['type'] = "type", 
+	 
+	['contract'] = "count",
 	['emulation'] = "emulation",
 	['buy_contract'] = 'buy contract',
 	['title'] = 'Current bids  sell/buy'
@@ -106,6 +108,7 @@ end;
 		SetCell(t_id_TableBids, b, 1, tostring(bid.price));  
 		SetCell(t_id_TableBids, b, 2, tostring(time));  
 		SetCell(t_id_TableBids, b, 3, tostring(bid.trans_id)); 
+		SetCell(t_id_TableBids, b, 4, tostring(bid.contract)); 
 		SetCell(t_id_TableBids, b, 5, tostring(bid.type)); 
 		SetCell(t_id_TableBids, b, 6, tostring(bid.buy_contract)); 
 
@@ -164,7 +167,7 @@ function CreateNewTableBids()
 	AddColumn(t_id_TableBids, 1, wordTitleTableBids.price, true, QTABLE_STRING_TYPE, 10);
 	AddColumn(t_id_TableBids, 2,  wordTitleTableBids.time, true, QTABLE_STRING_TYPE, 10); 
 	AddColumn(t_id_TableBids, 3,  wordTitleTableBids.trans_id, true,QTABLE_STRING_TYPE, 15); 
-	AddColumn(t_id_TableBids, 4,  wordTitleTableBids.status, true,QTABLE_STRING_TYPE, 10); 
+	AddColumn(t_id_TableBids, 4,  wordTitleTableBids.contract, true,QTABLE_STRING_TYPE, 10); 
 	AddColumn(t_id_TableBids, 5,  wordTitleTableBids.type, true,QTABLE_STRING_TYPE, 10); 
 	AddColumn(t_id_TableBids, 6,  wordTitleTableBids.buy_contract, true,QTABLE_STRING_TYPE, 15); 
 	AddColumn(t_id_TableBids, 7,  wordTitleTableBids.emulation, true,QTABLE_STRING_TYPE, 15); 

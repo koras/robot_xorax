@@ -15,12 +15,16 @@
    setting.sellTable = {};
    setting.close_positions = false; 
           
-   setting.count_buyin_a_row =  0; -- покупки подряд
-   setting.current_price =  0; -- покупки подряд
+   setting.count_buyin_a_row =  0; -- покупок сколько было за торговую сессию
+   setting.current_price =  0; -- текщая цена
          
    setting.count_buy = 0; -- сколько куплено
    setting.count_sell = 0; -- сколько продано
-   setting.limit_count_buy = 0; -- лимит на покупку
+   setting.emulation_count_buy = 0; -- сколько куплено(режим эмуляции)
+   setting.emulation_count_sell = 0; -- сколько продано (режим эмуляции)
+
+
+   setting.limit_count_buy = 0; -- лимит на покупку ( сколько контрактов купили на текущий момент )
           
    setting.SPRED_LONG_BUY_UP = 0.02; -- условия; не покупаем если здесь ранее мы купили | вверх диапозон;
    setting.SPRED_LONG_BUY_down = 0.01; -- условия; не покупаем если здесь ранее мы купили | вниз диапозон

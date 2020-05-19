@@ -113,7 +113,7 @@ function commonBUY(price ,dt)
     -- текущаая свеча
     setting.candles_buy_last = setting.number_of_candles;
     setting.count_buyin_a_row = setting.count_buyin_a_row + 1; -- сколько раз подряд купили и не продали
-    setting.limit_count_buy = setting.limit_count_buy + 1; -- отметка для лимита
+    setting.limit_count_buy = setting.limit_count_buy + setting.use_contract; -- отметка для лимита
     
     signalShowLog.addSignal(dt, 7, false, price);
 end 
@@ -159,10 +159,7 @@ function sellTransaction(priceLocal,dt)
 
             signalShowLog.addSignal(dt, 9, false, p); 
 
-            signalShowLog.addSignal(dt, 9, false, trans_id_sell); 
-
             loger.save('trans_id_sell = ' ..  trans_id_sell ); 
-
 
             setting.sellTable[(#setting.sellTable+1)] = {
                                                             ['price'] = p,
