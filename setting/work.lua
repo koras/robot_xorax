@@ -20,6 +20,10 @@
          
    setting.count_buy = 0; -- сколько куплено
    setting.count_sell = 0; -- сколько продано
+   setting.emulation_count_buy = 0; -- сколько куплено(режим эмуляции)
+   setting.emulation_count_sell = 0; -- сколько продано (режим эмуляции)
+
+
    setting.limit_count_buy = 0; -- лимит на покупку ( сколько контрактов купили на текущий момент )
           
    setting.SPRED_LONG_BUY_UP = 0.02; -- условия; не покупаем если здесь ранее мы купили | вверх диапозон;

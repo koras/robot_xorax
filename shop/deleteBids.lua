@@ -21,20 +21,24 @@ local contitionMarket = dofile(getScriptPath() .. "\\shop\\contition_shop.lua");
 
 -- продажа в режиме симуляции
 function callSELLEmulation(result)
+
     if #setting.sellTable > 0 then
         local buyContractSell = 0;
         local deleteKeySell = 0;
         
             for sellT = 1 ,  #setting.sellTable do 
     
-                if  setting.sellTable[sellT].type == 'sell' and  result.close + setting.profit_infelicity >= setting.sellTable[sellT].price   then 
+                if  setting.sellTable[sellT].type == 'sell' and   
+                setting.sellTable[sellT].emulation == true and  
+                result.close + setting.profit_infelicity >= setting.sellTable[sellT].price   then 
+                    
                         local price = result.price;
                         setting.count_buyin_a_row = 0; 
                         setting.SPRED_LONG_LOST_SELL = price;
                         setting.SPRED_LONG_TREND_DOWN  = setting.SPRED_LONG_TREND_DOWN - setting.SPRED_LONG_TREND_DOWN_SPRED;
-    
+                   
                         -- сколько исполнилось продаж
-                        setting.count_sell =  setting.count_sell + 1; 
+                        setting.emulation_count_sell =  setting.emulation_count_sell + 1; 
                         setting.profit =  setting.sellTable[sellT].price - setting.sellTable[sellT].buy_contract + setting.profit;
     
                         signalShowLog.addSignal(result.datetime, 8, false, setting.sellTable[sellT].price  + setting.profit_infelicity); 
