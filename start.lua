@@ -48,16 +48,8 @@ local market = dofile(getScriptPath() .. "\\shop\\market.lua");
 local deleteBids = dofile(getScriptPath() .. "\\shop\\deleteBids.lua");
  
   
-     
-  setting_scalp = true; -- на тихий рынок
-  
    
-   --require (modname)
-   
-   log =  "take_log.log"
-   
-   Run               = true;  
-     
+Run  = true;  
 
 function init()
 
@@ -112,8 +104,7 @@ basis = 9
     
 
    function  update()
-      control.stats()
-
+      control.stats();
       market.setLitmitBid();
       use_contract_limit();
    end
@@ -125,18 +116,17 @@ basis = 9
 
      signalShowLog.CreateNewTableLogEvent();
 
-      label.init(setting.tag);
-      loger.save(  " start ");
+ 
+      loger.save("start log");
+
       statsPanel.show();
-
       interfaceBids.show();
-
       update();
       getPrice();
       control.show(); 
 
  
-       local Price = false;
+      local Price = false;
           
       while Run do 
          update();
@@ -162,11 +152,8 @@ basis = 9
          deleteBids.transCallback(order);
         -- trans_id
       end;
-
-
+      
       if bit.band(order.flags,1) + bit.band(order.flags,2) == 0  then loger.save("исполнена loger.save(") end;
-      loger.save('OnOrder' )
-
    end
 
 

@@ -28,11 +28,11 @@ local DIRECT = 'LONG';
 -- local LIMIT = 1; -- limit order
  
 
-local function setDirect(localDirect) -- решение
+local function setDirect(localDirect)  
     DIRECT = localDirect;
 end
 
-local function setLitmitBid() -- решение
+local function setLitmitBid()  
     LIMIT = setting.LIMIT_BID;
 end
 -- price текущая цена
@@ -45,17 +45,13 @@ end
 
 local level = 1;
   
-function getSetting()
-    if setting_scalp then
-        SPRED_LONG_BUY = 0.03; -- покупаем если в этом диапозоне небыло покупок
-    end   
-end   
+
 
 
 
 -- автоматическая торговля
 function long(price, datetime, levelLocal , event) -- решение 
-            getSetting();
+
             getfractal(price);
 
             -- подсчитаем скольк заявок у нас на продажу

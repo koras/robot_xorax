@@ -155,6 +155,6 @@ M.callSELLEmulation   = callSELLEmulation;
 M.bid   = bid ;
 M.decision = decision;
 M.setDirect = setDirect;
-M.setLitmitBid = setLitmitBid;
+
  
 return M

@@ -2,9 +2,7 @@
 local M = {}
 
 local Labels = {};
-local Settings = {
-    tag="my_br"
-};
+
 local minute = '';
 local hour = '';
  
@@ -85,18 +83,13 @@ local function set(Operation, Price , datetime, count, textInfo)
            label_params['TRANSPARENT_BACKGROUND'] = 1; 
            label_params['FONT_FACE_NAME'] = "Webdings"; 
            label_params['FONT_HEIGHT'] = 14;
-
           label_params['HINT'] = 'Price ' .. Price .. " \n "..textInfo
 
 
         
-      -- loger.save(Operation.. '  '.. Settings['tag'].. '  '..  Price .. " ������� ��� ������� ���� � ����� - "..     label_params['DATE'] ..'   '..label_params['TIME'].. '  '.. label_params['IMAGE_PATH'] )
+      -- loger.save(Operation.. '  ' .. '  '..  Price .. " ������� ��� ������� ���� � ����� - "..     label_params['DATE'] ..'   '..label_params['TIME'].. '  '.. label_params['IMAGE_PATH'] )
        -- loger.save(  datetime.hour ..'   '..datetime.min.. '  '.. '00' )
-
-          AddLabel(Settings['tag'], label_params);
- 
-	 
-	  
+          AddLabel(setting.tag, label_params);
 end
 
   
@@ -107,9 +100,6 @@ end
 
 local function init(tag)
     loger.save( tag..'   tag ')
-
-    Settings['tag'] = tag;
-	  
 end
 
  
