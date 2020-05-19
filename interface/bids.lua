@@ -79,6 +79,7 @@ function updateBidsClear()
 		SetCell(t_id_TableBids, b, 1, tostring(''));  
 		SetCell(t_id_TableBids, b, 2, tostring(''));  
 		SetCell(t_id_TableBids, b, 3, tostring('')); 
+		SetCell(t_id_TableBids, b, 4, tostring('')); 
 		SetCell(t_id_TableBids, b, 5, tostring('')); 
 		SetCell(t_id_TableBids, b, 6, tostring('')); 
 		SetCell(t_id_TableBids, b, 7, tostring('')); 
