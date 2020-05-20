@@ -71,6 +71,7 @@ local function getSignal(tag, callback)
 
                   setting.current_price = bars_temp[j-1].close;
                   local bar = bars_temp[j-1];
+                  
                   if bigCandle <= i  then
                     bigCandle  = i; 
                     -- candle_current_high - setting.candle_current_low

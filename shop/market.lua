@@ -17,6 +17,7 @@ local interfaceBids = dofile(getScriptPath() .. "\\interface\\bids.lua");
 local contitionMarket = dofile(getScriptPath() .. "\\shop\\contition_shop.lua");
 local deleteBids = dofile(getScriptPath() .. "\\shop\\deleteBids.lua");
  
+local control = dofile(getScriptPath() .. "\\interface\\control.lua");
  
 
 M = {};
@@ -53,6 +54,7 @@ local level = 1;
 function long(price, datetime, levelLocal , event) -- решение 
 
             getfractal(price);
+ 
 
             -- подсчитаем скольк заявок у нас на продажу
             -- проверём, покупали здесь или нет, в этом промежутке
@@ -64,16 +66,26 @@ function long(price, datetime, levelLocal , event) -- решение
              -- Падение рынка
             failMarket = contitionMarket.getFailMarket(price, datetime) ;
             -- лимит по заявкам
-            limitBuy = contitionMarket.getLimitBuy(datetime);
-            -- лимит по заявкам
+            limitBuy = contitionMarket.getLimitBuy(datetime); 
+            -- блокировка покупки при падении рынка
             getFailBuy = contitionMarket.getFailBuy(price,datetime);
+            -- Запрет на покупку (блокируется кнопкой)
+            buyButtonBlock = contitionMarket.buyButtonBlock(price,datetime);
 
-            
 
-            if limitBuy and checkRangeBuy and checkRangeSell and randCandle  and failMarket and getFailBuy then
+            if limitBuy and checkRangeBuy and checkRangeSell and randCandle  and failMarket and getFailBuy and buyButtonBlock then
                 setting.SPRED_LONG_TREND_DOWN  = setting.SPRED_LONG_TREND_DOWN + setting.SPRED_LONG_TREND_DOWN_SPRED;
                 setting.SPRED_LONG_TREND_DOWN_LAST_PRICE = price; -- записываем последнюю покупку
+                
+                -- сколько подряд покупок было
+                setting.each_to_buy_step = setting.each_to_buy_step + 1;
+         
+
+
                     callBUY(price,  datetime);
+                    -- обновляем изменения в панели управления
+                    control.use_contract_limit();
+
                     signalShowLog.addSignal(datetime, 10, false, price); 
             end;  
               
@@ -122,7 +134,7 @@ function callBUY(price ,dt)
     -- ставим заявку на покупку выше на 0.01
     price  = price + setting.profit_infelicity; -- и надо снять заявку если не отработал
  
-   
+
     commonBUY(price ,dt);
  
     if setting.emulation == false then

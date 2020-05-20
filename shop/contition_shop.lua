@@ -9,6 +9,7 @@
 local loger = dofile(getScriptPath() .. "\\modules\\loger.lua");
 local label = dofile(getScriptPath() .. "\\modules\\drawLabel.lua"); 
 local signalShowLog = dofile(getScriptPath() .. "\\interface\\signalShowLog.lua");
+local control = dofile(getScriptPath() .. "\\interface\\control.lua");
 
 M = {};
   
@@ -67,12 +68,12 @@ function getRandSell(price)
 
 
  -- Лимит заявок на покупку
-function getLimitBuy(dt)
+function getLimitBuy(datetime)
 
         local checkRange = true;
            if setting.LIMIT_BID <= setting.limit_count_buy  then
 
-                signalShowLog.addSignal(dt, 16, false, setting.limit_count_buy);
+                signalShowLog.addSignal(datetime, 16, false, setting.limit_count_buy);
                 checkRange = false; 
         end;  
         return checkRange;
@@ -83,22 +84,21 @@ end;
  -- Не покупаем если промежуток на свече соответствуют высокой цене
  function getRandCandle(price, datetime)
 
-       -- local Gap = setting.profit_range - 0.02
-        local Gap = setting.profit_range ;
+
 
 
         local range_candle = setting.candle_current_high - setting.candle_current_low;
 
 
         local checkRange = true;
-                if range_candle < Gap  then 
+                if range_candle < setting.profit_range  then 
                         -- свечка меньше текущего профита 
 	                --	[13] = 'Текущая свеча меньше преполагаемого профита, низкая волатильность',   
                         checkRange = false;
                         signalShowLog.addSignal(datetime, 13, false, range_candle);
                 end;  
 
-                local priceMinimum =  setting.candle_current_high - Gap  ;
+                local priceMinimum =  setting.candle_current_high - setting.profit_range  ;
 
                 if checkRange == true and priceMinimum > price + setting.profit_infelicity    then
                  
@@ -119,7 +119,6 @@ end;
  function getFailMarket(price, datetime) 
  
 local checkRange = true;
-
 if setting.SPRED_LONG_TREND_DOWN_LAST_PRICE == 0  or  
         setting.SPRED_LONG_TREND_DOWN_LAST_PRICE - setting.SPRED_LONG_TREND_DOWN  > price  - setting.profit_infelicity  or 
         setting.SPRED_LONG_TREND_DOWN_LAST_PRICE  < price  then
@@ -135,16 +134,30 @@ end;
 
  -- Запрет на покупку
  function getFailBuy(price, datetime) 
-
         local checkRange = true;
-        if setting.buy == false  then
-                signalShowLog.addSignal(datetime, 4, true, price);
-                checkRange = false; 
-        end;
+                if setting.each_to_buy_step >= setting.each_to_buy_to_block then
+                        -- активация кнопки блокировки покупки
+                        signalShowLog.addSignal(datetime, 18, true, price);
+                        control.buy_stop()
+                        checkRange = false; 
+                end;
         return checkRange;
 end;
 
 
+
+function buyButtonBlock(price, datetime) 
+
+        local checkRange = true;
+                if setting.buy == false  then
+                        signalShowLog.addSignal(datetime, 4, true, price);
+                        checkRange = false; 
+                end;
+        return checkRange;
+end;
+
+ 
+M.buyButtonBlock = buyButtonBlock;
 M.getFailBuy = getFailBuy;
 M.getLimitBuy = getLimitBuy;
 M.getFailMarket = getFailMarket;

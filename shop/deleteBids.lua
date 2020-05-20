@@ -104,6 +104,13 @@ function deleteBuy(result, buy_contract)
         if setting.sellTable[searchBuy].type == 'buy' and setting.sellTable[searchBuy].price == ( buy_contract + setting.profit_infelicity)  then 
                 -- удаляем только 1 элемент
                 setting.limit_count_buy = setting.limit_count_buy - 1;
+
+
+               
+                -- отрабатываем падение рынка, разблокировка
+                setting.each_to_buy_step = 0;
+              
+
                 deleteKey = searchBuy; 
                 buyPrice = setting.sellTable[searchBuy].price;
         end;

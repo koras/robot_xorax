@@ -15,40 +15,36 @@ local word = {
 	['Buyplus'] = "Buy",
 	['sell'] = "",
 	['close_positions'] = "",
-
- 
 	['profit_range'] = "Profit range:",
-	
 	['start'] = "           BABLO",
 	['current_limit'] = "Current limit:",
 	['Use_contract_limit'] = "Use contract:",
 	['current_limit_minus'] = "          Minus",
 	['current_limit_plus'] = "          Add", 
-
 	['finish'] = "           PAUSE",
 	['pause'] = "          CONTINUE",
 	['pause2'] = "           PAUSE",
-
 	['emulation'] = "     Emulation",
 	['buy_by_hand'] = "        BUY (now)",
 	['sell_by_hand'] = "        MODE",
-
 	['take_profit_offset'] = "take profit offset:",
 	['take_profit_spread'] = "take profit spread:",
 	['on'] = "          ON      ",
 
-
 	['on'] = "          ON      ",
 	['off'] = "          OFF     ",
 	['Trading_Bot_Control_Panel'] = "Trading Bot Control Panel",
-
+	
+	['block_buy'] = "buy / block",
+	['SPRED_LONG_TREND_DOWN'] = "trend down", -- рынок падает, увеличиваем растояние между покупками
+	['SPRED_LONG_TREND_DOWN_SPRED'] = "down market range", -- на сколько увеличиваем растояние
 };
- 
+  
 -- OFFSET SPREAD
  
 local function show()  
 	CreateNewTable(); 
-	for i = 1, 25 do
+	for i = 1, 35 do
 		InsertRow(t_id, -1);
 	 end;
 	for i = 0, 3 do
@@ -101,7 +97,10 @@ function current_limit()
 	SetCell(t_id, 17, 0,  word.profit_range); 
 	SetCell(t_id, 19, 0,  word.take_profit_offset); 
 	SetCell(t_id, 21, 0,  word.take_profit_spread); 
-
+	SetCell(t_id, 25, 0,  word.block_buy); 
+	SetCell(t_id, 26, 0,  word.SPRED_LONG_TREND_DOWN); 
+	SetCell(t_id, 27, 0,  word.SPRED_LONG_TREND_DOWN_SPRED); 
+ 
 	 
 end;
 function current_limit_plus()  
@@ -111,12 +110,22 @@ function current_limit_plus()
 	SetCell(t_id, 17, 2,  word.current_limit_plus); 
 	SetCell(t_id, 19, 2,  word.current_limit_plus); 
 	SetCell(t_id, 21, 2,  word.current_limit_plus); 
+	SetCell(t_id, 25, 2,  word.current_limit_plus); 
+	SetCell(t_id, 26, 2,  word.current_limit_plus); 
+	SetCell(t_id, 27, 2,  word.current_limit_plus); 
 	Green(t_id,11, 2);
 	Green(t_id,13, 2);
 
 	Green(t_id,17, 2);
 	Green(t_id,19, 2);
 	Green(t_id,21, 2);
+	Green(t_id,25, 2);
+	Green(t_id,26, 2);
+	Green(t_id,27, 2);
+ 
+ 
+
+
 end;
 function current_limit_minus()  
 	SetCell(t_id, 11, 3,  word.current_limit_minus); 
@@ -125,24 +134,33 @@ function current_limit_minus()
 	SetCell(t_id, 17, 3,  word.current_limit_minus); 
 	SetCell(t_id, 19, 3,  word.current_limit_minus); 
 	SetCell(t_id, 21, 3,  word.current_limit_minus); 
+	SetCell(t_id, 25, 3,  word.current_limit_minus); 
+	SetCell(t_id, 26, 3,  word.current_limit_minus); 
+	SetCell(t_id, 27, 3,  word.current_limit_minus); 
 	Red(t_id,11, 3);
 	Red(t_id,13, 3);
 
 	Red(t_id,17, 3);
 	Red(t_id,19, 3);
 	Red(t_id,21, 3);
+	Red(t_id,25, 3);
+	Red(t_id,26, 3);
+	Red(t_id,27, 3);
 end;
 
  
 function use_contract_limit()  
-	SetCell(t_id, 11, 1,   tostring( setting.LIMIT_BID ) .. '/'.. setting.limit_count_buy .. '/'.. setting.use_contract ..' '); 
+	SetCell(t_id, 11, 1,   tostring( setting.LIMIT_BID ) .. '/'.. setting.limit_count_buy .. '/'.. setting.use_contract ); 
 	SetCell(t_id, 13, 1,   tostring(setting.use_contract)); 
  
 	SetCell(t_id, 17, 1,   tostring(setting.profit_range)); 
 	SetCell(t_id, 19, 1,   tostring(setting.take_profit_offset)); 
 	SetCell(t_id, 21, 1,   tostring(setting.take_profit_spread)); 
-
-
+-- потом только решение за человеком / сколько подряд раз уже купили
+	SetCell(t_id, 25, 1,   tostring( setting.each_to_buy_to_block ) .. '/'.. setting.each_to_buy_step ); 
+	SetCell(t_id, 26, 1,   tostring( setting.SPRED_LONG_TREND_DOWN )); 
+	SetCell(t_id, 27, 1,   tostring( setting.SPRED_LONG_TREND_DOWN_SPRED )); 
+ 
  
 end;
 
@@ -208,6 +226,8 @@ end;
 
 function buy_process()
 	setting.buy = true;
+	-- при падении рынка обнуляем продажы
+	setting.each_to_buy_step = 0;
 	SetCell(t_id, 2, 1,  word.on)
 	Green(t_id,1, 1) 
 	Green(t_id,2, 1) 
@@ -389,15 +409,64 @@ function event_callback_message (t_id, msg, par1, par2)
 		return;
 	end;
 
+
+	
+	-- блокировка лимита при падении
+	if par1 == 25 and par2 == 2  and  msg == 1 then
+		setting.each_to_buy_to_block = setting.each_to_buy_to_block + 1; 
+		use_contract_limit();
+		return;
+	end;
+	if par1 == 25 and par2 == 3  and  msg == 1 then
+		if setting.each_to_buy_to_block > 1 then
+			setting.each_to_buy_to_block = setting.each_to_buy_to_block - 1;
+			use_contract_limit();
+			end; 
+		return;
+	end;
 	 
---	loger.save(msg ..'  '  .. par1 .. '   '.. par2..' QTABLE_LBUTTONUP '.. QTABLE_LBUTTONUP);
+	
+	
+	-- рынок падает, увеличиваем растояние между покупками
+	if par1 == 26 and par2 == 2  and  msg == 1 then
+		setting.SPRED_LONG_TREND_DOWN = setting.SPRED_LONG_TREND_DOWN + 0.01; 
+		use_contract_limit();
+		return;
+	end;
+	if par1 == 26 and par2 == 3  and  msg == 1 then
+		if setting.SPRED_LONG_TREND_DOWN > 0.01 then
+			setting.SPRED_LONG_TREND_DOWN = setting.SPRED_LONG_TREND_DOWN - 0.01;
+			use_contract_limit();
+			end; 
+		return;
+	end;
+	 
+	
+	
+	-- на сколько увеличиваем растояние при падении рынка между покупками
+	if par1 == 27 and par2 == 2  and  msg == 1 then
+		setting.SPRED_LONG_TREND_DOWN_SPRED = setting.SPRED_LONG_TREND_DOWN_SPRED + 0.01; 
+		use_contract_limit();
+		return;
+	end;
+	if par1 == 27 and par2 == 3  and  msg == 1 then
+		if setting.SPRED_LONG_TREND_DOWN_SPRED > 1 then
+			setting.SPRED_LONG_TREND_DOWN_SPRED = setting.SPRED_LONG_TREND_DOWN_SPRED - 0.01;
+			use_contract_limit();
+			end; 
+		return;
+	end;
+	 
+
+ 
+	 
 end;
 
  
 
- function deleteTable()  -- �������
+function deleteTable()
 	DestroyTable(t_id)
- end;
+end;
 
  
 M.stats =  stats;
