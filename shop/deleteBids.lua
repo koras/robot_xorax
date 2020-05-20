@@ -73,8 +73,8 @@ function calculateProfit(value)
     local clearProfit =  value.price - value.buy_contract
     clearProfit = clearProfit * value.contract;
     setting.profit = clearProfit + setting.profit;
-                    -- сколько исполнилось продаж
-                    setting.count_sell =  setting.count_sell + 1; 
+    -- сколько исполнилось продаж
+    setting.count_sell =  setting.count_sell + 1; 
 end
 
 --реальные продажы
@@ -92,8 +92,6 @@ function deleteSell(result)
                     setting.count_contract_sell = setting.count_contract_sell + setting.sellTable[sellT].contract;
  
 
-
- 
                     calculateProfit(setting.sellTable[sellT]);
 
                     signalShowLog.addSignal(result.datetime, 8, false, setting.sellTable[sellT].price); 
