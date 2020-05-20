@@ -469,7 +469,8 @@ function deleteTable()
 end;
 
  
-M.use_contract_limit=  use_contract_limit;
+M.buy_stop =  buy_stop;
+M.use_contract_limit =  use_contract_limit;
 M.stats =  stats;
 M.deleteTable = deleteTable;
 M.CreateTable = CreateTable;
