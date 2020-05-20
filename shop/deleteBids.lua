@@ -67,6 +67,15 @@ function callSELL(result)
     end;
 end
 
+ 
+function calculateProfit(value)
+-- подсчёт чистой прибыли 
+    local clearProfit =  value.price - value.buy_contract
+    clearProfit = clearProfit * value.contract;
+    setting.profit = clearProfit + setting.profit;
+                    -- сколько исполнилось продаж
+                    setting.count_sell =  setting.count_sell + 1; 
+end
 
 --реальные продажы
 function deleteSell(result)
@@ -79,13 +88,13 @@ function deleteSell(result)
                     setting.count_buyin_a_row = 0; 
                     setting.SPRED_LONG_LOST_SELL = price;
                     setting.SPRED_LONG_TREND_DOWN  = setting.SPRED_LONG_TREND_DOWN - setting.SPRED_LONG_TREND_DOWN_SPRED;
-
                     setting.limit_count_buy = setting.limit_count_buy - setting.sellTable[sellT].contract;
-
                     setting.count_contract_sell = setting.count_contract_sell + setting.sellTable[sellT].contract;
-                    -- сколько исполнилось продаж
-                    setting.count_sell =  setting.count_sell + 1; 
-                    setting.profit =  setting.sellTable[sellT].price - setting.sellTable[sellT].buy_contract + setting.profit;
+ 
+
+
+ 
+                    calculateProfit(setting.sellTable[sellT]);
 
                     signalShowLog.addSignal(result.datetime, 8, false, setting.sellTable[sellT].price); 
                     -- надо удалить контракт по которому мы покупали
