@@ -78,6 +78,8 @@ function deleteSell(result)
                     setting.SPRED_LONG_LOST_SELL = price;
                     setting.SPRED_LONG_TREND_DOWN  = setting.SPRED_LONG_TREND_DOWN - setting.SPRED_LONG_TREND_DOWN_SPRED;
 
+                    setting.limit_count_buy = setting.limit_count_buy - setting.sellTable[sellT].contract;
+
                     -- сколько исполнилось продаж
                     setting.count_sell =  setting.count_sell + 1; 
                     setting.profit =  setting.sellTable[sellT].price - setting.sellTable[sellT].buy_contract + setting.profit;
@@ -99,16 +101,12 @@ end
 
 function deleteBuy(result, buy_contract)
     local deleteKey = 0;
-    local buyPrice = 0;
+    
     for searchBuy = 1 ,  #setting.sellTable do 
         if setting.sellTable[searchBuy].type == 'buy' and setting.sellTable[searchBuy].price == ( buy_contract + setting.profit_infelicity)  then 
-                -- удаляем только 1 элемент
-                setting.limit_count_buy = setting.limit_count_buy - setting.sellTable[searchBuy].contract;
-                -- отрабатываем падение рынка, разблокировка
+                -- удаляем только 1 элемент 
                 setting.each_to_buy_step = 0;
-                 
                 deleteKey = searchBuy; 
-                buyPrice = setting.sellTable[searchBuy].price;
         end;
     end;
 
