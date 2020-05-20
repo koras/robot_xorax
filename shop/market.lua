@@ -139,6 +139,9 @@ function callBUY(price ,dt)
  
     if setting.emulation == false then
        local trans_id =  transaction.send("BUY", price, setting.use_contract, type);
+       setting.count_contract_buy = setting.count_contract_buy + setting.use_contract
+    else 
+        setting.emulation_count_contract_buy = setting.emulation_count_contract_buy + setting.use_contract
     end;
    
     sellTransaction(priceLocal,dt);  

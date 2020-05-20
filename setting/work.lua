@@ -18,10 +18,19 @@
    setting.count_buyin_a_row =  0; -- покупок сколько было за торговую сессию
    setting.current_price =  0; -- текщая цена
          
-   setting.count_buy = 0; -- сколько куплено
-   setting.count_sell = 0; -- сколько продано
-   setting.emulation_count_buy = 0; -- сколько куплено(режим эмуляции)
-   setting.emulation_count_sell = 0; -- сколько продано (режим эмуляции)
+   setting.count_buy = 0; -- сколько куплено раз
+   setting.count_sell = 0; -- сколько продано раз
+   setting.emulation_count_buy = 0; -- сколько куплено раз (режим эмуляции) 
+   setting.emulation_count_sell = 0; -- сколько продано раз (режим эмуляции)
+
+
+   setting.count_contract_buy = 0; -- сколько куплено контрактов за сессию
+   setting.count_contract_sell = 0; -- сколько продано контрактов за сессию
+   setting.emulation_count_contract_buy = 0; -- сколько куплено контрактов за сессию (режим эмуляции) 
+   setting.emulation_count_contract_sell = 0; -- сколько продано контрактов за сессию (режим эмуляции)
+
+
+
 
 
    setting.limit_count_buy = 0; -- лимит на покупку ( сколько контрактов купили на текущий момент )
