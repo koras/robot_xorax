@@ -22,14 +22,19 @@
 Если цена будет падать и робот купит 3 контракта подряд, не продав не одного контракта, то сработает блокировка покупки, пока вы сами не разблокируете руками. При продаже хотя-бы одного контракта, идёт сброс лимита в 0. Это сделано с первую очередь для того, чтобы ограничить убытки, если цена резко пойдёт вниз на пол доллара или больше и вы не успеете отключить робота 
 
 
+![Лимит на блокировку покупки](https://raw.githubusercontent.com/koras/robot_xorax/master/images/readme/scrin_work.PNG)
+ 
+
 
 скачать https://github.com/koras/robot_xorax/archive/master.zip 
+
 
 установка:
 - Необходимо указать номер счёта. Его надо прописать в файле setting/account.lua  ( setting.ACCOUNT="")
 - Прописать  текущий код бумаги setting.SEC_CODE в файле setting/account.lua 
 - В графике надо указать Идентификатор my_br
-
+ 
+![tag](https://raw.githubusercontent.com/koras/robot_xorax/master/images/readme/tag.PNG)
 
 Группы в телеграмм https://t.me/robots_xorax
 
