@@ -17,7 +17,7 @@ local interfaceBids = dofile(getScriptPath() .. "\\interface\\bids.lua");
 local contitionMarket = dofile(getScriptPath() .. "\\shop\\contition_shop.lua");
  
   
-
+ 
 
 -- продажа в режиме симуляции
 function callSELLEmulation(result)
@@ -36,7 +36,9 @@ function callSELLEmulation(result)
                         setting.count_buyin_a_row = 0; 
                         setting.SPRED_LONG_LOST_SELL = price;
                         setting.SPRED_LONG_TREND_DOWN  = setting.SPRED_LONG_TREND_DOWN - setting.SPRED_LONG_TREND_DOWN_SPRED;
-                   
+                    
+                        -- сколько продано контрактов за сессию (режим эмуляции)ю
+                        setting.emulation_count_contract_sell = setting.emulation_count_contract_sell + setting.sellTable[sellT].contract;
                         -- сколько исполнилось продаж
                         setting.emulation_count_sell =  setting.emulation_count_sell + 1; 
                         setting.profit =  setting.sellTable[sellT].price - setting.sellTable[sellT].buy_contract + setting.profit;
@@ -80,6 +82,7 @@ function deleteSell(result)
 
                     setting.limit_count_buy = setting.limit_count_buy - setting.sellTable[sellT].contract;
 
+                    setting.count_contract_sell = setting.count_contract_sell + setting.sellTable[sellT].contract;
                     -- сколько исполнилось продаж
                     setting.count_sell =  setting.count_sell + 1; 
                     setting.profit =  setting.sellTable[sellT].price - setting.sellTable[sellT].buy_contract + setting.profit;

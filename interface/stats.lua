@@ -91,8 +91,11 @@ end
 	 SetCell(t_stat, 6, 1,  tostring(setting.tag));
 
 	 SetCell(t_stat, 10, 1,  tostring(setting.profit));   
-	SetCell(t_stat, 11, 1,  tostring(setting.count_buy));  
-	SetCell(t_stat, 12, 1,  tostring(setting.count_sell));  
+ 
+
+
+	SetCell(t_stat, 11, 1,  tostring(setting.count_buy)..'/'..tostring(setting.count_contract_buy)..'/'..tostring(setting.emulation_count_contract_buy).."(e)");  
+	SetCell(t_stat, 12, 1,  tostring(setting.count_sell)..'/'..tostring(setting.count_contract_sell)..'/'..tostring(setting.emulation_count_contract_sell).."(e)");  
 	SetCell(t_stat, 13, 1,  tostring(setting.use_contract));  
 
 
