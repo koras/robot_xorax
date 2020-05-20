@@ -77,11 +77,15 @@ end;
 			end
 		end
 
-
+		if(_arr.event == 9) then
+			label.set('red', _arr.price , _arr.dt, 1, 'sell contract '.. 1);
+		end
+		if(_arr.event == 7) then
+			label.set("BUY" , _arr.price, _arr.dt, 0);
+		end
+		
 		if(showLabelPrice) then
-			if(_arr.event == 7) then
-			--	label.set('green', _arr.price , _arr.dt, 1, _arr.description);
-			end
+			 
 			if(_arr.event == 1) then
 				label.set('red', _arr.price , _arr.dt, 1, _arr.description);
 			end
@@ -89,6 +93,8 @@ end;
 			if(_arr.event == 8) then
 				label.set('sell', _arr.price , _arr.dt, 1, _arr.description);
 			end
+
+			
 		end
 	end 
 

@@ -101,7 +101,7 @@ function getfractal(price)
     if #setting.fractals_collection > 0 then 
         for k,v in setting.fractals_collection do 
 
-            label.set("k " , k);
+ 
 
         end
     end;
@@ -116,7 +116,7 @@ buy_contract  = 0;
 function commonBUY(price ,dt)
 
 
-    label.set("BUY" , price, dt, 0);
+     
     setting.count_buy = setting.count_buy + 1;
     -- текущаая свеча
     setting.candles_buy_last = setting.number_of_candles;
@@ -178,7 +178,7 @@ function sellTransaction(priceLocal,dt)
                                                             ['contract']=  setting.use_contract,
                                                             ['buy_contract']= priceLocal, -- стоимость продажи
                                                         };
-    label.set('red', p , dt, 1, 'sell contract '.. 1);
+    
 end;
 
  
