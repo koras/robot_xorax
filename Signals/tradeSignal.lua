@@ -22,14 +22,10 @@ local signalStrength = 0;
 -- старая цена
 local oldPrice = 0;
 
-
 -- старый объём
 local oldVolume = 0;
 -- старый объём в прошлый тик
 local  lastTickVolume = 0;
-
-
-
 
  -- новая цена
 local newPrice = 0; 
@@ -43,9 +39,6 @@ local oldVolumeRange = 0;
 local countingTicsVolume = 0;
 
 -- свечки
---local number_of_candles = 0;
---local old_number_of_candles  = 0;
--- критический уровень объёма
 local CRITICAL_VOLUME= 0;
 
 
@@ -76,12 +69,8 @@ local rangeVolume = 10
     -- это разница объёмов
     local updateValue = volume - oldVolume;
  
-
     if   lastTickVolume + rangeVolume <= updateValue  then 
-    
-        -- увеличение объёмов
-        
-      --  loger.save(countingTicsVolume .." +  объёмов "..  lastTickVolume .. ' '.. updateValue..' rand ' );
+        -- увеличение объёмов 
         countingTicsVolume =  countingTicsVolume + 1;
     end
 
@@ -112,18 +101,13 @@ local function  calculatePrice( price,datetime)
         oldPrice = price;
         return
     end
-    --  loger.save(rangeLocal .. "  цена выросла " ..price.. '   oldPrice '..  oldPrice)
-  --  loger.save(rangeLocal .. "  цена выросла " ..price.. '   oldPrice '..  oldPrice)
-  
 --0.03  цена выросла 31.1   oldPrice 31.1
     if oldPrice + rangeLocal < price   then
 
      --   loger.save(rangeLocal .. "  цена выросла == " ..price.. '   oldPrice '..  oldPrice)
 
         if(countingTicsVolume > CRITICAL_VOLUME)  then
-            --  цена и объём  растёт  стремительно 
-      --  loger.save( " покупка или продажа цена и объём + " .. volumeRange ..' | '.. countingTicsVolume ..' | '.. CRITICAL_VOLUME..' | '..price..' | '..oldPrice )
-      
+            --  цена и объём  растёт  стремительно  
         collbackFunc( price, countingTicsVolume, datetime, 'SELL' );
         end
     end

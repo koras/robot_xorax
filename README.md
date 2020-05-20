@@ -13,6 +13,10 @@
 - эмуляция торговли для понятия алгоритма торговли
 - остановка и возобновление торговли в момент времени
 
+Риски (снижение убытков) : 
+![Image alt](https://github.com/koras/robot_xorax/tree/master/images/readme/risk_buy_block.png)
+
+
 скачать https://github.com/koras/robot_xorax/archive/master.zip 
 
 установка:
@@ -22,3 +26,4 @@
 
 
 Группы в телеграмм https://t.me/robots_xorax
+
