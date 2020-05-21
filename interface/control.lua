@@ -5,6 +5,7 @@ local init = {}
   
 local loger = dofile(getScriptPath() .. "\\interface\\color.lua");
 local loger = dofile(getScriptPath() .. "\\modules\\loger.lua");
+local words = dofile(getScriptPath() .. "\\langs\\words.lua");
 
 
 init.create = false;
@@ -38,6 +39,9 @@ local word = {
 	['block_buy'] = "buy / block",
 	['SPRED_LONG_TREND_DOWN'] = "trend down", -- рынок падает, увеличиваем растояние между покупками
 	['SPRED_LONG_TREND_DOWN_SPRED'] = "down market range", -- на сколько увеличиваем растояние
+	['not_buy_high'] = "not buy high", -- условия; Выше какого диапазона не покупать(на хаях)
+	 
+	 
 };
   
 -- OFFSET SPREAD
@@ -97,12 +101,12 @@ function current_limit()
 	SetCell(t_id, 17, 0,  word.profit_range); 
 	SetCell(t_id, 19, 0,  word.take_profit_offset); 
 	SetCell(t_id, 21, 0,  word.take_profit_spread); 
-	SetCell(t_id, 25, 0,  word.block_buy); 
+	SetCell(t_id, 25, 0,  words.word('buy_block')); 
 	SetCell(t_id, 26, 0,  word.SPRED_LONG_TREND_DOWN); 
 	SetCell(t_id, 27, 0,  word.SPRED_LONG_TREND_DOWN_SPRED); 
+	SetCell(t_id, 28, 0,  words.word('not_buy_high')); 
  
-	 
-end;
+end; 
 function current_limit_plus()  
 	SetCell(t_id, 11, 2,  word.current_limit_plus); 
 	SetCell(t_id, 13, 2,  word.current_limit_plus); 
@@ -113,6 +117,7 @@ function current_limit_plus()
 	SetCell(t_id, 25, 2,  word.current_limit_plus); 
 	SetCell(t_id, 26, 2,  word.current_limit_plus); 
 	SetCell(t_id, 27, 2,  word.current_limit_plus); 
+	SetCell(t_id, 28, 2,  word.current_limit_plus); 
 	Green(t_id,11, 2);
 	Green(t_id,13, 2);
 
@@ -122,6 +127,7 @@ function current_limit_plus()
 	Green(t_id,25, 2);
 	Green(t_id,26, 2);
 	Green(t_id,27, 2);
+	Green(t_id,28, 2);
  
  
 
@@ -137,6 +143,7 @@ function current_limit_minus()
 	SetCell(t_id, 25, 3,  word.current_limit_minus); 
 	SetCell(t_id, 26, 3,  word.current_limit_minus); 
 	SetCell(t_id, 27, 3,  word.current_limit_minus); 
+	SetCell(t_id, 28, 3,  word.current_limit_minus); 
 	Red(t_id,11, 3);
 	Red(t_id,13, 3);
 
@@ -146,6 +153,7 @@ function current_limit_minus()
 	Red(t_id,25, 3);
 	Red(t_id,26, 3);
 	Red(t_id,27, 3);
+	Red(t_id,28, 3);
 end;
 
  
@@ -160,6 +168,7 @@ function use_contract_limit()
 	SetCell(t_id, 25, 1,   tostring( setting.each_to_buy_to_block ) .. '/'.. setting.each_to_buy_step ); 
 	SetCell(t_id, 26, 1,   tostring( setting.SPRED_LONG_TREND_DOWN )); 
 	SetCell(t_id, 27, 1,   tostring( setting.SPRED_LONG_TREND_DOWN_SPRED )); 
+	SetCell(t_id, 28, 1,   tostring( setting.not_buy_high .. ' (-'..setting.profit_range ..')' )); 
  
  
 end;
@@ -254,7 +263,7 @@ init.create = true;
 	t_id = AllocTable();	 
 
 
-	AddColumn(t_id, 0, word.status , true, QTABLE_STRING_TYPE, 25);
+	AddColumn(t_id, 0, word.status , true, QTABLE_STRING_TYPE, 30);
 	AddColumn(t_id, 1, word.buy, true, QTABLE_STRING_TYPE, 20);
 	AddColumn(t_id, 2, word.sell, true, QTABLE_STRING_TYPE, 20); 
 	AddColumn(t_id, 3, word.close_positions, true,QTABLE_STRING_TYPE, 20); 
@@ -456,6 +465,24 @@ function event_callback_message (t_id, msg, par1, par2)
 			end; 
 		return;
 	end;
+	 
+	-- на сколько увеличиваем растояние при падении рынка между покупками
+	if par1 == 28 and par2 == 2  and  msg == 1 then
+		setting.not_buy_high = setting.not_buy_high + 0.05; 
+		use_contract_limit();
+		return;
+	end;
+	if par1 == 28 and par2 == 3  and  msg == 1 then
+		if setting.not_buy_high > 0.05 then
+			setting.not_buy_high = setting.not_buy_high - 0.05;
+			use_contract_limit();
+			end; 
+		return;
+	end;
+	 
+
+
+
 	 
 
  

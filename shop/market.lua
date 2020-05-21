@@ -72,8 +72,11 @@ function long(price, datetime, levelLocal , event) -- решение
             -- Запрет на покупку (блокируется кнопкой)
             buyButtonBlock = contitionMarket.buyButtonBlock(price,datetime);
 
+            -- Запрет на покупку если цена выше коридора
+            not_buy_high = contitionMarket.not_buy_high(price,datetime);
 
-            if limitBuy and checkRangeBuy and checkRangeSell and randCandle  and failMarket and getFailBuy and buyButtonBlock then
+
+            if limitBuy and checkRangeBuy and checkRangeSell and randCandle  and failMarket and getFailBuy and buyButtonBlock and not_buy_high then
                 setting.SPRED_LONG_TREND_DOWN  = setting.SPRED_LONG_TREND_DOWN + setting.SPRED_LONG_TREND_DOWN_SPRED;
                 setting.SPRED_LONG_TREND_DOWN_LAST_PRICE = price; -- записываем последнюю покупку
                 
