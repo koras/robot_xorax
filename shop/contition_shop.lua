@@ -83,13 +83,7 @@ end;
  
  -- Не покупаем если промежуток на свече соответствуют высокой цене
  function getRandCandle(price, datetime)
-
-
-
-
         local range_candle = setting.candle_current_high - setting.candle_current_low;
-
-
         local checkRange = true;
                 if range_candle < setting.profit_range  then 
                         -- свечка меньше текущего профита 
@@ -145,7 +139,7 @@ end;
 end;
 
 
-
+-- проверка на блокировку кнопки покупок
 function buyButtonBlock(price, datetime) 
 
         local checkRange = true;
@@ -157,7 +151,7 @@ function buyButtonBlock(price, datetime)
 end;
 
 
-
+-- верхний диапазон, выше которого покупка запрещена
 function not_buy_high(price, datetime) 
 
         local checkRange = true;

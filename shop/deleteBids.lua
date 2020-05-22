@@ -36,6 +36,8 @@ function callSELLEmulation(result)
                         setting.count_buyin_a_row = 0; 
                         setting.SPRED_LONG_LOST_SELL = price;
                         setting.SPRED_LONG_TREND_DOWN  = setting.SPRED_LONG_TREND_DOWN - setting.SPRED_LONG_TREND_DOWN_SPRED;
+                        
+                        setting.limit_count_buy = setting.limit_count_buy - setting.sellTable[sellT].contract;
 
                         if setting.SPRED_LONG_TREND_DOWN < 0  then 
                             setting.SPRED_LONG_TREND_DOWN = 0.01;
