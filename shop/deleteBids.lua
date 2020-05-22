@@ -25,9 +25,7 @@ function callSELLEmulation(result)
     if #setting.sellTable > 0 then
         local buyContractSell = 0;
         local deleteKeySell = 0;
-        
             for sellT = 1 ,  #setting.sellTable do 
-    
                 if  setting.sellTable[sellT].type == 'sell' and   
                 setting.sellTable[sellT].emulation == true and  
                 result.close + setting.profit_infelicity >= setting.sellTable[sellT].price   then 
@@ -54,7 +52,6 @@ function callSELLEmulation(result)
                         deleteKeySell = sellT; 
                 end;
             end;
-    
             if deleteKeySell ~= 0  then 
                 table.remove (setting.sellTable, deleteKeySell); 
                 deleteBuy(result,buyContractSell); 
@@ -102,8 +99,6 @@ function deleteSell(result)
                     
                     setting.limit_count_buy = setting.limit_count_buy - setting.sellTable[sellT].contract;
                     setting.count_contract_sell = setting.count_contract_sell + setting.sellTable[sellT].contract;
- 
-
                     calculateProfit(setting.sellTable[sellT]);
 
                     signalShowLog.addSignal(result.datetime, 8, false, setting.sellTable[sellT].price); 
@@ -154,6 +149,7 @@ function transCallback(trans_reply)
            
      -- http://luaq.ru/OnTransReply.html
     if #setting.sellTable > 0 then 
+
         deleteSell(trans_reply);
     end;
 

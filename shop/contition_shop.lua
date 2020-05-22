@@ -47,14 +47,15 @@ function getRandBuy(price)
  
  -- висит ли заявка на продажу в этом промежутке
 function getRandSell(price)
-
+  
         local checkRange = true;
            if #setting.sellTable > 0  then
                    for j_checkRange=1, #setting.sellTable  do
 
-                        if setting.sellTable[j_checkRange].type == 'sell' then
+                        if setting.sellTable[j_checkRange].type == 'sell' and setting.sellTable[j_checkRange].work then
                                    -- здесь узнаю, была ли покупка в этом диапозоне
-                                if   setting.profit_range + setting.sellTable[j_checkRange].price >= price and price >= setting.sellTable[j_checkRange].price - setting.profit_range   then
+                                if   setting.profit_range + setting.sellTable[j_checkRange].price >= price and 
+                                price >= setting.sellTable[j_checkRange].price - setting.profit_range   then
                                            checkRange = false; 
                                            signalShowLog.addSignal(setting.sellTable[j_checkRange].datetime, 12, false, price);
                                 end; 

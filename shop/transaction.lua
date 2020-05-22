@@ -4,7 +4,7 @@ local M = {}
  
 local loger = dofile(getScriptPath() .. "\\modules\\loger.lua")
 
-local function send(typeMarket, price, quantity,type )
+local function send(typeMarket, price, quantity,type, trans_id_buy )
 	
 	local operation = "S" 
 	  if typeMarket == "BUY" then
@@ -19,52 +19,81 @@ local function send(typeMarket, price, quantity,type )
 	  --https://quikluacsharp.ru/quik-qlua/prostoj-ma-robot-qlua-s-vystavleniem-tejk-profit-i-stop-limit/
 
 	  -- http://luaq.ru/sendTransaction.html
-	local Transaction={
-		['TRANS_ID']   = tostring(trans_id),
-		['ACTION']     = 'NEW_ORDER',
-		['CLASSCODE']  = setting.CLASS_CODE,
-		['SECCODE']    = setting.SEC_CODE,
-		['ACCOUNT']    = setting.ACCOUNT,
-		['USE_CASE_SENSITIVE_CONSTANTS'] = 'PROGRAM',
-		['OPERATION']  = operation, -- операция ("B" - buy, или "S" - sell)
-		['TYPE']       = 'L', -- по рынку (MARKET)
-		['QUANTITY']   = tostring(quantity), -- количество 
-		['PRICE']      = tostring(price),
-		['CLIENT_CODE']= 'Robot XoraX',
-		["EXPIRY_DATE"] = "TODAY",
-	--	["COMMENT"]    = "скрипт"
-	 } 
+	local Transaction={} 
+	
+		Transaction.CLASSCODE  = setting.CLASS_CODE;
+		Transaction.SECCODE    = setting.SEC_CODE;
+		Transaction.ACCOUNT    = setting.ACCOUNT;
+		Transaction.USE_CASE_SENSITIVE_CONSTANTS = 'PROGRAM';
+		Transaction.TYPE  = 'L';
 
-	 if type == "TAKE_PROFIT_AND_STOP_LIMIT_ORDER" then 
+		Transaction.TRANS_ID   = tostring(trans_id);
+		Transaction.ACTION    = 'NEW_ORDER'; 
+		Transaction.OPERATION  = operation; -- операция ("B" - buy, или "S" - sell)
+	 
+		Transaction.QUANTITY   = tostring(quantity); -- количество 
+		Transaction.PRICE      = tostring(price);
+		Transaction.CLIENT_CODE= 'Robot XoraX';
+		Transaction.EXPIRY_DATE = "GTC";
+	-- Transaction.COMMENT"]    = "скрипт"
+	  
+	  
 
-		Transaction['ACTION'] = "NEW_STOP_ORDER";
-		Transaction['OFFSET_UNITS']  = "PRICE_UNITS";
-		Transaction['STOPPRICE']     = tostring(price);
+-- 	 Transaction  res  Не указаны единицы измерения защитного интервала take profit стоп-заявки.
+--   Не указан номер базовой заявки.
+--   Не указан признак использования остатка базовой заявки.
+--   Не указан признак активирования стоп-заявки при частичном исполнении базовой заявки.
+
+
+	 --	 if type == "TAKE_PROFIT_AND_STOP_LIMIT_ORDER" then 
+	 if type == "TAKE_PROFIT_STOP_ORDER" then 
+		-- Не указан номер базовой заявки.
+		-- Не указан признак использования остатка базовой заявки.
+		-- Не указан признак активирования стоп-заявки при частичном исполнении базовой заявки.
+		-- Параметр "IS_ACTIVE_IN_TIME" для транзакции "Стоп-заявка" типа "ACTIVATED_BY_ORDER_TAKE_PROFIT_STOP_ORDER" не поддерживается.
+
+		Transaction.STOP_ORDER_KIND = type;
+		Transaction.ACTION = "NEW_STOP_ORDER"; 
+		Transaction.OFFSET_UNITS  = "PRICE_UNITS";
+		Transaction.STOPPRICE    = tostring(price);
+		Transaction.STOPPRICE2 = tostring(price);
+		 
+		 
 		-- "OFFSET" - (ОТСТУП)Если цена достигла Тэйк-профита и идет дальше в прибыль,
 		-- то Тэйк-профит сработает только когда цена вернется минимум на 2 шага цены назад,
 		-- это может потенциально увеличить прибыль
-		Transaction["OFFSET"] = tostring(setting.take_profit_offset); 
-	--	Transaction["OFFSET"] = 0,01; 
-
+		Transaction.OFFSET = tostring(setting.take_profit_offset); 
+		Transaction.KILL_IF_LINKED_ORDER_PARTLY_FILLED = "NO"; 
+	--	Transaction.IS_ACTIVE_IN_TIME = "NO"; 
+		Transaction.USE_BASE_ORDER_BALANCE ="NO";
+		Transaction.ACTIVATE_IF_BASE_ORDER_PARTLY_FILLED = "YES";
+		Transaction.BASE_ORDER_KEY = tostring(trans_id_buy);
 		-- "SPREAD" - Когда сработает Тэйк-профит, выставится заявка по цене хуже текущей 
       -- которая АВТОМАТИЧЕСКИ УДОВЛЕТВОРИТСЯ ПО ТЕКУЩЕЙ ЛУЧШЕЙ ЦЕНЕ,
       -- но то, что цена значительно хуже, спасет от проскальзывания,
       -- иначе, сделка может просто не закрыться (заявка на закрытие будет выставлена, но цена к тому времени ее уже проскочит)
-		Transaction["SPREAD"]  = tostring(setting.take_profit_spread);
+		Transaction.SPREAD  = tostring(setting.take_profit_spread);
+		Transaction.SPREAD_UNITS  = "PRICE_UNITS";
+	
+		 
+		loger.save( 'Transaction.STOP_ORDER_KIND ' .. Transaction.STOP_ORDER_KIND);
+		loger.save( 'Transaction.BASE_ORDER_KEY ' ..Transaction.BASE_ORDER_KEY);
+
+
 
 	 end;
 
 	-- Неверно указаны единицы измерения защитного интервала take profit стоп-заявки. "0.01"
 
---    loger.save(' setting.CLASS_CODE '..setting.CLASS_CODE);
---    loger.save(' setting.SEC_CODE '..setting.SEC_CODE);
---    loger.save(' setting.ACCOUNT '..setting.ACCOUNT);
+   loger.save(' setting.CLASS_CODE '..setting.CLASS_CODE);
+   loger.save(' setting.SEC_CODE '..setting.SEC_CODE);
+   loger.save(' setting.ACCOUNT '..setting.ACCOUNT);
    
-  -- loger.save( 'Transaction ' .. Transaction.OPERATION .. ' tostring(price) ' ..'  ' .. tostring(price).. ' ' .. ' '.. Transaction.TRANS_ID );
-  -- loger.save( 'SEC_CODE ' .. setting.SEC_CODE );
---    loger.save( 'Transaction SECCODE ' .. Transaction['SECCODE'] );
---    loger.save( 'Transaction CLASS_CODE ' .. Transaction.CLASSCODE  );
---    loger.save( 'Transaction ACCOUNT ' .. Transaction.ACCOUNT );
+  loger.save( 'Transaction ' .. Transaction.OPERATION .. ' tostring(price) ' ..'  ' .. tostring(price).. ' ' .. ' '.. Transaction.TRANS_ID );
+  loger.save( 'SEC_CODE ' .. setting.SEC_CODE );
+   loger.save( 'Transaction SECCODE ' .. Transaction['SECCODE'] );
+   loger.save( 'Transaction CLASS_CODE ' .. Transaction.CLASSCODE  );
+   loger.save( 'Transaction ACCOUNT ' .. Transaction.ACCOUNT ); 
    
 
 
@@ -79,7 +108,7 @@ local function send(typeMarket, price, quantity,type )
 		-- loger.save(' setting.SEC_CODE '..setting.SEC_CODE);
 		-- loger.save(' setting.ACCOUNT '..setting.ACCOUNT);
 
-		loger.save( 'Transaction  res ' .. res )
+		loger.save( 'Transaction  ' .. res )
 	  return nil, res
 	   
 
