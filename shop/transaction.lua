@@ -101,7 +101,7 @@ local function send(typeMarket, price, quantity,type, trans_id_buy )
 	  
 	  
 
-	  if res ~= "" then	
+	if res ~= "" then	
 		message(res);
 	--  Неверно указаны единицы измерения защитного интервала take profit стоп-заявки. "0.01"
 		-- loger.save(' setting.CLASS_CODE '..setting.CLASS_CODE);

@@ -138,13 +138,38 @@ end
 -- исполнение покупки контракта
 function buyContract(result)
     -- сперва находим контракт который купили и ставим статус что мы купили контракт
-    if #setting.sellTable > 0 then
+
+  --      signalShowLog.addSignal(result.datetime, 15, false, #setting.sellTable); 
+    if #setting.sellTable > 0 then 
+ 
+
 
         for contract = 1 ,  #setting.sellTable do 
+
+    loger.save("||||||||||||||||||||||||||||||| "); 
+
+    
+    if  setting.sellTable[contract].executed == false then
+        loger.save( 'false');
+    else
+        loger.save( 'true');
+    end;
+
+    loger.save(setting.sellTable[contract].type); 
+       loger.save(result.trans_id); 
+       loger.save(tostring(setting.sellTable[contract].trans_id));  
+          
+
+
+
+
+
             if  setting.sellTable[contract].type == 'buy' and  
             setting.sellTable[contract].executed == false  and 
             setting.sellTable[contract].trans_id == result.trans_id  then
                 
+                signalShowLog.addSignal(result.datetime, 15, false, 100); 
+
                 setting.sellTable[contract].executed = true;
                 -- выставляем на продажу контракт.
                 sellTransaction(result, countContracts);
@@ -157,6 +182,9 @@ end;
 
 -- исполнение покупки контракта на продажу
 function sellContract(result)
+
+    
+    signalShowLog.addSignal(result.datetime, 15, false, 200); 
     -- сперва находим контракт который купили и ставим статус что мы купили контракт
     if #setting.sellTable > 0 then
 
@@ -176,7 +204,7 @@ function sellContract(result)
 end;
 
 
- -- надо отметить в контркте на покупку что заявка исполнена
+--  -- надо отметить в контркте на покупку что заявка исполнена
 function deleteBuy(result, saleContract)
     if #setting.sellTable > 0 then
         for sellT = 1,  #setting.sellTable do 
@@ -218,10 +246,17 @@ end
 
 
 
--- выставление заявки на продажу
+
+
+
+
+
+
+
+-- выставление заявки на покупку
 function callBUY(price ,dt)
     local priceLocal = price;
-    local trans_id = getRand()
+    local trans_id_buy = getRand()
     local type = false
     -- ставим заявку на покупку выше на 0.01
     price  = price + setting.profit_infelicity; -- и надо снять заявку если не отработал
@@ -230,14 +265,15 @@ function callBUY(price ,dt)
     commonBUY(price ,dt);
  
     if setting.emulation == false then
-       local trans_id_buy =  transaction.send("BUY", price, setting.use_contract, type, 0);
+        trans_id_buy =  transaction.send("BUY", price, setting.use_contract, type, 0);
        setting.count_contract_buy = setting.count_contract_buy + setting.use_contract
     else 
         setting.emulation_count_contract_buy = setting.emulation_count_contract_buy + setting.use_contract
     end;
    
+    loger.save('trans_id_buy    1  ====    '..tostring(trans_id_buy));  
 
-            setting.sellTable[(#setting.sellTable+1)] = {
+     data = {
                 ['price'] = price,
                 ['datetime']= dt, 
                 ['trans_id']=  trans_id_buy, 
@@ -253,12 +289,29 @@ function callBUY(price ,dt)
                 ['buy_contract']= price, -- стоимость продажи
                 
             };
+
+            loger.save('trans_id_buy    2  ====    '..tostring(data.trans_id));  
+
+            setting.sellTable[(#setting.sellTable+1)] = data;
     panelBids.show();
 end 
 
   
--- только выставляется заявка на продажу
+ 
 
+
+
+
+
+
+
+
+
+
+
+
+
+-- только выставляется заявка на продажу
 function sellTransaction(order, countContracts)
     --loger.save("trans_id".. order.trans_id);
     --loger.save("trans_id".. order.order_num); 

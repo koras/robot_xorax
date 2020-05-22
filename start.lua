@@ -117,7 +117,7 @@ basis = 9
      signalShowLog.CreateNewTableLogEvent();
 
  
-      loger.save("start log");
+      --loger.save("start log");
 
       statsPanel.show();
       interfaceBids.show();
@@ -152,21 +152,21 @@ basis = 9
       if  bit.band(order.flags,3) == 0 then
  
  
-         loger.save("====================================================== "); 
+       --  loger.save("====================================================== "); 
          if bit.band(order.flags, 2) == 0 then
-            loger.save("покупка исполнена "); 
-            loger.save("Bye Bye Bue  111111 "); 
+         --   loger.save("покупка исполнена "); 
+         --   loger.save("Bye Bye Bue  111111 "); 
             -- покупка исполнена 
 
          else
-            loger.save("SELL SELL SELL SELL SELL "); 
+          --  loger.save("SELL SELL SELL SELL SELL "); 
             deleteBids.transCallback(order);
          end;
 
-         loger.save("order.trans_id ".. order.trans_id);
-         loger.save("order.order_num ".. order.order_num); 
-         loger.save("order.price ".. order.price);
-         loger.save("order.balance ".. order.balance);
+         -- loger.save("order.trans_id ".. order.trans_id);
+         -- loger.save("order.order_num ".. order.order_num); 
+         -- loger.save("order.price ".. order.price);
+         -- loger.save("order.balance ".. order.balance);
  
 
         -- trans_id
@@ -202,8 +202,7 @@ basis = 9
 
 
       if bit.band(trade.flags, 2) == 0 then
-         loger.save("покупка исполнена "); 
-         loger.save("Bye Bye Bue  22222"); 
+         
          -- исполняется покупка контракта
          market.buyContract(trade);
          -- покупка исполнена
@@ -211,7 +210,7 @@ basis = 9
    ---   market.sellTransaction(order);
 
       else
-         loger.save("SELL SELL SELL SELL SELL "); 
+         
          
       --   deleteBids.transCallback(order);
           market.sellContract(trade);
@@ -219,16 +218,7 @@ basis = 9
 
 
 
-      loger.save('11111 11111 11111 11111 11111 11111 №'..trade.order_num..' appruve')
 
-      write_str = trade.trade_num .. ";" ..
-      trade.order_num .. ";" ..
-      trade.brokerref .. ";" ..
-      trade.price .. ";" ..
-      trade.qty .. ";" ..
-      trade.value .. ";" ..   tostring(bit_set(trade.flags, 1)) .. ";" .. "\n";
-      
-      loger.save(write_str )
 
 
    end
@@ -236,21 +226,7 @@ basis = 9
    local test = bit.band(trade.flags, 3);
    if (test == 0) then
       -- если бит 0 и 1 не установлены -- заявка выполнена
-      loger.save('bandbandbandbandbandbandbandband  ' )
 
-      write_str = trade.trade_num .. ";" ..
-      trade.order_num .. ";" ..
-      trade.brokerref .. ";" ..
-      trade.price .. ";" ..
-      trade.qty .. ";" ..
-      trade.value .. ";" ..
-      trade.sec_code .. ";" ..
-      trade.class_code .. ";" ..
-      tostring(trade.datetime.year) .. "." .. tostring(trade.datetime.month) .. "." .. tostring(trade.datetime.day) .. " " ..
-      tostring(trade.datetime.hour) .. ":" .. tostring(trade.datetime.min) .. ":" .. tostring(trade.datetime.sec) .. ";" ..
-      tostring(bit_set(trade.flags, 1)) .. ";" .. "\n";
-
-      loger.save(write_str )
     --  self:OnStatusChanged(ST_FILLED);
 
    --   self:InternalDelete();
@@ -285,15 +261,15 @@ end
 
    -- Функция вызывается терминалом когда с сервера приходит информация по сделке
    function OnStopOrder(trade)
-      loger.save(' OnStopOrder' )
+    --  loger.save(' OnStopOrder' )
 
       if  bit.band(trade.flags,4)>0
          then
          -- заявка на продажу
-      loger.save(' trade.flags Sell ')
+   --   loger.save(' trade.flags Sell ')
          else
          -- заявка на покупку
-      loger.save(' trade.flags Buy ')
+    --  loger.save(' trade.flags Buy ')
          end
       
          if not CheckBit(trade.flags, 0) and not CheckBit(trade.flags, 1) then

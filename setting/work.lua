@@ -4,7 +4,7 @@
    
    setting.profit =  0.01; -- подсчёт прибыли
 
-   setting.LIMIT_BID = 10;
+   setting.LIMIT_BID = 1;
    setting.use_contract = 1;
    setting.emulation = true;
    setting.candles = {}; -- свечи

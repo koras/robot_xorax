@@ -38,7 +38,7 @@ local function addSignal(dt, event, status, price)
 
 	loger.save('event :' .. event     );
 
-	loger.save('event :' .. event    ..' price '..price );
+	loger.save('event :' .. event    ..' price '.. tostring( price ) );
 	
 	local arr = {
 		['dt'] =  dt,
