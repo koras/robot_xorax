@@ -100,11 +100,8 @@ end
 
 
 function getfractal(price)  
-
     if #setting.fractals_collection > 0 then 
         for k,v in setting.fractals_collection do 
-
- 
 
         end
     end;
@@ -129,7 +126,6 @@ buy_contract  = 0;
 -- исполнение покупки контракта
 function buyContract(result)
     -- сперва находим контракт который купили и ставим статус что мы купили контракт
-
   --      signalShowLog.addSignal(result.datetime, 15, false, #setting.sellTable); 
     if #setting.sellTable > 0 then 
  
