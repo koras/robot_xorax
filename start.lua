@@ -156,7 +156,7 @@ basis = 9
          if bit.band(order.flags, 2) == 0 then
 
          else
-          --  loger.save("SELL SELL SELL SELL SELL "); 
+           loger.save("SELL SELL SELL SELL SELL "); 
             deleteBids.transCallback(order);
          end;
 
@@ -183,13 +183,16 @@ basis = 9
    if not CheckBit(trade.flags, 0) and not CheckBit(trade.flags, 1) then
 
       if bit.band(trade.flags, 2) == 0 then
-         -- исполняется покупка контракта
+         -- исполняется покупка контракта 
          market.buyContract(trade);
          loger.save('OnTrade end  -- исполняется покупка контракта')
       else
+         loger.save('OnTrade end  -- исполняется продажа контракта 1')
           market.sellContract(trade);
       end;
 
+      loger.save('trade.flags -- '..bit.band(trade.flags, 2))
+      loger.save('trade.flags ++ '..tostring(trade.flags))
 
    end
     
@@ -211,15 +214,21 @@ end
 
    -- Функция вызывается терминалом когда с сервера приходит информация по сделке
    function OnStopOrder(trade)
-    --  loger.save(' OnStopOrder' )
+      loger.save(' OnStopOrder' )
 
       if  bit.band(trade.flags,4)>0
          then
+
+            if not CheckBit(trade.flags, 0) and not CheckBit(trade.flags, 1) then
+               loger.save('Заявка 11111 №'..trade.order_num..' appruve Sell Sell Sell')
+               market.sellContract(trade);
+            end
+
          -- заявка на продажу
-   --   loger.save(' trade.flags Sell ')
+      loger.save(' trade.flags Sell ')
          else
          -- заявка на покупку
-    --  loger.save(' trade.flags Buy ')
+      loger.save(' trade.flags Buy ')
          end
       
          if not CheckBit(trade.flags, 0) and not CheckBit(trade.flags, 1) then

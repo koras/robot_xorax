@@ -38,7 +38,7 @@ local wordTitleTableBids = {
 	['contract'] = "count",
 	['work'] = "work",
 	['emulation'] = "emulation",
-	['buy_contract'] = 'buy contract',
+--	['buy_contract'] = 'buy contract',
 	['title'] = 'Current bids  sell/buy'
 };
   
@@ -108,13 +108,43 @@ function updateBidsClear()
 
 end;
 
-
+-- event iii :2
+-- event #arrTableLog  :4
+-- event keyskeyskeys :2
+-- event iii :1
+-- event #arrTableLog  :4
+-- event keyskeyskeys :3
 
  function updateBidsSignal()  
 	CreateNewTableBids();
+	local b = 0;
+	local itter = 0;
+
+	if #arrTableLog == 0 then return; end; 
+
+	--local itter = 1
+	 if #setting.sellTable > 1 then
+	 	local itter = #setting.sellTable;
+	 end
+
+	for i = #setting.sellTable , itter , -1 do
+
+		if i > 0 then 
+		--	b =  (#setting.sellTable - i +1 );
+			b = i;
+		end 
+ 
+
+		loger.save('event iii : ' .. i     );
+		loger.save('event #setting.sellTable  : ' .. #setting.sellTable     );
+		loger.save('event keyskeyskeys :  ' .. b   );
+
 --	if #_arr == 0 then return; end; 
-	for b = 1 , #setting.sellTable do
+--	for b = 1 , #setting.sellTable do
 		bid = setting.sellTable[b];
+
+		
+		loger.save('event keyskeyskeys :  ' .. tostring(bid.price)   );
 
 		time = bid.datetime.hour..':'..bid.datetime.min..':'..bid.datetime.sec;
 		SetCell(t_id_TableBids, b, 0, tostring(b));  
@@ -143,7 +173,7 @@ end;
 			end
 		elseif bid.type == 'buy'  and bid.work == false or   bid.type == 'sell'  and bid.work == false  then
 			for num = 0 , 7 do
-				WhiteNo(t_id_TableBids, b, num); 
+				White(t_id_TableBids, b, num); 
 			end
 		else 
 			White(t_id_TableBids, b, 0);

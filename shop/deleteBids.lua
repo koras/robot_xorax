@@ -119,23 +119,23 @@ end
 -- end
 
 
-function deleteBuy(result, buy_contract)
-    local deleteKey = 0;
+-- function deleteBuy(result, buy_contract)
+--     local deleteKey = 0;
     
-    for searchBuy = 1 ,  #setting.sellTable do 
-        if setting.sellTable[searchBuy].type == 'buy' and setting.sellTable[searchBuy].price == ( buy_contract + setting.profit_infelicity)  then 
-                -- удаляем только 1 элемент 
-                setting.each_to_buy_step = 0;
-                deleteKey = searchBuy; 
-        end;
-    end;
+--     for searchBuy = 1 ,  #setting.sellTable do 
+--         if setting.sellTable[searchBuy].type == 'buy' and setting.sellTable[searchBuy].price == ( buy_contract + setting.profit_infelicity)  then 
+--                 -- удаляем только 1 элемент 
+--                 setting.each_to_buy_step = 0;
+--                 deleteKey = searchBuy; 
+--         end;
+--     end;
 
-    if deleteKey  ~= 0  then 
-        table.remove (setting.sellTable, deleteKey);
-        panelBids.show();
-    end;
+--     if deleteKey  ~= 0  then 
+--         table.remove (setting.sellTable, deleteKey);
+--         panelBids.show();
+--     end;
 
-end
+-- end
 
 
 

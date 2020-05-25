@@ -62,11 +62,18 @@ function getRandSell(price)
 function getLimitBuy(datetime)
 
         local checkRange = true;
-           if setting.LIMIT_BID <= setting.limit_count_buy  then
-
+        
+        if setting.emulation == false and setting.LIMIT_BID <= setting.limit_count_buy  then
                 signalShowLog.addSignal(datetime, 16, false, setting.limit_count_buy);
                 checkRange = false; 
         end;  
+
+        
+        if setting.emulation and setting.LIMIT_BID <= setting.limit_count_buy_emulation then
+                signalShowLog.addSignal(datetime, 25, false, setting.limit_count_buy);
+                checkRange = false; 
+        end;  
+
         return checkRange;
 end;
        
