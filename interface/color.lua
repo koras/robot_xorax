@@ -15,6 +15,17 @@ function Red(tableShow, Line, Col)
 	SetColor(tableShow, Line, Col, RGB(165,227,128), RGB(0,0,0), RGB(165,227,128), RGB(0,0,0));
  end;
 
+
+ function WhiteGreen(tableShow,Line, Col) 
+	if Col == nil then Col = QTABLE_NO_INDEX; end;
+	SetColor(tableShow, Line, Col, RGB(216,252,219), RGB(0,0,0), RGB(165,227,128), RGB(0,0,0));
+ end;
+ function WhiteNo(tableShow,Line, Col) 
+	if Col == nil then Col = QTABLE_NO_INDEX; end;
+	SetColor(tableShow, Line, Col, RGB(238,254,238), RGB(0,0,0), RGB(165,227,128), RGB(0,0,0));
+ end;
+
+
  function Yellow(tableShow,Line, Col) 
 	if Col == nil then Col = QTABLE_NO_INDEX; end;
 	SetColor(tableShow, Line, Col, RGB(255,255,0), RGB(000,000,0),RGB(255,255,0),RGB(0,0,0));
@@ -30,7 +41,8 @@ function Red(tableShow, Line, Col)
 	if Col == nil then Col = QTABLE_NO_INDEX; end;
 	SetColor(tableShow, Line, Col, RGB(255,255,255), RGB(4,51,119), RGB(255,255,255),RGB(4,51,119));
  end;
-
+ 
+ M. WhiteGreen =  WhiteGreen;
  M.Red = Red;
  M.White = White;
  M.Blue = Blue;

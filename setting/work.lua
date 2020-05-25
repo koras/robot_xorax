@@ -1,10 +1,17 @@
-   setting.profit_range =  0.05; -- минимальная прибыль
+   setting.profit_range =  0.01; -- минимальная прибыль
    setting.profit_range_array =  0.03; -- минимальная прибыль при больших заявках
    setting.profit_infelicity =  0.01; -- погрешность
    
    setting.profit =  0.01; -- подсчёт прибыли
 
-   setting.LIMIT_BID = 10;
+
+
+
+   setting.LIMIT_BID = 1;
+   setting.LIMIT_BID_emulation = 1;
+
+
+
    setting.use_contract = 1;
    setting.emulation = true;
    setting.candles = {}; -- свечи
@@ -16,6 +23,7 @@
    setting.close_positions = false; 
           
    setting.count_buyin_a_row =  0; -- покупок сколько было за торговую сессию
+   setting.count_buyin_a_row_emulation =  0; -- покупок сколько было за торговую сессию
    setting.current_price =  0; -- текщая цена
          
    setting.count_buy = 0; -- сколько куплено раз
@@ -31,9 +39,17 @@
 
 
 
+    -- Выставлять контракт на продажу через тейки или лимитки
+    -- Если рыно слабо ходит то выгоднее лимитки. Так как при выставлении тейков, продаваться будет ниже, что не выгодно.
+    -- по умолчанию стоят тейки
+   setting.sell_take_or_limit = true;
+
+
+
 
 
    setting.limit_count_buy = 0; -- лимит на покупку ( сколько контрактов купили на текущий момент )
+   setting.limit_count_buy_emulation = 0; -- лимит на покупку в эмуляции ( сколько контрактов купили на текущий момент )
           
    setting.SPRED_LONG_BUY_UP = 0.02; -- условия; не покупаем если здесь ранее мы купили | вверх диапозон;
    setting.SPRED_LONG_BUY_down = 0.01; -- условия; не покупаем если здесь ранее мы купили | вниз диапозон

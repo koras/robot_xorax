@@ -31,21 +31,29 @@ local wordTitleTableLog = {
 
  
 
-local function addSignal(dt, event, status, price) 
-	
-	
+local function addSignal(datetime, event, status, number) 
 	CreateNewTableLogEvent();
 
-	loger.save('event :' .. event     );
+	local time  = '';
+	local txt =  ' event :' .. event  ;
+--	local txt = datetime.hour..':'..datetime.min..':'..datetime.sec .. ' event :' .. event .. ", number: ".. number  ;
 
-	loger.save('event :' .. event    ..' price '..price );
+	loger.saveSignal(txt);
+
+	if(datetime ~= nul) then 
+		loger.saveSignal('time time ');
+		time = datetime.hour..':'..datetime.min..':'..datetime.sec;
+	end;
+
 	
+
+
 	local arr = {
-		['dt'] =  dt,
-		['dtime'] =  dt.hour..':'..dt.min..':'..dt.sec,
+		['dt'] =  datetime,
+		['dtime'] =  time,
 		['event'] = event,
 		['status'] = status,
-		['price'] = price,
+		['price'] = number,
 		['description'] =  words.wSignal(event),
 		['number'] =  (#arrTableLog+1),
 	};
@@ -78,16 +86,22 @@ end;
 			end
 		end
 
-		if(_arr.event == 9) then
-			label.set('red', _arr.price , _arr.dt, 1, 'sell contract '.. 1);
+		if(_arr.event == 21) then
+			label.set('SELL', _arr.price , _arr.dt, 1, 'sell contract '.. 1);
 		end
-		if(_arr.event == 7) then
+		if(_arr.event == 24) then
 			label.set("BUY" , _arr.price, _arr.dt, 0);
 		end
-			if(_arr.event == 8) then
-				label.set('sell', _arr.price , _arr.dt, 1, _arr.description);
-			end
 		
+		if(_arr.event == 8) then
+			label.set('sell', _arr.price , _arr.dt, 1, _arr.description);
+		end
+
+		if(_arr.event == 22) then
+				label.set('red', _arr.price , _arr.dt, 1, _arr.description);
+		end
+
+
 		if(showLabelPrice) then
 			 
 			if(_arr.event == 1) then
@@ -122,6 +136,15 @@ end;
 				
 			
 				if arrTableLog[i].event == 9 then 
+
+					Green(t_id_TableLog, keys,0);
+					Green(t_id_TableLog, keys,1);
+					Green(t_id_TableLog, keys,2);
+					Green(t_id_TableLog, keys,3);
+					Green(t_id_TableLog, keys,4);
+				end;
+	
+				if arrTableLog[i].event == 26  or arrTableLog[i].event == 27 then 
 
 					Green(t_id_TableLog, keys,0);
 					Green(t_id_TableLog, keys,1);

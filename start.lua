@@ -117,7 +117,7 @@ basis = 9
      signalShowLog.CreateNewTableLogEvent();
 
  
-      loger.save("start log");
+      --loger.save("start log");
 
       statsPanel.show();
       interfaceBids.show();
@@ -136,7 +136,7 @@ basis = 9
          
           if setting.status  then  
             tradeSignal.getSignal(setting.tag, eventTranc);
-            candles.getSignal(tag, deleteBids.callSELLEmulation);
+            candles.getSignal(tag, market.callSELL_emulation);
          end;
       end;  
    end;
@@ -148,8 +148,19 @@ basis = 9
    -- OnTrade показывает статусы сделок.
    -- Функция вызывается терминалом когда с сервера приходит информация по заявке 
    function OnOrder(order)
+
       if  bit.band(order.flags,3) == 0 then
-         deleteBids.transCallback(order);
+ 
+ 
+       --  loger.save("====================================================== "); 
+         if bit.band(order.flags, 2) == 0 then
+
+         else
+           loger.save("SELL SELL SELL SELL SELL "); 
+            deleteBids.transCallback(order);
+         end;
+
+
         -- trans_id
       end;
       
@@ -160,27 +171,31 @@ basis = 9
 
 -- OnTransReply -> OnTrade -> OnOrder 
    -- Функция вызывается терминалом когда с сервера приходит информация по сделке
-   function OnTrade(trade)
-   local test = CheckBit(trade.flags, 3);
-   if (test == 0) then
-      -- если бит 0 и 1 не установлены -- заявка выполнена
-      loger.save('CheckBit(order.flags, 3)  ' )
-    --  self:OnStatusChanged(ST_FILLED);
+   function OnTrade(trade) 
 
-   --   self:InternalDelete();
-   else
-      local sell = CheckBit(trade.flags, 4) ~= 0;
-   --   assert((sell == (self.request.OPERATION == "S")) and (not sell == (self.request.OPERATION == "B")));
-      -- if (test == 2) then
-      -- --   self:OnStatusChanged(ST_REJECTED);
-      -- --   self:InternalDelete();
-      -- else
-      -- --   self:UpdateTiming();
-      -- end
+   local sell = CheckBit(trade.flags, 1);
+
+   if (sell  == 0) then
+
+   end;
+
+
+   if not CheckBit(trade.flags, 0) and not CheckBit(trade.flags, 1) then
+
+      if bit.band(trade.flags, 2) == 0 then
+         -- исполняется покупка контракта 
+         market.buyContract(trade);
+         loger.save('OnTrade end  -- исполняется покупка контракта')
+      else
+         loger.save('OnTrade end  -- исполняется продажа контракта 1')
+          market.sellContract(trade);
+      end;
+
+      loger.save('trade.flags -- '..bit.band(trade.flags, 2))
+      loger.save('trade.flags ++ '..tostring(trade.flags))
+
    end
-
-
-      loger.save('OnTrade end' )
+    
        
    end
 
@@ -203,6 +218,12 @@ end
 
       if  bit.band(trade.flags,4)>0
          then
+
+            if not CheckBit(trade.flags, 0) and not CheckBit(trade.flags, 1) then
+               loger.save('Заявка 11111 №'..trade.order_num..' appruve Sell Sell Sell')
+               market.sellContract(trade);
+            end
+
          -- заявка на продажу
       loger.save(' trade.flags Sell ')
          else

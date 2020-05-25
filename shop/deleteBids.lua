@@ -19,20 +19,22 @@ local contitionMarket = dofile(getScriptPath() .. "\\shop\\contition_shop.lua");
   
  
 
--- продажа в режиме симуляции
-function callSELLEmulation(result)
+-- исполнение продажи в режиме эмуляции
+-- информация приходит из свечки
+function callSELL_emulation(result)
+
+    local price = result.close;
 
     if #setting.sellTable > 0 then
         local buyContractSell = 0;
         local deleteKeySell = 0;
-        
             for sellT = 1 ,  #setting.sellTable do 
-    
                 if  setting.sellTable[sellT].type == 'sell' and   
-                setting.sellTable[sellT].emulation == true and  
-                result.close + setting.profit_infelicity >= setting.sellTable[sellT].price   then 
+                setting.sellTable[sellT].emulation  and  
+                price + setting.profit_infelicity >= setting.sellTable[sellT].price   then 
                     
-                        local price = result.price;
+                      
+
                         setting.count_buyin_a_row = 0; 
                         setting.SPRED_LONG_LOST_SELL = price;
                         setting.SPRED_LONG_TREND_DOWN  = setting.SPRED_LONG_TREND_DOWN - setting.SPRED_LONG_TREND_DOWN_SPRED;
@@ -48,18 +50,16 @@ function callSELLEmulation(result)
                         setting.emulation_count_sell =  setting.emulation_count_sell + 1; 
                         setting.profit =  setting.sellTable[sellT].price - setting.sellTable[sellT].buy_contract + setting.profit;
     
-                        signalShowLog.addSignal(result.datetime, 8, false, setting.sellTable[sellT].price  + setting.profit_infelicity); 
+                        signalShowLog.addSignal(result.datetime, 21 , false, price); 
                         -- надо удалить контракт по которому мы покупали
                         buyContractSell = setting.sellTable[sellT].buy_contract; 
                         deleteKeySell = sellT; 
                 end;
             end;
-    
-            if deleteKeySell ~= 0  then 
-                table.remove (setting.sellTable, deleteKeySell); 
-                deleteBuy(result,buyContractSell); 
-                 
-            end;
+            -- if deleteKeySell ~= 0  then 
+            --     table.remove (setting.sellTable, deleteKeySell); 
+            --     deleteBuy(result,buyContractSell); 
+            -- end;
     end;
 end
 
@@ -82,62 +82,60 @@ function calculateProfit(value)
     setting.count_sell =  setting.count_sell + 1; 
 end
 
---реальные продажы
-function deleteSell(result)
-    local buyContractSell = 0;
-    local deleteKeySell = 0;
+-- --реальные продажы
+-- function deleteSell(result)
+--     local buyContractSell = 0;
+--     local deleteKeySell = 0;
     
-        for sellT = 1 ,  #setting.sellTable do 
-            if  setting.sellTable[sellT].type == 'sell' and setting.sellTable[sellT].trans_id == result.trans_id  then 
-                    local price = result.price;
-                    setting.count_buyin_a_row = 0; 
-                    setting.SPRED_LONG_LOST_SELL = price;
+--         for sellT = 1 ,  #setting.sellTable do 
+--             if  setting.sellTable[sellT].type == 'sell' and setting.sellTable[sellT].trans_id == result.trans_id  then 
+--                     local price = result.price;
+--                     setting.count_buyin_a_row = 0; 
+--                     setting.SPRED_LONG_LOST_SELL = price;
 
                     
-                    setting.SPRED_LONG_TREND_DOWN  = setting.SPRED_LONG_TREND_DOWN - setting.SPRED_LONG_TREND_DOWN_SPRED;
+--                     setting.SPRED_LONG_TREND_DOWN  = setting.SPRED_LONG_TREND_DOWN - setting.SPRED_LONG_TREND_DOWN_SPRED;
 
-                    if setting.SPRED_LONG_TREND_DOWN < 0  then 
-                        setting.SPRED_LONG_TREND_DOWN = 0.01;
-                    end;
+--                     if setting.SPRED_LONG_TREND_DOWN < 0  then 
+--                         setting.SPRED_LONG_TREND_DOWN = 0.01;
+--                     end;
                     
-                    setting.limit_count_buy = setting.limit_count_buy - setting.sellTable[sellT].contract;
-                    setting.count_contract_sell = setting.count_contract_sell + setting.sellTable[sellT].contract;
- 
+--                     setting.limit_count_buy = setting.limit_count_buy - setting.sellTable[sellT].contract;
+--                     setting.count_contract_sell = setting.count_contract_sell + setting.sellTable[sellT].contract;
+--                     calculateProfit(setting.sellTable[sellT]);
 
-                    calculateProfit(setting.sellTable[sellT]);
+--                     signalShowLog.addSignal(result.datetime, 8, false, setting.sellTable[sellT].price); 
+--                     -- надо удалить контракт по которому мы покупали
+--                     buyContractSell = setting.sellTable[sellT].buy_contract; 
+--                     deleteKeySell = sellT; 
+--             end;
+--         end;
 
-                    signalShowLog.addSignal(result.datetime, 8, false, setting.sellTable[sellT].price); 
-                    -- надо удалить контракт по которому мы покупали
-                    buyContractSell = setting.sellTable[sellT].buy_contract; 
-                    deleteKeySell = sellT; 
-            end;
-        end;
-
-        if deleteKeySell ~= 0  then 
-            table.remove (setting.sellTable, deleteKeySell); 
-            deleteBuy(result, buyContractSell); 
+--         if deleteKeySell ~= 0  then 
+--             table.remove (setting.sellTable, deleteKeySell); 
+--             deleteBuy(result, buyContractSell); 
              
-        end;
-end
+--         end;
+-- end
 
 
-function deleteBuy(result, buy_contract)
-    local deleteKey = 0;
+-- function deleteBuy(result, buy_contract)
+--     local deleteKey = 0;
     
-    for searchBuy = 1 ,  #setting.sellTable do 
-        if setting.sellTable[searchBuy].type == 'buy' and setting.sellTable[searchBuy].price == ( buy_contract + setting.profit_infelicity)  then 
-                -- удаляем только 1 элемент 
-                setting.each_to_buy_step = 0;
-                deleteKey = searchBuy; 
-        end;
-    end;
+--     for searchBuy = 1 ,  #setting.sellTable do 
+--         if setting.sellTable[searchBuy].type == 'buy' and setting.sellTable[searchBuy].price == ( buy_contract + setting.profit_infelicity)  then 
+--                 -- удаляем только 1 элемент 
+--                 setting.each_to_buy_step = 0;
+--                 deleteKey = searchBuy; 
+--         end;
+--     end;
 
-    if deleteKey  ~= 0  then 
-        table.remove (setting.sellTable, deleteKey);
-        panelBids.show();
-    end;
+--     if deleteKey  ~= 0  then 
+--         table.remove (setting.sellTable, deleteKey);
+--         panelBids.show();
+--     end;
 
-end
+-- end
 
 
 
@@ -154,6 +152,7 @@ function transCallback(trans_reply)
            
      -- http://luaq.ru/OnTransReply.html
     if #setting.sellTable > 0 then 
+
         deleteSell(trans_reply);
     end;
 
