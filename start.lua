@@ -136,7 +136,7 @@ basis = 9
          
           if setting.status  then  
             tradeSignal.getSignal(setting.tag, eventTranc);
-            candles.getSignal(tag, deleteBids.callSELLEmulation);
+            candles.getSignal(tag, market.callSELL_emulation);
          end;
       end;  
    end;

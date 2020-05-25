@@ -33,7 +33,7 @@ local wordTitleTableLog = {
 
 local function addSignal(dt, event, status, price) 
 	CreateNewTableLogEvent();
-	--loger.save('event :' .. event     );
+	loger.save('event :' .. event     );
 	local arr = {
 		['dt'] =  dt,
 		['dtime'] =  dt.hour..':'..dt.min..':'..dt.sec,
@@ -75,7 +75,7 @@ end;
 		if(_arr.event == 9) then
 			label.set('red', _arr.price , _arr.dt, 1, 'sell contract '.. 1);
 		end
-		if(_arr.event == 7) then
+		if(_arr.event == 21) then
 			label.set("BUY" , _arr.price, _arr.dt, 0);
 		end
 			if(_arr.event == 8) then

@@ -19,8 +19,9 @@ local contitionMarket = dofile(getScriptPath() .. "\\shop\\contition_shop.lua");
   
  
 
--- продажа в режиме эмуляции
-function callSELLEmulation(result)
+-- исполнение продажи в режиме эмуляции
+-- информация приходит из свечки
+function callSELL_emulation(result)
 
     local price = result.close;
 

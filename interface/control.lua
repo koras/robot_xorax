@@ -59,8 +59,8 @@ local function show()
 		Gray(t_id,16, i);
 		WhiteGreen(t_id,18, i);
  
-		Gray(t_id,20, i);
-		Gray(t_id,22, i);
+		Gray(t_id,21, i);
+	--	Gray(t_id,22, i);
 		Gray(t_id,24, i);
 		
 	 end; 

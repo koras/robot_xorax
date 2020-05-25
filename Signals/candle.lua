@@ -44,7 +44,7 @@ end;
 
 bigCandle = 0;
 
-local function getSignal(tag, callback)
+local function getSignal(tag, collbackFunc)
 
        
     shift = 0;
@@ -53,7 +53,7 @@ local function getSignal(tag, callback)
 
 
     seconds = os.time(datetime); -- в seconds будет значение 1427052491
-    collbackFunc = callback;
+    
     shift = 0;
     setting.number_of_candle = getNumCandles(setting.tag); 
 

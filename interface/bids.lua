@@ -64,7 +64,7 @@ local function show()
 
 end;
 
-
+local rows = 0;
  
 -- ['price'] = price,
 -- ['dt']= dt, 
@@ -75,25 +75,36 @@ end;
 -- ['buy_contract']= price, -- стоимость продажи
 function updateBidsClear() 
 
-	for b = 1, 35 do
-		SetCell(t_id_TableBids, b, 0, tostring(''));  
-		SetCell(t_id_TableBids, b, 1, tostring(''));  
-		SetCell(t_id_TableBids, b, 2, tostring(''));  
-		SetCell(t_id_TableBids, b, 3, tostring('')); 
-		SetCell(t_id_TableBids, b, 4, tostring('')); 
-		SetCell(t_id_TableBids, b, 5, tostring('')); 
-		SetCell(t_id_TableBids, b, 6, tostring('')); 
-		SetCell(t_id_TableBids, b, 7, tostring('')); 
 
-		White(t_id_TableBids, b, 0);
-		White(t_id_TableBids, b, 1);
-		White(t_id_TableBids, b, 2);
-		White(t_id_TableBids, b, 3);
-		White(t_id_TableBids, b, 4);
-		White(t_id_TableBids, b, 5);
-		White(t_id_TableBids, b, 6);
-		White(t_id_TableBids, b, 7);
+	if rows < #setting.sellTable then 
+		rows = #setting.sellTable ;
+		for i = rows, #setting.sellTable + 1 do
+			InsertRow(t_id_TableBids, -1);
+		end;
+
 	end;
+
+
+
+	-- for b = 1, 35 do
+	-- 	SetCell(t_id_TableBids, b, 0, tostring(''));  
+	-- 	SetCell(t_id_TableBids, b, 1, tostring(''));  
+	-- 	SetCell(t_id_TableBids, b, 2, tostring(''));  
+	-- 	SetCell(t_id_TableBids, b, 3, tostring('')); 
+	-- 	SetCell(t_id_TableBids, b, 4, tostring('')); 
+	-- 	SetCell(t_id_TableBids, b, 5, tostring('')); 
+	-- 	SetCell(t_id_TableBids, b, 6, tostring('')); 
+	-- 	SetCell(t_id_TableBids, b, 7, tostring('')); 
+
+	-- 	White(t_id_TableBids, b, 0);
+	-- 	White(t_id_TableBids, b, 1);
+	-- 	White(t_id_TableBids, b, 2);
+	-- 	White(t_id_TableBids, b, 3);
+	-- 	White(t_id_TableBids, b, 4);
+	-- 	White(t_id_TableBids, b, 5);
+	-- 	White(t_id_TableBids, b, 6);
+	-- 	White(t_id_TableBids, b, 7);
+	-- end;
 
 end;
 
@@ -132,7 +143,7 @@ end;
 			end
 		elseif bid.type == 'buy'  and bid.work == false or   bid.type == 'sell'  and bid.work == false  then
 			for num = 0 , 7 do
-				Gray(t_id_TableBids, b, num); 
+				WhiteNo(t_id_TableBids, b, num); 
 			end
 		else 
 			White(t_id_TableBids, b, 0);
@@ -143,6 +154,7 @@ end;
 			White(t_id_TableBids, b, 5);
 			White(t_id_TableBids, b, 6);
 			White(t_id_TableBids, b, 7);
+			White(t_id_TableBids, b, 8);
 		end   
 	end 
 	setLabelTableLog(_arr);
@@ -172,7 +184,7 @@ function CreateNewTableBids()
 	AddColumn(t_id_TableBids, 6,  wordTitleTableBids.buy_contract, true,QTABLE_STRING_TYPE, 15); 
 	AddColumn(t_id_TableBids, 7,  wordTitleTableBids.emulation, true,QTABLE_STRING_TYPE, 15); 
  
-	AddColumn(t_id_TableBids, 7,  wordTitleTableBids.work, true,QTABLE_STRING_TYPE, 15); 
+	AddColumn(t_id_TableBids, 8,  wordTitleTableBids.work, true,QTABLE_STRING_TYPE, 15); 
  
 	 
 	CreateWindow(t_id_TableBids); 
@@ -180,9 +192,9 @@ function CreateNewTableBids()
    	SetWindowPos(tt, 0, 70, 50, 140);
 
 
-	for i = 1, 35 do
-		InsertRow(t_id_TableBids, -1);
-	end;
+	-- for i = 1, 35 do
+	-- 	InsertRow(t_id_TableBids, -1);
+	-- end;
 
  
 
