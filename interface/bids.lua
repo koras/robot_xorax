@@ -36,6 +36,7 @@ local wordTitleTableBids = {
 	['type'] = "type", 
 	 
 	['contract'] = "count",
+	['work'] = "work",
 	['emulation'] = "emulation",
 	['buy_contract'] = 'buy contract',
 	['title'] = 'Current bids  sell/buy'
@@ -114,27 +115,25 @@ end;
 		SetCell(t_id_TableBids, b, 6, tostring(bid.buy_contract)); 
 
 		SetCell(t_id_TableBids, b, 7, tostring(bid.emulation)); 
+
+		SetCell(t_id_TableBids, b, 8, tostring(bid.work)); 
 		 
 
-		if bid.type == 'sell' then
-			Red(t_id_TableBids, b, 0);
-			Red(t_id_TableBids, b, 1);
-			Red(t_id_TableBids, b, 2);
-			Red(t_id_TableBids, b, 3);
-			Red(t_id_TableBids, b, 4);
-			Red(t_id_TableBids, b, 5);
-			Red(t_id_TableBids, b, 6);
-			Red(t_id_TableBids, b, 7);
 
-		elseif bid.type == 'buy' then
-			Green(t_id_TableBids, b, 0);
-			Green(t_id_TableBids, b, 1);
-			Green(t_id_TableBids, b, 2);
-			Green(t_id_TableBids, b, 3);
-			Green(t_id_TableBids, b, 4);
-			Green(t_id_TableBids, b, 5);
-			Green(t_id_TableBids, b, 6);
-			Green(t_id_TableBids, b, 7);
+		if bid.type == 'sell' and bid.work then
+			
+			for num = 0 , 7 do
+				Red(t_id_TableBids, b, num); 
+			end
+
+		elseif bid.type == 'buy'  and bid.work then
+			for num = 0 , 7 do
+				Green(t_id_TableBids, b, num); 
+			end
+		elseif bid.type == 'buy'  and bid.work == false or   bid.type == 'sell'  and bid.work == false  then
+			for num = 0 , 7 do
+				Gray(t_id_TableBids, b, num); 
+			end
 		else 
 			White(t_id_TableBids, b, 0);
 			White(t_id_TableBids, b, 1);
@@ -172,6 +171,8 @@ function CreateNewTableBids()
 	AddColumn(t_id_TableBids, 5,  wordTitleTableBids.type, true,QTABLE_STRING_TYPE, 10); 
 	AddColumn(t_id_TableBids, 6,  wordTitleTableBids.buy_contract, true,QTABLE_STRING_TYPE, 15); 
 	AddColumn(t_id_TableBids, 7,  wordTitleTableBids.emulation, true,QTABLE_STRING_TYPE, 15); 
+ 
+	AddColumn(t_id_TableBids, 7,  wordTitleTableBids.work, true,QTABLE_STRING_TYPE, 15); 
  
 	 
 	CreateWindow(t_id_TableBids); 

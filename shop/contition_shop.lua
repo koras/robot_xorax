@@ -1,5 +1,3 @@
-
-
 -- ЗДесь определённые условия для магазина
 
 -- https://open-broker.ru/pricing-plans/universal/
@@ -12,17 +10,8 @@ local signalShowLog = dofile(getScriptPath() .. "\\interface\\signalShowLog.lua"
 local control = dofile(getScriptPath() .. "\\interface\\control.lua");
 
 M = {};
-  
---    ['price'] = price,
---    ['dt']= dt, 
---    ['trans_id']= getRand(), 
---    ['type']= 'buy',
---    ['emulation']=  setting.emulation,
---    ['contract']=  setting.use_contract,
---    ['buy_contract']= price, -- стоимость продажи
 
 -- не покупаем если купили в текущем состоянии
-
 function getRandBuy(price)
           
     -- ['SPRED_LONG_BUY_UP'] = 0.02, -- условия, не покупаем если здесь ранее мы купили | вверх диапозон,
@@ -30,9 +19,10 @@ function getRandBuy(price)
      local checkRange = true;
                 if #setting.sellTable > 0  then
                         for j_checkRangBuy=1, #setting.sellTable  do
-                                if setting.sellTable[j_checkRangBuy].type == 'buy' then
+                                if setting.sellTable[j_checkRangBuy].type == 'buy' and 
+                                setting.sellTable[j_checkRangBuy].work then
                                 -- здесь узнаю, была ли покупка в этом диапозоне
-                                --   if   setting.profit_range + setting.sellTable[j_checkRangBuy].price >= price + setting.profit_infelicity  and 
+                                
                                         if   setting.profit_range + setting.sellTable[j_checkRangBuy].price >= price + setting.profit_infelicity  and 
                                         price >= setting.sellTable[j_checkRangBuy].price - setting.SPRED_LONG_BUY_down   then
                                         signalShowLog.addSignal(setting.sellTable[j_checkRangBuy].datetime, 11, false, price);
@@ -129,7 +119,8 @@ end;
  -- Запрет на покупку
  function getFailBuy(price, datetime) 
         local checkRange = true;
-                if setting.each_to_buy_step >= setting.each_to_buy_to_block then
+                if setting.each_to_buy_step >= setting.each_to_buy_to_block 
+                then
                         -- активация кнопки блокировки покупки
                         signalShowLog.addSignal(datetime, 18, true, price);
                         control.buy_stop()

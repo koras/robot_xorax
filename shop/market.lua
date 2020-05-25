@@ -55,7 +55,6 @@ function long(price, datetime, levelLocal , event) -- решение
 
             getfractal(price);
  
-
             -- подсчитаем скольк заявок у нас на продажу
             -- проверём, покупали здесь или нет, в этом промежутке
             checkRangeBuy = contitionMarket.getRandBuy(price, setting.sellTable);
@@ -71,7 +70,6 @@ function long(price, datetime, levelLocal , event) -- решение
             getFailBuy = contitionMarket.getFailBuy(price,datetime);
             -- Запрет на покупку (блокируется кнопкой)
             buyButtonBlock = contitionMarket.buyButtonBlock(price,datetime);
-
             -- Запрет на покупку если цена выше коридора
             not_buy_high = contitionMarket.not_buy_high(price,datetime);
 
@@ -83,12 +81,10 @@ function long(price, datetime, levelLocal , event) -- решение
                 -- сколько подряд покупок было
                 setting.each_to_buy_step = setting.each_to_buy_step + 1;
          
-
-
                     callBUY(price,  datetime);
+
                     -- обновляем изменения в панели управления
                     control.use_contract_limit();
-
                     signalShowLog.addSignal(datetime, 10, false, price); 
             end;  
               
@@ -115,15 +111,28 @@ buy_contract  = 0;
  
 
 
-
+ 
 function commonBUY(price ,dt)
-    setting.count_buy = setting.count_buy + 1;
-    -- текущаая свеча
-    setting.candles_buy_last = setting.number_of_candles;
-    setting.count_buyin_a_row = setting.count_buyin_a_row + 1; -- сколько раз подряд купили и не продали
-    setting.limit_count_buy = setting.limit_count_buy + setting.use_contract; -- отметка для лимита
-    
-    signalShowLog.addSignal(dt, 7, false, price);
+        -- текущаая свеча
+        setting.candles_buy_last = setting.number_of_candles;
+
+    if setting.emulation  then
+        signalShowLog.addSignal(dt, 20, false, price);
+        -- лимит на покупку в эмуляции ( сколько контрактов купили на текущий момент )
+        setting.limit_count_buy_emulation = setting.limit_count_buy_emulation + setting.use_contract;  
+        setting.emulation_count_buy = setting.emulation_count_buy + 1;
+
+        -- покупок сколько было за торговую сессию
+        setting.count_buyin_a_row_emulation = setting.count_buyin_a_row_emulation + 1;
+    else
+
+        setting.count_buy = setting.count_buy + 1; 
+        setting.count_buyin_a_row = setting.count_buyin_a_row + 1; -- сколько раз подряд купили и не продали
+        setting.limit_count_buy = setting.limit_count_buy + setting.use_contract; -- отметка для лимита
+        
+        signalShowLog.addSignal(dt, 7, false, price);
+    end 
+
 end 
 
 
@@ -145,8 +154,7 @@ function buyContract(result)
 
 
         for contract = 1 ,  #setting.sellTable do 
-
-    loger.save("||||||||||||||||||||||||||||||| "); 
+ 
 
     
     if  setting.sellTable[contract].executed == false then
@@ -164,7 +172,6 @@ function buyContract(result)
                 
                 signalShowLog.addSignal(result.datetime, 15, false, 100); 
                 
-                loger.save("________________________________"); 
                 setting.sellTable[contract].executed = true;
                 -- выставляем на продажу контракт.
               
@@ -191,6 +198,11 @@ function sellContract(result)
             setting.sellTable[contract].executed == false  and 
             setting.sellTable[contract].trans_id == result.trans_id  then
                 
+                -- статистика
+                setting.count_sell = setting.count_sell + 1;
+                setting.count_contract_sell = setting.count_contract_sell +  setting.sellTable[contract].use_contract;
+
+
                 setting.sellTable[contract].executed = true;
                 -- для учёта при выставлении заявки
                 setting.sellTable[contract].work = false;
@@ -214,6 +226,7 @@ function deleteBuy(result, saleContract)
         for sellT = 1,  #setting.sellTable do 
             if  setting.sellTable[sellT].type == 'buy' and  
             setting.sellTable[sellT].executed == true and 
+             
             setting.sellTable[sellT].use_contract > 0  and
             setting.sellTable[sellT].trans_id == result.trans_id  then 
                     local local_contract = setting.sellTable[sellT];
@@ -275,9 +288,7 @@ function callBUY(price ,dt)
     else 
         setting.emulation_count_contract_buy = setting.emulation_count_contract_buy + setting.use_contract
     end;
-   
-    loger.save('trans_id_buy    1  ====    '..tostring(trans_id_buy));  
-
+    
      data = {
                 ['price'] = price,
                 ['datetime']= dt, 
@@ -292,10 +303,13 @@ function callBUY(price ,dt)
                 ['emulation']=  setting.emulation,
                 ['contract']=  setting.use_contract,
                 ['buy_contract']= price, -- стоимость продажи
-                
             };
-  
+            
 
+            if setting.emulation  then
+                -- в режиме эмуляции контракт на покупку исполнен в полном объёме
+                data.executed = true;
+            end;
             setting.sellTable[(#setting.sellTable+1)] = data;
     panelBids.show();
 end 
@@ -317,9 +331,11 @@ end
 
 -- только выставляется заявка на продажу
 function sellTransaction(order, countContracts)
-
-
-    local type = "TAKE_PROFIT_STOP_ORDER";
+    if setting.sell_take_or_limit  then
+        local type = "TAKE_PROFIT_STOP_ORDER";
+    else 
+        local type = "SIMPLE_STOP_ORDER";
+    end;
   -- for contract = 1 ,  #setting.sellTable do 
 
     local  trans_id_sell  =  getRand();

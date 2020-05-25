@@ -34,7 +34,7 @@ local word = {
 
 	['on'] = "          ON      ",
 	['off'] = "          OFF     ",
-	['Trading_Bot_Control_Panel'] = "Trading Bot Control Panel (free 0.0.1)",
+	['Trading_Bot_Control_Panel'] = "Trading Bot Control Panel (free 0.0.2)",
 	
 	['block_buy'] = "buy / block",
 	['SPRED_LONG_TREND_DOWN'] = "trend down", -- рынок падает, увеличиваем растояние между покупками
@@ -522,12 +522,10 @@ function event_callback_message (t_id, msg, par1, par2)
 			setting.sell_take_or_limit = false;  
 			sell_take_or_limit();
 			use_contract_limit();
-			message('12');
 		else
 			setting.sell_take_or_limit = true; 
 			sell_take_or_limit();
 			use_contract_limit();
-			message('33');
 		end;   
 		return;
 	end;

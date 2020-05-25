@@ -82,7 +82,7 @@ end
   function stats()    
 	--  return;
 	 --  transaction.send("SELL", price, setting.use_contract);
- 
+  
 
 	 SetCell(t_stat, 2, 1,  tostring(setting.LIMIT_BID));   
 	 SetCell(t_stat, 3, 1,  tostring(setting.ACCOUNT));   
