@@ -57,7 +57,8 @@ local function show()
 		Gray(t_id,12, i);
 		Gray(t_id,14, i);
 		Gray(t_id,16, i);
-		Gray(t_id,18, i);
+		WhiteGreen(t_id,18, i);
+ 
 		Gray(t_id,20, i);
 		Gray(t_id,22, i);
 		Gray(t_id,24, i);
@@ -89,7 +90,17 @@ local function show()
 	current_limit();
 	current_limit_plus();
 	current_limit_minus();
+	sell_take_or_limit();
 end
+
+function sell_take_or_limit()   
+	if setting.sell_take_or_limit  then 
+		SetCell(t_id, 18, 1,  words.word('sell_set_take_profit'));  
+	else 
+		SetCell(t_id, 18, 1,  words.word('sell_set_limit')); 
+	end; 
+end; 
+
  
 -- ['profit_size'] = "profit size:",
 -- ['profit_range'] = "profit range:",
@@ -98,7 +109,15 @@ function current_limit()
 	SetCell(t_id, 11, 0,  word.current_limit); 
 	SetCell(t_id, 13, 0,  word.Use_contract_limit); 
 
+
+	
+
+	-- ['sell_set_take_or_limit'] = "Продажа(тейк или лимит)",
+	-- ['sell_set_take_profit'] = "тейк профит",
+	-- ['sell_set_limit'] = "тейк профит",
+
 	SetCell(t_id, 17, 0,  word.profit_range); 
+	SetCell(t_id, 18, 0,  words.word('sell_set_take_or_limit')); 
 	SetCell(t_id, 19, 0,  word.take_profit_offset); 
 	SetCell(t_id, 21, 0,  word.take_profit_spread); 
 	SetCell(t_id, 25, 0,  words.word('buy_block')); 
@@ -112,6 +131,10 @@ function current_limit_plus()
 	SetCell(t_id, 13, 2,  word.current_limit_plus); 
 
 	SetCell(t_id, 17, 2,  word.current_limit_plus); 
+
+	 
+	SetCell(t_id, 18, 2,  words.word('sell_set_take_or_limit_change')); 
+
 	SetCell(t_id, 19, 2,  word.current_limit_plus); 
 	SetCell(t_id, 21, 2,  word.current_limit_plus); 
 	SetCell(t_id, 25, 2,  word.current_limit_plus); 
@@ -138,6 +161,11 @@ function current_limit_minus()
 	SetCell(t_id, 13, 3,  word.current_limit_minus); 
  
 	SetCell(t_id, 17, 3,  word.current_limit_minus); 
+
+
+ 
+
+
 	SetCell(t_id, 19, 3,  word.current_limit_minus); 
 	SetCell(t_id, 21, 3,  word.current_limit_minus); 
 	SetCell(t_id, 25, 3,  word.current_limit_minus); 
@@ -162,6 +190,8 @@ function use_contract_limit()
 	SetCell(t_id, 13, 1,   tostring(setting.use_contract)); 
  
 	SetCell(t_id, 17, 1,   tostring(setting.profit_range)); 
+ 
+
 	SetCell(t_id, 19, 1,   tostring(setting.take_profit_offset)); 
 	SetCell(t_id, 21, 1,   tostring(setting.take_profit_spread)); 
 -- потом только решение за человеком / сколько подряд раз уже купили
@@ -482,7 +512,25 @@ function event_callback_message (t_id, msg, par1, par2)
 	 
 
 
-
+--	['sell_set_take_profit'] = "тейк профит",
+--	['sell_set_limit'] = "тейк профит",
+	
+--	['sell_set_take_or_limit_change'] = "Изменить",
+	-- установка тейкпрофита или лимитки на продажу
+	if par1 == 18 and par2 == 2  and  msg == 1 then
+		if setting.sell_take_or_limit   then 
+			setting.sell_take_or_limit = false;  
+			sell_take_or_limit();
+			use_contract_limit();
+			message('12');
+		else
+			setting.sell_take_or_limit = true; 
+			sell_take_or_limit();
+			use_contract_limit();
+			message('33');
+		end;   
+		return;
+	end;
 	 
 
  

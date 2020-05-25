@@ -158,21 +158,19 @@ function buyContract(result)
     loger.save(setting.sellTable[contract].type); 
        loger.save(result.trans_id); 
        loger.save(tostring(setting.sellTable[contract].trans_id));  
-          
-
-
-
-
-
             if  setting.sellTable[contract].type == 'buy' and  
             setting.sellTable[contract].executed == false  and 
             setting.sellTable[contract].trans_id == result.trans_id  then
                 
                 signalShowLog.addSignal(result.datetime, 15, false, 100); 
-
+                
+                loger.save("________________________________"); 
                 setting.sellTable[contract].executed = true;
                 -- выставляем на продажу контракт.
-                sellTransaction(result, countContracts);
+              
+                sellTransaction(result, setting.sellTable[contract]);
+                panelBids.show();
+                return;
             end;
         end;
     end;
@@ -197,11 +195,17 @@ function sellContract(result)
                 -- для учёта при выставлении заявки
                 setting.sellTable[contract].work = false;
                 -- выставляем на продажу контракт.
+                setting.sellTable[contract].price_take = result.price,
                 deleteBuy(result, setting.sellTable[contract])
+                panelBids.show();
             end;
         end;
     end;
 end;
+
+
+
+
 
 
 --  -- надо отметить в контркте на покупку что заявка исполнена
@@ -236,6 +240,7 @@ function deleteBuy(result, saleContract)
                     -- calculateProfit(setting.sellTable[sellT]);
 
                     signalShowLog.addSignal(result.datetime, 8, false, result.price); 
+                  
                     -- надо удалить контракт по которому мы покупали
             end;
         end;
@@ -289,8 +294,7 @@ function callBUY(price ,dt)
                 ['buy_contract']= price, -- стоимость продажи
                 
             };
-
-            loger.save('trans_id_buy    2  ====    '..tostring(data.trans_id));  
+  
 
             setting.sellTable[(#setting.sellTable+1)] = data;
     panelBids.show();
@@ -313,23 +317,23 @@ end
 
 -- только выставляется заявка на продажу
 function sellTransaction(order, countContracts)
-    --loger.save("trans_id".. order.trans_id);
-    --loger.save("trans_id".. order.order_num); 
 
 
     local type = "TAKE_PROFIT_STOP_ORDER";
-    for contract = 1 ,  #setting.sellTable do 
+  -- for contract = 1 ,  #setting.sellTable do 
 
     local  trans_id_sell  =  getRand();
-            local price = setting.profit_range + order.price + setting.profit_infelicity;
-            if setting.emulation == false then
-                 trans_id_sell =  transaction.send("SELL", p, setting.use_contract, type, order.order_num);
+          --  local price = setting.profit_range + order.price + setting.profit_infelicity;
+            local price = setting.profit_range + order.price ;
+          if setting.emulation == false then
+                 trans_id_sell =  transaction.send("SELL", price, setting.use_contract, type, order.order_num);
             end;
 
-            signalShowLog.addSignal(order.datetime, 9, false, p); 
-            
+            signalShowLog.addSignal(order.datetime, 9, false, price); 
+
             loger.save('trans_id_sell = ' ..  trans_id_sell ); 
-            setting.sellTable[(#setting.sellTable+1)] = {
+
+                                            local data = {
                                                             ['price'] = price,
                                                             ['datetime']= order.datetime, 
                                                             ['trans_id']= trans_id_sell, 
@@ -340,10 +344,10 @@ function sellTransaction(order, countContracts)
                                                             ['executed'] = false,
                                                             ['emulation']= setting.emulation,
                                                             ['contract']=  setting.use_contract,
-                                                            ['buy_contract']= priceLocal, -- стоимость продажи
+                                                            ['buy_contract']= order.price, -- стоимость покупку
                                                         };
-
-    end;
+            setting.sellTable[(#setting.sellTable+1)] = data;
+  --  end;
 end;
 
  

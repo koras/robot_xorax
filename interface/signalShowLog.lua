@@ -32,14 +32,8 @@ local wordTitleTableLog = {
  
 
 local function addSignal(dt, event, status, price) 
-	
-	
 	CreateNewTableLogEvent();
-
-	loger.save('event :' .. event     );
-
-	loger.save('event :' .. event    ..' price '.. tostring( price ) );
-	
+	--loger.save('event :' .. event     );
 	local arr = {
 		['dt'] =  dt,
 		['dtime'] =  dt.hour..':'..dt.min..':'..dt.sec,

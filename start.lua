@@ -200,49 +200,17 @@ basis = 9
 
    if not CheckBit(trade.flags, 0) and not CheckBit(trade.flags, 1) then
 
-
       if bit.band(trade.flags, 2) == 0 then
-         
          -- исполняется покупка контракта
          market.buyContract(trade);
-         -- покупка исполнена
-         -- вызываем выставление заявки на продажу продаж 
-   ---   market.sellTransaction(order);
-
+         loger.save('OnTrade end  -- исполняется покупка контракта')
       else
-         
-         
-      --   deleteBids.transCallback(order);
           market.sellContract(trade);
       end;
 
 
-
-
-
-
    end
-
-   local test = bit.band(trade.flags, 3);
-   if (test == 0) then
-      -- если бит 0 и 1 не установлены -- заявка выполнена
-
-    --  self:OnStatusChanged(ST_FILLED);
-
-   --   self:InternalDelete();
-   else
-      local sell = CheckBit(trade.flags, 4) ~= 0;
-   --   assert((sell == (self.request.OPERATION == "S")) and (not sell == (self.request.OPERATION == "B")));
-      -- if (test == 2) then
-      -- --   self:OnStatusChanged(ST_REJECTED);
-      -- --   self:InternalDelete();
-      -- else
-      -- --   self:UpdateTiming();
-      -- end
-   end
-
-
-      loger.save('OnTrade end' )
+    
        
    end
 
