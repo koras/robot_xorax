@@ -106,23 +106,25 @@ end;
 -- ['profit_range'] = "profit range:",
 
 function current_limit() 
-	SetCell(t_id, 11, 0,  word.current_limit); 
-	SetCell(t_id, 13, 0,  word.Use_contract_limit); 
+	SetCell(t_id, 11, 0,   words.word('current_limit')); 
+	SetCell(t_id, 13, 0,   words.word('current_limit_max'));  
 
-
+	 
 	
 
 	-- ['sell_set_take_or_limit'] = "Продажа(тейк или лимит)",
 	-- ['sell_set_take_profit'] = "тейк профит",
 	-- ['sell_set_limit'] = "тейк профит",
-
-	SetCell(t_id, 17, 0,  word.profit_range); 
+	 
+	SetCell(t_id, 17, 0,  words.word('profit_range')); 
 	SetCell(t_id, 18, 0,  words.word('sell_set_take_or_limit')); 
-	SetCell(t_id, 19, 0,  word.take_profit_offset); 
-	SetCell(t_id, 21, 0,  word.take_profit_spread); 
+	SetCell(t_id, 19, 0,  words.word('profit_take_max_range')); 
+	SetCell(t_id, 20, 0,  words.word('profit_take_protected')); 
+
+	 
 	SetCell(t_id, 25, 0,  words.word('buy_block')); 
-	SetCell(t_id, 26, 0,  word.SPRED_LONG_TREND_DOWN); 
-	SetCell(t_id, 27, 0,  word.SPRED_LONG_TREND_DOWN_SPRED); 
+	SetCell(t_id, 26, 0,   words.word('SPRED_LONG_TREND_DOWN')); 
+	SetCell(t_id, 27, 0,   words.word('SPRED_LONG_TREND_DOWN_SPRED')); 
 	SetCell(t_id, 28, 0,  words.word('not_buy_high')); 
  
 end; 
@@ -136,7 +138,7 @@ function current_limit_plus()
 	SetCell(t_id, 18, 2,  words.word('sell_set_take_or_limit_change')); 
 
 	SetCell(t_id, 19, 2,  word.current_limit_plus); 
-	SetCell(t_id, 21, 2,  word.current_limit_plus); 
+	SetCell(t_id, 20, 2,  word.current_limit_plus); 
 	SetCell(t_id, 25, 2,  word.current_limit_plus); 
 	SetCell(t_id, 26, 2,  word.current_limit_plus); 
 	SetCell(t_id, 27, 2,  word.current_limit_plus); 
@@ -146,7 +148,7 @@ function current_limit_plus()
 
 	Green(t_id,17, 2);
 	Green(t_id,19, 2);
-	Green(t_id,21, 2);
+	Green(t_id,20, 2);
 	Green(t_id,25, 2);
 	Green(t_id,26, 2);
 	Green(t_id,27, 2);
@@ -167,7 +169,7 @@ function current_limit_minus()
 
 
 	SetCell(t_id, 19, 3,  word.current_limit_minus); 
-	SetCell(t_id, 21, 3,  word.current_limit_minus); 
+	SetCell(t_id, 20, 3,  word.current_limit_minus); 
 	SetCell(t_id, 25, 3,  word.current_limit_minus); 
 	SetCell(t_id, 26, 3,  word.current_limit_minus); 
 	SetCell(t_id, 27, 3,  word.current_limit_minus); 
@@ -177,23 +179,25 @@ function current_limit_minus()
 
 	Red(t_id,17, 3);
 	Red(t_id,19, 3);
-	Red(t_id,21, 3);
+	Red(t_id,20, 3);
 	Red(t_id,25, 3);
 	Red(t_id,26, 3);
 	Red(t_id,27, 3);
 	Red(t_id,28, 3);
 end;
-
+ 
  
 function use_contract_limit()  
-	SetCell(t_id, 11, 1,   tostring( setting.LIMIT_BID ) .. '/'.. setting.limit_count_buy .. '/'.. setting.use_contract ); 
+	SetCell(t_id, 11, 1,   tostring( setting.LIMIT_BID )  .. ' / '.. 
+							setting.limit_count_buy .. "("..setting.limit_count_buy_emulation ..")"..' / '.. 
+							setting.use_contract ); 
 	SetCell(t_id, 13, 1,   tostring(setting.use_contract)); 
  
 	SetCell(t_id, 17, 1,   tostring(setting.profit_range)); 
  
 
 	SetCell(t_id, 19, 1,   tostring(setting.take_profit_offset)); 
-	SetCell(t_id, 21, 1,   tostring(setting.take_profit_spread)); 
+	SetCell(t_id, 20, 1,   tostring(setting.take_profit_spread)); 
 -- потом только решение за человеком / сколько подряд раз уже купили
 	SetCell(t_id, 25, 1,   tostring( setting.each_to_buy_to_block ) .. '/'.. setting.each_to_buy_step ); 
 	SetCell(t_id, 26, 1,   tostring( setting.SPRED_LONG_TREND_DOWN )); 
@@ -207,7 +211,7 @@ end;
  
 function mode_emulation_on() 
 	setting.emulation=true;
-	SetCell(t_id, 2, 2,  word.emulation)
+	SetCell(t_id, 2, 2,  words.word('emulation'))
 	SetCell(t_id, 3, 2,  word.on)
 	Green(t_id,1, 2) 
 	Green(t_id,2, 2) 
@@ -216,7 +220,7 @@ end;
 
 function mode_emulation_off() 
 	setting.emulation=false;  
-	SetCell(t_id, 2, 2,  word.emulation)
+	SetCell(t_id, 2, 2,   words.word('emulation'))
 	SetCell(t_id, 3, 2,  word.off)
 	Gray(t_id,1, 2);
 	Gray(t_id,2, 2);
@@ -235,9 +239,12 @@ function button_start()
 	Green(t_id,2, 0) 
 	Green(t_id,3, 0)
 end;
+
+
+ 
 function button_finish() 
 	setting.status=false;  
-	SetCell(t_id, 2, 0,  word.start)
+	SetCell(t_id, 2, 0,  words.word('bablo'))
 	Gray(t_id,1, 0);
 	Gray(t_id,2, 0);
 	Gray(t_id,3, 0);
@@ -293,7 +300,7 @@ init.create = true;
 	t_id = AllocTable();	 
 
 
-	AddColumn(t_id, 0, word.status , true, QTABLE_STRING_TYPE, 30);
+	AddColumn(t_id, 0, word.status , true, QTABLE_STRING_TYPE, 35);
 	AddColumn(t_id, 1, word.buy, true, QTABLE_STRING_TYPE, 20);
 	AddColumn(t_id, 2, word.sell, true, QTABLE_STRING_TYPE, 20); 
 	AddColumn(t_id, 3, word.close_positions, true,QTABLE_STRING_TYPE, 20); 
@@ -364,14 +371,15 @@ function event_callback_message (t_id, msg, par1, par2)
 	if par1 == 11 and par2 == 2  and  msg == 1 then
 		
 		setting.LIMIT_BID = setting.LIMIT_BID + 1;
-		
+		setting.LIMIT_BID_emulation = setting.LIMIT_BID_emulation + 1;
 		use_contract_limit();
 		return;
 	end;
 	if par1 == 11 and par2 == 3  and  msg == 1 then
 		
-		if(setting.LIMIT_BID > 0) then
+		if(setting.LIMIT_BID > 1) then
 				setting.LIMIT_BID = setting.LIMIT_BID - 1;
+				setting.LIMIT_BID_emulation = setting.LIMIT_BID_emulation - 1;
 				use_contract_limit();
 			end; 
 		return;
@@ -434,13 +442,13 @@ function event_callback_message (t_id, msg, par1, par2)
 
 
 
-	if par1 == 21 and par2 == 2  and  msg == 1 then
+	if par1 == 20 and par2 == 2  and  msg == 1 then
 		setting.take_profit_spread = setting.take_profit_spread + 0.01; 
 		use_contract_limit();
 		return;
 	end;
 
-	if par1 == 21 and par2 == 3  and  msg == 1 then
+	if par1 == 20 and par2 == 3  and  msg == 1 then
 		if setting.take_profit_spread > 0.01 then
 			setting.take_profit_spread = setting.take_profit_spread - 0.01;
 			use_contract_limit();

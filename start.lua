@@ -154,20 +154,12 @@ basis = 9
  
        --  loger.save("====================================================== "); 
          if bit.band(order.flags, 2) == 0 then
-         --   loger.save("покупка исполнена "); 
-         --   loger.save("Bye Bye Bue  111111 "); 
-            -- покупка исполнена 
 
          else
           --  loger.save("SELL SELL SELL SELL SELL "); 
             deleteBids.transCallback(order);
          end;
 
-         -- loger.save("order.trans_id ".. order.trans_id);
-         -- loger.save("order.order_num ".. order.order_num); 
-         -- loger.save("order.price ".. order.price);
-         -- loger.save("order.balance ".. order.balance);
- 
 
         -- trans_id
       end;
@@ -184,16 +176,6 @@ basis = 9
    local sell = CheckBit(trade.flags, 1);
 
    if (sell  == 0) then
-    --  loger.save('sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss  ' )
-
-      -- write_str = trade.trade_num .. ";" ..
-      -- trade.order_num .. ";" ..
-      -- trade.brokerref .. ";" ..
-      -- trade.price .. ";" ..
-      -- trade.qty .. ";" ..
-      -- trade.value .. ";" ..   tostring(bit_set(trade.flags, 1)) .. ";" .. "\n";
-      
-   --   loger.save(write_str )
 
    end;
 
