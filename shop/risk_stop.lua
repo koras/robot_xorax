@@ -34,7 +34,9 @@ stopClass.count_stop = 2;
 stopClass.spred_range = 0.1;
 
 
-
+-- стопы обновляются только при покупке или продаже контракта
+-- при срабатывании стопа, должны убираться контракты которые находятся на самом вверху
+-- и закрываться позиции по покупке. Более такие позиции не учитываются в логике
 function update_stop()
 
     if setting.emulation then
@@ -89,9 +91,7 @@ end;
 
 -- Ставим новый стоп
 function createStop()
-
     local contract_work = stopClass.contract_work + stopClass.contract_add;
-
     if contract_work > 0 then 
         if contract_work == 1 then 
             -- один стоп
@@ -99,12 +99,12 @@ function createStop()
         else
 
             if stopClass.count_stop >= 2  then 
-
                 for contractStopLimit = 0 , stopClass.count_stop do 
                     -- расставляем стопы
                     sendTransStop();
                 end; 
             end; 
+
         end; 
     end;
 
