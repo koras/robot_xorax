@@ -324,9 +324,8 @@ function callBUY_emulation(price ,datetime)
                 ['trans_id_buy']=  trans_id_buy, 
             };
 
-            signalShowLog.addSignal(data.datetime, 24, false, #setting.sellTable);  
+            signalShowLog.addSignal(data.datetime, 24, false, price);  
             setting.sellTable[(#setting.sellTable+1)] = data;
-           signalShowLog.addSignal(data.datetime, 24, false, #setting.sellTable);  
 
            panelBids.show();
             sellTransaction_emulation(data) 
@@ -342,8 +341,7 @@ function sellTransaction_emulation(contractBuy)
           -- price = setting.profit_range + contractBuy.price  + setting.profit_infelicity;
            price = setting.profit_range + contractBuy.price;
 
-            signalShowLog.addSignal(contractBuy.datetime, 22, false, #setting.sellTable); 
-
+            
             setting.sellTable[#setting.sellTable + 1] = {
                                                             ['price'] = price,
                                                             ['datetime']= contractBuy.datetime, 
@@ -357,7 +355,7 @@ function sellTransaction_emulation(contractBuy)
                                                             ['buy_contract']= contractBuy.price, -- стоимость продажи
                                                             ['trans_id_buy'] = contractBuy.trans_id_buy
                                                         };
-                                                        signalShowLog.addSignal(contractBuy.datetime, 22, false, #setting.sellTable); 
+           signalShowLog.addSignal(contractBuy.datetime, 22, false, price); 
     panelBids.show();
 end;
 
