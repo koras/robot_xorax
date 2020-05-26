@@ -125,7 +125,7 @@ function buyContract(result)
             setting.sellTable[contract].executed == false  and 
             setting.sellTable[contract].trans_id == result.trans_id  then
                 
-                signalShowLog.addSignal(result.datetime, 27, false, 100); 
+                signalShowLog.addSignal(result.datetime, 27, false, setting.sellTable[contract].price); 
                 
                 setting.sellTable[contract].executed = true;
                 -- выставляем на продажу контракт.
@@ -245,11 +245,8 @@ function deleteBuyCost(result, saleContract)
                     if setting.SPRED_LONG_TREND_DOWN < 0  then 
                         setting.SPRED_LONG_TREND_DOWN = 0.01;
                     end;
-
-                  --  if setting.sellTable[sellT].use_contract >= 0 then 
-                        -- использовать контракт в работе
-                        setting.sellTable[sellT].work = false;
-                  --  end;
+ 
+                    setting.sellTable[sellT].work = false;
 
                     
                     setting.limit_count_buy = setting.limit_count_buy - saleContract.contract;
@@ -273,8 +270,6 @@ end
  
 function commonBUY(price ,datetime)
     -- текущаая свеча
-
-    
     -- ставим заявку на покупку выше на 0.01
     price  = price + setting.profit_infelicity; -- и надо снять заявку если не отработал
 
@@ -288,7 +283,6 @@ function commonBUY(price ,datetime)
         -- покупок сколько было за торговую сессию
         setting.count_buyin_a_row_emulation = setting.count_buyin_a_row_emulation + 1;
     else
-
         setting.count_buy = setting.count_buy + 1; 
         setting.count_buyin_a_row = setting.count_buyin_a_row + 1; -- сколько раз подряд купили и не продали
         setting.limit_count_buy = setting.limit_count_buy + setting.use_contract; -- отметка для лимита
@@ -374,10 +368,7 @@ function callSELL_emulation(result)
                 --     result.close + setting.profit_infelicity >= setting.sellTable[sellT].price 
                 result.close  >= setting.sellTable[sellT].price   then 
                     
-                       
                         setting.sellTable[sellT].work = false; 
-                         
-                        
                         execution_sell(setting.sellTable[sellT]);
                         -- сколько продано контрактов за сессию (режим эмуляции)ю
                         setting.emulation_count_contract_sell = setting.emulation_count_contract_sell + setting.sellTable[sellT].contract; 

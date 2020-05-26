@@ -178,8 +178,7 @@ function CreateNewTableBids()
 	createTableBids = true; 
 	
 	t_id_TableBids = AllocTable();	 
- 
-	 
+
 	AddColumn(t_id_TableBids, 0, wordTitleTableBids.number , true, QTABLE_STRING_TYPE, 5);
 	AddColumn(t_id_TableBids, 1, wordTitleTableBids.price, true, QTABLE_STRING_TYPE, 20);
 	AddColumn(t_id_TableBids, 2,  wordTitleTableBids.time, true, QTABLE_STRING_TYPE, 10); 
@@ -199,15 +198,9 @@ function CreateNewTableBids()
 	-- for i = 1, 35 do
 	-- 	InsertRow(t_id_TableBids, -1);
 	-- end;
-
- 
-
-
 end;
 
  
- 
-
  function deleteTable()   
 	DestroyTable(t_id_TableBids)
  end;
