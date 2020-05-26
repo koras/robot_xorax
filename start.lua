@@ -164,7 +164,16 @@ basis = 9
         -- trans_id
       end;
       
-      if bit.band(order.flags,1) + bit.band(order.flags,2) == 0  then loger.save("исполнена loger.save(") end;
+      if bit.band(order.flags,1) + bit.band(order.flags,2) == 0  then 
+
+
+         loger.save("исполнена loger.save(  order.price ".. order.price) 
+
+         loger.save("исполнена loger.save( trans_id  ".. order.trans_id) 
+         market.sellContract(order);
+      
+      
+      end;
    end
 
 
@@ -177,6 +186,15 @@ basis = 9
 
    if (sell  == 0) then
 
+   end;
+
+   if bit.band(trade.flags, 2) == 0 then
+      -- исполняется покупка контракта 
+      market.buyContract(trade);
+      loger.save('OnTrade end 222  -- исполняется покупка контракта')
+   else
+      loger.save('OnTrade end 111 -- исполняется продажа контракта ')
+       market.sellContract(trade);
    end;
 
 
