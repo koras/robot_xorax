@@ -424,7 +424,7 @@ function execution_sell(contract)
 --setting.each_to_buy_step
     -- увеличивает лимит используемых контрактов 
     
-    if  contract.contract > 0 and setting.limit_count_buy  > contract.contract  then 
+    if   setting.emulation and contract.contract > 0 and setting.limit_count_buy  > contract.contract  then 
         setting.limit_count_buy = setting.limit_count_buy - contract.contract;
     end;
 

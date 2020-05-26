@@ -498,12 +498,14 @@ function event_callback_message (t_id, msg, par1, par2)
 		return;
 	end;
 	if par1 == 27 and par2 == 3  and  msg == 1 then
-		if setting.SPRED_LONG_TREND_DOWN_SPRED > 1 then
+		if setting.SPRED_LONG_TREND_DOWN_SPRED > 0.01 then
 			setting.SPRED_LONG_TREND_DOWN_SPRED = setting.SPRED_LONG_TREND_DOWN_SPRED - 0.01;
 			use_contract_limit();
 			end; 
 		return;
 	end;
+
+
 	 
 	-- на сколько увеличиваем растояние при падении рынка между покупками
 	if par1 == 28 and par2 == 2  and  msg == 1 then

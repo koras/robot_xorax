@@ -69,8 +69,8 @@ function getLimitBuy(datetime)
         end;  
 
         
-        if setting.emulation and setting.LIMIT_BID <= setting.limit_count_buy_emulation then
-                signalShowLog.addSignal(datetime, 25, false, setting.limit_count_buy);
+        if setting.emulation  and setting.LIMIT_BID <= setting.limit_count_buy_emulation then
+                signalShowLog.addSignal(datetime, 25, false, setting.limit_count_buy_emulation);
                 checkRange = false; 
         end;  
 
