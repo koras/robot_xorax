@@ -1,14 +1,14 @@
-   setting.profit_range =  0.01; -- минимальная прибыль
+   setting.profit_range =  0.05; -- минимальная прибыль
    setting.profit_range_array =  0.03; -- минимальная прибыль при больших заявках
    setting.profit_infelicity =  0.01; -- погрешность
    
-   setting.profit =  0.01; -- подсчёт прибыли
+   setting.profit =  0.00; -- подсчёт прибыли
 
 
 
 
-   setting.LIMIT_BID = 1;
-   setting.LIMIT_BID_emulation = 1;
+   setting.LIMIT_BID = 10;
+   setting.LIMIT_BID_emulation = 10;
 
 
 
@@ -42,7 +42,7 @@
     -- Выставлять контракт на продажу через тейки или лимитки
     -- Если рыно слабо ходит то выгоднее лимитки. Так как при выставлении тейков, продаваться будет ниже, что не выгодно.
     -- по умолчанию стоят тейки
-   setting.sell_take_or_limit = true;
+   setting.sell_take_or_limit = false;
 
 
 
