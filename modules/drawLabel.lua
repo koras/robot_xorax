@@ -89,7 +89,7 @@ local function set(Operation, Price , datetime, count, textInfo)
         
       -- loger.save(Operation.. '  ' .. '  '..  Price .. " ������� ��� ������� ���� � ����� - "..     label_params['DATE'] ..'   '..label_params['TIME'].. '  '.. label_params['IMAGE_PATH'] )
        -- loger.save(  datetime.hour ..'   '..datetime.min.. '  '.. '00' )
-          AddLabel(setting.tag, label_params);
+       return   AddLabel(setting.tag, label_params);
 end
 
   

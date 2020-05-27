@@ -2,16 +2,9 @@ local loger = dofile(getScriptPath() .. "\\modules\\loger.lua");
 local label = dofile(getScriptPath() .. "\\modules\\drawLabel.lua");
 local transaction = dofile(getScriptPath() .. "\\shop\\transaction.lua");
 local signalShowLog = dofile(getScriptPath() .. "\\interface\\signalShowLog.lua");
-local statsPanel = dofile(getScriptPath() .. "\\interface\\stats.lua");
-local panelBids = dofile(getScriptPath() .. "\\interface\\bids.lua");
-local interfaceBids = dofile(getScriptPath() .. "\\interface\\bids.lua");
-local contitionMarket = dofile(getScriptPath() .. "\\shop\\contition_shop.lua");
-local deleteBids = dofile(getScriptPath() .. "\\shop\\deleteBids.lua");
-local control = dofile(getScriptPath() .. "\\interface\\control.lua");
  
 
 -- класс для работы с стопами
- 
 
 
 -- стопы обновляются только при покупке или продаже контракта
@@ -115,7 +108,23 @@ end;
 
 -- снимаем старые стоп заявки
 function backStop()
+
     -- обнуляем заявки
+    if #stopClass.array_stop > 0 then
+
+        for s = 1 ,  #stopClass.array_stop do 
+            if #stopClass.array_stop[s].emulation then
+                -- удаляем метку
+
+            else
+                -- снимаем стоп заявку
+
+            end;
+            
+        end;
+
+    end;
+
     stopClass.array_stop = {};
     
 end;
@@ -133,22 +142,25 @@ function sendTransStop(countContract, countPrice )
             dataParam.emulation = setting.emulation;
             dataParam.price = countPrice;
             dataParam.contract = countContract;
-
-    stopClass.array_stop[ #stopClass.array_stop + 1 ] = dataParam;
+            dataParam.trans_id = getRand();
+            dataParam.label = 0;
+ 
     
     if setting.emulation then
         -- рисуем стоп
+        dataParam.label = label.set('stop', countPrice ,  setting.datetime, countContract, 'stop')
+         
+ 
         signalShowLog.addSignal(setting.datetime, 28, false, countPrice);  
     else
+          
         signalShowLog.addSignal( setting.datetime, 29, false, countPrice);  
         -- отправляем транкзакцию 
-
     end;
+
+    stopClass.array_stop[ #stopClass.array_stop + 1 ] = dataParam; 
     
 end;
-
-
-
 
 
 stopClass.transCallback = transCallback;
@@ -156,3 +168,7 @@ stopClass.update_stop = update_stop;
  
 return stopClass
 
+
+function getRand()
+    return tostring(math.random(2000000000));
+end;
