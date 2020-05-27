@@ -26,11 +26,13 @@ package.path = package.path
 
         require("table")
  
-
-setting = {};
+ 
+        setting = {};
+        stopClass = {};
 
 dofile(getScriptPath() .. "\\setting\\account.lua");
 dofile(getScriptPath() .. "\\setting\\work.lua");
+dofile(getScriptPath() .. "\\setting\\stop.lua");
  
 local uTransaction = dofile(getScriptPath() .. "\\shop\\transaction.lua");
 

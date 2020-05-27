@@ -37,8 +37,17 @@ end;
 
     
 function word(key)
+	
 
+ 
 	arr = {	  
+		['stop_add_contract'] = "Добавить контрактов к стопам",
+		['stop_count_contract'] = "Количество стопов",
+		['stop_range_price'] = "Расстояние до макс. покупки",
+		['stop_range_price_stop'] = "Расстояние между стопами",
+		['stop_contract_work'] = " в работе",
+		['stop_from_price'] = " от цены ",
+
 		['add'] = "       прибавить",
 		['minus'] = "       убавить",
 		['bablo'] = "                   БАБЛО",
