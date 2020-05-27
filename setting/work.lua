@@ -6,6 +6,8 @@
    
    setting.profit =  0.00; -- подсчёт прибыли
 
+   setting.datetime =  0; -- подсчёт прибыли
+
 
 
 

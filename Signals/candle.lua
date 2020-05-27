@@ -78,7 +78,7 @@ local function getSignal(tag, collbackFunc)
                     bigCandle  = i; 
 
 
-
+                    setting.datetime  = bar.datetime;
                     
                     -- candle_current_high - setting.candle_current_low
 

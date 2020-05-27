@@ -112,8 +112,9 @@ basis = 9
    end
 
 
-   function main()
-   
+   function main() 
+    
+ 
       tradeSignal.getSignal(setting.tag, eventTranc);
 
      signalShowLog.CreateNewTableLogEvent();
@@ -283,6 +284,11 @@ end
 
    end;
      
+
+
+
+
+   
 
    
    function OnStop()

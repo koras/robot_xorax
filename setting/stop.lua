@@ -28,3 +28,6 @@ stopClass.triger_stop = false;
 
 -- обновили максимальную цену, передвигаем стоп, сбрасываем тригер на обновление
 stopClass.triger_update_up = false;
+
+-- стоп заявки
+stopClass.array_stop = {};

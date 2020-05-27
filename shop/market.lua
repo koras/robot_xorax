@@ -1,7 +1,5 @@
 
-
 -- ЗДесь принимается решение о покупке или продаже в зависимости от текущего состояния счёта
-
 -- https://open-broker.ru/pricing-plans/universal/
 -- 751,97 ₽
 -- 7,5  = 0.01
@@ -12,12 +10,12 @@ local transaction = dofile(getScriptPath() .. "\\shop\\transaction.lua");
 local signalShowLog = dofile(getScriptPath() .. "\\interface\\signalShowLog.lua");
 local statsPanel = dofile(getScriptPath() .. "\\interface\\stats.lua");
 local panelBids = dofile(getScriptPath() .. "\\interface\\bids.lua");
-
 local interfaceBids = dofile(getScriptPath() .. "\\interface\\bids.lua");
 local contitionMarket = dofile(getScriptPath() .. "\\shop\\contition_shop.lua");
 local deleteBids = dofile(getScriptPath() .. "\\shop\\deleteBids.lua");
- 
 local control = dofile(getScriptPath() .. "\\interface\\control.lua");
+local risk_stop = dofile(getScriptPath() .. "\\shop\\risk_stop.lua");
+ 
  
 
 M = {};
@@ -132,6 +130,7 @@ function buyContract(result)
               
                 sellTransaction(result, setting.sellTable[contract]);
                 panelBids.show();
+                risk_stop.update_stop();
                 return;
             end;
         end;
@@ -179,6 +178,8 @@ function sellTransaction(order, countContracts)
                                                             ['buy_contract']= order.price, -- стоимость покупку
                                                         };
             setting.sellTable[(#setting.sellTable+1)] = data;
+
+            
   --  end;
 end;
 
@@ -205,6 +206,8 @@ function sellContract(result)
                 setting.sellTable[contract].executed = true;
                 -- для учёта при выставлении заявки
                 setting.sellTable[contract].work = false;
+                 
+
                 -- выставляем на продажу контракт.
                 setting.sellTable[contract].price_take = result.price,
  
@@ -213,9 +216,8 @@ function sellContract(result)
                 signalShowLog.addSignal(setting.sellTable[contract].datetime, 26, false, result.price); 
 
                 deleteBuyCost(result, setting.sellTable[contract])
+                
  
-
-              --  panelBids.show();
             end;
         end;
     end;
@@ -256,6 +258,7 @@ function deleteBuyCost(result, saleContract)
                     -- надо удалить контракт по которому мы покупали
 
                     
+                    risk_stop.update_stop();
                     panelBids.show();
             end;
         end;
@@ -313,16 +316,17 @@ function callBUY_emulation(price ,datetime)
                 ['type']= "buy",
                 ['emulation']=  setting.emulation,
                 ['contract']=  setting.use_contract,
-                ['use_contract']=   setting.use_contract,  
-                ['buy_contract']= price, -- стоимость продажи
-                ['trans_id_buy']=  trans_id_buy, 
+                ['use_contract'] = setting.use_contract,  
+                ['buy_contract'] = price, -- стоимость продажи
+                ['trans_id_buy'] = trans_id_buy, 
             };
 
             signalShowLog.addSignal(data.datetime, 24, false, price);  
             setting.sellTable[(#setting.sellTable+1)] = data;
-
-           panelBids.show();
+ 
             sellTransaction_emulation(data) 
+            panelBids.show();
+            risk_stop.update_stop();
 end 
 
 
@@ -350,7 +354,7 @@ function sellTransaction_emulation(contractBuy)
                                                             ['trans_id_buy'] = contractBuy.trans_id_buy
                                                         };
            signalShowLog.addSignal(contractBuy.datetime, 22, false, price); 
-    panelBids.show();
+ 
 end;
 
 
@@ -379,7 +383,7 @@ function callSELL_emulation(result)
 
                      --   panelBids.show();
                        deleteBuy_emulation(setting.sellTable[sellT])
- 
+                       risk_stop.update_stop();
 
                 end;
             end; 
@@ -494,7 +498,6 @@ end;
  
  
 M.transCallback   = transCallback;
--- M.callSELL   = callSELL;
  
  
 M.callSELL_emulation   = callSELL_emulation ;

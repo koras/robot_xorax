@@ -18,12 +18,8 @@ local control = dofile(getScriptPath() .. "\\interface\\control.lua");
 -- при срабатывании стопа, должны убираться контракты которые находятся на самом вверху
 -- и закрываться позиции по покупке. Более такие позиции не учитываются в логике
 function update_stop()
-
-    if setting.emulation then
-      
-    else
-
-    end;
+    getStopBid();
+    createStop();
 end;
 
  
@@ -38,9 +34,7 @@ end;
 
 -- функция сбора заявок для стопов
 function getStopBid()
- 
     setStopDefault();
-
     for contractStop = 1 ,  #setting.sellTable do 
             -- берём все заявки которые куплены
         if  setting.sellTable[contractStop].type == 'buy' and    setting.sellTable[contractStop].work then
@@ -68,19 +62,48 @@ function removeStop()
 end;
 
 -- Ставим новый стоп
-function createStop()
+function createStop() 
+
     local contract_work = stopClass.contract_work + stopClass.contract_add;
     if contract_work > 0 then 
         if contract_work == 1 then 
             -- один стоп
-                    sendTransStop();
+                    sendTransStop(contract_work);
         else
 
             if stopClass.count_stop >= 2  then 
-                for contractStopLimit = 0 , stopClass.count_stop do 
-                    -- расставляем стопы
-                    sendTransStop();
+                -- более двух стопов
+
+                if contract_work  > stopClass.count_stop  then 
+    
+
+                    local lost_contract_start = 0;
+
+                    -- количество контрактов на 1 стоп
+                    local contract = math.floor(contract_work / stopClass.count_stop);
+
+                    -- остаток от контрактов
+                    local lost_contract = contract_work % stopClass.count_stop; -- в переменной A число остаток
+
+
+                    -- сперва ставим стоп контракты с остатками, если таковые имеются
+                    if  lost_contract ~= 0  then 
+                        local stopContractCount = contract + lost_contract;
+
+
+                        sendTransStop(stopContractCount);
+                        lost_contract_start = 1;
+                    end;
+                    
+                    for contractItterationLimit = lost_contract_start, stopClass.count_stop do 
+                        -- расставляем стопы
+                        sendTransStop(contract_work);
+                    end; 
+                else
+                        --   1 стоп
+                        sendTransStop(contract_work);
                 end; 
+
             end; 
 
         end; 
@@ -89,9 +112,39 @@ function createStop()
     local count = 0;
 end;
 
--- отправляем транкзакцию
-function sendTransStop()
 
+-- снимаем старые стоп заявки
+function backStop()
+    -- обнуляем заявки
+    stopClass.array_stop = {};
+    
+end;
+
+
+
+-- отправляем транкзакцию
+-- countContract - сколько контрактов на стопе
+-- countPrice - стоимость контракта
+function sendTransStop(countContract, countPrice )
+    -- [28] = 'Ставим стоп заявку в режиме эмуляции', 
+    -- [29] = 'Ставим стоп заявку',  
+
+    local dataParam = {};
+            dataParam.emulation = setting.emulation;
+            dataParam.price = countPrice;
+            dataParam.contract = countContract;
+
+    stopClass.array_stop[ #stopClass.array_stop + 1 ] = dataParam;
+    
+    if setting.emulation then
+        -- рисуем стоп
+        signalShowLog.addSignal(setting.datetime, 28, false, countPrice);  
+    else
+        signalShowLog.addSignal( setting.datetime, 29, false, countPrice);  
+        -- отправляем транкзакцию 
+
+    end;
+    
 end;
 
 
@@ -99,5 +152,7 @@ end;
 
 
 stopClass.transCallback = transCallback;
-
+stopClass.update_stop = update_stop;
+ 
 return stopClass
+
