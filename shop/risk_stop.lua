@@ -24,6 +24,25 @@ function setStopDefault()
     stopClass.contract_work = 0;
 end;
 
+ -- расчёт максимального отступа от максимальной цены
+ function getMaxStopPrice()
+    
+    return  stopClass.price_max - stopClass.spred;
+end;
+-- расчёт цены для следующего стоп заявки
+function getMaxPriceRange(mPrice, countStop)
+    if countStop == 0 then 
+        countStop = 1;
+    end;
+
+    mPrice = mPrice * countStop;
+    mPrice = stopClass.price_max - stopClass.spred_range + mPrice;
+   return mPrice;
+end;
+
+
+ 
+
 
 -- функция сбора заявок для стопов
 function getStopBid()
@@ -56,12 +75,16 @@ end;
 
 -- Ставим новый стоп
 function createStop() 
+    
+ 
+    maxPrice = getMaxStopPrice();
 
     local contract_work = stopClass.contract_work + stopClass.contract_add;
     if contract_work > 0 then 
         if contract_work == 1 then 
             -- один стоп
-                    sendTransStop(contract_work);
+ 
+                    sendTransStop(contract_work, maxPrice);
         else
 
             if stopClass.count_stop >= 2  then 
@@ -83,18 +106,19 @@ function createStop()
                     if  lost_contract ~= 0  then 
                         local stopContractCount = contract + lost_contract;
 
-
-                        sendTransStop(stopContractCount);
+                        local price  = getMaxPriceRange(maxPrice, lost_contract);
+                        sendTransStop(stopContractCount, price);
                         lost_contract_start = 1;
                     end;
                     
                     for contractItterationLimit = lost_contract_start, stopClass.count_stop do 
                         -- расставляем стопы
-                        sendTransStop(contract_work);
+                        local price  = getMaxPriceRange(maxPrice, contractItterationLimit);
+                        sendTransStop(contract_work, price);
                     end; 
                 else
                         --   1 стоп
-                        sendTransStop(contract_work);
+                        sendTransStop(contract_work, maxPrice);
                 end; 
 
             end; 
@@ -148,10 +172,11 @@ function sendTransStop(countContract, countPrice )
     
     if setting.emulation then
         -- рисуем стоп
+
+        signalShowLog.addSignal(setting.datetime, 28, false, countPrice); 
         dataParam.label = label.set('stop', countPrice ,  setting.datetime, countContract, 'stop')
          
- 
-        signalShowLog.addSignal(setting.datetime, 28, false, countPrice);  
+   
     else
           
         signalShowLog.addSignal( setting.datetime, 29, false, countPrice);  
