@@ -82,8 +82,7 @@ function updateBidsClear()
 			loger.save('CountRowsCountRowsCountRowsCountRowsCountRows : ' .. CountRows   );
 			rows = #setting.sellTable  - CountRows;
 			CountRows = #setting.sellTable;
- 
-			loger.save('rowsrowsrowsrowsrowsrowsrowsrowsrowsrowsrowsrowsrowsrowsrows : ' .. rows     );
+  
 			for i = 1, rows  do
 				InsertRow(t_id_TableBids, -1);
 			end;
@@ -93,21 +92,23 @@ end;
 
  function updateBidsSignal()  
 	CreateNewTableBids();
-
-if #setting.sellTable == 0   then
-	 return 
-	end;
+ 
 	
+
+if #setting.sellTable == 0   then return; end;
+	loger.save('event #setting.sellTable  : ' .. #setting.sellTable     );
+	 
 	local b = 0;
 	local itter = 0;
+ 
 
-	if #arrTableLog == 0 then return; end; 
-
+	loger.save('333 event #setting.sellTable  : ' .. #setting.sellTable     );
 	--local itter = 1
 	 if #setting.sellTable > 1 then
 		 itter = #setting.sellTable;
 
 	 end
+	 loger.save('111 event #setting.sellTable  : ' .. #setting.sellTable     );
 
 --	for b = #setting.sellTable  , itter , -1 do
 	for b = 1 ,  #setting.sellTable do
@@ -131,6 +132,9 @@ if #setting.sellTable == 0   then
 		loger.save('event keyskeyskeys :  ' .. tostring(bid.price)   );
 
 		time = bid.datetime.hour..':'..bid.datetime.min..':'..bid.datetime.sec;
+
+		loger.save('timetimetimetime:  ' .. tostring(time)   );
+
 		SetCell(t_id_TableBids, b, 0, tostring(b));  
 		SetCell(t_id_TableBids, b, 1, tostring(bid.price));  
 	--	SetCell(t_id_TableBids, b, 1, tostring(bid.price)..'/'.. tostring(bid.buy_contract));  

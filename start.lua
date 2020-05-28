@@ -48,8 +48,15 @@ local signalShowLog = dofile(getScriptPath() .. "\\interface\\signalShowLog.lua"
 local FRACTALS = dofile(getScriptPath() .. "\\LuaIndicators\\FRACTALS.lua"); 
 local market = dofile(getScriptPath() .. "\\shop\\market.lua");
 local deleteBids = dofile(getScriptPath() .. "\\shop\\deleteBids.lua");
+local panelBids = dofile(getScriptPath() .. "\\interface\\bids.lua");
+
+
+local test_bids = dofile(getScriptPath() .. "\\tests\\test_bids.lua");
+
+local risk_stop = dofile(getScriptPath() .. "\\shop\\risk_stop.lua");
  
-  
+ 
+
    
 Run  = true;  
 
@@ -113,11 +120,16 @@ basis = 9
 
 
    function main() 
-    
+      candles.getSignal(tag, market.callSELL_emulation);
  
-      tradeSignal.getSignal(setting.tag, eventTranc);
 
-     signalShowLog.CreateNewTableLogEvent();
+       
+      
+      
+
+
+      tradeSignal.getSignal(setting.tag, eventTranc);
+      signalShowLog.CreateNewTableLogEvent();
 
  
       --loger.save("start log");
@@ -128,7 +140,13 @@ basis = 9
       getPrice();
       control.show(); 
 
+      
+      setting.sellTable = test_bids.getOrder(setting.current_price);
+      panelBids.show();
+      risk_stop.update_stop();
  
+
+
       local Price = false;
           
       while Run do 

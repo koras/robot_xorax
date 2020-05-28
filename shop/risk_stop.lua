@@ -155,7 +155,7 @@ end;
 
 
 
--- отправляем транкзакцию
+-- создаём объёкт 
 -- countContract - сколько контрактов на стопе
 -- countPrice - стоимость контракта
 function sendTransStop(countContract, countPrice )
