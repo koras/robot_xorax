@@ -161,14 +161,17 @@ function sendTransStop(countContract, countPrice )
     stopClass.array_stop[ #stopClass.array_stop + 1 ] = dataParam; 
     
 end;
+ 
+
+
+function getRand()
+    return tostring(math.random(2000000000));
+end;
+
+
 
 
 stopClass.transCallback = transCallback;
 stopClass.update_stop = update_stop;
  
 return stopClass
-
-
-function getRand()
-    return tostring(math.random(2000000000));
-end;
