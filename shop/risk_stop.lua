@@ -11,9 +11,22 @@ local signalShowLog = dofile(getScriptPath() .. "\\interface\\signalShowLog.lua"
 -- при срабатывании стопа, должны убираться контракты которые находятся на самом вверху
 -- и закрываться позиции по покупке. Более такие позиции не учитываются в логике
 function update_stop()
-    getStopBid();
-    createStop();
+
+    -- получаем заявки для ордеров
+    getOrdersForBid();
+
+    -- снимаем старые стопы если таковые имеются
+    removeStop();
+
+    -- генерируем объёк из стоп заявок
+    -- и ставим стоп
+    generationCollectionStop(); 
+      
 end;
+
+ 
+
+
 
  
 function setStopDefault()
@@ -30,13 +43,9 @@ end;
     return  stopClass.price_max - stopClass.spred;
 end;
 -- расчёт цены для следующего стоп заявки
-function getMaxPriceRange(mPrice, countStop)
-    if countStop == 0 then 
-        countStop = 1;
-    end;
+function getMaxPriceRange(countStop)
 
-    mPrice = mPrice * countStop;
-    mPrice = stopClass.price_max - stopClass.spred_range + mPrice;
+   local  mPrice =  stopClass.price_max - ( stopClass.spred_range * countStop)  - stopClass.spred;
    return mPrice;
 end;
 
@@ -45,7 +54,7 @@ end;
 
 
 -- функция сбора заявок для стопов
-function getStopBid()
+function getOrdersForBid()
     setStopDefault();
     for contractStop = 1 ,  #setting.sellTable do 
             -- берём все заявки которые куплены
@@ -68,13 +77,26 @@ end;
 
 -- снимаем стоп
 function removeStop() 
-     
+
+    
+    if #stopClass.array_stop > 0 then
+
+        for s = 1 ,  #stopClass.array_stop do   
+            
+            if setting.emulation  then
+                -- в режиме эмуляции 
+            
+            else 
+                callBUY(price,  datetime);
+            end;
 
 
+        end;
+    end;
 end;
 
 -- Ставим новый стоп
-function createStop() 
+function generationCollectionStop() 
     
  
     maxPrice = getMaxStopPrice();
@@ -93,7 +115,7 @@ function createStop()
                 if contract_work  > stopClass.count_stop  then 
     
 
-                    local lost_contract_start = 0;
+                    local lost_contract_start = 1;
 
                     -- количество контрактов на 1 стоп
                     local contract = math.floor(contract_work / stopClass.count_stop);
@@ -105,17 +127,21 @@ function createStop()
                     -- сперва ставим стоп контракты с остатками, если таковые имеются
                     if  lost_contract ~= 0  then 
                         local stopContractCount = contract + lost_contract;
-
-                        local price  = getMaxPriceRange(maxPrice, lost_contract);
+ 
+                        local price  = getMaxPriceRange(lost_contract); 
                         sendTransStop(stopContractCount, price);
-                        lost_contract_start = 1;
+                      
                     end;
                     
                     for contractItterationLimit = lost_contract_start, stopClass.count_stop do 
-                        -- расставляем стопы
-                        local price  = getMaxPriceRange(maxPrice, contractItterationLimit);
-                        sendTransStop(contract_work, price);
+                        -- расставляем стопы 
+                        
+                        local price  = getMaxPriceRange(contractItterationLimit);
+                        
+                        sendTransStop(contract, price);
                     end; 
+
+
                 else
                         --   1 стоп
                         sendTransStop(contract_work, maxPrice);
@@ -174,7 +200,7 @@ function sendTransStop(countContract, countPrice )
         -- рисуем стоп
 
         signalShowLog.addSignal(setting.datetime, 28, false, countPrice); 
-        dataParam.label = label.set('stop', countPrice ,  setting.datetime, countContract, 'stop')
+        dataParam.label = label.set('stop', countPrice ,  setting.datetime, countContract, 'stop '..countContract)
          
    
     else
@@ -192,7 +218,6 @@ end;
 function getRand()
     return tostring(math.random(2000000000));
 end;
-
 
 
 

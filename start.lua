@@ -121,11 +121,6 @@ basis = 9
 
    function main() 
       candles.getSignal(tag, market.callSELL_emulation);
- 
-
-       
-      
-      
 
 
       tradeSignal.getSignal(setting.tag, eventTranc);
