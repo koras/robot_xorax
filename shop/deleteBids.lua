@@ -45,7 +45,8 @@ function callSELL_emulation(result)
                             setting.SPRED_LONG_TREND_DOWN = 0.01;
                         end;
                         -- сколько продано контрактов за сессию (режим эмуляции)ю
-                        setting.emulation_count_contract_sell = setting.emulation_count_contract_sell + setting.sellTable[sellT].contract;
+                        -- setting.emulation_count_contract_sell = setting.emulation_count_contract_sell + setting.sellTable[sellT].contract;
+                        setting.count_contract_sell = setting.count_contract_sell  + setting.sellTable[sellT].contract;
                         -- сколько исполнилось продаж
                         setting.emulation_count_sell =  setting.emulation_count_sell + 1; 
                         setting.profit =  setting.sellTable[sellT].price - setting.sellTable[sellT].buy_contract + setting.profit;

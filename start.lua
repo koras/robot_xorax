@@ -129,7 +129,7 @@ basis = 9
  
       --loger.save("start log");
 
-      statsPanel.show();
+   --   statsPanel.show();
       interfaceBids.show();
       update();
       getPrice();
@@ -146,7 +146,7 @@ basis = 9
           
       while Run do 
          update();
-           statsPanel.stats();
+         --  statsPanel.stats();
            fractalSignal.last();
 
          

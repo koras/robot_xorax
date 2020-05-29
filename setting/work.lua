@@ -38,8 +38,8 @@
 
    setting.count_contract_buy = 0; -- сколько куплено контрактов за сессию
    setting.count_contract_sell = 0; -- сколько продано контрактов за сессию
-   setting.emulation_count_contract_buy = 0; -- сколько куплено контрактов за сессию (режим эмуляции) 
-   setting.emulation_count_contract_sell = 0; -- сколько продано контрактов за сессию (режим эмуляции)
+  -- setting.emulation_count_contract_buy = 0; -- сколько куплено контрактов за сессию (режим эмуляции) 
+  --  setting.emulation_count_contract_sell = 0; -- сколько продано контрактов за сессию (режим эмуляции)
 
 
 

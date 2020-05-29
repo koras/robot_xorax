@@ -302,8 +302,8 @@ function callBUY_emulation(price_callBUY_emulation ,datetime)
     local trans_id_buy = getRand() 
      
     price_callBUY_emulation = commonBUY(price_callBUY_emulation ,datetime);
-    setting.emulation_count_contract_buy = setting.emulation_count_contract_buy + setting.use_contract;
-
+  --  setting.emulation_count_contract_buy = setting.emulation_count_contract_buy + setting.use_contract;
+    setting.count_contract_buy = setting.count_contract_buy  + setting.use_contract;
 
     local data = {
                 ['price'] = price_callBUY_emulation,
@@ -374,8 +374,9 @@ function callSELL_emulation(result)
                     
                         setting.sellTable[sellT].work = false; 
                         execution_sell(setting.sellTable[sellT]);
-                        -- сколько продано контрактов за сессию (режим эмуляции)ю
-                        setting.emulation_count_contract_sell = setting.emulation_count_contract_sell + setting.sellTable[sellT].contract; 
+                        -- сколько продано контрактов за сессию (режим эмуляции)
+                     --   setting.emulation_count_contract_sell = setting.emulation_count_contract_sell + setting.sellTable[sellT].contract; 
+                        setting.count_contract_sell = setting.count_contract_sell  + setting.sellTable[sellT].contract; 
                         setting.profit =  setting.sellTable[sellT].price - setting.sellTable[sellT].buy_contract + setting.profit;
     
                         signalShowLog.addSignal(result.datetime, 21 , false, result.close); 

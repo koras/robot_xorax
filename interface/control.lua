@@ -10,6 +10,8 @@ local words = dofile(getScriptPath() .. "\\langs\\words.lua");
 
 init.create = false;
 
+
+
 local word = {
 	['status'] = "Status",
 	['buy'] = "Buy",
@@ -217,13 +219,23 @@ function current_limit_minus()
 	Red(t_id,33, 3);
 	Red(t_id,34, 3);
 end;
- 
+--SetCell(t_stat, 11, 1,  tostring(setting.count_buy)..'/'..tostring(setting.count_contract_buy)..'/'..tostring(setting.emulation_count_contract_buy).."(e)");  
+--SetCell(t_stat, 12, 1,  tostring(setting.count_sell)..'/'..tostring(setting.count_contract_sell)..'/'..tostring(setting.emulation_count_contract_sell).."(e)");
  
 function use_contract_limit()  
+
+	local buy_session = "b:"..tostring(setting.count_buy).."/"..tostring(setting.count_contract_buy).."";
+	local sell_session = "s:"..tostring(setting.count_sell).."/"..tostring(setting.count_contract_sell).."";
+
+
 	SetCell(t_id, 11, 1,   tostring( setting.LIMIT_BID )  .. ' / '.. 
 							setting.limit_count_buy .. "("..setting.limit_count_buy_emulation ..")"..' / '.. 
 							setting.use_contract ); 
 							
+	SetCell(t_id, 11, 1,   tostring( setting.LIMIT_BID )  .. ' / '.. setting.limit_count_buy .. "("..setting.limit_count_buy_emulation ..")"); 
+	SetCell(t_id, 12, 1,   buy_session.. " | "..sell_session); 
+
+
 	SetCell(t_id, 13, 1,   tostring(setting.use_contract)); 
  
 	SetCell(t_id, 17, 1,   tostring(setting.profit_range).."("..tostring(setting.profit)..")"); 
@@ -236,10 +248,6 @@ function use_contract_limit()
 	SetCell(t_id, 26, 1,   tostring( setting.SPRED_LONG_TREND_DOWN )); 
 	SetCell(t_id, 27, 1,   tostring( setting.SPRED_LONG_TREND_DOWN_SPRED )); 
 	SetCell(t_id, 28, 1,   tostring( setting.not_buy_high .. ' (-'..setting.profit_range ..')' )); 
- 
- 
-
-	 
 	 
 -- количество контрактов добавленных трейдером
 	SetCell(t_id, 31, 1,   tostring(stopClass.contract_add .. ' ( '..  stopClass.contract_work .. words.word('stop_contract_work') ..' )' )); 
