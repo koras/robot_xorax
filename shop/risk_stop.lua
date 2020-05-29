@@ -87,7 +87,7 @@ function removeStop()
                 -- в режиме эмуляции 
             
             else 
-                callBUY(price,  datetime);
+     
             end;
 
 

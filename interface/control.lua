@@ -226,7 +226,7 @@ function use_contract_limit()
 							
 	SetCell(t_id, 13, 1,   tostring(setting.use_contract)); 
  
-	SetCell(t_id, 17, 1,   tostring(setting.profit_range)); 
+	SetCell(t_id, 17, 1,   tostring(setting.profit_range).."("..tostring(setting.profit)..")"); 
  
 
 	SetCell(t_id, 19, 1,   tostring(setting.take_profit_offset)); 

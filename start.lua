@@ -135,10 +135,10 @@ basis = 9
       getPrice();
       control.show(); 
 
-      
-      setting.sellTable = test_bids.getOrder(setting.current_price);
-      panelBids.show();
-      risk_stop.update_stop();
+      -- для тестирования
+    --  setting.sellTable = test_bids.getOrder(setting.current_price);
+    --  panelBids.show();
+     -- risk_stop.update_stop();
  
 
 
