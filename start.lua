@@ -127,7 +127,7 @@ basis = 9
       signalShowLog.CreateNewTableLogEvent();
 
  
-      --loger.save("start log");
+      loger.save("start log");
 
    --   statsPanel.show();
       interfaceBids.show();
@@ -136,10 +136,10 @@ basis = 9
       control.show(); 
 
       -- для тестирования
-    --  setting.sellTable = test_bids.getOrder(setting.current_price);
-    --  panelBids.show();
-     -- risk_stop.update_stop();
- 
+   --   setting.sellTable = test_bids.getOrder(setting.current_price);
+   --   panelBids.show();
+   --   risk_stop.update_stop();
+   --   test_bids.saleBids(setting.current_price) 
 
 
       local Price = false;

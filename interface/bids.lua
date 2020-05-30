@@ -13,9 +13,6 @@ local color = dofile(getScriptPath() .. "\\interface\\color.lua");
 local loger = dofile(getScriptPath() .. "\\modules\\loger.lua");
 local label = dofile(getScriptPath() .. "\\modules\\drawLabel.lua");
 
- 
-
-
 createTableBids= false;
 
 
@@ -43,10 +40,7 @@ local wordTitleTableBids = {
 };
   
 
--- dt - current time
--- (int)  event
--- (bool) status
--- (string) price
+
 
 function getEventLog(_event)
 	return arr[_event];
@@ -78,8 +72,7 @@ function updateBidsClear()
 
 
 		if CountRows < #setting.sellTable then 
-
-			loger.save('CountRowsCountRowsCountRowsCountRowsCountRows : ' .. CountRows   );
+ 
 			rows = #setting.sellTable  - CountRows;
 			CountRows = #setting.sellTable;
   

@@ -684,7 +684,12 @@ function event_callback_message (t_id, msg, par1, par2)
 			end; 
 		return;
 	end;
-	  
+
+	
+	if par1 == 4 and par2 == 0  and  msg == 1 then 
+			 
+		return;
+	end; 
 
 end;
 

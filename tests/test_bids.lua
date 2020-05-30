@@ -53,8 +53,6 @@ function getOrder(curentPrice)
                 ['buy_contract']= stepPrice, -- стоимость продажи
                 ['trans_id_buy'] = trans_id_buy
             };
-
-
             M.test_bids[#M.test_bids + 1] = buy_order_bids;
             M.test_bids[#M.test_bids + 1] = sell_order_bids;
 
@@ -64,11 +62,33 @@ function getOrder(curentPrice)
 end;
 
 
+
+
+
+
+-- воссоздаём ситуацию, что продали несколько контрактов, допустим 5;
+function saleBids(priceBig) 
+    -- сколько контрактов сделать проданными
+    local priceBig = priceBig + 1;
+    message(priceBig)
+    if #setting.sellTable > 0 then 
+        for cbuy = 1 ,  #setting.sellTable  do 
+                if priceBig > setting.sellTable[cbuy].price then 
+                setting.sellTable[cbuy].work = false;
+                setting.sellTable[cbuy].use_contract =  0;
+            end;
+        end;
+    end; 
+end;
+
+
+
+
 function getRand()
     return tostring(math.random(2000000000));
 end;
 
-
+ 
+M.saleBids = saleBids;
 M.getOrder = getOrder;
-
 return M;

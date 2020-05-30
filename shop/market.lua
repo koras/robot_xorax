@@ -381,11 +381,9 @@ function callSELL_emulation(result)
     
                         signalShowLog.addSignal(result.datetime, 21 , false, result.close); 
                         -- надо удалить контракт по которому мы покупали 
-
                      --   panelBids.show();
                        deleteBuy_emulation(setting.sellTable[sellT])
                        risk_stop.update_stop();
-
                 end;
             end; 
     end;
