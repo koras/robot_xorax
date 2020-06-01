@@ -229,7 +229,7 @@ function use_contract_limit()
 
 
 	SetCell(t_id, 11, 1,   tostring( setting.LIMIT_BID )  .. ' / '.. 
-							setting.limit_count_buy .. "("..setting.limit_count_buy_emulation ..")"..' / '.. 
+							setting.limit_count_buy .. " ("..setting.limit_count_buy_emulation ..")"..' / '.. 
 							setting.use_contract ); 
 							
 	SetCell(t_id, 11, 1,   tostring( setting.LIMIT_BID )  .. ' / '.. setting.limit_count_buy .. "("..setting.limit_count_buy_emulation ..")"); 
@@ -238,14 +238,14 @@ function use_contract_limit()
 
 	SetCell(t_id, 13, 1,   tostring(setting.use_contract)); 
  
-	SetCell(t_id, 17, 1,   tostring(setting.profit_range).."("..tostring(setting.profit)..")"); 
+	SetCell(t_id, 17, 1,   tostring(setting.profit_range).." ("..tostring(setting.profit)..") "); 
  
 
 	SetCell(t_id, 19, 1,   tostring(setting.take_profit_offset)); 
 	SetCell(t_id, 20, 1,   tostring(setting.take_profit_spread)); 
 -- потом только решение за человеком / сколько подряд раз уже купили
 	SetCell(t_id, 25, 1,   tostring( setting.each_to_buy_to_block ) .. '/'.. setting.each_to_buy_step ); 
-	SetCell(t_id, 26, 1,   tostring( setting.SPRED_LONG_TREND_DOWN )); 
+	SetCell(t_id, 26, 1,   tostring( setting.SPRED_LONG_TREND_DOWN .. " ("..setting.SPRED_LONG_TREND_DOWN_NEXT_BUY ..")" )); 
 	SetCell(t_id, 27, 1,   tostring( setting.SPRED_LONG_TREND_DOWN_SPRED )); 
 	SetCell(t_id, 28, 1,   tostring( setting.not_buy_high .. ' (-'..setting.profit_range ..')' )); 
 	 

@@ -116,6 +116,8 @@
 
    setting.SPRED_LONG_TREND_DOWN_LAST_PRICE = 0.00; -- 
 
+   setting.SPRED_LONG_TREND_DOWN_NEXT_BUY = 0.00; -- когда следующая покупка при падении
+
    setting.timeWork =  {
             { '10:00', '14:00'};
             { '14:05', '18:45'}; 
