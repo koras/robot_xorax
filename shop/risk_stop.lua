@@ -170,7 +170,11 @@ function backStop()
             --   dataParam.label = label.set('stop', countPrice ,  setting.datetime, countContract, 'stop '..countContract)
             else
                 -- снимаем стоп заявку
-                transaction.delete(stopClass.array_stop[s].trans_id, stopClass.array_stop[s].order_num);
+                if  stopClass.array_stop[s].work == 1 then 
+                    local order_num = stopClass.array_stop[s].order_num;
+                    local trans_id = stopClass.array_stop[s].trans_id;
+                    transaction.delete(stopClass.array_stop[s].trans_id, order_num);
+                end;
             end;
             
         end;
