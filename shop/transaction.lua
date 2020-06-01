@@ -78,22 +78,20 @@ local function send(typeMarket, price, quantity,type, trans_id_buy )
 		 
 		loger.save( 'Transaction.STOP_ORDER_KIND ' .. Transaction.STOP_ORDER_KIND);
 		loger.save( 'Transaction.BASE_ORDER_KEY ' ..Transaction.BASE_ORDER_KEY);
-
-
-
+		
 	 end;
 
 	-- Неверно указаны единицы измерения защитного интервала take profit стоп-заявки. "0.01"
 
-   loger.save(' setting.CLASS_CODE '..setting.CLASS_CODE);
-   loger.save(' setting.SEC_CODE '..setting.SEC_CODE);
-   loger.save(' setting.ACCOUNT '..setting.ACCOUNT);
+--    loger.save(' setting.CLASS_CODE '..setting.CLASS_CODE);
+--    loger.save(' setting.SEC_CODE '..setting.SEC_CODE);
+--    loger.save(' setting.ACCOUNT '..setting.ACCOUNT);
    
-  loger.save( 'Transaction ' .. Transaction.OPERATION .. ' tostring(price) ' ..'  ' .. tostring(price).. ' ' .. ' '.. Transaction.TRANS_ID );
-  loger.save( 'SEC_CODE ' .. setting.SEC_CODE );
-   loger.save( 'Transaction SECCODE ' .. Transaction['SECCODE'] );
-   loger.save( 'Transaction CLASS_CODE ' .. Transaction.CLASSCODE  );
-   loger.save( 'Transaction ACCOUNT ' .. Transaction.ACCOUNT ); 
+--   loger.save( 'Transaction ' .. Transaction.OPERATION .. ' tostring(price) ' ..'  ' .. tostring(price).. ' ' .. ' '.. Transaction.TRANS_ID );
+--   loger.save( 'SEC_CODE ' .. setting.SEC_CODE );
+--    loger.save( 'Transaction SECCODE ' .. Transaction['SECCODE'] );
+--    loger.save( 'Transaction CLASS_CODE ' .. Transaction.CLASSCODE  );
+--    loger.save( 'Transaction ACCOUNT ' .. Transaction.ACCOUNT ); 
    
 
 
@@ -127,6 +125,7 @@ function random_max()
 end
 
 
+M.delete = delete
 M.send = send
  
 return M

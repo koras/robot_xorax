@@ -85,7 +85,7 @@ function removeStop()
             
             if setting.emulation  then
                 -- в режиме эмуляции 
-            
+                
             else 
      
             end;
@@ -163,12 +163,14 @@ function backStop()
     if #stopClass.array_stop > 0 then
 
         for s = 1 ,  #stopClass.array_stop do 
-            if #stopClass.array_stop[s].emulation then
+            if stopClass.array_stop[s].emulation then
                 -- удаляем метку
-
+                DelLabel(setting.tag, stopClass.array_stop[s].label);
+           --     signalShowLog.addSignal(setting.datetime, 28, false, countPrice); 
+            --   dataParam.label = label.set('stop', countPrice ,  setting.datetime, countContract, 'stop '..countContract)
             else
                 -- снимаем стоп заявку
-
+                
             end;
             
         end;
