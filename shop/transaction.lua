@@ -101,11 +101,6 @@ local function send(typeMarket, price, quantity,type, trans_id_buy )
 
 	if res ~= "" then	
 		message(res);
-	--  Неверно указаны единицы измерения защитного интервала take profit стоп-заявки. "0.01"
-		-- loger.save(' setting.CLASS_CODE '..setting.CLASS_CODE);
-		-- loger.save(' setting.SEC_CODE '..setting.SEC_CODE);
-		-- loger.save(' setting.ACCOUNT '..setting.ACCOUNT);
-
 		loger.save( 'Transaction  ' .. res )
 	  return nil, res
 	   
@@ -115,6 +110,34 @@ local function send(typeMarket, price, quantity,type, trans_id_buy )
 	end
 
 end
+
+
+-- здесь снимаются заявки
+function delete(transId_del_order,stopOrder_num)
+
+	local Transaction={} 
+	
+	Transaction.CLASSCODE  		= setting.CLASS_CODE;
+	Transaction.SECCODE    		= setting.SEC_CODE;
+	Transaction.ACCOUNT   		= setting.ACCOUNT;
+	Transaction.ACTION    		= "KILL_STOP_ORDER";
+	Transaction.CLIENT_CODE		= 'Robot XoraX';
+	Transaction.TRANS_ID  		= transId_del_order;
+	Transaction.STOP_ORDER_KEY  = tostring(stopOrder_num);
+	Transaction.TYPE = "L";
+
+
+ 
+
+	local res = sendTransaction(Transaction)
+	if string.len(res) ~= 0 then
+		--message('Error: '..res, 3)
+		loger.save("DeleteStopOrder(): fail "..res)
+	else
+		loger.save("DeleteStopOrder(): "..stopOrder_num.." success ")
+	end 
+end;
+
 
 
 function random_max()

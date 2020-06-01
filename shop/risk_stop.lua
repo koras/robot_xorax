@@ -170,7 +170,7 @@ function backStop()
             --   dataParam.label = label.set('stop', countPrice ,  setting.datetime, countContract, 'stop '..countContract)
             else
                 -- снимаем стоп заявку
-                
+                transaction.delete(stopClass.array_stop[s].trans_id, stopClass.array_stop[s].order_num);
             end;
             
         end;
@@ -186,9 +186,9 @@ end;
 -- создаём объёкт 
 -- countContract - сколько контрактов на стопе
 -- countPrice - стоимость контракта
+
+
 function sendTransStop(countContract, countPrice )
-    -- [28] = 'Ставим стоп заявку в режиме эмуляции', 
-    -- [29] = 'Ставим стоп заявку',  
 
     local dataParam = {};
             dataParam.emulation = setting.emulation;
@@ -196,11 +196,18 @@ function sendTransStop(countContract, countPrice )
             dataParam.contract = countContract;
             dataParam.trans_id = getRand();
             dataParam.label = 0;
- 
+            -- work = 0 - отправляем на сервер
+            -- work = 1 - заявка выставлена
+            -- work = 2 - заявка снята пл какой либо причине
+            dataParam.work = 0;
+            dataParam.order_num = 0;
+             
     
     if setting.emulation then
         -- рисуем стоп
 
+        dataParam.work = true;
+        dataParam.order_num = 1;
         signalShowLog.addSignal(setting.datetime, 28, false, countPrice); 
         dataParam.label = label.set('stop', countPrice ,  setting.datetime, countContract, 'stop '..countContract)
          
@@ -216,13 +223,27 @@ function sendTransStop(countContract, countPrice )
 end;
  
 
+-- обновление заявки по которой пришла информация
+-- присваиваем номер заявке, если он отсутствует
+-- вызывается в OnStopOrder
+function updateOrderNumber(order) 
+    for stopItter = 1 ,  #stopClass.array_stop do 
+        if order.trans_id == stopClass.array_stop[stopItter].trans_id and stopClass.array_stop[stopItter].work == 0 then
+            stopClass.array_stop[stopItter].work = 1;
+            stopClass.array_stop[stopItter].order_num = order.order_num;
+        end;
+    end;
+end;
+
+
 
 function getRand()
     return tostring(math.random(2000000000));
 end;
 
 
-
+ 
+stopClass.updateOrderNumber = updateOrderNumber;
 stopClass.transCallback = transCallback;
 stopClass.update_stop = update_stop;
  
