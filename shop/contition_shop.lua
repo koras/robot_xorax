@@ -116,7 +116,8 @@ end;
         
         else
                 checkRange = false;
-                signalShowLog.addSignal(datetime, 3, true, setting.SPRED_LONG_TREND_DOWN_LAST_PRICE - setting.SPRED_LONG_TREND_DOWN);
+                setting.SPRED_LONG_TREND_DOWN_NEXT_BUY = setting.SPRED_LONG_TREND_DOWN_LAST_PRICE - setting.SPRED_LONG_TREND_DOWN;
+                signalShowLog.addSignal(datetime, 3, true, setting.SPRED_LONG_TREND_DOWN_NEXT_BUY);
 
         end;
         return checkRange;

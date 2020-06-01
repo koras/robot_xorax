@@ -13,9 +13,6 @@ local color = dofile(getScriptPath() .. "\\interface\\color.lua");
 local loger = dofile(getScriptPath() .. "\\modules\\loger.lua");
 local label = dofile(getScriptPath() .. "\\modules\\drawLabel.lua");
 
- 
-
-
 createTableBids= false;
 
 
@@ -43,10 +40,7 @@ local wordTitleTableBids = {
 };
   
 
--- dt - current time
--- (int)  event
--- (bool) status
--- (string) price
+
 
 function getEventLog(_event)
 	return arr[_event];
@@ -78,12 +72,10 @@ function updateBidsClear()
 
 
 		if CountRows < #setting.sellTable then 
-
-			loger.save('CountRowsCountRowsCountRowsCountRowsCountRows : ' .. CountRows   );
+ 
 			rows = #setting.sellTable  - CountRows;
 			CountRows = #setting.sellTable;
- 
-			loger.save('rowsrowsrowsrowsrowsrowsrowsrowsrowsrowsrowsrowsrowsrowsrows : ' .. rows     );
+  
 			for i = 1, rows  do
 				InsertRow(t_id_TableBids, -1);
 			end;
@@ -93,21 +85,23 @@ end;
 
  function updateBidsSignal()  
 	CreateNewTableBids();
-
-if #setting.sellTable == 0   then
-	 return 
-	end;
+ 
 	
+
+if #setting.sellTable == 0   then return; end;
+	loger.save('event #setting.sellTable  : ' .. #setting.sellTable     );
+	 
 	local b = 0;
 	local itter = 0;
+ 
 
-	if #arrTableLog == 0 then return; end; 
-
+	loger.save('333 event #setting.sellTable  : ' .. #setting.sellTable     );
 	--local itter = 1
 	 if #setting.sellTable > 1 then
 		 itter = #setting.sellTable;
 
 	 end
+	 loger.save('111 event #setting.sellTable  : ' .. #setting.sellTable     );
 
 --	for b = #setting.sellTable  , itter , -1 do
 	for b = 1 ,  #setting.sellTable do
@@ -131,6 +125,9 @@ if #setting.sellTable == 0   then
 		loger.save('event keyskeyskeys :  ' .. tostring(bid.price)   );
 
 		time = bid.datetime.hour..':'..bid.datetime.min..':'..bid.datetime.sec;
+
+		loger.save('timetimetimetime:  ' .. tostring(time)   );
+
 		SetCell(t_id_TableBids, b, 0, tostring(b));  
 		SetCell(t_id_TableBids, b, 1, tostring(bid.price));  
 	--	SetCell(t_id_TableBids, b, 1, tostring(bid.price)..'/'.. tostring(bid.buy_contract));  
@@ -178,8 +175,7 @@ function CreateNewTableBids()
 	createTableBids = true; 
 	
 	t_id_TableBids = AllocTable();	 
- 
-	 
+
 	AddColumn(t_id_TableBids, 0, wordTitleTableBids.number , true, QTABLE_STRING_TYPE, 5);
 	AddColumn(t_id_TableBids, 1, wordTitleTableBids.price, true, QTABLE_STRING_TYPE, 20);
 	AddColumn(t_id_TableBids, 2,  wordTitleTableBids.time, true, QTABLE_STRING_TYPE, 10); 
@@ -199,15 +195,9 @@ function CreateNewTableBids()
 	-- for i = 1, 35 do
 	-- 	InsertRow(t_id_TableBids, -1);
 	-- end;
-
- 
-
-
 end;
 
  
- 
-
  function deleteTable()   
 	DestroyTable(t_id_TableBids)
  end;

@@ -9,10 +9,15 @@ local hour = '';
 local PicPathSell = getScriptPath()..'\\images\\myDeals_sell';
 local PicPathBuy = getScriptPath()..'\\images\\myDeals_buy'; 
 local PicPathEvent = getScriptPath()..'\\images\\myDeals_'; 
+local PicPathSTOP = getScriptPath()..'\\images\\line_stop.jpeg'; 
+
+ 
 local loger = dofile(getScriptPath() .. "\\modules\\loger.lua")
  
 local function set(Operation, Price , datetime, count, textInfo)
   count = 1;
+ loger.save(Operation.. 'Operation  ' .. '  Price '..  Price );
+    
 
   if(textInfo == nul)then 
     textInfo = '';
@@ -61,6 +66,11 @@ local function set(Operation, Price , datetime, count, textInfo)
           else   
         --    label_params['IMAGE_PATH'] = PicPathSell..count..'.bmp'; 
           end;   
+
+          if Operation == 'stop'  then 
+            label_params['IMAGE_PATH'] = PicPathSTOP; 
+       
+          end;   
           
           local day  = datetime.day ;
           if datetime.day < 10  then 
@@ -89,7 +99,7 @@ local function set(Operation, Price , datetime, count, textInfo)
         
       -- loger.save(Operation.. '  ' .. '  '..  Price .. " ������� ��� ������� ���� � ����� - "..     label_params['DATE'] ..'   '..label_params['TIME'].. '  '.. label_params['IMAGE_PATH'] )
        -- loger.save(  datetime.hour ..'   '..datetime.min.. '  '.. '00' )
-          AddLabel(setting.tag, label_params);
+       return   AddLabel(setting.tag, label_params);
 end
 
   

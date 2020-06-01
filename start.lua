@@ -26,11 +26,13 @@ package.path = package.path
 
         require("table")
  
-
-setting = {};
+ 
+        setting = {};
+        stopClass = {};
 
 dofile(getScriptPath() .. "\\setting\\account.lua");
 dofile(getScriptPath() .. "\\setting\\work.lua");
+dofile(getScriptPath() .. "\\setting\\stop.lua");
  
 local uTransaction = dofile(getScriptPath() .. "\\shop\\transaction.lua");
 
@@ -46,8 +48,15 @@ local signalShowLog = dofile(getScriptPath() .. "\\interface\\signalShowLog.lua"
 local FRACTALS = dofile(getScriptPath() .. "\\LuaIndicators\\FRACTALS.lua"); 
 local market = dofile(getScriptPath() .. "\\shop\\market.lua");
 local deleteBids = dofile(getScriptPath() .. "\\shop\\deleteBids.lua");
+local panelBids = dofile(getScriptPath() .. "\\interface\\bids.lua");
+
+
+local test_bids = dofile(getScriptPath() .. "\\tests\\test_bids.lua");
+
+local risk_stop = dofile(getScriptPath() .. "\\shop\\risk_stop.lua");
  
-  
+ 
+
    
 Run  = true;  
 
@@ -110,27 +119,34 @@ basis = 9
    end
 
 
-   function main()
-   
-      tradeSignal.getSignal(setting.tag, eventTranc);
+   function main() 
+      candles.getSignal(tag, market.callSELL_emulation);
 
-     signalShowLog.CreateNewTableLogEvent();
+
+      tradeSignal.getSignal(setting.tag, eventTranc);
+      signalShowLog.CreateNewTableLogEvent();
 
  
-      --loger.save("start log");
+      loger.save("start log");
 
-      statsPanel.show();
+   --   statsPanel.show();
       interfaceBids.show();
       update();
       getPrice();
       control.show(); 
 
- 
+      -- для тестирования
+   --   setting.sellTable = test_bids.getOrder(setting.current_price);
+   --   panelBids.show();
+   --   risk_stop.update_stop();
+   --   test_bids.saleBids(setting.current_price) 
+
+
       local Price = false;
           
       while Run do 
          update();
-           statsPanel.stats();
+         --  statsPanel.stats();
            fractalSignal.last();
 
          
@@ -281,6 +297,11 @@ end
 
    end;
      
+
+
+
+
+   
 
    
    function OnStop()

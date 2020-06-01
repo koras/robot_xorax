@@ -20,11 +20,6 @@ local function set( Price ,  count, textInfo)
   if(textInfo == nul)then 
     textInfo = '';
   end;
-    
-     
-
- 
-
            local label_params = {};
            label_params['TEXT'] = '';       
            if Operation == "BUY" then             
@@ -42,19 +37,6 @@ local function set( Price ,  count, textInfo)
            label_params['ALIGNMENT'] = 'BOTTOM'; 
            
   
-
-           
-       
-          
-          -- local day  = datetime.day ;
-          -- if datetime.day < 10  then 
-          --   day  = '0'..datetime.day ;
-          -- end;   
-
-          -- local month = datetime.month ;
-          -- if datetime.month < 10  then 
-          --   month  = '0'..datetime.month ;
-          -- end;   
 
             
            label_params['YVALUE'] = Price; 

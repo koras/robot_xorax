@@ -70,15 +70,14 @@ local function getSignal(tag, collbackFunc)
      if(bars_temp[j-1].datetime.hour == nul)then
      end
             if bars_temp[j-1].datetime.hour >= 10 then
-
-                  setting.current_price = bars_temp[j-1].close;
+ 
                   local bar = bars_temp[j-1];
                   
                   if bigCandle <= i  then
                     bigCandle  = i; 
 
 
-
+                    setting.datetime  = bar.datetime;
                     
                     -- candle_current_high - setting.candle_current_low
 
@@ -94,6 +93,9 @@ local function getSignal(tag, collbackFunc)
 
                             if start_init  then
                                 setting.not_buy_high  = setting.not_buy_high_UP + bar.close;
+                                
+                                setting.current_price = bar.close;
+
                                 start_init  = false;
                             end
 
@@ -109,6 +111,8 @@ local function getSignal(tag, collbackFunc)
                             setting.buffer_old_candles_low = bar.low; 
                         else
                             setting.old_number_of_candle = setting.number_of_candle;
+                            
+                            setting.current_price = bar.close;
 
                             setting.candle_current_high = setting.buffer_old_candles_high;
                             setting.candle_current_low = setting.buffer_old_candles_low;

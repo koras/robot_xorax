@@ -1,8 +1,12 @@
-   setting.profit_range =  0.01; -- минимальная прибыль
+ 
+
+   setting.profit_range =  0.05; -- минимальная прибыль
    setting.profit_range_array =  0.03; -- минимальная прибыль при больших заявках
    setting.profit_infelicity =  0.01; -- погрешность
    
    setting.profit =  0.00; -- подсчёт прибыли
+
+   setting.datetime =  0; -- подсчёт прибыли
 
 
 
@@ -34,8 +38,8 @@
 
    setting.count_contract_buy = 0; -- сколько куплено контрактов за сессию
    setting.count_contract_sell = 0; -- сколько продано контрактов за сессию
-   setting.emulation_count_contract_buy = 0; -- сколько куплено контрактов за сессию (режим эмуляции) 
-   setting.emulation_count_contract_sell = 0; -- сколько продано контрактов за сессию (режим эмуляции)
+  -- setting.emulation_count_contract_buy = 0; -- сколько куплено контрактов за сессию (режим эмуляции) 
+  --  setting.emulation_count_contract_sell = 0; -- сколько продано контрактов за сессию (режим эмуляции)
 
 
 
@@ -111,6 +115,8 @@
    setting.SPRED_LONG_TREND_DOWN_SPRED = 0.02; -- на сколько увеличиваем растояние
 
    setting.SPRED_LONG_TREND_DOWN_LAST_PRICE = 0.00; -- 
+
+   setting.SPRED_LONG_TREND_DOWN_NEXT_BUY = 0.00; -- когда следующая покупка при падении
 
    setting.timeWork =  {
             { '10:00', '14:00'};
