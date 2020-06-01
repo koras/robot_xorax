@@ -127,8 +127,7 @@ end;
  -- Запрет на покупку
  function getFailBuy(price, datetime) 
         local checkRange = true;
-                if setting.each_to_buy_step >= setting.each_to_buy_to_block 
-                then
+                if setting.each_to_buy_step >= setting.each_to_buy_to_block then
                         -- активация кнопки блокировки покупки
                         signalShowLog.addSignal(datetime, 18, true, price);
                         setting.each_to_buy_status_block = true;
