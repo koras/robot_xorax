@@ -37,7 +37,7 @@ local word = {
 	['on'] =       "          ON      ",
 	['off'] =      "          OFF     ",
 	['off_auto'] = "        OFF AUTO     ",
-	['Trading_Bot_Control_Panel'] = "Trading Bot Control Panel (free 0.0.22)",
+	['Trading_Bot_Control_Panel'] = "Trading Bot Control Panel (free 0.0.23)",
 	
 	['block_buy'] = "buy / block",
 	['SPRED_LONG_TREND_DOWN'] = "trend down", -- рынок падает, увеличиваем растояние между покупками
