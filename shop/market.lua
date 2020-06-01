@@ -392,8 +392,11 @@ function callSELL_emulation(result)
                      --   setting.emulation_count_contract_sell = setting.emulation_count_contract_sell + setting.sellTable[sellT].contract; 
                         setting.count_contract_sell = setting.count_contract_sell  + setting.sellTable[sellT].contract; 
                         setting.profit =  setting.sellTable[sellT].price - setting.sellTable[sellT].buy_contract + setting.profit;
-    
-                        signalShowLog.addSignal(result.datetime, 21 , false, setting.profit); 
+
+                        if setting.limit_count_buy_emulation > setting.sellTable[sellT].contract  then 
+                          setting.limit_count_buy_emulation = setting.limit_count_buy_emulation - setting.sellTable[sellT].buy_contract;
+                        end;
+
                         signalShowLog.addSignal(result.datetime, 21 , false, result.close); 
                         -- надо удалить контракт по которому мы покупали 
                      --   panelBids.show(); 
