@@ -34,8 +34,9 @@ local word = {
 	['take_profit_spread'] = "take profit spread:",
 	['on'] = "          ON      ",
 
-	['on'] = "          ON      ",
-	['off'] = "          OFF     ",
+	['on'] =       "          ON      ",
+	['off'] =      "          OFF     ",
+	['off_auto'] = "        OFF AUTO     ",
 	['Trading_Bot_Control_Panel'] = "Trading Bot Control Panel (free 0.0.22)",
 	
 	['block_buy'] = "buy / block",
@@ -244,7 +245,7 @@ function use_contract_limit()
 	SetCell(t_id, 19, 1,   tostring(setting.take_profit_offset)); 
 	SetCell(t_id, 20, 1,   tostring(setting.take_profit_spread)); 
 -- потом только решение за человеком / сколько подряд раз уже купили
-	SetCell(t_id, 25, 1,   tostring( setting.each_to_buy_to_block ) .. '/'.. setting.each_to_buy_step ); 
+	SetCell(t_id, 25, 1,   tostring( setting.each_to_buy_to_block ) .." ( ".. setting.each_to_sell_step .. ') /'.. setting.each_to_buy_step ); 
 	SetCell(t_id, 26, 1,   tostring( setting.SPRED_LONG_TREND_DOWN .. " ("..setting.SPRED_LONG_TREND_DOWN_NEXT_BUY ..")" )); 
 	SetCell(t_id, 27, 1,   tostring( setting.SPRED_LONG_TREND_DOWN_SPRED )); 
 	SetCell(t_id, 28, 1,   tostring( setting.not_buy_high .. ' (-'..setting.profit_range ..')' )); 
@@ -343,9 +344,17 @@ function buy_process()
 	Green(t_id,2, 1) 
 	Green(t_id,3, 1)
 end;
+
 function buy_stop()  
 	setting.buy = false;  
 	SetCell(t_id, 2, 1,  word.off)
+	Red(t_id,1, 1);
+	Red(t_id,2, 1);
+	Red(t_id,3,1);
+end;
+function buy_stop_auto()  
+	setting.buy = false;  
+	SetCell(t_id, 2, 1,  word.off_auto)
 	Red(t_id,1, 1);
 	Red(t_id,2, 1);
 	Red(t_id,3,1);
@@ -700,6 +709,8 @@ function deleteTable()
 end;
 
  
+M.buy_stop_auto =  buy_stop_auto;
+M.buy_process =  buy_process;
 M.buy_stop =  buy_stop;
 M.use_contract_limit =  use_contract_limit;
 M.stats =  stats;

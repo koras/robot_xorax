@@ -201,6 +201,24 @@ function sellContract(result)
                 setting.count_sell = setting.count_sell + 1;
                 setting.count_contract_sell = setting.count_contract_sell +  setting.sellTable[contract].use_contract;
 
+                -- подсчёт профита
+                local sell =  setting.sellTable[contract].use_contract * setting.sellTable[contract].price ;
+                local buy =  setting.sellTable[contract].use_contract * setting.sellTable[contract].buy_contract ;
+                setting.profit = sell  - buy  + setting.profit;
+
+
+                -- если кнопка покупки заблокирована автоматически по причине падение
+                if  setting.each_to_buy_status_block then
+                    setting.each_to_sell_step = setting.each_to_sell_step + 1;
+                    if setting.each_to_sell_step >= setting.each_to_buy_to_block then
+                        -- разблокируем кнопку покупки, потому что всё продали что должны были
+                        setting.each_to_buy_status_block = false;
+                        setting.each_to_sell_step = 0; 
+                        setting.each_to_buy_step = 0; -- сколько подряд раз уже купили
+                        control.buy_process();
+                    end
+                end
+
 
                 setting.sellTable[contract].executed = true;
                 -- для учёта при выставлении заявки
@@ -213,10 +231,8 @@ function sellContract(result)
                 execution_sell(setting.sellTable[contract]); 
 
                 signalShowLog.addSignal(setting.sellTable[contract].datetime, 26, false, result.price); 
-
                 deleteBuyCost(result, setting.sellTable[contract])
-                
- 
+                control.use_contract_limit();  
             end;
         end;
     end;
@@ -255,8 +271,6 @@ function deleteBuyCost(result, saleContract)
                     -- calculateProfit(setting.sellTable[sellT]);
                     signalShowLog.addSignal(setting.sellTable[sellT].datetime, 8, false, result.price); 
                     -- надо удалить контракт по которому мы покупали
-
-                    
                     risk_stop.update_stop();
                     panelBids.show();
             end;

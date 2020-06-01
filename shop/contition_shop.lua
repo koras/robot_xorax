@@ -131,7 +131,8 @@ end;
                 then
                         -- активация кнопки блокировки покупки
                         signalShowLog.addSignal(datetime, 18, true, price);
-                        control.buy_stop()
+                        setting.each_to_buy_status_block = true;
+                        control.buy_stop_auto();
                         checkRange = false; 
                 end;
         return checkRange;
