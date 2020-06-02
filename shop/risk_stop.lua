@@ -4,27 +4,25 @@ local transaction = dofile(getScriptPath() .. "\\shop\\transaction.lua");
 local signalShowLog = dofile(getScriptPath() .. "\\interface\\signalShowLog.lua");
  
 
--- класс для работы с стопами
+-- класс для работы с стопами, риск-менеджмент
+-- Главное не сколько заработаешь, а сколько не потеряешь
 
 
 -- стопы обновляются только при покупке или продаже контракта
 -- при срабатывании стопа, должны убираться контракты которые находятся на самом вверху
 -- и закрываться позиции по покупке. Более такие позиции не учитываются в логике
 function update_stop()
-
     -- получаем заявки для ордеров
     getOrdersForBid();
-
     -- снимаем старые стопы если таковые имеются
-    removeStop();
-
-    -- генерируем объёк из стоп заявок
+    backStop();
+    -- генерируем объёкт из стоп заявок
     -- и ставим стоп
     generationCollectionStop(); 
-      
 end;
 
  
+
 
 
 
@@ -75,25 +73,6 @@ function getOrdersForBid()
     end;
 end;
 
--- снимаем стоп
-function removeStop() 
-
-    
-    if #stopClass.array_stop > 0 then
-
-        for s = 1 ,  #stopClass.array_stop do   
-            
-            if setting.emulation  then
-                -- в режиме эмуляции 
-                
-            else 
-     
-            end;
-
-
-        end;
-    end;
-end;
 
 -- Ставим новый стоп
 function generationCollectionStop() 
@@ -105,7 +84,6 @@ function generationCollectionStop()
     if contract_work > 0 then 
         if contract_work == 1 then 
             -- один стоп
- 
                     sendTransStop(contract_work, maxPrice);
         else
 
@@ -158,7 +136,6 @@ end;
 
 -- снимаем старые стоп заявки
 function backStop()
-
     -- обнуляем заявки
     if #stopClass.array_stop > 0 then
 
@@ -166,14 +143,14 @@ function backStop()
             if stopClass.array_stop[s].emulation then
                 -- удаляем метку
                 DelLabel(setting.tag, stopClass.array_stop[s].label);
-           --     signalShowLog.addSignal(setting.datetime, 28, false, countPrice); 
+            signalShowLog.addSignal(setting.datetime, 15, false, stopClass.array_stop[s].price); 
             --   dataParam.label = label.set('stop', countPrice ,  setting.datetime, countContract, 'stop '..countContract)
             else
                 -- снимаем стоп заявку
                 if  stopClass.array_stop[s].work == 1 then 
                     local order_num = stopClass.array_stop[s].order_num;
                     local trans_id = stopClass.array_stop[s].trans_id;
-                    transaction.delete(stopClass.array_stop[s].trans_id, order_num);
+                    transaction.delete(trans_id, order_num);
                 end;
             end;
             
@@ -181,7 +158,7 @@ function backStop()
 
     end;
 
-    stopClass.array_stop = {};
+
     
 end;
 
@@ -193,7 +170,6 @@ end;
 
 
 function sendTransStop(countContract, countPrice )
-
     local dataParam = {};
             dataParam.emulation = setting.emulation;
             dataParam.price = countPrice;
@@ -217,7 +193,6 @@ function sendTransStop(countContract, countPrice )
          
    
     else
-          
         signalShowLog.addSignal( setting.datetime, 29, false, countPrice);  
         -- отправляем транкзакцию 
     end;
@@ -232,21 +207,77 @@ end;
 -- вызывается в OnStopOrder
 function updateOrderNumber(order) 
     for stopItter = 1 ,  #stopClass.array_stop do 
-        if order.trans_id == stopClass.array_stop[stopItter].trans_id and stopClass.array_stop[stopItter].work == 0 then
-            stopClass.array_stop[stopItter].work = 1;
+        if order.trans_id == stopClass.array_stop[stopItter].trans_id and stopClass.array_stop[stopItter].work == 1 then
+            stopClass.array_stop[stopItter].work = 2;
             stopClass.array_stop[stopItter].order_num = order.order_num;
         end;
     end;
 end;
 
 
+ 
+
 
 function getRand()
     return tostring(math.random(2000000000));
 end;
+ 
+ 
+-- сработал стоп (OnStopOrder)
+-- необходимо снять старые заявки на продажу, если есть таковые
+-- когда срабатывает стоп, передвижение стопов запрещено
+function appruveOrderStop(order) 
+    local appruveStop = false;
+    local countContract = 0;
+    -- помечаем заявку как исполненной
+    for stopItter = 1 ,  #stopClass.array_stop do 
+
+        if setting.emulation then 
+            -- в режиме эмуляции сработал стоп, здесь смотрим цену
+            if order.trans_id == stopClass.array_stop[stopItter].trans_id and stopClass.array_stop[stopItter].work == 1 then
+                stopClass.array_stop[stopItter].work = 2;
+                stopClass.array_stop[stopItter].order_num = order.order_num;
+                countContract = dataParam.contract;
+                -- признак срабатывания стопа
+                appruveStop = true;
+                stopClass.triger_stop = true;
+                -- снимаем стоп
+                DelLabel(setting.tag, stopClass.array_stop[stopItter].label);
+            end;
+        else 
+            --  режим торговли 
+            if order.close < stopClass.array_stop[stopItter].price and stopClass.array_stop[stopItter].work == 1 then
+                stopClass.array_stop[stopItter].work = 2;
+                stopClass.array_stop[stopItter].order_num = order.order_num;
+                countContract = dataParam.contract;
+                -- признак срабатывания стопа
+                appruveStop = true;
+                stopClass.triger_stop = true;
+                -- снимаем стоп
+                
+                local order_num = stopClass.array_stop[stopItter].order_num;
+                local trans_id = stopClass.array_stop[stopItter].trans_id;
+                transaction.delete(trans_id, order_num);
+            end;
+        end;
+
+    end; 
+
+    -- перебераем все заявки для того чтобы снять, по цене 
+    -- если контрактов в заявке больше, то такие заявки надо перевыставить 
+    if  appruveStop then 
+
+
+    end;
+
+
+end;
+
 
 
  
+stopClass.backStop = backStop;
+stopClass.appruveOrderStop = appruveOrderStop;
 stopClass.updateOrderNumber = updateOrderNumber;
 stopClass.transCallback = transCallback;
 stopClass.update_stop = update_stop;

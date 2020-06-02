@@ -116,12 +116,13 @@ basis = 9
       control.stats();
       market.setLitmitBid();
       use_contract_limit();
+
+      -- riskStop.appruveOrderStop(trade)
    end
 
 
    function main() 
       candles.getSignal(tag, market.callSELL_emulation);
-
 
       tradeSignal.getSignal(setting.tag, eventTranc);
       signalShowLog.CreateNewTableLogEvent();
@@ -136,9 +137,9 @@ basis = 9
       control.show(); 
 
       -- для тестирования
-   --   setting.sellTable = test_bids.getOrder(setting.current_price);
-   --   panelBids.show();
-   --   risk_stop.update_stop();
+     setting.sellTable = test_bids.getOrder(setting.current_price);
+      panelBids.show();
+      risk_stop.update_stop();
    --   test_bids.saleBids(setting.current_price) 
 
 
@@ -152,11 +153,25 @@ basis = 9
          
           if setting.status  then  
             tradeSignal.getSignal(setting.tag, eventTranc);
-            candles.getSignal(tag, market.callSELL_emulation);
+            candles.getSignal(tag, updateTick);
          end;
       end;  
    end;
    
+
+-- срабатывает при обновлении свечи
+   function updateTick(result)
+
+      if  setting.emulation then
+         -- обработка во время эмуляции
+         market.callSELL_emulation(result);
+         -- сработал стоп в режиме эмуляции
+         riskStop.appruveOrderStop(result)
+      end;
+      
+   end;
+
+
    
    
    -- https://quikluacsharp.ru/quik-qlua/primer-prostogo-torgovogo-dvizhka-simple-engine-qlua-lua/
@@ -256,6 +271,7 @@ end
             if not CheckBit(trade.flags, 0) and not CheckBit(trade.flags, 1) then
                loger.save('Заявка 11111 №'..trade.order_num..' appruve Sell Sell Sell')
                market.sellContract(trade);
+               riskStop.appruveOrderStop(trade)
             end
 
          -- заявка на продажу
@@ -267,7 +283,6 @@ end
       
          if not CheckBit(trade.flags, 0) and not CheckBit(trade.flags, 1) then
             loger.save('Заявка 11111 №'..trade.order_num..' appruve')
-
             riskStop.updateOrderNumber(trade)
          end
 

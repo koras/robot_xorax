@@ -138,8 +138,8 @@ end;
 
 -- только выставляется заявка на продажу
 function sellTransaction(order, countContracts)
-    local type = "TAKE_PROFIT_STOP_ORDER";
 
+    local type = "TAKE_PROFIT_STOP_ORDER";
     if setting.sell_take_or_limit == false  then
         type = "SIMPLE_STOP_ORDER";
     end;
@@ -149,19 +149,17 @@ function sellTransaction(order, countContracts)
     local  trans_id_sell  =  getRand();
           --  local price = setting.profit_range + order.price + setting.profit_infelicity;
             local price = setting.profit_range + order.price ;
+
           if setting.emulation == false then
 
                  trans_id_sell =  transaction.send("SELL", price, setting.use_contract, type, order.order_num);
                  signalShowLog.addSignal(order.datetime, 9, false, price); 
-            else
-
             end;
- 
 
             loger.save('trans_id_sell = ' ..  trans_id_sell ); 
-
                                             local data = {
                                                             ['price'] = price,
+                                                            ['number']= 0, 
                                                             ['datetime']= order.datetime, 
                                                             ['trans_id']= trans_id_sell, 
                                                             ['order_num_buy']=  order.order_num, 
@@ -178,7 +176,6 @@ function sellTransaction(order, countContracts)
                                                         };
             setting.sellTable[(#setting.sellTable+1)] = data;
 
-            
   --  end;
 end;
 
@@ -214,8 +211,9 @@ function sellContract(result)
                         -- разблокируем кнопку покупки, потому что всё продали что должны были
                         setting.each_to_buy_status_block = false;
                         setting.each_to_sell_step = 0; 
-                        setting.each_to_buy_step = 0; -- сколько подряд раз уже купили
+                        setting.each_to_buy_step = 0; -- сколько подряд раз уже купили 
                         control.buy_process();
+                        
                     end
                 end
 
@@ -318,22 +316,23 @@ function callBUY_emulation(price_callBUY_emulation ,datetime)
     price_callBUY_emulation = commonBUY(price_callBUY_emulation ,datetime);
   --  setting.emulation_count_contract_buy = setting.emulation_count_contract_buy + setting.use_contract;
     setting.count_contract_buy = setting.count_contract_buy  + setting.use_contract;
-
-    local data = {
-                ['price'] = price_callBUY_emulation,
-                ['datetime']= datetime, 
-                ['trans_id']=  trans_id_buy, 
+    local data = {};
+  
+                 data.price = price_callBUY_emulation;
+                 data.datetime= datetime;
+                 data.trans_id=  trans_id_buy;
                 -- сколько контрактов исполнилось  
                 
-                ['work'] = true,
-                ['executed'] = true, -- покупка исполнилась
-                ['type']= "buy",
-                ['emulation']=  setting.emulation,
-                ['contract']=  setting.use_contract,
-                ['use_contract'] = setting.use_contract,  
-                ['buy_contract'] = price_callBUY_emulation, -- стоимость продажи
-                ['trans_id_buy'] = trans_id_buy, 
-            };
+                data.work = true;
+                data.number = 0;
+                data.executed = true; -- покупка исполнилась
+                data.type = "buy";
+                data.emulation =  setting.emulation;
+                data.contract =  setting.use_contract;
+                data.use_contract = setting.use_contract;  
+                data.buy_contract = price_callBUY_emulation; -- стоимость продажи
+                data.trans_id_buy = trans_id_buy; 
+            
 
             signalShowLog.addSignal(data.datetime, 24, false, price_callBUY_emulation);  
             setting.sellTable[(#setting.sellTable+1)] = data;
@@ -353,20 +352,23 @@ function sellTransaction_emulation(contractBuy)
           -- price = setting.profit_range + contractBuy.price  + setting.profit_infelicity;
           price_sellTransaction_emulation = setting.profit_range + contractBuy.price;
 
-            
-            setting.sellTable[#setting.sellTable + 1] = {
-                                                            ['price'] = price_sellTransaction_emulation,
-                                                            ['datetime']= contractBuy.datetime, 
-                                                            ['trans_id']= trans_id_sell, 
-                                                            ['type']= 'sell',                
-                                                            ['work'] = true,
-                                                            ['executed'] = false, -- покупка исполнилась
-                                                            ['emulation']= setting.emulation,
-                                                            ['contract']=  setting.use_contract,
-                                                            ['use_contract']=  setting.use_contract,
-                                                            ['buy_contract']= contractBuy.price, -- стоимость продажи
-                                                            ['trans_id_buy'] = contractBuy.trans_id_buy
-                                                        };
+            local data = {};
+                    data.price = price_sellTransaction_emulation;
+                    data.datetime= contractBuy.datetime;
+                    data.trans_id= trans_id_sell; 
+                    data.number = 0;
+                    data.type= 'sell';                
+                    data.work = true;
+                    data.executed = false; -- покупка исполнилась
+                    data.emulation= setting.emulation;
+                    data.contract=  setting.use_contract;
+                    data.use_contract=  setting.use_contract;
+                    data.buy_contract= contractBuy.price; -- стоимость продажи
+                    data.trans_id_buy = contractBuy.trans_id_buy;
+
+          setting.sellTable[#setting.sellTable + 1] =  data;                                    
+
+
            signalShowLog.addSignal(contractBuy.datetime, 22, false, price_sellTransaction_emulation); 
  
 end;
@@ -482,21 +484,21 @@ function callBUY(price_callBUY ,datetime)
 
     
     
-     local data = {
-                ['price'] = price_callBUYl,
-                ['datetime']= datetime, 
-                ['trans_id']=  trans_id_buy, 
+     local data = {};
+     data.price = price_callBUYl;
+     data.datetime= datetime;
+     data.trans_id=  trans_id_buy;
                 -- сколько контрактов исполнилось 
-                ['use_contract']=   setting.use_contract, 
-                ['trans_id_buy']=  trans_id_buy, 
+                data.use_contract=   setting.use_contract;
+                data.trans_id_buy=  trans_id_buy;
                 
-                ['work'] = true,
-                ['executed'] = false,
-                ['type']= 'buy',
-                ['emulation']=  setting.emulation,
-                ['contract']=  setting.use_contract,
-                ['buy_contract']= price_callBUYl, -- стоимость продажи
-            };
+                data.work = true;
+                data.executed = false;
+                data.type= 'buy';
+                data.emulation=  setting.emulation;
+                data.contract=  setting.use_contract;
+                data.buy_contract= price_callBUYl; -- стоимость продажи
+            
             
             setting.sellTable[(#setting.sellTable+1)] = data;
             -- Выставили контракт на покупку

@@ -444,7 +444,6 @@ function event_callback_message (t_id, msg, par1, par2)
 	if par1 == 11 and par2 == 2  and  msg == 1 then
 		
 		setting.LIMIT_BID = setting.LIMIT_BID + 1;
-		setting.LIMIT_BID_emulation = setting.LIMIT_BID_emulation + 1;
 		use_contract_limit();
 		return;
 	end;
@@ -452,7 +451,6 @@ function event_callback_message (t_id, msg, par1, par2)
 		
 		if(setting.LIMIT_BID > 1) then
 				setting.LIMIT_BID = setting.LIMIT_BID - 1;
-				setting.LIMIT_BID_emulation = setting.LIMIT_BID_emulation - 1;
 				use_contract_limit();
 			end; 
 		return;

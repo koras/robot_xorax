@@ -34,7 +34,7 @@ local function send(typeMarket, price, quantity,type, trans_id_buy )
 		Transaction.QUANTITY   = tostring(quantity); -- количество 
 		Transaction.PRICE      = tostring(price);
 		Transaction.CLIENT_CODE= 'Robot XoraX';
-		Transaction.EXPIRY_DATE = "GTC";
+		Transaction.EXPIRY_DATE = "TODAY";
 	-- Transaction.COMMENT"]    = "скрипт"
 	  
 	  
@@ -126,8 +126,6 @@ function delete(transId_del_order,stopOrder_num)
 	Transaction.STOP_ORDER_KEY  = tostring(stopOrder_num);
 	Transaction.TYPE = "L";
 
-
- 
 
 	local res = sendTransaction(Transaction)
 	if string.len(res) ~= 0 then
