@@ -74,25 +74,19 @@ function getOrdersForBid()
 end;
 
 
--- Ставим новый стоп
-function generationCollectionStop() 
-    
- 
-    maxPrice = getMaxStopPrice();
+-- Ставим новый стоп, но если сработал стоп, увеличиваем стоп на количество срабатываемых стопов и уменьшаем количество стопов
 
+function generationCollectionStop() 
+    maxPrice = getMaxStopPrice();
     local contract_work = stopClass.contract_work + stopClass.contract_add;
     if contract_work > 0 then 
         if contract_work == 1 then 
             -- один стоп
                     sendTransStop(contract_work, maxPrice);
         else
-
             if stopClass.count_stop >= 2  then 
                 -- более двух стопов
-
                 if contract_work  > stopClass.count_stop  then 
-    
-
                     local lost_contract_start = 1;
 
                     -- количество контрактов на 1 стоп
@@ -105,21 +99,15 @@ function generationCollectionStop()
                     -- сперва ставим стоп контракты с остатками, если таковые имеются
                     if  lost_contract ~= 0  then 
                         local stopContractCount = contract + lost_contract;
- 
                         local price  = getMaxPriceRange(lost_contract); 
                         sendTransStop(stopContractCount, price);
-                      
                     end;
                     
                     for contractItterationLimit = lost_contract_start, stopClass.count_stop do 
                         -- расставляем стопы 
-                        
                         local price  = getMaxPriceRange(contractItterationLimit);
-                        
                         sendTransStop(contract, price);
                     end; 
-
-
                 else
                         --   1 стоп
                         sendTransStop(contract_work, maxPrice);
@@ -236,11 +224,10 @@ function appruveOrderStop(order)
             -- в режиме эмуляции сработал стоп, здесь смотрим цену
             if order.trans_id == stopClass.array_stop[stopItter].trans_id and stopClass.array_stop[stopItter].work == 1 then
                 stopClass.array_stop[stopItter].work = 2;
-                stopClass.array_stop[stopItter].order_num = order.order_num;
-                countContract = dataParam.contract;
+
+                countContract = stopClass.array_stop[stopItter].contract;
                 -- признак срабатывания стопа
-                appruveStop = true;
-                stopClass.triger_stop = true;
+                appruveStop = true; 
                 -- снимаем стоп
                 DelLabel(setting.tag, stopClass.array_stop[stopItter].label);
             end;
@@ -248,11 +235,10 @@ function appruveOrderStop(order)
             --  режим торговли 
             if order.close < stopClass.array_stop[stopItter].price and stopClass.array_stop[stopItter].work == 1 then
                 stopClass.array_stop[stopItter].work = 2;
-                stopClass.array_stop[stopItter].order_num = order.order_num;
-                countContract = dataParam.contract;
+
+                countContract = stopClass.array_stop[stopItter].contract;
                 -- признак срабатывания стопа
-                appruveStop = true;
-                stopClass.triger_stop = true;
+                appruveStop = true; 
                 -- снимаем стоп
                 
                 local order_num = stopClass.array_stop[stopItter].order_num;
@@ -263,10 +249,19 @@ function appruveOrderStop(order)
 
     end; 
 
+    -- сработал стоп, флаг
+  
+
+
     -- перебераем все заявки для того чтобы снять, по цене 
     -- если контрактов в заявке больше, то такие заявки надо перевыставить 
     if  appruveStop then 
-
+        if stopClass.count_stop > 0 then 
+            stopClass.count_stop = stopClass.count_stop - 1;
+            stopClass.triger_stop = true;
+            -- сколько контрактов было в стопе
+            signalShowLog.addSignal(setting.datetime, 30, false, countContract); 
+        end;
 
     end;
 
