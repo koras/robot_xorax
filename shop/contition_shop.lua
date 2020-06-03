@@ -69,8 +69,8 @@ function getLimitBuy(datetime)
         end;  
 
         
-        if setting.emulation  and setting.LIMIT_BID <= setting.limit_count_buy_emulation then
-                signalShowLog.addSignal(datetime, 25, false, setting.limit_count_buy_emulation);
+        if setting.emulation  and setting.LIMIT_BID <= setting.limit_count_buy then
+                signalShowLog.addSignal(datetime, 25, false, setting.limit_count_buy);
                 checkRange = false; 
         end;  
 
@@ -111,7 +111,7 @@ end;
  function getFailMarket(price, datetime) 
         local checkRange = true;
         if setting.SPRED_LONG_TREND_DOWN_LAST_PRICE == 0  or  
-                setting.profit_range + setting.SPRED_LONG_TREND_DOWN_LAST_PRICE - setting.SPRED_LONG_TREND_DOWN  > price  - setting.profit_infelicity  or 
+                setting.profit_range - setting.SPRED_LONG_TREND_DOWN_LAST_PRICE - setting.SPRED_LONG_TREND_DOWN  > price  - setting.profit_infelicity  or 
                 setting.SPRED_LONG_TREND_DOWN_LAST_PRICE  < price  then
         
         else
