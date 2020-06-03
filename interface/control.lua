@@ -229,9 +229,9 @@ function use_contract_limit()
 	local sell_session = "s:"..tostring(setting.count_sell).."/"..tostring(setting.count_contract_sell).."";
 
 
-	SetCell(t_id, 11, 1,   tostring( setting.LIMIT_BID )  .. ' / '.. 
+	SetCell(t_id, 11, 1,   tostring( setting.LIMIT_BID   .. ' / '.. 
 							setting.limit_count_buy .. " ("..setting.limit_count_buy_emulation ..")"..' / '.. 
-							setting.use_contract ); 
+							setting.use_contract )) ; 
 							
 	SetCell(t_id, 11, 1,   tostring( setting.LIMIT_BID )  .. ' / '.. setting.limit_count_buy .. "("..setting.limit_count_buy_emulation ..")"); 
 	SetCell(t_id, 12, 1,   buy_session.. " | "..sell_session); 
@@ -444,7 +444,6 @@ function event_callback_message (t_id, msg, par1, par2)
 	if par1 == 11 and par2 == 2  and  msg == 1 then
 		
 		setting.LIMIT_BID = setting.LIMIT_BID + 1;
-		setting.LIMIT_BID_emulation = setting.LIMIT_BID_emulation + 1;
 		use_contract_limit();
 		return;
 	end;
@@ -452,7 +451,6 @@ function event_callback_message (t_id, msg, par1, par2)
 		
 		if(setting.LIMIT_BID > 1) then
 				setting.LIMIT_BID = setting.LIMIT_BID - 1;
-				setting.LIMIT_BID_emulation = setting.LIMIT_BID_emulation - 1;
 				use_contract_limit();
 			end; 
 		return;

@@ -3,8 +3,8 @@ local M = {}
 local log = getScriptPath().."\\log\\dataLog.txt";
 local logSignal = getScriptPath().."\\log\\EventLog.txt";
 
-local function save(text)
   -- Пытается открыть файл в режиме "чтения/записи"
+local function save(text) 
     --  f = io.open(log,"a");
     --  if f == nil then 
     --    f = io.open(log,"w"); 
@@ -16,8 +16,8 @@ local function save(text)
     --   f:close(); 
 end
 
-local function saveSignal(text)
         -- Пытается открыть файл в режиме "чтения/записи"
+local function saveSignal(text) 
           --  f = io.open(logSignal,"a");
           --  if f == nil then 
           --    f = io.open(logSignal,"w"); 

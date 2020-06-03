@@ -110,23 +110,16 @@ if #setting.sellTable == 0   then return; end;
 			return;
 		end 
  
-
-		loger.save('event iii : ' .. itter    );
-		loger.save('event #setting.sellTable  : ' .. #setting.sellTable     );
-		loger.save('event keyskeyskeys :  ' .. b   );
+ 
 
 --	if #_arr == 0 then return; end; 
 --	for b = 1 , #setting.sellTable do
 		bid = setting.sellTable[b];
 
 		
-		loger.save('bbbbbbbbbbbbb :  ' .. tostring(b)   );
-		
-		loger.save('event keyskeyskeys :  ' .. tostring(bid.price)   );
-
 		time = bid.datetime.hour..':'..bid.datetime.min..':'..bid.datetime.sec;
 
-		loger.save('timetimetimetime:  ' .. tostring(time)   );
+		
 
 		SetCell(t_id_TableBids, b, 0, tostring(b));  
 		SetCell(t_id_TableBids, b, 1, tostring(bid.price));  

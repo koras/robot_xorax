@@ -84,7 +84,7 @@ end
 	 --  transaction.send("SELL", price, setting.use_contract);
   
 	  
-	 SetCell(t_stat, 2, 1,  tostring(setting.LIMIT_BID).."(".. setting.LIMIT_BID_emulation ..")");   
+	 SetCell(t_stat, 2, 1,  tostring(setting.LIMIT_BID));   
 	 SetCell(t_stat, 3, 1,  tostring(setting.ACCOUNT));   
 	 SetCell(t_stat, 4, 1,  tostring(setting.SEC_CODE));  
 	 SetCell(t_stat, 5, 1,  tostring(setting.CLASS_CODE));

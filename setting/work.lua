@@ -12,7 +12,7 @@
 
 
    setting.LIMIT_BID = 10;
-   setting.LIMIT_BID_emulation = 10;
+   
 
 
 
