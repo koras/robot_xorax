@@ -269,8 +269,7 @@ function commonBUY(_pricecommonBUY ,datetime)
 
     if setting.emulation  then
         signalShowLog.addSignal(datetime, 20, false, pricecommonBUY);
-        -- лимит на покупку в эмуляции ( сколько контрактов купили на текущий момент )
-        setting.limit_count_buy_emulation = setting.limit_count_buy_emulation + setting.use_contract;  
+        -- лимит на покупку в эмуляции ( сколько контрактов купили на текущий момент ) 
         setting.emulation_count_buy = setting.emulation_count_buy + 1;
         -- покупок сколько было за торговую сессию
         setting.count_buyin_a_row_emulation = setting.count_buyin_a_row_emulation + 1;
@@ -373,9 +372,7 @@ function callSELL_emulation(result)
                         setting.count_contract_sell = setting.count_contract_sell  + setting.sellTable[sellT].contract; 
                         setting.profit =  setting.sellTable[sellT].price - setting.sellTable[sellT].buy_contract + setting.profit;
 
-                        if setting.limit_count_buy_emulation > setting.sellTable[sellT].contract  then 
-                          setting.limit_count_buy_emulation = setting.limit_count_buy_emulation - setting.sellTable[sellT].buy_contract;
-                        end;
+                 
 
                         signalShowLog.addSignal(result.datetime, 21 , false, result.close); 
                         -- надо удалить контракт по которому мы покупали 
@@ -432,12 +429,8 @@ function execution_sell(contract)
     -- сколько исполнилось продаж
     setting.emulation_count_sell =  setting.emulation_count_sell + 1; 
 
-    if
-    setting.emulation == false and 
-    setting.limit_count_buy_emulation > 0 and
-    setting.limit_count_buy_emulation  + contract.contract > 0 then 
-        setting.limit_count_buy_emulation = setting.limit_count_buy_emulation - contract.contract;
-    end;
+
+ 
 
     -- падение цены прекратилось
     setting.SPRED_LONG_TREND_DOWN  = setting.SPRED_LONG_TREND_DOWN - setting.SPRED_LONG_TREND_DOWN_SPRED;
