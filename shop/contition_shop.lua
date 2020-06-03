@@ -110,13 +110,14 @@ end;
  -- Падение рынка
  function getFailMarket(price, datetime) 
         local checkRange = true;
-        if setting.SPRED_LONG_TREND_DOWN_LAST_PRICE == 0  or  
-                setting.profit_range - setting.SPRED_LONG_TREND_DOWN_LAST_PRICE - setting.SPRED_LONG_TREND_DOWN  > price  - setting.profit_infelicity  or 
-                setting.SPRED_LONG_TREND_DOWN_LAST_PRICE  < price  then
+        
+        local spred = setting.SPRED_LONG_TREND_DOWN_LAST_PRICE - setting.SPRED_LONG_TREND_DOWN -  setting.profit_range ;
+
+        if setting.SPRED_LONG_TREND_DOWN_LAST_PRICE == 0  or  spred > price  - setting.profit_infelicity  or    setting.SPRED_LONG_TREND_DOWN_LAST_PRICE  < price  then
         
         else
                 checkRange = false;
-                setting.SPRED_LONG_TREND_DOWN_NEXT_BUY = setting.SPRED_LONG_TREND_DOWN_LAST_PRICE - setting.SPRED_LONG_TREND_DOWN;
+                setting.SPRED_LONG_TREND_DOWN_NEXT_BUY =   spred;
                 signalShowLog.addSignal(datetime, 3, true, setting.SPRED_LONG_TREND_DOWN_NEXT_BUY);
 
         end;
