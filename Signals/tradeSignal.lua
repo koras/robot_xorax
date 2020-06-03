@@ -152,7 +152,7 @@ local function  getRange()
 end;
   
 
-local function getSignal(tag, callback)
+local function getSignal(tg, callback)
     seconds = os.time(datetime); -- в seconds будет значение 1427052491
 
     collbackFunc = callback;
@@ -161,11 +161,11 @@ local function getSignal(tag, callback)
     setting.number_of_candles = getNumCandles(setting.tag); 
     bars_temp,res,legend = getCandlesByIndex(setting.tag, 0, setting.number_of_candles-2*len-shift,2*len)
 
-    local lines_count = getLinesCount(tag) 
-    bars={}
+    local lines_count = getLinesCount(tg) 
+    local bars={}
 
-    i=len
-    j=2*len
+    local i=len
+    local j=2*len
  
     while i>=1 do
 

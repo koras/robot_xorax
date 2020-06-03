@@ -229,9 +229,9 @@ function use_contract_limit()
 	local sell_session = "s:"..tostring(setting.count_sell).."/"..tostring(setting.count_contract_sell).."";
 
 
-	SetCell(t_id, 11, 1,   tostring( setting.LIMIT_BID )  .. ' / '.. 
+	SetCell(t_id, 11, 1,   tostring( setting.LIMIT_BID   .. ' / '.. 
 							setting.limit_count_buy .. " ("..setting.limit_count_buy_emulation ..")"..' / '.. 
-							setting.use_contract ); 
+							setting.use_contract )) ; 
 							
 	SetCell(t_id, 11, 1,   tostring( setting.LIMIT_BID )  .. ' / '.. setting.limit_count_buy .. "("..setting.limit_count_buy_emulation ..")"); 
 	SetCell(t_id, 12, 1,   buy_session.. " | "..sell_session); 

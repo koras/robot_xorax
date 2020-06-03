@@ -93,30 +93,12 @@ function long(price_long, datetime, levelLocal , event) -- решение
               
 end
 
-
-
-
-
-
--- function getfractal(price)  
---     if #setting.fractals_collection > 0 then 
---         for k,v in setting.fractals_collection do 
-
---         end
---     end;
-
--- end;
-
-
-
 -- исполнение покупки контракта
 function buyContract(result)
     -- сперва находим контракт который купили и ставим статус что мы купили контракт
     if #setting.sellTable > 0 then 
     for contract = 1 ,  #setting.sellTable do 
-    loger.save(setting.sellTable[contract].type); 
-       loger.save(result.trans_id); 
-       loger.save(tostring(setting.sellTable[contract].trans_id));  
+    loger.save(setting.sellTable[contract].type);  
             if  setting.sellTable[contract].type == 'buy' and  
             setting.sellTable[contract].executed == false  and 
             setting.sellTable[contract].trans_id == result.trans_id  then
@@ -137,21 +119,20 @@ end;
 
 
 -- только выставляется заявка на продажу
+-- or
+-- может вызываеться при срабатывании стопа
 function sellTransaction(order, countContracts)
 
     local type = "TAKE_PROFIT_STOP_ORDER";
     if setting.sell_take_or_limit == false  then
         type = "SIMPLE_STOP_ORDER";
     end;
-    
-  -- for contract = 1 ,  #setting.sellTable do 
 
     local  trans_id_sell  =  getRand();
           --  local price = setting.profit_range + order.price + setting.profit_infelicity;
             local price = setting.profit_range + order.price ;
 
           if setting.emulation == false then
-
                  trans_id_sell =  transaction.send("SELL", price, setting.use_contract, type, order.order_num);
                  signalShowLog.addSignal(order.datetime, 9, false, price); 
             end;
@@ -176,7 +157,6 @@ function sellTransaction(order, countContracts)
                                                         };
             setting.sellTable[(#setting.sellTable+1)] = data;
 
-  --  end;
 end;
 
 
@@ -185,10 +165,8 @@ end;
 
 -- исполнение продажи контракта
 function sellContract(result)
-
     -- сперва находим контракт который купили и ставим статус что мы купили контракт
     if #setting.sellTable > 0 then
-
         for contract = 1 ,  #setting.sellTable do 
             if  setting.sellTable[contract].type == 'sell' and  
             setting.sellTable[contract].executed == false  and 

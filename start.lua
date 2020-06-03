@@ -52,8 +52,8 @@ local panelBids = dofile(getScriptPath() .. "\\interface\\bids.lua");
 
 
 local test_bids = dofile(getScriptPath() .. "\\tests\\test_bids.lua");
-
-local risk_stop = dofile(getScriptPath() .. "\\shop\\risk_stop.lua");
+ 
+local riskStop = dofile(getScriptPath() .. "\\shop\\risk_stop.lua");
  
  
 
@@ -137,9 +137,10 @@ basis = 9
       control.show(); 
 
       -- для тестирования
-     setting.sellTable = test_bids.getOrder(setting.current_price);
-      panelBids.show();
-      risk_stop.update_stop();
+   --   setting.sellTable = test_bids.getOrder(setting.current_price);
+   --    panelBids.show();
+   --    riskStop.update_stop();
+   --    riskStop.removeOldOrderSell(11);
    --   test_bids.saleBids(setting.current_price) 
 
 
