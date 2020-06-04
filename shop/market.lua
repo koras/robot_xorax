@@ -172,6 +172,8 @@ function sellContract(result)
             setting.sellTable[contract].executed == false  and 
             setting.sellTable[contract].trans_id == result.trans_id  then
                 
+
+                setting.SPRED_LONG_TREND_DOWN_LAST_PRICE = 0;
                 -- статистика
                 setting.count_sell = setting.count_sell + 1;
                 setting.count_contract_sell = setting.count_contract_sell +  setting.sellTable[contract].use_contract;
@@ -295,6 +297,8 @@ function callBUY_emulation(price_callBUY_emulation ,datetime)
     setting.count_contract_buy = setting.count_contract_buy  + setting.use_contract;
     local data = {};
   
+                setting.SPRED_LONG_TREND_DOWN_LAST_PRICE = 0;
+
                  data.price = price_callBUY_emulation;
                  data.datetime= datetime;
                  data.trans_id=  trans_id_buy;
