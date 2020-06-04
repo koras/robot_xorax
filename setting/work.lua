@@ -1,43 +1,51 @@
  
+   -- минимальная прибыль
+   setting.profit_range =  0.05; 
 
-   setting.profit_range =  0.05; -- минимальная прибыль
-   setting.profit_range_array =  0.03; -- минимальная прибыль при больших заявках
-   setting.profit_infelicity =  0.01; -- погрешность
+   -- минимальная прибыль при больших заявках, не используется 
+   setting.profit_range_array =  0.03;  
+
+   -- погрешность, необходимо для предотвращения проскальзывания при активной торговле
+   setting.profit_infelicity =  0.01;  
    
-   setting.profit =  0.00; -- подсчёт прибыли
+    -- подсчёт прибыли, считается после каждой продажи
+   setting.profit =  0.00; 
 
-   setting.datetime =  0; -- подсчёт прибыли
+   -- текущее время в свече, для внетреннего использования в роботе
+   setting.datetime =  0;  
+
+  -- режим разработки, используется только для тестирования нового функционала
+   setting.developer = false;    
 
 
-  
-   setting.developer = false;   -- режим разработки 
 
-
-
-
+   -- лимит количества заявок на сессию работы робота.
    setting.LIMIT_BID = 10;
    
 
 
-
+   -- сколько использовать контрактов по умолчанию в режиме скальпинга
    setting.use_contract = 1;
+   -- включён или выключен режим эмуляции по умолчанию
    setting.emulation = true;
    setting.candles = {}; -- свечи
          
    setting.status = false;
    setting.buy = true;
    setting.sell = true;
+   -- таблица заявок, здесь все заявки используемые в работе робота
    setting.sellTable = {};
+   -- кнопка закрытия позиции
    setting.close_positions = false; 
           
    setting.count_buyin_a_row =  0; -- покупок сколько было за торговую сессию
    setting.count_buyin_a_row_emulation =  0; -- покупок сколько было за торговую сессию
    setting.current_price =  0; -- текщая цена
-         
-   setting.count_buy = 0; -- сколько куплено раз
-   setting.count_sell = 0; -- сколько продано раз
-   setting.emulation_count_buy = 0; -- сколько куплено раз (режим эмуляции) 
-   setting.emulation_count_sell = 0; -- сколько продано раз (режим эмуляции)
+    
+   -- сколько куплено раз
+   setting.count_buy = 0;  
+   -- сколько продано раз
+   setting.count_sell = 0;    
 
 
    setting.count_contract_buy = 0; -- сколько куплено контрактов за сессию
@@ -57,7 +65,7 @@
 
 
    setting.limit_count_buy = 0; -- лимит на покупку ( сколько контрактов купили на текущий момент )
-   setting.limit_count_buy_emulation = 0; -- лимит на покупку в эмуляции ( сколько контрактов купили на текущий момент )
+   -- setting.limit_count_buy_emulation = 0; -- лимит на покупку в эмуляции ( сколько контрактов купили на текущий момент )
           
    setting.SPRED_LONG_BUY_UP = 0.02; -- условия; не покупаем если здесь ранее мы купили | вверх диапозон;
    setting.SPRED_LONG_BUY_down = 0.01; -- условия; не покупаем если здесь ранее мы купили | вниз диапозон
@@ -70,7 +78,7 @@
    setting.take_profit_offset = 0.01;   
    setting.take_profit_spread = 0.01;  
           
- 
+   -- тип интервала на свече, обязательный параметр
    setting.INTERVAL = INTERVAL_M1;
          
    setting.number_of_candles = 0; -- current a candle
@@ -117,15 +125,18 @@
    setting.each_to_buy_status_block = false; -- сколько подряд раз уже купили
 
 
-
-   setting.SPRED_LONG_LOST_SELL = 0.00; -- Последняя цена сделки по продаже констракта
-   setting.SPRED_LONG_TREND_DOWN = 0.01;  -- рынок падает, увеличиваем растояние между покупками
+ -- Последняя цена сделки по продаже констракта
+   setting.SPRED_LONG_LOST_SELL = 0.00; 
+    -- рынок падает, увеличиваем растояние между покупками
+   setting.SPRED_LONG_TREND_DOWN = 0.01;  
    setting.SPRED_LONG_TREND_DOWN_SPRED = 0.02; -- на сколько увеличиваем растояние
 
+   -- какая последняя покупка была при падении
    setting.SPRED_LONG_TREND_DOWN_LAST_PRICE = 0.00; -- 
+   -- когда следующая покупка при падении
+   setting.SPRED_LONG_TREND_DOWN_NEXT_BUY = 0.00;  
 
-   setting.SPRED_LONG_TREND_DOWN_NEXT_BUY = 0.00; -- когда следующая покупка при падении
-
+   -- примерное время работы, пока не используется
    setting.timeWork =  {
             { '10:00', '14:00'};
             { '14:05', '18:45'}; 

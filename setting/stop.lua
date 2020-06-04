@@ -17,7 +17,7 @@ stopClass.contract_add = 0;
 stopClass.spred = 0.41;
 stopClass.spred_default = 0.4;
 -- количество стопов
-stopClass.count_stop = 1;
+stopClass.count_stop = 2;
 -- увеличение промежутка между стопами
 stopClass.spred_range = 0.15;
 stopClass.spred_range_default = 0.09;

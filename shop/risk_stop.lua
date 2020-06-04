@@ -63,6 +63,8 @@ function getMaxPriceRange(countStop)
     local triger_stop = 1;
     -- тригер срабатывания тейк профита
     if stopClass.triger_stop > 0 then 
+        
+        signalShowLog.addSignal(setting.datetime, 2, false, firstContract );  
        local  triger_stop =   stopClass.triger_stop + triger_stop;
     end;
 
@@ -127,6 +129,8 @@ function generationCollectionStop()
 
     local contract_work = stopClass.contract_work + stopClass.contract_add;
 
+    local contract = math.floor(contract_work / stopClass.count_stop);
+
     if contract_work > 0 then 
 
         if contract_work == 1 then 
@@ -143,9 +147,7 @@ function generationCollectionStop()
 
                     -- количество контрактов на 1 стоп
                 
-                    signalShowLog.addSignal(setting.datetime, 3, false, contract_work); 
-
-                    local contract = math.floor(contract_work / stopClass.count_stop);
+                    signalShowLog.addSignal(setting.datetime, 3, false, contract_work);  
 
                     -- остаток от контрактов
                    -- local lost_contract = contract_work % stopClass.count_stop; -- в переменной A число остаток
@@ -160,12 +162,12 @@ function generationCollectionStop()
 
                             -- сколько контрактов в первом стопе 
                             local firstContract = contract + contract_work - (contract * stopClass.count_stop);
-                            signalShowLog.addSignal(setting.datetime, 19, false, firstContract ); 
-                            signalShowLog.addSignal(setting.datetime, 16, false, contract);  
+                            signalShowLog.addSignal(setting.datetime, 19, false, firstContract );  
                             local price  = getMaxPriceRange(1); 
+                            signalShowLog.addSignal(setting.datetime, 27, false, price);  
                             sendTransStop(firstContract, price);
 
-                        return;
+                       
  
                     end;
 
@@ -173,11 +175,14 @@ function generationCollectionStop()
                     for contractItterationLimit = lost_contract_start, stopClass.count_stop do 
                         -- расставляем стопы  
 
-                            signalShowLog.addSignal(setting.datetime, 16, false, contract); 
-                            local price  = getMaxPriceRange(contractItterationLimit);
+                        local price  = getMaxPriceRange(contractItterationLimit); 
+                        signalShowLog.addSignal(setting.datetime, 22, false, price);  
                             sendTransStop(contract, price);
-                            return;
+                            
                     end; 
+
+
+                    return;
 
                 elseif contract_work  < stopClass.count_stop  then 
                         maxPrice = getMaxPriceRange(1) 
@@ -189,9 +194,7 @@ function generationCollectionStop()
 
             elseif  stopClass.count_stop == 1  then 
                 --   1 стоп 
-                    signalShowLog.addSignal(setting.datetime, 16, false, contract); 
-                    signalShowLog.addSignal(setting.datetime, 16, false, contract); 
-                    signalShowLog.addSignal(setting.datetime, 16, false, contract); 
+                    signalShowLog.addSignal(setting.datetime, 17, false, contract);  
                     maxPrice = getMaxPriceRange(1) 
                     sendTransStop(contract_work, maxPrice);
                     return;

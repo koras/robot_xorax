@@ -241,8 +241,10 @@ function deleteBuyCost(result, saleContract)
  
                     setting.sellTable[sellT].work = false;
 
-                    
-                    setting.limit_count_buy = setting.limit_count_buy - saleContract.contract;
+                    if  setting.limit_count_buy > local_contract.use_contract and   setting.limit_count_buy > 0 then
+                        setting.limit_count_buy = setting.limit_count_buy - local_contract.use_contract;
+                    end;
+
                     setting.count_contract_sell = setting.count_contract_sell + saleContract.contract;
                     -- calculateProfit(setting.sellTable[sellT]);
                     signalShowLog.addSignal(setting.sellTable[sellT].datetime, 8, false, result.price); 
@@ -269,18 +271,15 @@ function commonBUY(_pricecommonBUY ,datetime)
 
     if setting.emulation  then
         signalShowLog.addSignal(datetime, 20, false, pricecommonBUY);
-        -- лимит на покупку в эмуляции ( сколько контрактов купили на текущий момент )
-        setting.limit_count_buy_emulation = setting.limit_count_buy_emulation + setting.use_contract;  
-        setting.emulation_count_buy = setting.emulation_count_buy + 1;
-        -- покупок сколько было за торговую сессию
         setting.count_buyin_a_row_emulation = setting.count_buyin_a_row_emulation + 1;
     else
-        setting.count_buy = setting.count_buy + 1; 
-        setting.count_buyin_a_row = setting.count_buyin_a_row + 1; -- сколько раз подряд купили и не продали
-        setting.limit_count_buy = setting.limit_count_buy + setting.use_contract; -- отметка для лимита
-        
         signalShowLog.addSignal(datetime, 7, false, pricecommonBUY);
     end 
+
+    setting.count_buy = setting.count_buy + 1; 
+    setting.count_buyin_a_row = setting.count_buyin_a_row + 1; -- сколько раз подряд купили и не продали
+    setting.limit_count_buy = setting.limit_count_buy + setting.use_contract; -- отметка для лимита
+
     return   pricecommonBUY ;
 end 
 
@@ -373,8 +372,8 @@ function callSELL_emulation(result)
                         setting.count_contract_sell = setting.count_contract_sell  + setting.sellTable[sellT].contract; 
                         setting.profit =  setting.sellTable[sellT].price - setting.sellTable[sellT].buy_contract + setting.profit;
 
-                        if setting.limit_count_buy_emulation > setting.sellTable[sellT].contract  then 
-                          setting.limit_count_buy_emulation = setting.limit_count_buy_emulation - setting.sellTable[sellT].buy_contract;
+                        if setting.limit_count_buy > setting.sellTable[sellT].contract  then 
+                            setting.limit_count_buy = setting.limit_count_buy - setting.sellTable[sellT].buy_contract;
                         end;
 
                         signalShowLog.addSignal(result.datetime, 21 , false, result.close); 
@@ -418,7 +417,7 @@ function execution_sell(contract)
 --setting.each_to_buy_step
     -- увеличивает лимит используемых контрактов 
     
-    if   setting.emulation and contract.contract > 0 and setting.limit_count_buy  > contract.contract  then 
+    if  contract.contract > 0 and setting.limit_count_buy  > contract.contract  then 
         setting.limit_count_buy = setting.limit_count_buy - contract.contract;
     end;
 
@@ -430,14 +429,8 @@ function execution_sell(contract)
 
     setting.each_to_buy_step = 0;
     -- сколько исполнилось продаж
-    setting.emulation_count_sell =  setting.emulation_count_sell + 1; 
+    setting.count_sell =  setting.count_sell + 1; 
 
-    if
-    setting.emulation == false and 
-    setting.limit_count_buy_emulation > 0 and
-    setting.limit_count_buy_emulation  + contract.contract > 0 then 
-        setting.limit_count_buy_emulation = setting.limit_count_buy_emulation - contract.contract;
-    end;
 
     -- падение цены прекратилось
     setting.SPRED_LONG_TREND_DOWN  = setting.SPRED_LONG_TREND_DOWN - setting.SPRED_LONG_TREND_DOWN_SPRED;

@@ -37,7 +37,7 @@ local word = {
 	['on'] =       "          ON      ",
 	['off'] =      "          OFF     ",
 	['off_auto'] = "        OFF AUTO     ",
-	['Trading_Bot_Control_Panel'] = "Trading Bot Control Panel (free 0.0.23)",
+	['Trading_Bot_Control_Panel'] = "Trading Bot Control Panel (free 0.0.24)",
 	
 	['block_buy'] = "buy / block",
 	['SPRED_LONG_TREND_DOWN'] = "trend down", -- рынок падает, увеличиваем растояние между покупками
@@ -229,11 +229,9 @@ function use_contract_limit()
 	local sell_session = "s:"..tostring(setting.count_sell).."/"..tostring(setting.count_contract_sell).."";
 
 
-	SetCell(t_id, 11, 1,   tostring( setting.LIMIT_BID   .. ' / '.. 
-							setting.limit_count_buy .. " ("..setting.limit_count_buy_emulation ..")"..' / '.. 
-							setting.use_contract )) ; 
+	SetCell(t_id, 11, 1,   tostring( setting.LIMIT_BID )  .. ' / '..  tostring( setting.limit_count_buy) .. ' / '.. 	 tostring( setting.use_contract )) ; 
 							
-	SetCell(t_id, 11, 1,   tostring( setting.LIMIT_BID )  .. ' / '.. setting.limit_count_buy .. "("..setting.limit_count_buy_emulation ..")"); 
+	 
 	SetCell(t_id, 12, 1,   buy_session.. " | "..sell_session); 
 
 
@@ -246,7 +244,7 @@ function use_contract_limit()
 	SetCell(t_id, 20, 1,   tostring(setting.take_profit_spread)); 
 -- потом только решение за человеком / сколько подряд раз уже купили
 	SetCell(t_id, 25, 1,   tostring( setting.each_to_buy_to_block ) .." ( ".. setting.each_to_sell_step .. ') /'.. setting.each_to_buy_step ); 
-	SetCell(t_id, 26, 1,   tostring( setting.SPRED_LONG_TREND_DOWN .. " ("..setting.SPRED_LONG_TREND_DOWN_NEXT_BUY ..")" )); 
+	SetCell(t_id, 26, 1,   tostring( setting.SPRED_LONG_TREND_DOWN .." - ".. setting.profit_range.. " ("..setting.SPRED_LONG_TREND_DOWN_NEXT_BUY ..")" )); 
 	SetCell(t_id, 27, 1,   tostring( setting.SPRED_LONG_TREND_DOWN_SPRED )); 
 	SetCell(t_id, 28, 1,   tostring( setting.not_buy_high .. ' (-'..setting.profit_range ..')' )); 
 	 
@@ -552,7 +550,7 @@ function event_callback_message (t_id, msg, par1, par2)
 		return;
 	end;
 	if par1 == 26 and par2 == 3  and  msg == 1 then
-		if setting.SPRED_LONG_TREND_DOWN > 0.01 then
+		if setting.SPRED_LONG_TREND_DOWN > 0.00 then
 			setting.SPRED_LONG_TREND_DOWN = setting.SPRED_LONG_TREND_DOWN - 0.01;
 			use_contract_limit();
 			end; 

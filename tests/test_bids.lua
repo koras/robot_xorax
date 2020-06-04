@@ -17,7 +17,7 @@ function getOrder(curentPrice)
     curentPrice = curentPrice - 0.02;
  
 
-    for testB = 1 ,  9  do 
+    for testB = 1 ,  15  do 
         
         local rangePrice = stepPricerange * testB;
         curentPrice = curentPrice +  rangePrice;
@@ -34,8 +34,8 @@ function getOrder(curentPrice)
                 ['work'] = true,
                 ['executed'] = executed, -- покупка исполнилась
                 ['emulation']= emulation,
-                ['contract']=  2,
-                ['use_contract']=  2,
+                ['contract']=  1,
+                ['use_contract']=  1,
                 ['buy_contract']= curentPrice, -- стоимость продажи
                 ['trans_id_buy'] = trans_id_buy
             };
@@ -48,8 +48,8 @@ function getOrder(curentPrice)
                 ['work'] = true,
                 ['executed'] = executed,  
                 ['emulation']= emulation,
-                ['contract']=  2,
-                ['use_contract']=  2,
+                ['contract']=  1,
+                ['use_contract']=  1,
                 ['buy_contract']= stepPrice, -- стоимость продажи
                 ['trans_id_buy'] = trans_id_buy
             };
