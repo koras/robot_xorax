@@ -238,7 +238,7 @@ function deleteBuyCost(result, saleContract)
                     setting.SPRED_LONG_TREND_DOWN  = setting.SPRED_LONG_TREND_DOWN - setting.SPRED_LONG_TREND_DOWN_SPRED;
 
                     if setting.SPRED_LONG_TREND_DOWN < 0  then 
-                        setting.SPRED_LONG_TREND_DOWN = 0.01;
+                        setting.SPRED_LONG_TREND_DOWN = setting.SPRED_LONG_TREND_DOWN_minimal;
                     end;
  
                     setting.sellTable[sellT].work = false;
@@ -440,9 +440,8 @@ function execution_sell(contract)
     setting.SPRED_LONG_TREND_DOWN  = setting.SPRED_LONG_TREND_DOWN - setting.SPRED_LONG_TREND_DOWN_SPRED;
 
     if setting.SPRED_LONG_TREND_DOWN < 0  then 
-        setting.SPRED_LONG_TREND_DOWN = 0.01;
+        setting.SPRED_LONG_TREND_DOWN = setting.SPRED_LONG_TREND_DOWN_minimal;
     end;
-
 end;
 
  

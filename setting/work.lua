@@ -131,10 +131,19 @@
    setting.SPRED_LONG_TREND_DOWN = 0.01;  
    setting.SPRED_LONG_TREND_DOWN_SPRED = 0.02; -- на сколько увеличиваем растояние
 
+    -- рынок падает, увеличиваем растояние между покупками(минимальное число)
+   setting.SPRED_LONG_TREND_DOWN_minimal  = 0.01;  
+
+
    -- какая последняя покупка была при падении
    setting.SPRED_LONG_TREND_DOWN_LAST_PRICE = 0.00; -- 
    -- когда следующая покупка при падении
    setting.SPRED_LONG_TREND_DOWN_NEXT_BUY = 0.00;  
+
+ -- минимильное измерение в инструменте 
+ setting.instrument_measurement = 0.01;
+
+
 
    -- примерное время работы, пока не используется
    setting.timeWork =  {
