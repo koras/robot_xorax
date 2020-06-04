@@ -58,7 +58,7 @@ function getRandSell(price)
 
 
 
- -- Лимит заявок на покупку
+ -- Лимит заявок на покупку 
 function getLimitBuy(datetime)
 
         local checkRange = true;
@@ -82,15 +82,23 @@ end;
  -- Не покупаем если промежуток на свече соответствуют высокой цене
  function getRandCandle(price, datetime)
         local range_candle = setting.candle_current_high - setting.candle_current_low;
+
+        local priceMinimum =  setting.candle_current_high - setting.profit_range;
         local checkRange = true;
+
+         
+
+
+
                 if range_candle < setting.profit_range  then 
                         -- свечка меньше текущего профита 
 	                --	[13] = 'Текущая свеча меньше преполагаемого профита, низкая волатильность',   
                         checkRange = false;
                         signalShowLog.addSignal(datetime, 13, false, range_candle);
                 end;  
+ 
 
-                local priceMinimum =  setting.candle_current_high - setting.profit_range  ;
+
 
                 if checkRange == true and priceMinimum > price + setting.profit_infelicity    then
                  
@@ -110,14 +118,18 @@ end;
  -- Падение рынка
  function getFailMarket(price, datetime) 
         local checkRange = true;
+        local localPrice =  price  -  setting.profit_infelicity ;
         
-        local spred = setting.SPRED_LONG_TREND_DOWN_LAST_PRICE - setting.SPRED_LONG_TREND_DOWN -  setting.profit_range ;
+        -- профит и 
+        if setting.SPRED_LONG_TREND_DOWN_LAST_PRICE  ~= 0 then 
+                setting.SPRED_LONG_TREND_DOWN_NEXT_BUY = setting.SPRED_LONG_TREND_DOWN_LAST_PRICE - setting.profit_range - setting.SPRED_LONG_TREND_DOWN
+        end;
+        
+        if setting.SPRED_LONG_TREND_DOWN_LAST_PRICE == 0  or  
+                setting.SPRED_LONG_TREND_DOWN_NEXT_BUY > localPrice  then else
 
-        if setting.SPRED_LONG_TREND_DOWN_LAST_PRICE == 0  or  spred > price  - setting.profit_infelicity  or    setting.SPRED_LONG_TREND_DOWN_LAST_PRICE  < price  then
-        
-        else
                 checkRange = false;
-                setting.SPRED_LONG_TREND_DOWN_NEXT_BUY =   spred;
+               -- setting.SPRED_LONG_TREND_DOWN_NEXT_BUY =  setting.SPRED_LONG_TREND_DOWN_LAST_PRICE - nextPrice;
                 signalShowLog.addSignal(datetime, 3, true, setting.SPRED_LONG_TREND_DOWN_NEXT_BUY);
 
         end;

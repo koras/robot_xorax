@@ -48,7 +48,7 @@ function callSELL_emulation(result)
                         -- setting.emulation_count_contract_sell = setting.emulation_count_contract_sell + setting.sellTable[sellT].contract;
                         setting.count_contract_sell = setting.count_contract_sell  + setting.sellTable[sellT].contract;
                         -- сколько исполнилось продаж
-                        setting.emulation_count_sell =  setting.emulation_count_sell + 1; 
+                        setting.count_sell =  setting.count_sell + 1; 
                         setting.profit =  setting.sellTable[sellT].price - setting.sellTable[sellT].buy_contract + setting.profit;
     
                         signalShowLog.addSignal(result.datetime, 21 , false, price); 

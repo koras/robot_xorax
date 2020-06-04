@@ -37,7 +37,7 @@ local word = {
 	['on'] =       "          ON      ",
 	['off'] =      "          OFF     ",
 	['off_auto'] = "        OFF AUTO     ",
-	['Trading_Bot_Control_Panel'] = "Trading Bot Control Panel (free 0.0.23)",
+	['Trading_Bot_Control_Panel'] = "Trading Bot Control Panel (free 0.0.24)",
 	
 	['block_buy'] = "buy / block",
 	['SPRED_LONG_TREND_DOWN'] = "trend down", -- рынок падает, увеличиваем растояние между покупками
@@ -229,11 +229,9 @@ function use_contract_limit()
 	local sell_session = "s:"..tostring(setting.count_sell).."/"..tostring(setting.count_contract_sell).."";
 
 
-	SetCell(t_id, 11, 1,   tostring( setting.LIMIT_BID   .. ' / '.. 
-							setting.limit_count_buy .. "   ".. 
-							setting.use_contract )) ; 
+	SetCell(t_id, 11, 1,   tostring( setting.LIMIT_BID )  .. ' / '..  tostring( setting.limit_count_buy) .. ' / '.. 	 tostring( setting.use_contract )) ; 
 							
-	SetCell(t_id, 11, 1,   tostring( setting.LIMIT_BID )  .. ' / '.. setting.limit_count_buy .. " "); 
+	 
 	SetCell(t_id, 12, 1,   buy_session.. " | "..sell_session); 
 
 
@@ -246,7 +244,7 @@ function use_contract_limit()
 	SetCell(t_id, 20, 1,   tostring(setting.take_profit_spread)); 
 -- потом только решение за человеком / сколько подряд раз уже купили
 	SetCell(t_id, 25, 1,   tostring( setting.each_to_buy_to_block ) .." ( ".. setting.each_to_sell_step .. ') /'.. setting.each_to_buy_step ); 
-	SetCell(t_id, 26, 1,   tostring( setting.SPRED_LONG_TREND_DOWN .. " ("..setting.SPRED_LONG_TREND_DOWN_NEXT_BUY ..")" )); 
+	SetCell(t_id, 26, 1,   tostring( setting.SPRED_LONG_TREND_DOWN .." - ".. setting.profit_range.. " ("..setting.SPRED_LONG_TREND_DOWN_NEXT_BUY ..")" )); 
 	SetCell(t_id, 27, 1,   tostring( setting.SPRED_LONG_TREND_DOWN_SPRED )); 
 	SetCell(t_id, 28, 1,   tostring( setting.not_buy_high .. ' (-'..setting.profit_range ..')' )); 
 	 
@@ -552,7 +550,7 @@ function event_callback_message (t_id, msg, par1, par2)
 		return;
 	end;
 	if par1 == 26 and par2 == 3  and  msg == 1 then
-		if setting.SPRED_LONG_TREND_DOWN > 0.01 then
+		if setting.SPRED_LONG_TREND_DOWN > 0.00 then
 			setting.SPRED_LONG_TREND_DOWN = setting.SPRED_LONG_TREND_DOWN - 0.01;
 			use_contract_limit();
 			end; 
@@ -620,13 +618,15 @@ function event_callback_message (t_id, msg, par1, par2)
 
 	-- количество контрактов которые добавляет трейдер
 	if par1 == 31 and par2 == 2  and  msg == 1 then
-		stopClass.contract_add = stopClass.contract_add + 1; 
-		use_contract_limit();
-		return;
+			stopClass.contract_add = stopClass.contract_add + 1; 
+			update_stop();
+			use_contract_limit();
+			return;
 	end;
 	if par1 == 31 and par2 == 3  and  msg == 1 then
 		if stopClass.contract_add > 0 then
 			stopClass.contract_add = stopClass.contract_add - 1;
+			update_stop();
 			use_contract_limit();
 			end; 
 		return;
@@ -635,12 +635,14 @@ function event_callback_message (t_id, msg, par1, par2)
 	-- количество стопов
 	if par1 == 32 and par2 == 2  and  msg == 1 then
 		stopClass.count_stop  = stopClass.count_stop  + 1; 
+		update_stop();
 		use_contract_limit();
 		return;
 	end;
 	if par1 == 32 and par2 == 3  and  msg == 1 then
 		if stopClass.count_stop > 1 then
 			stopClass.count_stop = stopClass.count_stop  - 1;
+			update_stop();
 			use_contract_limit();
 			end; 
 		return;
@@ -650,12 +652,14 @@ function event_callback_message (t_id, msg, par1, par2)
 	-- растояние до максимальной покупки, меняется только при максимальной покупке
 	if par1 == 32 and par2 == 2  and  msg == 1 then
 		stopClass.count_stop  = stopClass.count_stop  + 1; 
+		update_stop();
 		use_contract_limit();
 		return;
 	end;
 	if par1 == 32 and par2 == 3  and  msg == 1 then
 		if stopClass.count_stop > 1 then
 			stopClass.count_stop = stopClass.count_stop  - 1;
+			update_stop();
 			use_contract_limit();
 			end; 
 		return;
@@ -667,12 +671,14 @@ function event_callback_message (t_id, msg, par1, par2)
 	-- растояние до максимальной покупки, меняется только при максимальной покупке
 	if par1 == 33 and par2 == 2  and  msg == 1 then
 		stopClass.spred  = stopClass.spred  + 0.05; 
+		update_stop();
 		use_contract_limit();
 		return;
 	end;
 	if par1 == 33 and par2 == 3  and  msg == 1 then
 		if stopClass.spred >  stopClass.spred_default then
 			stopClass.spred = stopClass.spred  - 0.05;
+			update_stop();
 			use_contract_limit();
 			end; 
 		return;
@@ -680,13 +686,17 @@ function event_callback_message (t_id, msg, par1, par2)
 	 
 	-- растояние между стопами если стопов более 1
 	if par1 == 34 and par2 == 2  and  msg == 1 then
-		stopClass.spred_range  = stopClass.spred_range  + 0.01; 
-		use_contract_limit();
+			stopClass.spred_range  = stopClass.spred_range  + 0.01; 
+			update_stop();
+			use_contract_limit();
 		return;
 	end;
 	if par1 == 34 and par2 == 3  and  msg == 1 then
-		if stopClass.spred_range >  stopClass.spred_range_default then
+		
+		if stopClass.spred_range >  stopClass.spred_range_default then 
 			stopClass.spred_range = stopClass.spred_range  - 0.01;
+			update_stop();
+			 
 			use_contract_limit();
 			end; 
 		return;

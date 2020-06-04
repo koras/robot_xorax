@@ -137,11 +137,16 @@ basis = 9
       control.show(); 
 
       -- для тестирования
-   --   setting.sellTable = test_bids.getOrder(setting.current_price);
-   --    panelBids.show();
-   --    riskStop.update_stop();
-   --    riskStop.removeOldOrderSell(11);
-   --   test_bids.saleBids(setting.current_price) 
+      if setting.developer then 
+            setting.sellTable = test_bids.getOrder(setting.current_price);
+            panelBids.show();
+            riskStop.update_stop();
+          --   riskStop.removeOldOrderSell(11);
+          --   stopClass.triger_update_up = true;
+          --   riskStop.update_stop();
+         --   test_bids.saleBids(setting.current_price) 
+      end;
+
 
 
       local Price = false;
@@ -323,11 +328,14 @@ end
 
    
    function OnStop()
+
       Run = false;
       control.deleteTable();
       signalShowLog.deleteTable();
       statsPanel.deleteTableStats();
       interfaceBids.deleteTable();
+
+      DelAllLabels(setting.tag);
    end;
     
 
