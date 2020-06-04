@@ -14,10 +14,10 @@ stopClass.contract_add = 0;
 
 -- расстояние от максимальной покупки
 -- зависимость от используемых контрактов
-stopClass.spred = 0.81;
-stopClass.spred_default = 0.75;
+stopClass.spred = 0.41;
+stopClass.spred_default = 0.4;
 -- количество стопов
-stopClass.count_stop = 3;
+stopClass.count_stop = 1;
 -- увеличение промежутка между стопами
 stopClass.spred_range = 0.15;
 stopClass.spred_range_default = 0.09;

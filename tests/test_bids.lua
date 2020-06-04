@@ -14,7 +14,7 @@ function getOrder(curentPrice)
     local executed = true;
     local emulation = true;
 
-    curentPrice = curentPrice + 0.1;
+    curentPrice = curentPrice - 0.02;
  
 
     for testB = 1 ,  9  do 

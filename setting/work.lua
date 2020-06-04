@@ -9,6 +9,10 @@
    setting.datetime =  0; -- подсчёт прибыли
 
 
+  
+   setting.developer = false;   -- режим разработки 
+
+
 
 
    setting.LIMIT_BID = 10;

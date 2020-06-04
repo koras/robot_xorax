@@ -620,13 +620,15 @@ function event_callback_message (t_id, msg, par1, par2)
 
 	-- количество контрактов которые добавляет трейдер
 	if par1 == 31 and par2 == 2  and  msg == 1 then
-		stopClass.contract_add = stopClass.contract_add + 1; 
-		use_contract_limit();
-		return;
+			stopClass.contract_add = stopClass.contract_add + 1; 
+			update_stop();
+			use_contract_limit();
+			return;
 	end;
 	if par1 == 31 and par2 == 3  and  msg == 1 then
 		if stopClass.contract_add > 0 then
 			stopClass.contract_add = stopClass.contract_add - 1;
+			update_stop();
 			use_contract_limit();
 			end; 
 		return;
@@ -635,12 +637,14 @@ function event_callback_message (t_id, msg, par1, par2)
 	-- количество стопов
 	if par1 == 32 and par2 == 2  and  msg == 1 then
 		stopClass.count_stop  = stopClass.count_stop  + 1; 
+		update_stop();
 		use_contract_limit();
 		return;
 	end;
 	if par1 == 32 and par2 == 3  and  msg == 1 then
 		if stopClass.count_stop > 1 then
 			stopClass.count_stop = stopClass.count_stop  - 1;
+			update_stop();
 			use_contract_limit();
 			end; 
 		return;
@@ -650,12 +654,14 @@ function event_callback_message (t_id, msg, par1, par2)
 	-- растояние до максимальной покупки, меняется только при максимальной покупке
 	if par1 == 32 and par2 == 2  and  msg == 1 then
 		stopClass.count_stop  = stopClass.count_stop  + 1; 
+		update_stop();
 		use_contract_limit();
 		return;
 	end;
 	if par1 == 32 and par2 == 3  and  msg == 1 then
 		if stopClass.count_stop > 1 then
 			stopClass.count_stop = stopClass.count_stop  - 1;
+			update_stop();
 			use_contract_limit();
 			end; 
 		return;
@@ -667,12 +673,14 @@ function event_callback_message (t_id, msg, par1, par2)
 	-- растояние до максимальной покупки, меняется только при максимальной покупке
 	if par1 == 33 and par2 == 2  and  msg == 1 then
 		stopClass.spred  = stopClass.spred  + 0.05; 
+		update_stop();
 		use_contract_limit();
 		return;
 	end;
 	if par1 == 33 and par2 == 3  and  msg == 1 then
 		if stopClass.spred >  stopClass.spred_default then
 			stopClass.spred = stopClass.spred  - 0.05;
+			update_stop();
 			use_contract_limit();
 			end; 
 		return;
@@ -680,13 +688,17 @@ function event_callback_message (t_id, msg, par1, par2)
 	 
 	-- растояние между стопами если стопов более 1
 	if par1 == 34 and par2 == 2  and  msg == 1 then
-		stopClass.spred_range  = stopClass.spred_range  + 0.01; 
-		use_contract_limit();
+			stopClass.spred_range  = stopClass.spred_range  + 0.01; 
+			update_stop();
+			use_contract_limit();
 		return;
 	end;
 	if par1 == 34 and par2 == 3  and  msg == 1 then
-		if stopClass.spred_range >  stopClass.spred_range_default then
+		
+		if stopClass.spred_range >  stopClass.spred_range_default then 
 			stopClass.spred_range = stopClass.spred_range  - 0.01;
+			update_stop();
+			 
 			use_contract_limit();
 			end; 
 		return;
