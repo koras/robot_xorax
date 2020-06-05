@@ -131,7 +131,7 @@ function generationCollectionStop()
 
     local contract = math.floor(contract_work / stopClass.count_stop);
 
-    if contract_work > 0 then 
+    if contract_work > 0  then 
 
         if contract_work == 1 then 
             -- один стоп  
@@ -142,7 +142,8 @@ function generationCollectionStop()
             if stopClass.count_stop >= 2  then 
                 -- более двух стопов
                 if contract_work  > stopClass.count_stop  then 
-
+                    
+                    
                     local lost_contract_start = 1;
 
                     -- количество контрактов на 1 стоп
@@ -166,7 +167,7 @@ function generationCollectionStop()
                             local price  = getMaxPriceRange(1); 
                             signalShowLog.addSignal(setting.datetime, 27, false, price);  
                             sendTransStop(firstContract, price);
-
+ 
                        
  
                     end;
@@ -174,6 +175,7 @@ function generationCollectionStop()
                     
                     for contractItterationLimit = lost_contract_start, stopClass.count_stop do 
                         -- расставляем стопы  
+
 
                         local price  = getMaxPriceRange(contractItterationLimit); 
                         signalShowLog.addSignal(setting.datetime, 22, false, price);  
@@ -259,13 +261,15 @@ function sendTransStop(countContract, countPrice )
     
     if setting.emulation then
         -- рисуем стоп
-        dataParam.work = true;
+        dataParam.work = 1;
         dataParam.order_num = 1;
         
         dataParam.label = label.set('stop', countPrice ,  setting.datetime, countContract, 'stop '..countContract)
          
-   
     else
+        -- здесь статус меняется полсле того как пришёл статус об установке стопа 
+        -- dataParam.work = 0; 
+
         signalShowLog.addSignal( setting.datetime, 29, false, countPrice);  
         -- отправляем транкзакцию 
     end;
@@ -301,7 +305,6 @@ end;
 -- когда срабатывает стоп, передвижение стопов запрещено
 function appruveOrderStop(order) 
 
-    
     local appruveStop = false;
     local countContract = 0;
     -- помечаем заявку как исполненной
@@ -309,8 +312,10 @@ function appruveOrderStop(order)
 
         if setting.emulation then 
             -- в режиме эмуляции сработал стоп, здесь смотрим цену
-            if order.trans_id == stopClass.array_stop[stopItter].trans_id and stopClass.array_stop[stopItter].work == 1 then
+            if order.close < stopClass.array_stop[stopItter].price and stopClass.array_stop[stopItter].work == 1 then 
                 stopClass.array_stop[stopItter].work = 2;
+
+                signalShowLog.addSignal(setting.datetime, 8, false, stopClass.array_stop[stopItter].price); 
 
                 countContract = stopClass.array_stop[stopItter].contract;
                 -- признак срабатывания стопа
@@ -319,8 +324,8 @@ function appruveOrderStop(order)
                 DelLabel(setting.tag, stopClass.array_stop[stopItter].label);
             end;
         else 
-            --  режим торговли 
-            if order.close < stopClass.array_stop[stopItter].price and stopClass.array_stop[stopItter].work == 1 then
+            --  режим торговли  
+            if order.trans_id == stopClass.array_stop[stopItter].trans_id and stopClass.array_stop[stopItter].work == 1 then
                 stopClass.array_stop[stopItter].work = 2;
 
                 countContract = stopClass.array_stop[stopItter].contract;
