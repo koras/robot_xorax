@@ -139,21 +139,21 @@ basis = 9
       -- для тестирования
       if setting.developer then 
             setting.sellTable = test_bids.getOrder(setting.current_price);
-       --     panelBids.show();
-       --     test_bids.testLabelBids();
-     --       riskStop.update_stop();
+           panelBids.show();
+         --  test_bids.testLabelBids();
+           riskStop.update_stop();
 
 
 
             -- утановка параметров на то что сработал стоп
             local testOrder = {
-               ['close']= 39.6 ,
+               ['close']= 41.25,
                ['trans_id']= "123123"
              };
 
-            -- сработал стоп, проверка
-        --    riskStop.appruveOrderStop(testOrder);
+       
 
+          --   riskStop.appruveOrderStop(testOrder);
             
           --   riskStop.removeOldOrderSell(11);
           --   stopClass.triger_update_up = true;
@@ -166,6 +166,16 @@ basis = 9
       local Price = false;
           
       while Run do 
+
+
+         local testOrder = {
+            ['close']= 41.25,
+            ['trans_id']= "123123"
+          };
+
+       --  riskStop.appruveOrderStop(testOrder);
+               -- сработал стоп, проверка 
+
          update();
          --  statsPanel.stats();
            fractalSignal.last();

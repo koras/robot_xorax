@@ -14,18 +14,18 @@ stopClass.contract_add = 0;
 
 -- расстояние от максимальной покупки
 -- зависимость от используемых контрактов
-stopClass.spred = 1.41;
-stopClass.spred_default = 0.4;
+stopClass.spred = 1;
+stopClass.spred_default = 0.2;
 -- на сколько исзменять параметр в панели управления
-stopClass.spred_limit = 0.05;
+stopClass.spred_limit = 0.02;
 
 -- количество стопов
-stopClass.count_stop = 2;
+stopClass.count_stop = 5;
 
 
 
 -- увеличение промежутка между стопами
-stopClass.spred_range = 0.15;
+stopClass.spred_range = 0.1;
 stopClass.spred_range_default = 0.09;
 
 -- на сколько исзменять параметр в панели управления
@@ -35,7 +35,7 @@ stopClass.spred_range_limit = 0.01;
 -- сработал стоп или нет
 -- если сработал стоп, то другие стопы не передигаем
 -- число отвечающее на сколько отодвинуты стопы от первоначальной версии
-stopClass.triger_stop = 0;
+stopClass.triger_stop = 4;
 
 -- обновили максимальную цену, передвигаем стоп, сбрасываем тригер на обновление
 stopClass.triger_update_up = false;

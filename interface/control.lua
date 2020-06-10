@@ -251,9 +251,9 @@ function use_contract_limit()
 -- количество контрактов добавленных трейдером
 	SetCell(t_id, 31, 1,   tostring(stopClass.contract_add .. ' ( '..  stopClass.contract_work .. words.word('stop_contract_work') ..' )' )); 
 
-	SetCell(t_id, 32, 1,   tostring(stopClass.count_stop .. " ( ".. words.word('stop_from_price') .. stopClass.price_max .." ) ")); 
+	SetCell(t_id, 32, 1,   tostring(stopClass.count_stop )); 
 	-- -- расстояние от максимальной покупки
-	SetCell(t_id, 33, 1,   tostring(stopClass.spred)); 
+	SetCell(t_id, 33, 1,   tostring(stopClass.spred .. " (".. words.word('stop_from_price') .. stopClass.price_max ..")")); 
  -- увеличение промежутка между стопами
 	SetCell(t_id, 34, 1,   tostring(stopClass.spred_range)); 
 
