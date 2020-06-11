@@ -1,5 +1,14 @@
 
 
+-- Использовать стопы или нет, по умолчанию да
+stopClass.use_stop = true;
+
+
+-- Показывать или скрывать панель стопов, по умолчинию скрыта
+stopClass.show_panel = false;
+
+
+
 -- максимальная цена в заявке
 stopClass.price_max = 0;
 -- минимальная цена в  заявке
@@ -14,15 +23,18 @@ stopClass.contract_add = 0;
 
 -- расстояние от максимальной покупки
 -- зависимость от используемых контрактов
-stopClass.spred = 0.41;
-stopClass.spred_default = 0.4;
+stopClass.spred = 1.0;
+stopClass.spred_default = 0.2;
 -- на сколько исзменять параметр в панели управления
-stopClass.spred_limit = 0.05;
+stopClass.spred_limit = 0.02;
 
 -- количество стопов
 stopClass.count_stop = 2;
+
+
+
 -- увеличение промежутка между стопами
-stopClass.spred_range = 0.15;
+stopClass.spred_range = 0.1;
 stopClass.spred_range_default = 0.09;
 
 -- на сколько исзменять параметр в панели управления

@@ -50,6 +50,7 @@ local level = 1;
 -- автоматическая торговля
 function long(price_long, datetime, levelLocal , event) -- решение 
 
+    loger.save(  "  event " .. event)
             -- логика выставления заявки на покупку контракта
 
           --  getfractal(price);
@@ -81,7 +82,9 @@ function long(price_long, datetime, levelLocal , event) -- решение
                 setting.each_to_buy_step = setting.each_to_buy_step + 1;
          
                      
+                loger.save(  "  ============================= " )
                     if setting.emulation  then
+                        loger.save(  "  покупай " .. price_long)
                         -- в режиме эмуляции контракт на покупку исполнен в полном объёме
                         callBUY_emulation(price_long,  datetime);
                     else 
@@ -377,7 +380,7 @@ function callSELL_emulation(result)
                         setting.profit =  setting.sellTable[sellT].price - setting.sellTable[sellT].buy_contract + setting.profit;
 
                         if setting.limit_count_buy > setting.sellTable[sellT].contract  then 
-                            setting.limit_count_buy = setting.limit_count_buy - setting.sellTable[sellT].buy_contract;
+                            setting.limit_count_buy = setting.limit_count_buy - setting.sellTable[sellT].contract;
                         end;
 
                         signalShowLog.addSignal(result.datetime, 21 , false, result.close); 

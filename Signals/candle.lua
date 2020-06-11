@@ -78,14 +78,9 @@ local function getSignal(tag, collbackFunc)
 
 
                     setting.datetime  = bar.datetime;
-                    
-                    -- candle_current_high - setting.candle_current_low
+                     
 
-
-                    
-  -- setting.not_buy_high_UP = 1; -- условия; цена входа при запуске скрипта
- --  setting.not_buy_high = 0; -- условия; Выше какого диапазона не покупать(на хаях)
-
+ 
    
 
                         if  setting.old_number_of_candle == setting.number_of_candle then

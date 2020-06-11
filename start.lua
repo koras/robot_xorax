@@ -62,7 +62,7 @@ Run  = true;
 
 function init()
 
-   tradeSignal.setRange(RangeSignal);
+ --  tradeSignal.setRange(RangeSignal);
   --   control.show();
 
 end;
@@ -74,7 +74,7 @@ basis = 9
 
     Size = 0;
    function OnInit()
-
+      riskStop.calculateMaxStopStart();
   
       local Error = '';
       ds,Error = CreateDataSource(setting.CLASS_CODE, setting.SEC_CODE, setting.INTERVAL); 
@@ -139,8 +139,22 @@ basis = 9
       -- для тестирования
       if setting.developer then 
             setting.sellTable = test_bids.getOrder(setting.current_price);
-            panelBids.show();
-            riskStop.update_stop();
+           panelBids.show();
+         --  test_bids.testLabelBids();
+           riskStop.update_stop();
+
+
+
+            -- утановка параметров на то что сработал стоп
+            local testOrder = {
+               ['close']= 41.25,
+               ['trans_id']= "123123"
+             };
+
+       
+
+          --   riskStop.appruveOrderStop(testOrder);
+            
           --   riskStop.removeOldOrderSell(11);
           --   stopClass.triger_update_up = true;
           --   riskStop.update_stop();
@@ -152,6 +166,16 @@ basis = 9
       local Price = false;
           
       while Run do 
+
+
+         local testOrder = {
+            ['close']= 41.25,
+            ['trans_id']= "123123"
+          };
+
+    --    riskStop.appruveOrderStop(testOrder);
+               -- сработал стоп, проверка 
+
          update();
          --  statsPanel.stats();
            fractalSignal.last();

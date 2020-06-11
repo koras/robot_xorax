@@ -6,6 +6,7 @@ local init = {}
 local loger = dofile(getScriptPath() .. "\\interface\\color.lua");
 local loger = dofile(getScriptPath() .. "\\modules\\loger.lua");
 local words = dofile(getScriptPath() .. "\\langs\\words.lua");
+local riskStop = dofile(getScriptPath() .. "\\shop\\risk_stop.lua");
 
 
 init.create = false;
@@ -94,6 +95,8 @@ local function show()
 	current_limit_plus();
 	current_limit_minus();
 	sell_take_or_limit();
+	use_stop();
+	show_stop();
 end
 
 function sell_take_or_limit()   
@@ -103,6 +106,28 @@ function sell_take_or_limit()
 		SetCell(t_id, 18, 1,  words.word('sell_set_limit')); 
 	end; 
 end; 
+ 
+
+-- функция использования и отображения стопов
+function use_stop()
+	if stopClass.use_stop  then 
+		SetCell(t_id, 30, 1,  words.word('use_stop_yes'));  
+	else 
+		SetCell(t_id, 30, 1,  words.word('use_stop_no')); 
+	end;
+end;	
+  
+function show_stop()
+	if stopClass.show_panel  then  
+		SetCell(t_id, 30, 0,  words.word('show_stop_no')); 
+		show_info_stop ();
+	else  
+		SetCell(t_id, 30, 0,  words.word('show_stop_yes'));  
+		hide_info_stop ();
+	end;
+end;		 
+ 
+
 
  
 -- ['profit_size'] = "profit size:",
@@ -130,11 +155,7 @@ function current_limit()
 	SetCell(t_id, 27, 0,   words.word('SPRED_LONG_TREND_DOWN_SPRED')); 
 	SetCell(t_id, 28, 0,  words.word('not_buy_high')); 
 
-
-	SetCell(t_id, 31, 0,  words.word('stop_add_contract')); 
-	SetCell(t_id, 32, 0,  words.word('stop_count_contract')); 
-	SetCell(t_id, 33, 0,  words.word('stop_range_price')); 
-	SetCell(t_id, 34, 0,  words.word('stop_range_price_stop')); 
+ 
  
 end; 
 function current_limit_plus()  
@@ -145,6 +166,7 @@ function current_limit_plus()
 
 	 
 	SetCell(t_id, 18, 2,  words.word('sell_set_take_or_limit_change')); 
+	SetCell(t_id, 30, 2,  words.word('sell_set_take_or_limit_change')); 
 
 	SetCell(t_id, 19, 2,  word.current_limit_plus); 
 	SetCell(t_id, 20, 2,  word.current_limit_plus); 
@@ -154,11 +176,7 @@ function current_limit_plus()
 	SetCell(t_id, 28, 2,  word.current_limit_plus); 
 
 	
-	SetCell(t_id, 31, 2,  word.current_limit_plus); 
-	SetCell(t_id, 32, 2,  word.current_limit_plus); 
-	SetCell(t_id, 33, 2,  word.current_limit_plus); 
-	SetCell(t_id, 34, 2,  word.current_limit_plus); 
-
+ 
 	Green(t_id,11, 2);
 	Green(t_id,13, 2);
 
@@ -171,10 +189,7 @@ function current_limit_plus()
 	Green(t_id,28, 2);
 
 	
-	Green(t_id,31, 2);
-	Green(t_id,32, 2);
-	Green(t_id,33, 2);
-	Green(t_id,34, 2);
+ 
  
  
 
@@ -197,10 +212,7 @@ function current_limit_minus()
 	SetCell(t_id, 27, 3,  word.current_limit_minus); 
 	SetCell(t_id, 28, 3,  word.current_limit_minus); 
 
-	SetCell(t_id, 31, 3,  word.current_limit_minus); 
-	SetCell(t_id, 32, 3,  word.current_limit_minus); 
-	SetCell(t_id, 33, 3,  word.current_limit_minus); 
-	SetCell(t_id, 34, 3,  word.current_limit_minus); 
+ 
 	
 	
 	Red(t_id,11, 3);
@@ -214,11 +226,7 @@ function current_limit_minus()
 	Red(t_id,27, 3);
 	Red(t_id,28, 3);
 
-	
-	Red(t_id,31, 3);
-	Red(t_id,32, 3);
-	Red(t_id,33, 3);
-	Red(t_id,34, 3);
+ 
 end;
 --SetCell(t_stat, 11, 1,  tostring(setting.count_buy)..'/'..tostring(setting.count_contract_buy)..'/'..tostring(setting.emulation_count_contract_buy).."(e)");  
 --SetCell(t_stat, 12, 1,  tostring(setting.count_sell)..'/'..tostring(setting.count_contract_sell)..'/'..tostring(setting.emulation_count_contract_sell).."(e)");
@@ -248,14 +256,7 @@ function use_contract_limit()
 	SetCell(t_id, 27, 1,   tostring( setting.SPRED_LONG_TREND_DOWN_SPRED )); 
 	SetCell(t_id, 28, 1,   tostring( setting.not_buy_high .. ' (-'..setting.profit_range ..')' )); 
 	 
--- количество контрактов добавленных трейдером
-	SetCell(t_id, 31, 1,   tostring(stopClass.contract_add .. ' ( '..  stopClass.contract_work .. words.word('stop_contract_work') ..' )' )); 
 
-	SetCell(t_id, 32, 1,   tostring(stopClass.count_stop .. " ( ".. words.word('stop_from_price') .. stopClass.price_max .." ) ")); 
-	-- -- расстояние от максимальной покупки
-	SetCell(t_id, 33, 1,   tostring(stopClass.spred)); 
- -- увеличение промежутка между стопами
-	SetCell(t_id, 34, 1,   tostring(stopClass.spred_range)); 
 
 	-- -- количество контрактов в работе
 -- stopClass.contract_work = 0;
@@ -270,7 +271,79 @@ function use_contract_limit()
 -- stopClass.spred_range = 0.1;
 end;
 
+
+function show_info_stop ()
+	-- количество контрактов добавленных трейдером
+	SetCell(t_id, 31, 1,   tostring(stopClass.contract_add .. ' ( '..  stopClass.contract_work .. words.word('stop_contract_work') ..' )' )); 
+		
+	SetCell(t_id, 32, 1,   tostring(stopClass.count_stop .. " (" .. stopClass.triger_stop ..")" )); 
+	-- -- расстояние от максимальной покупки
+	SetCell(t_id, 33, 1,   tostring(stopClass.spred .. " (".. words.word('stop_from_price') .. stopClass.price_max ..")")); 
+	-- увеличение промежутка между стопами
+	SetCell(t_id, 34, 1,   tostring(stopClass.spred_range)); 
+
+	
+	SetCell(t_id, 31, 0,  words.word('stop_add_contract')); 
+	SetCell(t_id, 32, 0,  words.word('stop_count_contract')); 
+	SetCell(t_id, 33, 0,  words.word('stop_range_price')); 
+	SetCell(t_id, 34, 0,  words.word('stop_range_price_stop')); 
+
+	SetCell(t_id, 31, 2,  word.current_limit_plus); 
+	SetCell(t_id, 32, 2,  word.current_limit_plus); 
+	SetCell(t_id, 33, 2,  word.current_limit_plus); 
+	SetCell(t_id, 34, 2,  word.current_limit_plus); 
+	SetCell(t_id, 31, 3,  word.current_limit_minus); 
+	SetCell(t_id, 32, 3,  word.current_limit_minus); 
+	SetCell(t_id, 33, 3,  word.current_limit_minus); 
+	SetCell(t_id, 34, 3,  word.current_limit_minus); 
+
+		
+	Red(t_id,31, 3);
+	Red(t_id,32, 3);
+	Red(t_id,33, 3);
+	Red(t_id,34, 3);
+
+	Green(t_id,31, 2);
+	Green(t_id,32, 2);
+	Green(t_id,33, 2);
+	Green(t_id,34, 2);
+
+
  
+end;
+function hide_info_stop ()
+	-- количество контрактов добавленных трейдером
+	SetCell(t_id, 31, 1, tostring( "" )); 
+	SetCell(t_id, 32, 1, tostring( "" )); 
+	SetCell(t_id, 33, 1, tostring( "" )); 
+	SetCell(t_id, 34, 1, tostring( "" )); 
+	
+	SetCell(t_id, 31, 0, tostring( "" )); 
+	SetCell(t_id, 32, 0, tostring( "" )); 
+	SetCell(t_id, 33, 0, tostring( "" )); 
+	SetCell(t_id, 34, 0, tostring( "" )); 
+	
+
+	SetCell(t_id, 31, 2, tostring( "" )); 
+	SetCell(t_id, 32, 2, tostring( "" )); 
+	SetCell(t_id, 33, 2, tostring( "" )); 
+	SetCell(t_id, 34, 2, tostring( "" )); 
+	SetCell(t_id, 31, 3, tostring( "" )); 
+	SetCell(t_id, 32, 3, tostring( "" )); 
+	SetCell(t_id, 33, 3, tostring( "" )); 
+	SetCell(t_id, 34, 3, tostring( "" )); 
+
+		
+	White(t_id,31, 3);
+	White(t_id,32, 3);
+	White(t_id,33, 3);
+	White(t_id,34, 3);
+
+	White(t_id,31, 2);
+	White(t_id,32, 2);
+	White(t_id,33, 2);
+	White(t_id,34, 2); 
+end;
  
 function mode_emulation_on() 
 	setting.emulation=true;
@@ -372,7 +445,7 @@ init.create = true;
 
 
 	AddColumn(t_id, 0, word.status , true, QTABLE_STRING_TYPE, 35);
-	AddColumn(t_id, 1, word.buy, true, QTABLE_STRING_TYPE, 20);
+	AddColumn(t_id, 1, word.buy, true, QTABLE_STRING_TYPE, 30);
 	AddColumn(t_id, 2, word.sell, true, QTABLE_STRING_TYPE, 20); 
 	AddColumn(t_id, 3, word.close_positions, true,QTABLE_STRING_TYPE, 20); 
  
@@ -384,9 +457,6 @@ end;
 
 
 function event_callback_message (t_id, msg, par1, par2)
-
-
-
 
 	if par1 == 1 and par2 == 2 or  par1 == 2 and par2 == 2 or par1 == 3 and par2 == 2 then
 		if  msg == 1 and setting.emulation == false then
@@ -621,6 +691,7 @@ function event_callback_message (t_id, msg, par1, par2)
 			stopClass.contract_add = stopClass.contract_add + 1; 
 			update_stop();
 			use_contract_limit();
+			show_info_stop ()
 			return;
 	end;
 	if par1 == 31 and par2 == 3  and  msg == 1 then
@@ -628,6 +699,7 @@ function event_callback_message (t_id, msg, par1, par2)
 			stopClass.contract_add = stopClass.contract_add - 1;
 			update_stop();
 			use_contract_limit();
+			show_info_stop ()
 			end; 
 		return;
 	end;
@@ -637,6 +709,7 @@ function event_callback_message (t_id, msg, par1, par2)
 		stopClass.count_stop  = stopClass.count_stop  + 1; 
 		update_stop();
 		use_contract_limit();
+		show_info_stop ()
 		return;
 	end;
 	if par1 == 32 and par2 == 3  and  msg == 1 then
@@ -644,10 +717,41 @@ function event_callback_message (t_id, msg, par1, par2)
 			stopClass.count_stop = stopClass.count_stop  - 1;
 			update_stop();
 			use_contract_limit();
+			show_info_stop ()
 			end; 
+		return;
+	end; 
+
+
+	-- Кнопка использовать стопы или нет
+	if par1 == 30 and par2 == 2  and  msg == 1 then
+		if stopClass.use_stop then 
+			stopClass.use_stop = false; 
+		else
+			stopClass.use_stop = true; 
+		end;
+		use_stop();
+		update_stop();
+		use_contract_limit(); 
+		show_info_stop ()
 		return;
 	end;
 
+	-- Кнопка отобразить панель со стопами или нет
+	if par1 == 30 and par2 == 0  and  msg == 1 then
+		if stopClass.show_panel then 
+			stopClass.show_panel = false; 
+		else
+			stopClass.show_panel = true; 
+		end;
+		show_stop();
+	--	update_stop();
+		use_contract_limit(); 
+		
+		return;
+	end;
+
+	 
 
 	-- -- растояние до максимальной покупки, меняется только при максимальной покупке
 	-- if par1 == 32 and par2 == 2  and  msg == 1 then
@@ -673,6 +777,7 @@ function event_callback_message (t_id, msg, par1, par2)
 		stopClass.spred  = stopClass.spred  + stopClass.spred_limit; 
 		update_stop();
 		use_contract_limit();
+		show_info_stop ()
 		return;
 	end;
 	if par1 == 33 and par2 == 3  and  msg == 1 then
@@ -680,27 +785,56 @@ function event_callback_message (t_id, msg, par1, par2)
 			stopClass.spred = stopClass.spred  - stopClass.spred_limit;
 			update_stop();
 			use_contract_limit();
+			show_info_stop ()
 			end; 
 		return;
 	end;
 	 
 	-- растояние между стопами если стопов более 1
 	if par1 == 34 and par2 == 2  and  msg == 1 then
+		if stopClass.show_panel == false then return end;
 			stopClass.spred_range  = stopClass.spred_range  + stopClass.spred_range_limit; 
 			update_stop();
 			use_contract_limit();
+			show_info_stop ()
 		return;
 	end;
 	if par1 == 34 and par2 == 3  and  msg == 1 then
-		
+		if stopClass.show_panel == false then return end;
 		if stopClass.spred_range >  stopClass.spred_range_default then 
 			stopClass.spred_range = stopClass.spred_range  - stopClass.spred_range_limit;
 			update_stop();
 			 
 			use_contract_limit();
+			show_info_stop ()
 			end; 
 		return;
 	end;
+
+
+
+
+	-- if par1 == 30 and par2 == 0  and  msg == 1 then 
+	-- 	-- утановка параметров на то что сработал стоп
+	-- 	local testOrder = {
+	-- 	  ['close']= 41.25,
+	-- 	  ['trans_id']= "123123"
+	-- 	};
+	-- 	 riskStop.appruveOrderStop(testOrder); 
+	-- return;
+	-- end; 
+
+	-- if par1 == 30 and par2 == 1  and  msg == 1 then 
+	-- 	-- утановка параметров на то что сработал стоп
+	-- 	local testOrder = {
+	-- 	['close']= 41.15,
+	-- 	['trans_id']= "123121233"
+	-- 	};
+	-- 	riskStop.appruveOrderStop(testOrder); 
+	-- return;
+	-- end; 
+
+
 
 	
 	if par1 == 4 and par2 == 0  and  msg == 1 then 

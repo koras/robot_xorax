@@ -1,5 +1,7 @@
 -- заявки для режима эмуляции
 
+local label = dofile(getScriptPath() .. "\\modules\\drawLabel.lua");
+
 local M = {};
 M.test_bids = {};
 
@@ -62,7 +64,25 @@ function getOrder(curentPrice)
 end;
 
 
+ 
 
+
+
+
+-- Отобразим точками где находятся все заявки на продажу
+function testLabelBids() 
+    if #setting.sellTable > 0 then 
+        for lab = 1 ,  #setting.sellTable  do 
+
+                if setting.sellTable[lab].type == "buy" then  
+                    label.set("BUY" , setting.sellTable[lab].price,  setting.sellTable[lab].datetime, setting.sellTable[lab].contract);
+                else 
+
+                    label.set("SELL" , setting.sellTable[lab].price,  setting.sellTable[lab].datetime, setting.sellTable[lab].contract);
+                end;
+        end;
+    end; 
+end;
 
 
 
@@ -87,8 +107,9 @@ end;
 function getRand()
     return tostring(math.random(2000000000));
 end;
-
  
+ 
+M.testLabelBids = testLabelBids;
 M.saleBids = saleBids;
 M.getOrder = getOrder;
 return M;
