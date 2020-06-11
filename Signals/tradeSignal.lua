@@ -14,9 +14,7 @@ local collbackFunc;
 -- как должна ходить цена для сигнала
 -- здесь мы не учитываем ничего
 local rangeLocal = 0.0
-
--- U-turn
-local rangeUturn = 0.2 
+ 
 
 local signalStrength = 0;
 -- старая цена
@@ -81,10 +79,6 @@ local rangeVolume = 10
                 if countingTicsVolume > 1  then 
                      countingTicsVolume =   countingTicsVolume - 2;
                  end         
-
-            --    loger.save(countingTicsVolume .."  -  объёмов "..  lastTickVolume .. ' '.. updateValue..' rand ' );
-     --   end
-
     end
 
     oldVolume = volume;  
@@ -103,27 +97,23 @@ local function  calculatePrice( price,datetime)
     end
 --0.03  цена выросла 31.1   oldPrice 31.1
     if oldPrice + rangeLocal < price   then
-
-     --   loger.save(rangeLocal .. "  цена выросла == " ..price.. '   oldPrice '..  oldPrice)
-
         if(countingTicsVolume > CRITICAL_VOLUME)  then
-            --  цена и объём  растёт  стремительно  
-        collbackFunc( price, countingTicsVolume, datetime, 'SELL' );
+            --  цена и объём  растёт   
+        loger.save((oldPrice + rangeLocal) .. "   цена и объём  растёт  "..price)
+        collbackFunc( price, countingTicsVolume, datetime, 'buy');
         end
     end
      
 
     -- цена упала
     if oldPrice - rangeLocal > price then
-     --   loger.save((oldPrice + rangeLocal) .. "   цена упала "..price)
+        loger.save((oldPrice + rangeLocal) .. "   цена упала "..price)
      --   oldPrice = price;
 
-      --  loger.save(countingTicsVolume.. "  countingTicsVolume " .. CRITICAL_VOLUME)
+        loger.save(countingTicsVolume.. "  countingTicsVolume " .. CRITICAL_VOLUME)
         if(countingTicsVolume > CRITICAL_VOLUME) then
-         --   loger.save( " покупка или продажа цена и объём - " .. volumeRange ..' | '.. countingTicsVolume ..' | '.. CRITICAL_VOLUME..' | '..price..' | '..oldPrice )
-            --  цена  и объём падает стремительно 
-
-            collbackFunc( price, countingTicsVolume, datetime, 'BUY');
+            --  цена  и объём падает
+        collbackFunc( price, countingTicsVolume, datetime, 'sell' );
         end
     end
     oldPrice = price;

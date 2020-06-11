@@ -48,6 +48,16 @@ function word(key)
 
  
 	arr = {	  
+		['panel_bids'] = "Заявки",
+		['panel_logs'] = "Логи",
+
+		['use_stop_yes'] = "Используются стопы",
+		['use_stop_no'] = "Стопы не используются",
+
+		['show_stop_yes'] = "Отобразить панель стопов",
+		['show_stop_no'] = "-- скрыть --",
+		
+
 		['stop_add_contract'] = "Добавить контрактов к стопам",
 		['stop_count_contract'] = "Количество стопов",
 		['stop_range_price'] = "Расстояние до макс. покупки",

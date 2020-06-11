@@ -15,7 +15,7 @@ local panelBids = dofile(getScriptPath() .. "\\interface\\bids.lua");
 -- при срабатывании стопа, должны убираться контракты которые находятся на самом вверху
 -- и закрываться позиции по покупке. Более такие позиции не учитываются в логике
 function update_stop()
-    if setting.developer then 
+ --   if setting.developer then 
         -- получаем заявки для ордеров
         -- определяем максимальную и минимальную цену покупки
         getOrdersForBid();
@@ -24,12 +24,18 @@ function update_stop()
         -- генерируем объёкт из стоп заявок
         -- и ставим стоп
         generationCollectionStop(); 
-    end;
+ --   end;
 end;
 
  
 
 
+ -- расчёт максимального расстояния в зависимости от количества используемых контрактов при старте
+function calculateMaxStopStart()
+    -- зависимость контрактов
+    stopClass.spred = setting.LIMIT_BID / setting.use_contract * setting.profit_range ;
+    stopClass.spred = setting.LIMIT_BID * setting.SPRED_LONG_TREND_DOWN / setting.use_contract  + stopClass.spred + stopClass.spred_range ;
+ end;
 
 
  
@@ -70,7 +76,6 @@ function getMaxPriceRange(countStop)
         mPrice  = mPrice  -  countStop * stopClass.spred_range + stopClass.spred_range;  
 
     end
-    signalShowLog.addSignal(setting.datetime, 25, false,  countStop); 
     signalShowLog.addSignal(setting.datetime, 25, false,  mPrice); 
    return mPrice;
 end;
@@ -185,9 +190,6 @@ function generationCollectionStop()
 
                         -- количество контрактов на 1 стоп
                     
-                        signalShowLog.addSignal(setting.datetime, 30, false, contract_work);  
-                        signalShowLog.addSignal(setting.datetime, 31, false, triger_stop);  
-                        signalShowLog.addSignal(setting.datetime, 30, false, stopClass.count_stop );  
 
                         -- остаток от контрактов
                         -- local lost_contract = contract_work % stopClass.count_stop; -- в переменной A число остаток
@@ -195,19 +197,16 @@ function generationCollectionStop()
                         local lost_contract = math.fmod(contract_work, workCountStop);
 
 
-                        signalShowLog.addSignal(setting.datetime, 28, false,  lost_contract);  
-                        signalShowLog.addSignal(setting.datetime, 28, false,  workCountStop);  
-                        signalShowLog.addSignal(setting.datetime, 28, false, contract_work);  
-
+                        
                         -- сперва ставим стоп контракты с остатками, если таковые имеются
                         if  tostring(lost_contract) ~= 0  then 
-                            signalShowLog.addSignal(setting.datetime, 28, false, 1121);  
+                             
                                 local price = 0;
                                 
                                 -- сколько контрактов в первом стопе 
-                                signalShowLog.addSignal(setting.datetime, 27, false, triger_stop);  
+                                 
                                 local firstContract = contract + contract_work - (contract * workCountStop); 
-                                signalShowLog.addSignal(setting.datetime, 27, false, triger_stop);  
+                                
                                 if triger_stop == 0 then 
                                     lost_contract_start = 2;
                                     price  = getMaxPriceRange(1);
@@ -217,9 +216,9 @@ function generationCollectionStop()
                                     price  = getMaxPriceRange(triger_stop + 1); 
                                 end;
                                 sendTransStop(firstContract, price);
-                        else 
-
-                            signalShowLog.addSignal(setting.datetime, 28, false, 22222);  
+                      
+                                
+                            
                         end;
                         
                         
@@ -545,12 +544,10 @@ function removeOldOrderSell(countContract)
     panelBids.show();
 end;
 
-
-
-
  
-
  
+ 
+stopClass.calculateMaxStopStart = calculateMaxStopStart;
 stopClass.removeOldOrderSell = removeOldOrderSell;
 stopClass.backStop = backStop;
 stopClass.appruveOrderStop = appruveOrderStop;

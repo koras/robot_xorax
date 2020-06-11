@@ -62,7 +62,7 @@ Run  = true;
 
 function init()
 
-   tradeSignal.setRange(RangeSignal);
+ --  tradeSignal.setRange(RangeSignal);
   --   control.show();
 
 end;
@@ -74,7 +74,7 @@ basis = 9
 
     Size = 0;
    function OnInit()
-
+      riskStop.calculateMaxStopStart();
   
       local Error = '';
       ds,Error = CreateDataSource(setting.CLASS_CODE, setting.SEC_CODE, setting.INTERVAL); 
