@@ -63,9 +63,9 @@ local function show()
 		Gray(t_id,10, i); 
 
 		Gray(t_id,16, i);
-		WhiteGreen(t_id,18, i);
+	--	WhiteGreen(t_id,18, i);
  
-		Gray(t_id,21, i);
+	--	Gray(t_id,21, i);
 	--	Gray(t_id,22, i);
 		Gray(t_id,24, i);
 		Gray(t_id,30, i);
@@ -96,9 +96,10 @@ local function show()
 	current_limit();
 	current_limit_plus();
 	current_limit_minus();
-	sell_take_or_limit();
+--	sell_take_or_limit();
 	use_stop();
 	show_stop();
+	show_panel_bue_sell();
 end
 
 function sell_take_or_limit()   
@@ -114,8 +115,11 @@ end;
 function use_stop()
 	if stopClass.use_stop  then 
 		SetCell(t_id, 30, 1,  words.word('use_stop_yes'));  
+		
+		Green(t_id,30, 1 );
 	else 
 		SetCell(t_id, 30, 1,  words.word('use_stop_no')); 
+		Red(t_id,30, 1);
 	end;
 end;	
   
@@ -129,6 +133,66 @@ function show_stop()
 	end;
 end;		 
  
+-- отображение и сокрытие панели покупок
+function show_panel_bue_sell()
+	if stopClass.show_panel_bue_sell  then   
+		SetCell(t_id, 16, 0,  words.word('show_stop_no'));  
+	--	show_info_stop ();  
+		show_panel_buy();
+	else   
+		SetCell(t_id, 16, 0,  words.word('show_panel_bue_sell_yes'));  
+	--	hide_info_stop ();  
+		hide_panel_buy();
+	end;
+end;		  
+
+
+
+
+function show_panel_buy() 
+	SetCell(t_id, 17, 3,  word.current_limit_minus); 
+	SetCell(t_id, 19, 3,  word.current_limit_minus); 
+	SetCell(t_id, 20, 3,  word.current_limit_minus); 
+
+	Red(t_id,17, 3);
+	Red(t_id,19, 3);
+	Red(t_id,20, 3);	
+	
+	SetCell(t_id, 17, 2,  word.current_limit_plus); 
+
+	SetCell(t_id, 18, 2,  words.word('sell_set_take_or_limit_change')); 
+	SetCell(t_id, 19, 2,  word.current_limit_plus); 
+	SetCell(t_id, 20, 2,  word.current_limit_plus); 
+	Green(t_id,17, 2);
+	Green(t_id,19, 2);
+	Green(t_id,20, 2);
+
+
+	SetCell(t_id, 17, 0,  words.word('profit_range')); 
+	SetCell(t_id, 18, 0,  words.word('sell_set_take_or_limit')); 
+	SetCell(t_id, 19, 0,  words.word('profit_take_max_range')); 
+	SetCell(t_id, 20, 0,  words.word('profit_take_protected')); 
+
+	SetCell(t_id, 17, 1,   tostring(setting.profit_range).." ("..tostring(setting.profit)..") "); 
+	SetCell(t_id, 19, 1,   tostring(setting.take_profit_offset)); 
+	SetCell(t_id, 20, 1,   tostring(setting.take_profit_spread)); 
+
+	sell_take_or_limit();
+end;
+
+function hide_panel_buy() 
+
+	for i = 17, 20 do
+		for s = 0, 3 do
+			SetCell(t_id, i, s,   tostring(""));  
+			White(t_id,i, s); 
+		end;
+	end;
+
+end;
+
+
+
 
 
  
@@ -151,10 +215,7 @@ function current_limit()
 	-- ['sell_set_take_profit'] = "тейк профит",
 	-- ['sell_set_limit'] = "тейк профит",
 	 
-	SetCell(t_id, 17, 0,  words.word('profit_range')); 
-	SetCell(t_id, 18, 0,  words.word('sell_set_take_or_limit')); 
-	SetCell(t_id, 19, 0,  words.word('profit_take_max_range')); 
-	SetCell(t_id, 20, 0,  words.word('profit_take_protected')); 
+ 
 
 	 
 	SetCell(t_id, 25, 0,  words.word('buy_block')); 
@@ -168,15 +229,13 @@ end;
 function current_limit_plus()  
 	SetCell(t_id, 11, 2,  word.current_limit_plus); 
 	SetCell(t_id, 13, 2,  word.current_limit_plus); 
-
-	SetCell(t_id, 17, 2,  word.current_limit_plus); 
-
-	 
-	SetCell(t_id, 18, 2,  words.word('sell_set_take_or_limit_change')); 
+ 
 	SetCell(t_id, 30, 2,  words.word('sell_set_take_or_limit_change')); 
 
-	SetCell(t_id, 19, 2,  word.current_limit_plus); 
-	SetCell(t_id, 20, 2,  word.current_limit_plus); 
+
+ 
+
+
 	SetCell(t_id, 25, 2,  word.current_limit_plus); 
 	SetCell(t_id, 26, 2,  word.current_limit_plus); 
 	SetCell(t_id, 27, 2,  word.current_limit_plus); 
@@ -186,10 +245,7 @@ function current_limit_plus()
  
 	Green(t_id,11, 2);
 	Green(t_id,13, 2);
-
-	Green(t_id,17, 2);
-	Green(t_id,19, 2);
-	Green(t_id,20, 2);
+ 
 	Green(t_id,25, 2);
 	Green(t_id,26, 2);
 	Green(t_id,27, 2);
@@ -206,14 +262,8 @@ function current_limit_minus()
 	SetCell(t_id, 11, 3,  word.current_limit_minus); 
 	SetCell(t_id, 13, 3,  word.current_limit_minus); 
  
-	SetCell(t_id, 17, 3,  word.current_limit_minus); 
-
-
  
 
-
-	SetCell(t_id, 19, 3,  word.current_limit_minus); 
-	SetCell(t_id, 20, 3,  word.current_limit_minus); 
 	SetCell(t_id, 25, 3,  word.current_limit_minus); 
 	SetCell(t_id, 26, 3,  word.current_limit_minus); 
 	SetCell(t_id, 27, 3,  word.current_limit_minus); 
@@ -224,10 +274,7 @@ function current_limit_minus()
 	
 	Red(t_id,11, 3);
 	Red(t_id,13, 3);
-
-	Red(t_id,17, 3);
-	Red(t_id,19, 3);
-	Red(t_id,20, 3);
+  
 	Red(t_id,25, 3);
 	Red(t_id,26, 3);
 	Red(t_id,27, 3);
@@ -252,17 +299,16 @@ function use_contract_limit()
 
 	SetCell(t_id, 13, 1,   tostring(setting.use_contract)); 
  
-	SetCell(t_id, 17, 1,   tostring(setting.profit_range).." ("..tostring(setting.profit)..") "); 
  
-
-	SetCell(t_id, 19, 1,   tostring(setting.take_profit_offset)); 
-	SetCell(t_id, 20, 1,   tostring(setting.take_profit_spread)); 
 -- потом только решение за человеком / сколько подряд раз уже купили
 	SetCell(t_id, 25, 1,   tostring( setting.each_to_buy_to_block ) .." ( ".. setting.each_to_sell_step .. ') /'.. setting.each_to_buy_step ); 
 	SetCell(t_id, 26, 1,   tostring( setting.SPRED_LONG_TREND_DOWN .." - ".. setting.profit_range.. " ("..setting.SPRED_LONG_TREND_DOWN_NEXT_BUY ..")" )); 
 	SetCell(t_id, 27, 1,   tostring( setting.SPRED_LONG_TREND_DOWN_SPRED )); 
 	SetCell(t_id, 28, 1,   tostring( setting.not_buy_high .. ' (-'..setting.profit_range ..')' )); 
 	 
+
+	
+	show_panel_bue_sell();
 
 
 	-- -- количество контрактов в работе
@@ -572,12 +618,15 @@ function event_callback_message (t_id, msg, par1, par2)
 
 
 	if par1 == 17 and par2 == 2  and  msg == 1 then
+	if stopClass.show_panel_bue_sell == false then return end;
+
 		setting.profit_range = setting.profit_range + 0.01; 
 		use_contract_limit();
 		return;
 	end;
 
 	if par1 == 17 and par2 == 3  and  msg == 1 then
+		if stopClass.show_panel_bue_sell == false then return end;
 		if setting.profit_range > 0.01 then
 			setting.profit_range = setting.profit_range - 0.01;
 			use_contract_limit();
@@ -587,12 +636,14 @@ function event_callback_message (t_id, msg, par1, par2)
 
 
 	if par1 == 19 and par2 == 2  and  msg == 1 then
+		if stopClass.show_panel_bue_sell == false then return end;
 		setting.take_profit_offset = setting.take_profit_offset + 0.01; 
 		use_contract_limit();
 		return;
 	end;
 
 	if par1 == 19 and par2 == 3  and  msg == 1 then
+		if stopClass.show_panel_bue_sell == false then return end;
 		if setting.take_profit_offset > 0.01 then
 			setting.take_profit_offset = setting.take_profit_offset - 0.01;
 			use_contract_limit();
@@ -604,12 +655,14 @@ function event_callback_message (t_id, msg, par1, par2)
 
 
 	if par1 == 20 and par2 == 2  and  msg == 1 then
+		if stopClass.show_panel_bue_sell == false then return end;
 		setting.take_profit_spread = setting.take_profit_spread + 0.01; 
 		use_contract_limit();
 		return;
 	end;
 
 	if par1 == 20 and par2 == 3  and  msg == 1 then
+		if stopClass.show_panel_bue_sell == false then return end;
 		if setting.take_profit_spread > 0.01 then
 			setting.take_profit_spread = setting.take_profit_spread - 0.01;
 			use_contract_limit();
@@ -689,6 +742,7 @@ function event_callback_message (t_id, msg, par1, par2)
 --	['sell_set_take_or_limit_change'] = "Изменить",
 	-- установка тейкпрофита или лимитки на продажу
 	if par1 == 18 and par2 == 2  and  msg == 1 then
+		if stopClass.show_panel_bue_sell == false then return end;
 		if setting.sell_take_or_limit   then 
 			setting.sell_take_or_limit = false;  
 			sell_take_or_limit();
@@ -755,7 +809,7 @@ function event_callback_message (t_id, msg, par1, par2)
 		use_stop();
 		update_stop();
 		use_contract_limit(); 
-		show_info_stop ()
+	--	show_info_stop()
 		return;
 	end;
 
@@ -773,23 +827,21 @@ function event_callback_message (t_id, msg, par1, par2)
 		return;
 	end;
 
-	 
+	-- кнопка показываем панель покупок или нет
 
-	-- -- растояние до максимальной покупки, меняется только при максимальной покупке
-	-- if par1 == 32 and par2 == 2  and  msg == 1 then
-	-- 	stopClass.count_stop  = stopClass.count_stop  + 1; 
-	-- 	update_stop();
-	-- 	use_contract_limit();
-	-- 	return;
-	-- end;
-	-- if par1 == 32 and par2 == 3  and  msg == 1 then
-	-- 	if stopClass.count_stop > 1 then
-	-- 		stopClass.count_stop = stopClass.count_stop  - 1;
-	-- 		update_stop();
-	-- 		use_contract_limit();
-	-- 		end; 
-	-- 	return;
-	-- end;
+	if par1 == 16 and par2 == 0  and  msg == 1 then
+		if stopClass.show_panel_bue_sell then 
+			stopClass.show_panel_bue_sell = false; 
+		else
+			stopClass.show_panel_bue_sell = true; 
+		end; 
+	--	update_stop();
+		use_contract_limit(); 
+		show_panel_bue_sell();
+		
+		return;
+	end;
+	 
 	 
 	 
 
