@@ -173,7 +173,7 @@ basis = 9
             ['trans_id']= "123123"
           };
 
-       --  riskStop.appruveOrderStop(testOrder);
+    --    riskStop.appruveOrderStop(testOrder);
                -- сработал стоп, проверка 
 
          update();

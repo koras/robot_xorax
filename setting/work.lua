@@ -1,5 +1,5 @@
    -- минимальная прибыль
-   setting.profit_range =  0.01; 
+   setting.profit_range =  0.05; 
 
    -- минимальная прибыль при больших заявках, не используется 
    setting.profit_range_array =  0.03;  

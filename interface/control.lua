@@ -6,6 +6,7 @@ local init = {}
 local loger = dofile(getScriptPath() .. "\\interface\\color.lua");
 local loger = dofile(getScriptPath() .. "\\modules\\loger.lua");
 local words = dofile(getScriptPath() .. "\\langs\\words.lua");
+local riskStop = dofile(getScriptPath() .. "\\shop\\risk_stop.lua");
 
 
 init.create = false;
@@ -250,8 +251,8 @@ function use_contract_limit()
 	 
 -- количество контрактов добавленных трейдером
 	SetCell(t_id, 31, 1,   tostring(stopClass.contract_add .. ' ( '..  stopClass.contract_work .. words.word('stop_contract_work') ..' )' )); 
-
-	SetCell(t_id, 32, 1,   tostring(stopClass.count_stop )); 
+	 
+	SetCell(t_id, 32, 1,   tostring(stopClass.count_stop .. " (" .. stopClass.triger_stop ..")" )); 
 	-- -- расстояние от максимальной покупки
 	SetCell(t_id, 33, 1,   tostring(stopClass.spred .. " (".. words.word('stop_from_price') .. stopClass.price_max ..")")); 
  -- увеличение промежутка между стопами
@@ -701,6 +702,31 @@ function event_callback_message (t_id, msg, par1, par2)
 			end; 
 		return;
 	end;
+
+
+
+
+	if par1 == 30 and par2 == 0  and  msg == 1 then 
+		-- утановка параметров на то что сработал стоп
+		local testOrder = {
+		  ['close']= 41.25,
+		  ['trans_id']= "123123"
+		};
+		 riskStop.appruveOrderStop(testOrder); 
+	return;
+	end; 
+
+	if par1 == 30 and par2 == 1  and  msg == 1 then 
+		-- утановка параметров на то что сработал стоп
+		local testOrder = {
+		['close']= 41.15,
+		['trans_id']= "123121233"
+		};
+		riskStop.appruveOrderStop(testOrder); 
+	return;
+	end; 
+
+
 
 	
 	if par1 == 4 and par2 == 0  and  msg == 1 then 

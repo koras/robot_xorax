@@ -75,6 +75,9 @@ function getMaxPriceRange(countStop)
    return mPrice;
 end;
 
+-- ситуация когда срабатывали стопы, и сейчас стопов больше чем контрактов
+
+
 
  
 
@@ -133,6 +136,12 @@ function generationCollectionStop()
 
     local contract = math.floor(contract_work / stopClass.count_stop);
 
+
+    local lost_contract_start = 1;
+
+    signalShowLog.addSignal(setting.datetime, 9, false,  triger_stop); 
+
+
     if contract_work > 0  then 
 
         if contract_work == 1 then 
@@ -141,78 +150,136 @@ function generationCollectionStop()
                     sendTransStop(contract_work, maxPrice);
 
         else
-            if stopClass.count_stop >= 2  then 
-                -- более двух стопов
-                if contract_work  > stopClass.count_stop  then 
-                    
-                    
-                    local lost_contract_start = 1;
-
-                    -- количество контрактов на 1 стоп
+                if stopClass.count_stop >= 2  then 
+                    -- более двух стопов
                 
-                    signalShowLog.addSignal(setting.datetime, 3, false, contract_work);  
+                
+                    if   stopClass.count_stop  ==  triger_stop  then 
+                        --   1 стоп 
+                            signalShowLog.addSignal(setting.datetime, 16, false, contract);  
+                            maxPrice = getMaxPriceRange( triger_stop +1 ) 
+                            sendTransStop(contract_work, maxPrice);
+                            return;
+    
+                        elseif   stopClass.count_stop  <=  triger_stop  or  stopClass.count_stop  ==  triger_stop + 1    then 
 
-                    -- остаток от контрактов
-                   -- local lost_contract = contract_work % stopClass.count_stop; -- в переменной A число остаток
+                            --   1 стоп 
+                                signalShowLog.addSignal(setting.datetime, 19, false, contract);  
+                                maxPrice = getMaxPriceRange( triger_stop + 1 ) 
+                                sendTransStop(contract_work, maxPrice);
+                        return;
+        
 
-                    local lost_contract = math.fmod(contract_work, stopClass.count_stop);
+                    elseif   stopClass.count_stop  ==  triger_stop and  stopClass.count_stop  == contract_work    then 
 
-
-                    -- сперва ставим стоп контракты с остатками, если таковые имеются
-                    if  lost_contract ~= 0  then 
-                            local price = 0;
-                            
-                            -- сколько контрактов в первом стопе 
-                            local firstContract = contract + contract_work - (contract * stopClass.count_stop); 
-                            if triger_stop == 0 then 
-                                lost_contract_start = 2;
-                                price  = getMaxPriceRange(1);
-                            else 
-                               -- triger_stop  = triger_stop + 1;
-                                lost_contract_start = 1;
-                                price  = getMaxPriceRange(triger_stop + 1); 
-                            end;
-                            
-
-                            signalShowLog.addSignal(setting.datetime, 27, false, triger_stop);  
-                            sendTransStop(firstContract, price);
- 
-                    end;
-                    
-                    signalShowLog.addSignal(setting.datetime, 28, false, lost_contract_start);  
-                    lost_contract_start  = lost_contract_start 
-                    
-
-
-                    for contractItterationLimit = lost_contract_start, stopClass.count_stop - triger_stop do 
-                        -- расставляем стопы  
+                            --   1 стоп 
+                                signalShowLog.addSignal(setting.datetime, 18, false, contract);  
+                                maxPrice = getMaxPriceRange( triger_stop + 1 ) 
+                                sendTransStop(contract_work, maxPrice);
+                        return;
+        
+                    elseif  stopClass.count_stop >  triger_stop  then 
                         
-                        -- если раньше срабатывали стопы
-                        local trigerStop = triger_stop + contractItterationLimit;
-                        local price  = getMaxPriceRange(trigerStop);  
-                        signalShowLog.addSignal(setting.datetime, 22, false, trigerStop);  
-                            sendTransStop(contract, price);
+                        local workCountStop =  stopClass.count_stop -  triger_stop;
+                         
+
+                        -- количество контрактов на 1 стоп
+                    
+                        signalShowLog.addSignal(setting.datetime, 30, false, contract_work);  
+                        signalShowLog.addSignal(setting.datetime, 31, false, triger_stop);  
+                        signalShowLog.addSignal(setting.datetime, 30, false, stopClass.count_stop );  
+
+                        -- остаток от контрактов
+                        -- local lost_contract = contract_work % stopClass.count_stop; -- в переменной A число остаток
+
+                        local lost_contract = math.fmod(contract_work, workCountStop);
+
+
+                        signalShowLog.addSignal(setting.datetime, 28, false,  lost_contract);  
+                        signalShowLog.addSignal(setting.datetime, 28, false,  workCountStop);  
+                        signalShowLog.addSignal(setting.datetime, 28, false, contract_work);  
+
+                        -- сперва ставим стоп контракты с остатками, если таковые имеются
+                        if  tostring(lost_contract) ~= 0  then 
+                            signalShowLog.addSignal(setting.datetime, 28, false, 1121);  
+                                local price = 0;
+                                
+                                -- сколько контрактов в первом стопе 
+                                signalShowLog.addSignal(setting.datetime, 27, false, triger_stop);  
+                                local firstContract = contract + contract_work - (contract * workCountStop); 
+                                signalShowLog.addSignal(setting.datetime, 27, false, triger_stop);  
+                                if triger_stop == 0 then 
+                                    lost_contract_start = 2;
+                                    price  = getMaxPriceRange(1);
+                                else 
+                                -- triger_stop  = triger_stop + 1;
+                                    lost_contract_start = 1;
+                                    price  = getMaxPriceRange(triger_stop + 1); 
+                                end;
+                                sendTransStop(firstContract, price);
+                        else 
+
+                            signalShowLog.addSignal(setting.datetime, 28, false, 22222);  
+                        end;
+                        
+                        
+         
+                        
+
+
+                        for contractItterationLimit = lost_contract_start, stopClass.count_stop - triger_stop do 
+                            -- расставляем стопы  
                             
+                            -- если раньше срабатывали стопы
+                            if contract ~= 0 then 
+                                local trigerStop = triger_stop + contractItterationLimit;
+                                local price  = getMaxPriceRange(trigerStop);  
+                                signalShowLog.addSignal(setting.datetime, 22, false, trigerStop);  
+                                    sendTransStop(contract, price);
+                            end;
+                        end; 
+
+
+                        return;
+
+                    elseif   stopClass.count_stop == triger_stop then 
+                        --   1 стоп 
+                            signalShowLog.addSignal(setting.datetime, 10, false, contract);  
+                            maxPrice = getMaxPriceRange( triger_stop +1 ) 
+                            sendTransStop(contract_work, maxPrice);
+                            return;
+
+                    elseif   stopClass.count_stop < triger_stop then 
+                        --   1 стоп 
+                            signalShowLog.addSignal(setting.datetime, 16, false, contract);  
+                            maxPrice = getMaxPriceRange( triger_stop +1 ) 
+                            sendTransStop(contract_work, maxPrice);
+                            return;
+
+                    elseif contract_work  < stopClass.count_stop  then 
+                            maxPrice = getMaxPriceRange( triger_stop +1 ) 
+                            signalShowLog.addSignal(setting.datetime, 17, false, triger_stop); 
+                            signalShowLog.addSignal(setting.datetime, 17, false, maxPrice);  
+                            sendTransStop(contract_work, maxPrice);
+                            return;
+                  
+                    else  
+                           
+                                signalShowLog.addSignal(setting.datetime, 19, false, triger_stop);  
+    
                     end; 
 
-
-                    return;
-
-                elseif contract_work  < stopClass.count_stop  then 
-                        maxPrice = getMaxPriceRange(1) 
+ 
+                    signalShowLog.addSignal(setting.datetime, 33, false, maxPrice);  
+            
+            
+                elseif  stopClass.count_stop == 1  then 
+                    --   1 стоп 
+                        signalShowLog.addSignal(setting.datetime, 17, false, contract);  
+                        maxPrice = getMaxPriceRange( triger_stop +1 ) 
                         sendTransStop(contract_work, maxPrice);
                         return;
                 end; 
-
-
-
-            elseif  stopClass.count_stop == 1  then 
-                --   1 стоп 
-                    signalShowLog.addSignal(setting.datetime, 17, false, contract);  
-                    maxPrice = getMaxPriceRange(1) 
-                    sendTransStop(contract_work, maxPrice);
-                    return;
-            end; 
         end; 
     end;
 
@@ -330,11 +397,15 @@ function appruveOrderStop(order)
                 stopClass.array_stop[stopItter].work = 2;
 
                 signalShowLog.addSignal(setting.datetime, 31, false, stopClass.array_stop[stopItter].price); 
+                signalShowLog.addSignal(setting.datetime, 31, false, stopClass.array_stop[stopItter].contract); 
 
                 countContract = countContract + stopClass.array_stop[stopItter].contract;
                 -- признак срабатывания стопа
                 appruveStop = true; 
-                stopClass.triger_stop = stopClass.triger_stop + 1;
+                
+                if stopClass.count_stop > stopClass.triger_stop then 
+                   stopClass.triger_stop = stopClass.triger_stop + 1;
+                end
                 -- снимаем стоп
                 DelLabel(setting.tag, stopClass.array_stop[stopItter].label);
             end;
@@ -346,7 +417,10 @@ function appruveOrderStop(order)
                 countContract = countContract + stopClass.array_stop[stopItter].contract;
                 -- признак срабатывания стопа
                 appruveStop = true; 
-                stopClass.triger_stop = stopClass.triger_stop + 1;
+                
+                if stopClass.count_stop > stopClass.triger_stop then 
+                    stopClass.triger_stop = stopClass.triger_stop + 1;
+                end
                 -- снимаем стоп
                 signalShowLog.addSignal(setting.datetime, 32, false, stopClass.array_stop[stopItter].price); 
                 
