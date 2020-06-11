@@ -15,7 +15,7 @@ local panelBids = dofile(getScriptPath() .. "\\interface\\bids.lua");
 -- при срабатывании стопа, должны убираться контракты которые находятся на самом вверху
 -- и закрываться позиции по покупке. Более такие позиции не учитываются в логике
 function update_stop()
- --   if setting.developer then 
+    if stopClass.use_stop then 
         -- получаем заявки для ордеров
         -- определяем максимальную и минимальную цену покупки
         getOrdersForBid();
@@ -24,7 +24,7 @@ function update_stop()
         -- генерируем объёкт из стоп заявок
         -- и ставим стоп
         generationCollectionStop(); 
- --   end;
+  end;
 end;
 
  
@@ -76,7 +76,7 @@ function getMaxPriceRange(countStop)
         mPrice  = mPrice  -  countStop * stopClass.spred_range + stopClass.spred_range;  
 
     end
-    signalShowLog.addSignal(setting.datetime, 25, false,  mPrice); 
+    
    return mPrice;
 end;
 
@@ -144,7 +144,7 @@ function generationCollectionStop()
 
     local lost_contract_start = 1;
 
-    signalShowLog.addSignal(setting.datetime, 9, false,  triger_stop); 
+    
 
 
     if contract_work > 0  then 
@@ -161,7 +161,7 @@ function generationCollectionStop()
                 
                     if   stopClass.count_stop  ==  triger_stop  then 
                         --   1 стоп 
-                            signalShowLog.addSignal(setting.datetime, 16, false, contract);  
+                        
                             maxPrice = getMaxPriceRange( triger_stop +1 ) 
                             sendTransStop(contract_work, maxPrice);
                             return;
@@ -169,7 +169,7 @@ function generationCollectionStop()
                         elseif   stopClass.count_stop  <=  triger_stop  or  stopClass.count_stop  ==  triger_stop + 1    then 
 
                             --   1 стоп 
-                                signalShowLog.addSignal(setting.datetime, 19, false, contract);  
+                             
                                 maxPrice = getMaxPriceRange( triger_stop + 1 ) 
                                 sendTransStop(contract_work, maxPrice);
                         return;
@@ -178,7 +178,7 @@ function generationCollectionStop()
                     elseif   stopClass.count_stop  ==  triger_stop and  stopClass.count_stop  == contract_work    then 
 
                             --   1 стоп 
-                                signalShowLog.addSignal(setting.datetime, 18, false, contract);  
+                             
                                 maxPrice = getMaxPriceRange( triger_stop + 1 ) 
                                 sendTransStop(contract_work, maxPrice);
                         return;
@@ -233,7 +233,7 @@ function generationCollectionStop()
                             if contract ~= 0 then 
                                 local trigerStop = triger_stop + contractItterationLimit;
                                 local price  = getMaxPriceRange(trigerStop);  
-                                signalShowLog.addSignal(setting.datetime, 22, false, trigerStop);  
+                                
                                     sendTransStop(contract, price);
                             end;
                         end; 
@@ -243,38 +243,36 @@ function generationCollectionStop()
 
                     elseif   stopClass.count_stop == triger_stop then 
                         --   1 стоп 
-                            signalShowLog.addSignal(setting.datetime, 10, false, contract);  
+                        
                             maxPrice = getMaxPriceRange( triger_stop +1 ) 
                             sendTransStop(contract_work, maxPrice);
                             return;
 
                     elseif   stopClass.count_stop < triger_stop then 
                         --   1 стоп 
-                            signalShowLog.addSignal(setting.datetime, 16, false, contract);  
+                        
                             maxPrice = getMaxPriceRange( triger_stop +1 ) 
                             sendTransStop(contract_work, maxPrice);
                             return;
 
                     elseif contract_work  < stopClass.count_stop  then 
                             maxPrice = getMaxPriceRange( triger_stop +1 ) 
-                            signalShowLog.addSignal(setting.datetime, 17, false, triger_stop); 
-                            signalShowLog.addSignal(setting.datetime, 17, false, maxPrice);  
+                            
                             sendTransStop(contract_work, maxPrice);
                             return;
                   
-                    else  
-                           
-                                signalShowLog.addSignal(setting.datetime, 19, false, triger_stop);  
+
+                            
     
                     end; 
 
  
-                    signalShowLog.addSignal(setting.datetime, 33, false, maxPrice);  
+                    
             
             
                 elseif  stopClass.count_stop == 1  then 
                     --   1 стоп 
-                        signalShowLog.addSignal(setting.datetime, 17, false, contract);  
+                     
                         maxPrice = getMaxPriceRange( triger_stop +1 ) 
                         sendTransStop(contract_work, maxPrice);
                         return;
@@ -323,7 +321,7 @@ end;
 
 function sendTransStop(countContract, countPrice )
     
-    signalShowLog.addSignal(setting.datetime, 15, false, countPrice); 
+    
     local dataParam = {};
             dataParam.emulation = setting.emulation;
             dataParam.price = countPrice;
@@ -348,7 +346,7 @@ function sendTransStop(countContract, countPrice )
         -- здесь статус меняется полсле того как пришёл статус об установке стопа 
         -- dataParam.work = 0; 
 
-        signalShowLog.addSignal( setting.datetime, 29, false, countPrice);  
+        
         -- отправляем транкзакцию 
     end;
 
@@ -382,71 +380,72 @@ end;
 -- необходимо снять старые заявки на продажу, если есть таковые
 -- когда срабатывает стоп, передвижение стопов запрещено
 function appruveOrderStop(order) 
+    if stopClass.use_stop then 
 
-    local appruveStop = false;
-    local countContract = 0;
-    -- помечаем заявку как исполненной
-    for stopItter = 1 ,  #stopClass.array_stop do 
+        local appruveStop = false;
+        local countContract = 0;
+        -- помечаем заявку как исполненной
+        for stopItter = 1 ,  #stopClass.array_stop do 
 
-        if setting.emulation then 
- 
+            if setting.emulation then 
+    
 
-            -- в режиме эмуляции сработал стоп, здесь смотрим цену
-            if order.close <= stopClass.array_stop[stopItter].price and stopClass.array_stop[stopItter].work == 1 then 
-                stopClass.array_stop[stopItter].work = 2;
+                -- в режиме эмуляции сработал стоп, здесь смотрим цену
+                if order.close <= stopClass.array_stop[stopItter].price and stopClass.array_stop[stopItter].work == 1 then 
+                    stopClass.array_stop[stopItter].work = 2;
 
-                signalShowLog.addSignal(setting.datetime, 31, false, stopClass.array_stop[stopItter].price); 
-                signalShowLog.addSignal(setting.datetime, 31, false, stopClass.array_stop[stopItter].contract); 
+                    signalShowLog.addSignal(setting.datetime, 31, false, stopClass.array_stop[stopItter].price);  
 
-                countContract = countContract + stopClass.array_stop[stopItter].contract;
-                -- признак срабатывания стопа
-                appruveStop = true; 
-                
-                if stopClass.count_stop > stopClass.triger_stop then 
-                   stopClass.triger_stop = stopClass.triger_stop + 1;
-                end
-                -- снимаем стоп
-                DelLabel(setting.tag, stopClass.array_stop[stopItter].label);
-            end;
-        else 
-            --  режим торговли  
-            if order.trans_id == stopClass.array_stop[stopItter].trans_id and stopClass.array_stop[stopItter].work == 1 then
-                stopClass.array_stop[stopItter].work = 2;
-
-                countContract = countContract + stopClass.array_stop[stopItter].contract;
-                -- признак срабатывания стопа
-                appruveStop = true; 
-                
-                if stopClass.count_stop > stopClass.triger_stop then 
+                    countContract = countContract + stopClass.array_stop[stopItter].contract;
+                    -- признак срабатывания стопа
+                    appruveStop = true; 
+                    
+                    if stopClass.count_stop > stopClass.triger_stop then 
                     stopClass.triger_stop = stopClass.triger_stop + 1;
-                end
-                -- снимаем стоп
-                signalShowLog.addSignal(setting.datetime, 32, false, stopClass.array_stop[stopItter].price); 
-                
-                local order_num = stopClass.array_stop[stopItter].order_num;
-                local trans_id = stopClass.array_stop[stopItter].trans_id;
-                transaction.delete(trans_id, order_num);
+                    end
+                    -- снимаем стоп
+                    DelLabel(setting.tag, stopClass.array_stop[stopItter].label);
+                end;
+            else 
+                --  режим торговли  
+                if order.trans_id == stopClass.array_stop[stopItter].trans_id and stopClass.array_stop[stopItter].work == 1 then
+                    stopClass.array_stop[stopItter].work = 2;
+
+                    countContract = countContract + stopClass.array_stop[stopItter].contract;
+                    -- признак срабатывания стопа
+                    appruveStop = true; 
+                    
+                    if stopClass.count_stop > stopClass.triger_stop then 
+                        stopClass.triger_stop = stopClass.triger_stop + 1;
+                    end
+                    -- снимаем стоп
+                    signalShowLog.addSignal(setting.datetime, 32, false, stopClass.array_stop[stopItter].price); 
+                    
+                    local order_num = stopClass.array_stop[stopItter].order_num;
+                    local trans_id = stopClass.array_stop[stopItter].trans_id;
+                    transaction.delete(trans_id, order_num);
+                end;
             end;
-        end;
 
+        end; 
+
+        -- сработал стоп, флаг
+        -- перебераем все заявки для того чтобы снять, по цене 
+        -- если контрактов в заявке больше, то такие заявки надо перевыставить 
+        if  appruveStop then 
+            
+
+            if stopClass.count_stop > 0 then  
+                -- сколько контрактов было в стопе
+                signalShowLog.addSignal(setting.datetime, 33, false, stopClass.triger_stop); 
+                -- снимаем заявки которые установлены на верху, в зависимости от количества заявок
+                removeOldOrderSell( countContract );
+                -- обновляем таблицу с заявками 
+
+            end;
+            panelBids.show();
+        end;
     end; 
-
-    -- сработал стоп, флаг
-    -- перебераем все заявки для того чтобы снять, по цене 
-    -- если контрактов в заявке больше, то такие заявки надо перевыставить 
-    if  appruveStop then 
-        signalShowLog.addSignal(setting.datetime, 18, false, stopClass.count_stop); 
-
-        if stopClass.count_stop > 0 then  
-            -- сколько контрактов было в стопе
-            signalShowLog.addSignal(setting.datetime, 33, false, stopClass.triger_stop); 
-            -- снимаем заявки которые установлены на верху, в зависимости от количества заявок
-            removeOldOrderSell( countContract );
-            -- обновляем таблицу с заявками 
-
-        end;
-        panelBids.show();
-    end;
 end;
 
 
@@ -502,9 +501,7 @@ function removeOldOrderSell(countContract)
                     arrayOrdersBuys[#arrayOrdersBuys + 1]  = setting.sellTable[i].trans_id_buy;
                     countContract = countContract -  setting.sellTable[i].contract ;  
                  else 
-                    -- надо перевыставить одну заявку на продажу, ставим лимитку, чтоб не заморачиваться
-                    loger.save("  надо перевыставить одну заявку на продажу, ставим лимитку, чтоб не заморачиваться ,".. arrayOrders[i].price);
-                    loger.save("  надо перевыставить одну заявку на продажу, ставим лимитку, чтоб не заморачиваться ,".. arrayOrders[i].contract);
+                    -- надо перевыставить одну заявку на продажу, ставим лимитку, чтоб не заморачиваться 
                     
                     local orderStop = {};
                     orderStop.price = arrayOrders[i].price;
