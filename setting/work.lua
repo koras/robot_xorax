@@ -14,7 +14,7 @@
    setting.datetime =  0;  
 
   -- режим разработки, используется только для тестирования нового функционала
-   setting.developer = true;    
+   setting.developer = false;    
 
    -- лимит количества заявок на сессию работы робота.
    setting.LIMIT_BID = 10;
