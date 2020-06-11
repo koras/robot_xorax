@@ -48,8 +48,8 @@ function word(key)
 
  
 	arr = {	  
-		['panel_bids'] = "Заявки",
-		['panel_logs'] = "Логи",
+		['panel_bids'] = "  панель заявок",
+		['panel_logs'] = "  панель логов",
 
 		['use_stop_yes'] = "Используются стопы",
 		['use_stop_no'] = "Стопы не используются",

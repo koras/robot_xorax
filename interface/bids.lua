@@ -47,7 +47,7 @@ function getEventLog(_event)
 end;
 
 local function show() 
-	CreateNewTableBids();
+--	CreateNewTableBids();
 	-- очищаем табличку
 	updateBidsClear();
 
@@ -84,7 +84,7 @@ end;
  
 
  function updateBidsSignal()  
-	CreateNewTableBids();
+--	CreateNewTableBids();
  
 	
 
@@ -164,7 +164,7 @@ end;
 
 --- simple create a table
 function CreateNewTableBids() 
-	if createTableBids  then return; end;
+	--if createTableBids  then return; end;
 	createTableBids = true; 
 	
 	t_id_TableBids = AllocTable();	 
@@ -182,7 +182,7 @@ function CreateNewTableBids()
 
 	CreateWindow(t_id_TableBids); 
 	SetWindowCaption(t_id_TableBids, wordTitleTableBids.title);  
-   	SetWindowPos(tt, 0, 70, 50, 140);
+   	SetWindowPos(t_id_TableBids, 0, 70, 460, 340);
 
 
 	-- for i = 1, 35 do

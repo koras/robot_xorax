@@ -7,6 +7,9 @@ local loger = dofile(getScriptPath() .. "\\interface\\color.lua");
 local loger = dofile(getScriptPath() .. "\\modules\\loger.lua");
 local words = dofile(getScriptPath() .. "\\langs\\words.lua");
 local riskStop = dofile(getScriptPath() .. "\\shop\\risk_stop.lua");
+local panelBids = dofile(getScriptPath() .. "\\interface\\bids.lua");
+local signalShowLog = dofile(getScriptPath() .. "\\interface\\signalShowLog.lua");
+ 
 
 
 init.create = false;
@@ -66,7 +69,6 @@ local function show()
 	--	Gray(t_id,22, i);
 		Gray(t_id,24, i);
 		Gray(t_id,30, i);
-		
 	 end; 
 		 
 	  
@@ -137,7 +139,12 @@ function current_limit()
 	SetCell(t_id, 11, 0,   words.word('current_limit')); 
 	SetCell(t_id, 13, 0,   words.word('current_limit_max'));  
 
-	 
+
+	SetCell(t_id, 1, 3,   words.word('panel_bids')); 
+	SetCell(t_id, 2, 3,   words.word('panel_logs'));  
+ 
+	WhiteBlue(t_id,1, 3);
+	WhiteBlue(t_id,2, 3);
 	
 
 	-- ['sell_set_take_or_limit'] = "Продажа(тейк или лимит)",
@@ -457,6 +464,21 @@ end;
 
 
 function event_callback_message (t_id, msg, par1, par2)
+
+
+		-- панель заявок 
+
+	if par1 == 1 and par2 == 3  and  msg == 1 then
+		panelBids.CreateNewTableBids();
+		panelBids.show();
+	end; 
+	-- панель логов
+	if par1 == 2 and par2 == 3  and  msg == 1 then
+		signalShowLog.CreateNewTableLogEvent();
+		
+	end;
+
+
 
 	if par1 == 1 and par2 == 2 or  par1 == 2 and par2 == 2 or par1 == 3 and par2 == 2 then
 		if  msg == 1 and setting.emulation == false then

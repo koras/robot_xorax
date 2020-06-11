@@ -141,7 +141,7 @@
    setting.profit_add_candle =  0.0; 
 
 -- версия продукта 
-setting.version = "0.1.11";
+setting.version = "0.1.12";
 
 
    -- примерное время работы, пока не используется

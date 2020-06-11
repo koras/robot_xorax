@@ -32,7 +32,7 @@ local wordTitleTableLog = {
  
 
 local function addSignal(datetime, event, status, number) 
-	CreateNewTableLogEvent();
+	--CreateNewTableLogEvent();
 
 	local time  = '';
 	local txt =  ' event :' .. event  ;
@@ -185,7 +185,7 @@ end;
 
 --- simple create a table
 function CreateNewTableLogEvent() 
-	if createTableLog  then return; end;
+--	if createTableLog  then return; end;
 	createTableLog = true; 
 	
 	t_id_TableLog = AllocTable();	 
@@ -202,7 +202,8 @@ function CreateNewTableLogEvent()
 	t = CreateWindow(t_id_TableLog); 
 	SetWindowCaption(t_id_TableLog, wordTitleTableLog.log_signal);  
 
-   SetWindowPos(tt, 0, 70, 50, 140);
+ 
+   SetWindowPos(t_id_TableLog, 0, 70, 520, 340);
 
 
 	for i = 1, 35 do
@@ -233,7 +234,7 @@ end;
 M.addSignal = addSignal;
 M.stats = stats;
 M.deleteTable = deleteTable;
-M. CreateNewTableLogEvent =  CreateNewTableLogEvent;
+M.CreateNewTableLogEvent =  CreateNewTableLogEvent;
 M.show = show;
 
 return M
