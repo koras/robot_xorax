@@ -50,7 +50,6 @@ local level = 1;
 -- автоматическая торговля
 function long(price_long, datetime, levelLocal , event) -- решение 
 
-    loger.save(  "  event " .. event)
             -- логика выставления заявки на покупку контракта
 
           --  getfractal(price);
@@ -82,9 +81,7 @@ function long(price_long, datetime, levelLocal , event) -- решение
                 setting.each_to_buy_step = setting.each_to_buy_step + 1;
          
                      
-                loger.save(  "  ============================= " )
                     if setting.emulation  then
-                        loger.save(  "  покупай " .. price_long)
                         -- в режиме эмуляции контракт на покупку исполнен в полном объёме
                         callBUY_emulation(price_long,  datetime);
                     else 

@@ -138,7 +138,7 @@
 
 -- ### engine
    -- На сколько прибавить к свече чтобы закупится ниже профита
-   setting.profit_add_candle =  0.03; 
+   setting.profit_add_candle =  0.0; 
 
 
 
