@@ -15,6 +15,7 @@ local panelBids = dofile(getScriptPath() .. "\\interface\\bids.lua");
 -- при срабатывании стопа, должны убираться контракты которые находятся на самом вверху
 -- и закрываться позиции по покупке. Более такие позиции не учитываются в логике
 function update_stop()
+    -- можно ли использовать стопы
     if stopClass.use_stop then 
         -- получаем заявки для ордеров
         -- определяем максимальную и минимальную цену покупки
@@ -326,7 +327,7 @@ function sendTransStop(countContract, countPrice )
             dataParam.emulation = setting.emulation;
             dataParam.price = countPrice;
             dataParam.contract = countContract;
-            dataParam.trans_id = getRand();
+             
             dataParam.label = 0;
             -- work = 0 - отправляем на сервер
             -- work = 1 - заявка выставлена
@@ -339,14 +340,15 @@ function sendTransStop(countContract, countPrice )
         -- рисуем стоп
         dataParam.work = 1;
         dataParam.order_num = 1;
-        
+        dataParam.trans_id = getRand();
         dataParam.label = label.set('stop', countPrice ,  setting.datetime, countContract, 'stop '..countContract)
          
     else
         -- здесь статус меняется полсле того как пришёл статус об установке стопа 
         -- dataParam.work = 0; 
 
-        
+        local type = "SIMPLE_STOP_ORDER";
+        dataParam.trans_id =  transaction.send('sell', countPrice, countContract, type, 0 );
         -- отправляем транкзакцию 
     end;
 

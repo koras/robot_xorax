@@ -78,7 +78,12 @@ local function send(typeMarket, price, quantity,type, trans_id_buy )
 		 
 		loger.save( 'Transaction.STOP_ORDER_KIND ' .. Transaction.STOP_ORDER_KIND);
 		loger.save( 'Transaction.BASE_ORDER_KEY ' ..Transaction.BASE_ORDER_KEY);
-		
+
+
+	 elseif type == "SIMPLE_STOP_ORDER" then 
+		Transaction.CONDITION = direction;
+		Transaction.STOP_ORDER_KIND = type;
+
 	 end;
 
 	-- Неверно указаны единицы измерения защитного интервала take profit стоп-заявки. "0.01"

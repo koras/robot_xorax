@@ -58,7 +58,7 @@ function getRandSell(price)
 
 
 
- -- Лимит заявок на покупку 
+ -- Лимит заявок на покупку
 function getLimitBuy(datetime)
 
         local checkRange = true;
@@ -69,8 +69,8 @@ function getLimitBuy(datetime)
         end;  
 
         
-        if setting.emulation  and setting.LIMIT_BID <= setting.limit_count_buy then
-                signalShowLog.addSignal(datetime, 25, false, setting.limit_count_buy);
+        if setting.emulation  and setting.LIMIT_BID <= setting.limit_count_buy_emulation then
+                signalShowLog.addSignal(datetime, 25, false, setting.limit_count_buy_emulation);
                 checkRange = false; 
         end;  
 
@@ -103,7 +103,6 @@ end;
         return checkRange;
 end;
     
-    
      
  
 
@@ -111,18 +110,13 @@ end;
  -- Падение рынка
  function getFailMarket(price, datetime) 
         local checkRange = true;
-        local localPrice =  price  -  setting.profit_infelicity ;
-        
-        -- профит и 
-        if setting.SPRED_LONG_TREND_DOWN_LAST_PRICE  ~= 0 then 
-                setting.SPRED_LONG_TREND_DOWN_NEXT_BUY = setting.SPRED_LONG_TREND_DOWN_LAST_PRICE - setting.profit_range - setting.SPRED_LONG_TREND_DOWN
-        end;
-        
         if setting.SPRED_LONG_TREND_DOWN_LAST_PRICE == 0  or  
-                setting.SPRED_LONG_TREND_DOWN_NEXT_BUY > localPrice  then else
-
+                setting.profit_range + setting.SPRED_LONG_TREND_DOWN_LAST_PRICE - setting.SPRED_LONG_TREND_DOWN  > price  - setting.profit_infelicity  or 
+                setting.SPRED_LONG_TREND_DOWN_LAST_PRICE  < price  then
+        
+        else
                 checkRange = false;
-               -- setting.SPRED_LONG_TREND_DOWN_NEXT_BUY =  setting.SPRED_LONG_TREND_DOWN_LAST_PRICE - nextPrice;
+                setting.SPRED_LONG_TREND_DOWN_NEXT_BUY =  setting.profit_range +  setting.SPRED_LONG_TREND_DOWN_LAST_PRICE - setting.SPRED_LONG_TREND_DOWN;
                 signalShowLog.addSignal(datetime, 3, true, setting.SPRED_LONG_TREND_DOWN_NEXT_BUY);
 
         end;
