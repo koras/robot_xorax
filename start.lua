@@ -43,7 +43,7 @@ local loger = dofile(getScriptPath() .. "\\modules\\loger.lua");
 local label = dofile(getScriptPath() .. "\\modules\\drawLabel.lua");
 local control = dofile(getScriptPath() .. "\\interface\\control.lua");
 local statsPanel = dofile(getScriptPath() .. "\\interface\\stats.lua");
-local interfaceBids = dofile(getScriptPath() .. "\\interface\\bids.lua");
+--local interfaceBids = dofile(getScriptPath() .. "\\interface\\bids.lua");
 local signalShowLog = dofile(getScriptPath() .. "\\interface\\signalShowLog.lua");
 local FRACTALS = dofile(getScriptPath() .. "\\LuaIndicators\\FRACTALS.lua"); 
 local market = dofile(getScriptPath() .. "\\shop\\market.lua");
@@ -89,7 +89,7 @@ basis = 9
     
       Size =ds:Size();  
       
-        p      = tostring(getParamEx(setting.CLASS_CODE, setting.SEC_CODE, "offer").param_value + 10*getParamEx(setting.CLASS_CODE, setting.SEC_CODE, "SEC_PRICE_STEP").param_value); 
+        p = tostring(getParamEx(setting.CLASS_CODE, setting.SEC_CODE, "offer").param_value + 10*getParamEx(setting.CLASS_CODE, setting.SEC_CODE, "SEC_PRICE_STEP").param_value); 
        SEC_PRICE_STEP = tostring(getParamEx2(setting.CLASS_CODE, setting.SEC_CODE, "SEC_PRICE_STEP").param_value);	
    end;
    
@@ -125,13 +125,13 @@ basis = 9
       candles.getSignal(tag, market.callSELL_emulation);
 
       tradeSignal.getSignal(setting.tag, eventTranc);
-      signalShowLog.CreateNewTableLogEvent();
+    --  signalShowLog.CreateNewTableLogEvent();
 
  
       loger.save("start log");
 
    --   statsPanel.show();
-      interfaceBids.show();
+    --  panelBids.show();
       update();
       getPrice();
       control.show(); 
@@ -139,7 +139,7 @@ basis = 9
       -- для тестирования
       if setting.developer then 
             setting.sellTable = test_bids.getOrder(setting.current_price);
-           panelBids.show();
+        --   panelBids.show();
          --  test_bids.testLabelBids();
            riskStop.update_stop();
 
@@ -357,7 +357,7 @@ end
       control.deleteTable();
       signalShowLog.deleteTable();
       statsPanel.deleteTableStats();
-      interfaceBids.deleteTable();
+      panelBids.deleteTable();
 
       DelAllLabels(setting.tag);
    end;

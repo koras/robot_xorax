@@ -20,6 +20,13 @@ function Red(tableShow, Line, Col)
 	if Col == nil then Col = QTABLE_NO_INDEX; end;
 	SetColor(tableShow, Line, Col, RGB(216,252,219), RGB(0,0,0), RGB(165,227,128), RGB(0,0,0));
  end;
+
+ function WhiteBlue(tableShow,Line, Col) 
+	if Col == nil then Col = QTABLE_NO_INDEX; end;
+	SetColor(tableShow, Line, Col, RGB(77, 194, 241), RGB(0,0,0), RGB(77, 194, 241), RGB(0,0,0));
+ end;
+
+
  function WhiteNo(tableShow,Line, Col) 
 	if Col == nil then Col = QTABLE_NO_INDEX; end;
 	SetColor(tableShow, Line, Col, RGB(238,254,238), RGB(0,0,0), RGB(165,227,128), RGB(0,0,0));
