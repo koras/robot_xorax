@@ -48,7 +48,7 @@ local rangeVolume = 10
 
 
     -- новая свеча
-    if (setting.old_number_of_candles  ~= setting.number_of_candles ) then 
+    if (setting.old_number_of_candles + setting.count_of_candle  ~= setting.number_of_candles ) then 
         setting.old_number_of_candles = setting.number_of_candles;
         -- если новая свечка
         volumeRange =  volume;

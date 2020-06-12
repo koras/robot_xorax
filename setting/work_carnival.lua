@@ -1,3 +1,4 @@
+
 -- Перед тем чтоб робота перевести робота в боевой режим, посмотрите работу робота XoraX в режиме эмуляции
 -- Следите за объёмом и рисками
 -- Не гонитеь за большими заработками
@@ -5,13 +6,13 @@
 -- @xorax <=> @koras
 
 -- счёт клиента, как вариант его можно узнать в зваяках в таблице заявок
-setting.ACCOUNT =  '4105F8Y';  
+setting.ACCOUNT =  'MFOPENM003';  
 
 -- класс бумаги. У фьючерсов в основном он одинаков
-setting.CLASS_CODE =  "SPBFUT";  
+setting.CLASS_CODE =  "SPBXM";  
 
 -- код бумаги. Название бумаги разная от месяца к месяцу 
-setting.SEC_CODE =  "BRN0" ; 
+setting.SEC_CODE =  "CCL_SPB" ; 
 
 -- тег графика, необходимо указывать в том графике из которого робот будет получать данные. 
 -- график нужен в минутном таймфрейме(обязательно)
@@ -19,13 +20,15 @@ setting.tag = "my_br";
  
 
 
-
+--#####################################################################
+--#####################################################################
+--#####################################################################
 
 
 
 
 -- минимальная прибыль
-   setting.profit_range =  0.05; 
+   setting.profit_range =  0.2; 
 
    -- минимальная прибыль при больших заявках, не используется 
    setting.profit_range_array =  0.03;  
@@ -91,9 +94,6 @@ setting.tag = "my_br";
 
    setting.not_buy_high_UP = 1; -- условия; цена входа при запуске скрипта
    setting.not_buy_high = 36.85; -- условия; Выше какого диапазона не покупать(на хаях)
-
-
-
    setting.take_profit_offset = 0.01;   
    setting.take_profit_spread = 0.01;  
           
@@ -106,15 +106,13 @@ setting.tag = "my_br";
    setting.number_of_candle = 0; -- current a candle
    setting.old_number_of_candle = 0; -- old current candle
        
- --  setting.buffer_old_candles_high = 0; -- current a candle
-  -- setting.buffer_old_candles_low = 0; -- old current candle
-
-
+  -- setting.buffer_old_candles_high = 0; -- current a candle
+ --  setting.buffer_old_candles_low = 0; -- old current candle
 
  
 
- -- на какой свече была последняя покупка
-   setting.candles_buy_last = 0; 
+
+   setting.candles_buy_last = 0; -- на какой свече была последняя покупка
    setting.candle_buy_number_down_price = 6; -- сколько свечей должно пройти чтобы отпустить продажу 
    setting.range_down_price_candles = 0;
 
@@ -181,6 +179,7 @@ setting.count_of_candle = 2;
 -- информация по свечам для анализа
 setting.array_candle = {};
 
+
    -- примерное время работы, пока не используется
    setting.timeWork =  {
             { '10:00', '14:00'};
@@ -193,3 +192,6 @@ setting.array_candle = {};
             { '18:00', '19:02'}; 
             { '22:55', '23:55'}
          };
+
+
+ -- https://open-broker.ru/pricing-plans/

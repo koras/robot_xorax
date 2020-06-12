@@ -31,8 +31,9 @@ setting = {};
 stopClass = {};
 engine = {};
 
--- dofile(getScriptPath() .. "\\setting\\account.lua");
-dofile(getScriptPath() .. "\\setting\\work.lua");
+--message(getScriptPath() .. "\\setting\\account.lua");
+--dofile(getScriptPath() .. "\\setting\\account.lua");
+dofile(getScriptPath() .. "\\setting\\work_carnival.lua");
 dofile(getScriptPath() .. "\\setting\\stop.lua");
 dofile(getScriptPath() .. "\\setting\\engine.lua");
  
@@ -46,9 +47,6 @@ local label = dofile(getScriptPath() .. "\\modules\\drawLabel.lua");
 local control = dofile(getScriptPath() .. "\\interface\\control.lua");
 local statsPanel = dofile(getScriptPath() .. "\\interface\\stats.lua");
 local candleGraff = dofile(getScriptPath() .. "\\interface\\candleGraff.lua");
-
- 
-
 --local interfaceBids = dofile(getScriptPath() .. "\\interface\\bids.lua");
 local signalShowLog = dofile(getScriptPath() .. "\\interface\\signalShowLog.lua");
 local FRACTALS = dofile(getScriptPath() .. "\\LuaIndicators\\FRACTALS.lua"); 
@@ -136,7 +134,7 @@ basis = 9
  
       loger.save("start log");
 
-   --   statsPanel.show();
+      statsPanel.show();
     --  panelBids.show();
       update();
       getPrice();
@@ -366,7 +364,6 @@ end
       candleGraff.deleteTableGraff();
 
       DelAllLabels(setting.tag);
-
    end;
     
 
