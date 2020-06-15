@@ -25,7 +25,7 @@ setting.tag = "my_br";
 
 
 -- минимальная прибыль
-   setting.profit_range =  0.05; 
+   setting.profit_range =  0.03; 
 
    -- минимальная прибыль при больших заявках, не используется 
    setting.profit_range_array =  0.03;  
@@ -43,7 +43,7 @@ setting.tag = "my_br";
    setting.developer = false;    
 
    -- лимит количества заявок на сессию работы робота.
-   setting.LIMIT_BID = 10;
+   setting.LIMIT_BID = 1;
    
    -- сколько использовать контрактов по умолчанию в режиме скальпинга
    setting.use_contract = 1;
@@ -126,15 +126,7 @@ setting.tag = "my_br";
    setting.fractal_candle = 3;
    setting.fractal_under_up = 0.06; -- под вверхом не покупаем; можем пробить а цена не пойдёт в нашу сторону
 
-          
-   setting.candle_current_high = 0.00; -- верхняя граница свечи; для промежутка покупки
-   setting.candle_current_low = 0.00; -- верхняя граница свечи; для промежутка покупки
-
-
-
-   setting.old_candle_price_high = 0.00; -- верхняя граница свечи; для промежутка покупки
-   setting.old_candle_price_low = 0.00; -- верхняя граница свечи; для промежутка покупки
-
+           
 
    -- сколько нужно подряд купить контрактов при падении рынка
    -- что-бы заблокировать кнопку покупки
@@ -174,12 +166,8 @@ stopClass.show_panel_bue_sell = false;
 
 -- версия продукта 
 setting.version = "0.1.12";
+ 
 
--- минутные свечи. используются для подсчёта 
-setting.count_of_candle = 2;
-
--- информация по свечам для анализа
-setting.array_candle = {};
 
    -- примерное время работы, пока не используется
    setting.timeWork =  {

@@ -15,8 +15,9 @@ local panelBids = dofile(getScriptPath() .. "\\interface\\bids.lua");
 -- при срабатывании стопа, должны убираться контракты которые находятся на самом вверху
 -- и закрываться позиции по покупке. Более такие позиции не учитываются в логике
 function update_stop()
+    
     -- можно ли использовать стопы
-    if stopClass.use_stop then 
+    if stopClass.use_stop   then 
         -- получаем заявки для ордеров
         -- определяем максимальную и минимальную цену покупки
         getOrdersForBid();

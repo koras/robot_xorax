@@ -90,9 +90,11 @@ local function getSignal(tag, collbackFunc)
 
                             setting.old_number_of_candle = setting.number_of_candle;
                             setting.current_price = bar.close;
+                            setting.candle_current_high = bar.high;
+                            setting.candle_current_low = bar.low;
 
-                            setting.candle_current_high = setting.buffer_old_candles_high;
-                            setting.candle_current_low = setting.buffer_old_candles_low;
+                         --   setting.candle_current_high = setting.buffer_old_candles_high;
+                         --   setting.candle_current_low = setting.buffer_old_candles_low;
                         end
  
                       --  setArrayCandles(bar, setting.number_of_candle);
@@ -133,13 +135,20 @@ function setArrayCandles(barCandle, numberCandle)
                 calculateCandle(candle, barCandle);
                 -- обновляем данные
                 setting.array_candle[candle] = localCandle;
-       
+                setting.candle_current_high = barCandle.high;
+                setting.candle_current_low = barCandle.low; 
+                
+                loger.save(numberCandle .. " №1  ------------------------------------------  ".. setting.array_candle[candle].numberCandle ) 
             end;
+
+
             -- мы перебираем все свечи и проверяем на свечах уровни
             if numberCandle + setting.count_of_candle <= setting.array_candle[candle].numberCandle   then
-
                  
                 -- обновляем высокую цену на текущей свече
+
+                
+                loger.save(numberCandle .."||||||||||||||||||||||||| ".. setting.array_candle[candle].high ) 
                 if setting.candle_current_high < setting.array_candle[candle].high  then
                     setting.candle_current_high = setting.array_candle[candle].high;
                 end
@@ -148,6 +157,10 @@ function setArrayCandles(barCandle, numberCandle)
                 if setting.candle_current_low > setting.array_candle[candle].low  then
                     setting.candle_current_low = setting.array_candle[candle].low;
                 end
+                
+                loger.save(numberCandle .." №2 =========================================== ".. setting.array_candle[candle].numberCandle ) 
+                -- проверяем уровень
+            
             end;
 
         end;
@@ -159,9 +172,22 @@ function setArrayCandles(barCandle, numberCandle)
     candleGraff.addSignal(setting.array_candle); 
 end;
 
+-- проверка формаций
+
+function checkFormation()
+ --   setting.candle_current_low  
+  --  setting.low_formacia
+end
+
+
+
+
 function calculateCandle(key, barC) 
 
     if start_init  then
+
+
+      --  loger.save( "+++++++++++++ ".. setting.candle_current_high ) 
         -- разовая операция 
         -- условия по умолчанию выше какого диапозона не покупать
         setting.not_buy_high  = setting.not_buy_high_UP + barC.close;
@@ -174,23 +200,10 @@ function calculateCandle(key, barC)
         setting.candle_current_high = barC.high;
         setting.candle_current_low = barC.low;
 
+         
+
         start_init  = false;
     end;
-
-    
-
-    -- обновляем высокую цену на текущей свече
-    -- if setting.candle_current_high < bar.high or  setting.candle_current_high == 0 then
-    --     setting.candle_current_high = bar.high;
-    -- end
-
-    -- -- обновляем низкую цену на текущей свече
-    -- if setting.candle_current_low > bar.low or setting.candle_current_low == 0 then
-    --     setting.candle_current_low = bar.low;
-    -- end
-    
-  --  setting.buffer_old_candles_high = bar.high;
-  --  setting.buffer_old_candles_low = bar.low; 
 
 
 

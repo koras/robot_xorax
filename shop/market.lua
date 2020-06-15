@@ -103,7 +103,7 @@ function buyContract(result)
             setting.sellTable[contract].executed == false  and 
             setting.sellTable[contract].trans_id == result.trans_id  then
                 
-                signalShowLog.addSignal(result.datetime, 27, false, setting.sellTable[contract].price); 
+                signalShowLog.addSignal(result.datetime, 27, false, setting.sellTable[contract].price);  
                 setting.sellTable[contract].executed = true;
                 -- выставляем на продажу контракт.
                 sellTransaction(result, setting.sellTable[contract]);
@@ -477,6 +477,7 @@ function callBUY(price_callBUY ,datetime)
             setting.sellTable[(#setting.sellTable+1)] = data;
             -- Выставили контракт на покупку
             signalShowLog.addSignal(datetime, 23, false, price_callBUYl); 
+            signalShowLog.addSignal(datetime, 23, false, setting.use_contract); 
     panelBids.show();
 end 
 
