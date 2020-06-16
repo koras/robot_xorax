@@ -48,30 +48,11 @@ function setStopDefault()
   --  stopClass.spred_range = 0.1;
     stopClass.contract_work = 0;
 end;
-
- -- расчёт максимального отступа от максимальной цены
- function getMaxStopPrice()
-    
-    
-    return  stopClass.price_max - stopClass.spred;
-    
-end;
+ 
 -- расчёт цены для следующего стоп заявки
 function getMaxPriceRange(countStop)
- --   stopClass.triger_stop
-    -- максимальная цена   
-
-    -- stopClass.triger_stop
-    -- коэффециент
-  --  local triger_stop = 1;
-
-    -- тригер срабатывания тейк профита
-    -- if stopClass.triger_stop > 0 then 
-    --    local  triger_stop =   stopClass.triger_stop +triger_stop;
-    -- end;
-
-    local mPrice  =  getMaxStopPrice();
-
+     -- расчёт максимального отступа от максимальной цены
+    local mPrice  =  stopClass.price_max - stopClass.spred;
     if countStop > 1 then
         -- для второго стопа
 
@@ -96,22 +77,28 @@ function getOrdersForBid()
 
     -- if stopClass.triger_update_up  then
     --     -- если стоп сработал хотя бы раз, то больше максимальную цену не обновляем
+    -- при условии что заявок нет и его надо обновить
     --     return;
     -- end;
+    
+    if #setting.sellTable == 1 or  #setting.sellTable == 2 then 
+        stopClass.triger_update_up = true;
+    end;
+ 
+
     stopClass.contract_work = 0;
     for contractStop = 1 ,  #setting.sellTable do 
             -- берём все заявки которые куплены
-
-
-
         if  setting.sellTable[contractStop].type == 'buy' and    setting.sellTable[contractStop].work then
             
-            if stopClass.triger_update_up == false  then
+            if stopClass.triger_update_up  then
             -- если стоп сработал хотя бы раз, то больше максимальную цену не обновляем
                     if setting.sellTable[contractStop].price > stopClass.price_max then 
                         -- максимальная цена покупки
                         stopClass.price_max = setting.sellTable[contractStop].price ;
+                        
                     end 
+                    stopClass.triger_update_up = false;
             end;
             
             if setting.sellTable[contractStop].price < stopClass.price_min then 

@@ -1,7 +1,7 @@
 
 
 -- Использовать стопы или нет, по умолчанию да
-stopClass.use_stop = false;
+stopClass.use_stop = true;
 
 
 -- Показывать или скрывать панель стопов, по умолчинию скрыта
@@ -47,7 +47,7 @@ stopClass.spred_range_limit = 0.01;
 stopClass.triger_stop = 0;
 
 -- обновили максимальную цену, передвигаем стоп, сбрасываем тригер на обновление
-stopClass.triger_update_up = false;
+stopClass.triger_update_up = true;
 
 -- стоп заявки
 stopClass.array_stop = {};

@@ -1,9 +1,4 @@
--- https://www.lua.org/ftp/
-
-
--- Бесплатный робот торгующий в боковике "robot XoraX"
--- https://t.me/robots_xorax
--- https://smart-lab.ru/blog/621155.php
+-- только для иестирования
 
 
 local lua51path = "C:\\Program Files (x86)\\Lua\\5.1\\" -- путь, куда установлен дистрибутив Lua 5.1 for Windows
@@ -31,13 +26,13 @@ setting = {};
 stopClass = {};
 engine = {};
 
---message(getScriptPath() .. "\\setting\\account.lua");
---dofile(getScriptPath() .. "\\setting\\account.lua");
-dofile(getScriptPath() .. "\\setting\\work_carnival.lua");
+-- dofile(getScriptPath() .. "\\setting\\account.lua");
+dofile(getScriptPath() .. "\\setting\\work.lua");
 dofile(getScriptPath() .. "\\setting\\stop.lua");
 dofile(getScriptPath() .. "\\setting\\engine.lua");
  
-local uTransaction = dofile(getScriptPath() .. "\\shop\\transaction.lua");
+ 
+local transaction = dofile(getScriptPath() .. "\\shop\\transaction.lua");
 
 local candles = dofile(getScriptPath() .. "\\Signals\\candle.lua");
 local tradeSignal = dofile(getScriptPath() .. "\\Signals\\tradeSignal.lua"); 
@@ -47,6 +42,9 @@ local label = dofile(getScriptPath() .. "\\modules\\drawLabel.lua");
 local control = dofile(getScriptPath() .. "\\interface\\control.lua");
 local statsPanel = dofile(getScriptPath() .. "\\interface\\stats.lua");
 local candleGraff = dofile(getScriptPath() .. "\\interface\\candleGraff.lua");
+
+ 
+
 --local interfaceBids = dofile(getScriptPath() .. "\\interface\\bids.lua");
 local signalShowLog = dofile(getScriptPath() .. "\\interface\\signalShowLog.lua");
 local FRACTALS = dofile(getScriptPath() .. "\\LuaIndicators\\FRACTALS.lua"); 
@@ -70,131 +68,63 @@ function init()
   --   control.show();
 
 end;
-    
-    
-shift = 0;
-len = 100
-basis = 9
+     
 
     Size = 0;
    function OnInit()
-      riskStop.calculateMaxStopStart();
-  
-      local Error = '';
-      ds,Error = CreateDataSource(setting.CLASS_CODE, setting.SEC_CODE, setting.INTERVAL); 
-    --  while (Error == "" or Error == nil) and DS:Size() == 0 do sleep(1) end
     
-       
-     if Error ~= "" and Error ~= nil then message("1111111111111111111111 : "..Error) return end
-    -- GET_GRAFFIC
-      
-      GET_GRAFFIC   = ds:SetEmptyCallback();
-    --  ds:SetUpdateCallback(MyFuncName);
-    
-      Size =ds:Size();  
-      
-        p = tostring(getParamEx(setting.CLASS_CODE, setting.SEC_CODE, "offer").param_value + 10*getParamEx(setting.CLASS_CODE, setting.SEC_CODE, "SEC_PRICE_STEP").param_value); 
-       SEC_PRICE_STEP = tostring(getParamEx2(setting.CLASS_CODE, setting.SEC_CODE, "SEC_PRICE_STEP").param_value);	
    end;
    
    function getPrice()
    
-       SEC_PRICE_STEP = tostring(getParamEx2(setting.CLASS_CODE, setting.SEC_CODE, "SEC_PRICE_STEP").param_value);
-         if GET_GRAFFIC then
-      else 
-       Run  = false;
-        end;
-        
+  
    end;
      
  
     
     
    function eventTranc( priceLocal , levelLocal ,datetime, event) 
-      -- buy or sell
-      market.decision(event, priceLocal, datetime , levelLocal) ;
+  
    end
     
 
    function  update()
-      control.stats();
-      market.setLitmitBid();
-      use_contract_limit();
-
-      -- riskStop.appruveOrderStop(trade)
+ 
    end
+
+   function trans()
+      
+      local price = 40;
+      local use_contract = 1;
+      local type = "SIMPLE_STOP_ORDER";
+
+      trans_id_sell =  transaction.send("SELL", price, use_contract, type, 0);
+
+   end;
 
 
    function main() 
-      candles.getSignal(market.callSELL_emulation);
 
-      tradeSignal.getSignal(setting.tag, eventTranc);
-    --  signalShowLog.CreateNewTableLogEvent();
+      candles.getSignal( updateTick);
+    
+      while Run do  
+
+
+         candles.getSignal(setting.tag , updateTick);
+      --   trans();
 
  
-      loger.save("start log");
-
-      statsPanel.show();
-    --  panelBids.show();
-      update();
-      getPrice();
-      control.show(); 
-
-      -- для тестирования
-      if setting.developer then 
-            setting.sellTable = test_bids.getOrder(setting.current_price);
-        --   panelBids.show();
-         --  test_bids.testLabelBids();
-           riskStop.update_stop();
-
-
-
-            -- утановка параметров на то что сработал стоп
-            local testOrder = {
-               ['close']= 41.25,
-               ['trans_id']= "123123"
-             };
-
-       
- 
-      end;
-
-
-
-      local Price = false;
-          
-      while Run do 
-
-
-         local testOrder = {
-            ['close']= 41.25,
-            ['trans_id']= "123123"
-          };
-
-    --    riskStop.appruveOrderStop(testOrder);
-               -- сработал стоп, проверка 
-
-         update();
-         --  statsPanel.stats();
-           fractalSignal.last();
-
-         
-          if setting.status  then  
-            tradeSignal.getSignal(setting.tag, eventTranc);
-            candles.getSignal(tag, updateTick);
-         end;
       end;  
    end;
    
-
--- срабатывает при обновлении свечи
+ -- срабатывает при обновлении свечи
    function updateTick(result)
 
       if  setting.emulation then
          -- обработка во время эмуляции
-         market.callSELL_emulation(result);
+      --   market.callSELL_emulation(result);
          -- сработал стоп в режиме эмуляции
-         riskStop.appruveOrderStop(result)
+      --   riskStop.appruveOrderStop(result)
       end;
       
    end;
@@ -215,7 +145,7 @@ basis = 9
 
          else
            loger.save("SELL SELL SELL SELL SELL "); 
-            deleteBids.transCallback(order);
+         
          end;
 
 
@@ -226,9 +156,7 @@ basis = 9
 
 
          loger.save("исполнена loger.save(  order.price ".. order.price) 
-
-         loger.save("исполнена loger.save( trans_id  ".. order.trans_id) 
-         market.sellContract(order);
+ 
       
       
       end;
@@ -248,11 +176,11 @@ basis = 9
 
    if bit.band(trade.flags, 2) == 0 then
       -- исполняется покупка контракта 
-      market.buyContract(trade);
+
       loger.save('OnTrade end 222  -- исполняется покупка контракта')
    else
       loger.save('OnTrade end 111 -- исполняется продажа контракта ')
-       market.sellContract(trade);
+     
    end;
 
 
@@ -260,11 +188,11 @@ basis = 9
 
       if bit.band(trade.flags, 2) == 0 then
          -- исполняется покупка контракта 
-         market.buyContract(trade);
+   
          loger.save('OnTrade end  -- исполняется покупка контракта')
       else
          loger.save('OnTrade end  -- исполняется продажа контракта 1')
-          market.sellContract(trade);
+
       end;
 
       loger.save('trade.flags -- '..bit.band(trade.flags, 2))
@@ -297,8 +225,8 @@ end
 
             if not CheckBit(trade.flags, 0) and not CheckBit(trade.flags, 1) then
                loger.save('Заявка 11111 №'..trade.order_num..' appruve Sell Sell Sell')
-               market.sellContract(trade);
-               riskStop.appruveOrderStop(trade)
+            
+             --  riskStop.appruveOrderStop(trade)
             end
 
          -- заявка на продажу
@@ -310,7 +238,7 @@ end
       
          if not CheckBit(trade.flags, 0) and not CheckBit(trade.flags, 1) then
             loger.save('Заявка 11111 №'..trade.order_num..' appruve')
-            riskStop.updateOrderNumber(trade)
+          --  riskStop.updateOrderNumber(trade)
          end
 
    end
@@ -358,6 +286,7 @@ end
       candleGraff.deleteTableGraff();
 
       DelAllLabels(setting.tag);
+
    end;
     
 

@@ -135,7 +135,7 @@ end;
 				end;
 				
 			
-				if arrTableLog[i].event == 9 then 
+				if arrTableLog[i].event == 9 or  arrTableLog[i].event ==  20 then 
 
 					Green(t_id_TableLog, keys,0);
 					Green(t_id_TableLog, keys,1);

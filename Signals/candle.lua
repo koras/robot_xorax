@@ -42,7 +42,7 @@ end;
 
 bigCandle = 0;
 
-local function getSignal(tag, collbackFunc)
+local function getSignal(collbackFunc)
 
        
     shift = 0;
@@ -53,6 +53,7 @@ local function getSignal(tag, collbackFunc)
     seconds = os.time(datetime); -- в seconds будет значение 1427052491
     
     shift = 0;
+ 
     setting.number_of_candle = getNumCandles(setting.tag); 
 
    bars_temp,res,legend = getCandlesByIndex(setting.tag, 0, setting.number_of_candle-2*len-shift,2*len)
@@ -137,8 +138,8 @@ function setArrayCandles(barCandle, numberCandle)
                 setting.array_candle[candle] = localCandle;
                 setting.candle_current_high = barCandle.high;
                 setting.candle_current_low = barCandle.low; 
-                
-                loger.save(numberCandle .. " №1  ------------------------------------------  ".. setting.array_candle[candle].numberCandle ) 
+                setting.datetime = barCandle.datetime;
+            --    loger.save(numberCandle .. " №1  ".. setting.array_candle[candle].numberCandle ) 
             end;
 
 
@@ -148,7 +149,7 @@ function setArrayCandles(barCandle, numberCandle)
                 -- обновляем высокую цену на текущей свече
 
                 
-                loger.save(numberCandle .."||||||||||||||||||||||||| ".. setting.array_candle[candle].high ) 
+           --     loger.save(numberCandle .." №2 ".. setting.array_candle[candle].high ) 
                 if setting.candle_current_high < setting.array_candle[candle].high  then
                     setting.candle_current_high = setting.array_candle[candle].high;
                 end
@@ -158,7 +159,7 @@ function setArrayCandles(barCandle, numberCandle)
                     setting.candle_current_low = setting.array_candle[candle].low;
                 end
                 
-                loger.save(numberCandle .." №2 =========================================== ".. setting.array_candle[candle].numberCandle ) 
+                loger.save(numberCandle .." №2   ".. setting.array_candle[candle].numberCandle ) 
                 -- проверяем уровень
             
             end;

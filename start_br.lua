@@ -128,7 +128,7 @@ basis = 9
 
 
    function main() 
-      candles.getSignal(tag, market.callSELL_emulation);
+      candles.getSignal( market.callSELL_emulation);
 
       tradeSignal.getSignal(setting.tag, eventTranc);
     --  signalShowLog.CreateNewTableLogEvent();
@@ -159,12 +159,6 @@ basis = 9
 
        
 
-          --   riskStop.appruveOrderStop(testOrder);
-            
-          --   riskStop.removeOldOrderSell(11);
-          --   stopClass.triger_update_up = true;
-          --   riskStop.update_stop();
-         --   test_bids.saleBids(setting.current_price) 
       end;
 
 
@@ -189,7 +183,7 @@ basis = 9
          
           if setting.status  then  
             tradeSignal.getSignal(setting.tag, eventTranc);
-            candles.getSignal(tag, updateTick);
+            candles.getSignal( updateTick);
          end;
       end;  
    end;

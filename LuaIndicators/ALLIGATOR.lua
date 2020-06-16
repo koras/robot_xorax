@@ -92,9 +92,7 @@ return nil
 end
 end
 
-------------------------------------------------------------------
 ----Moving Average SMA, MMA, EMA, WMA, SMMA, VMA
-------------------------------------------------------------------
 --[[Simple Moving Average (SMA)
 SMA = sum(Pi) / n]]
 function F_SMA()

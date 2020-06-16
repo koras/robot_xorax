@@ -90,8 +90,7 @@ end;
 	                --	[13] = 'Текущая свеча меньше преполагаемого профита, низкая волатильность',   
                         checkRange = false;
                         signalShowLog.addSignal(datetime, 13, false, range_candle);
-                        signalShowLog.addSignal(datetime, 15, false, setting.candle_current_high);
-                        signalShowLog.addSignal(datetime, 15, false, setting.candle_current_low);
+                        signalShowLog.addSignal(datetime, 13, false, range_candle);
                 end;  
 
                 local priceMinimum =  setting.candle_current_high - setting.profit_range  ;
@@ -102,8 +101,10 @@ end;
                                 -- свечка меньше текущего профита  
                                 --	[14] = 'Цена на свече выше профита, покупка на верху невозможна',   
                         checkRange = false;
+                        signalShowLog.addSignal(datetime, 15, false, setting.candle_current_high);
                         signalShowLog.addSignal(datetime, 14, false, priceMinimum );
-                        signalShowLog.addSignal(datetime, 17, false, price + setting.profit_infelicity  );
+                        signalShowLog.addSignal(datetime, 14, false, price );
+                        signalShowLog.addSignal(datetime, 14, false, setting.profit_infelicity );
                 end; 
         return checkRange;
 end;
