@@ -98,7 +98,7 @@ end;
       local use_contract = 1;
       local type = "SIMPLE_STOP_ORDER";
 
-      trans_id_sell =  transaction.send("SELL", price, use_contract, type, 0);
+      trans_id_sell =  transaction.send("S", price, use_contract, type, 0);
 
    end;
 
@@ -107,11 +107,12 @@ end;
 
       candles.getSignal( updateTick);
     
+      trans();
       while Run do  
 
 
-         candles.getSignal(setting.tag , updateTick);
-      --   trans();
+       --  candles.getSignal( updateTick);
+   
 
  
       end;  

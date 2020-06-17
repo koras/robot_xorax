@@ -135,7 +135,7 @@ end;
  
 -- отображение и сокрытие панели покупок
 function show_panel_bue_sell()
-	if stopClass.show_panel_bue_sell  then   
+	if stopClass.show_panel_bue_sell  then  
 		SetCell(t_id, 16, 0,  words.word('show_stop_no'));  
 	--	show_info_stop ();  
 		show_panel_buy();
@@ -150,6 +150,7 @@ end;
 
 
 function show_panel_buy() 
+	if stopClass.show_panel_bue_sell == false  then  return end;
 	SetCell(t_id, 17, 3,  word.current_limit_minus); 
 	SetCell(t_id, 19, 3,  word.current_limit_minus); 
 	SetCell(t_id, 20, 3,  word.current_limit_minus); 
@@ -210,22 +211,13 @@ function current_limit()
 	WhiteBlue(t_id,1, 3);
 	WhiteBlue(t_id,2, 3);
 	
-
-	-- ['sell_set_take_or_limit'] = "Продажа(тейк или лимит)",
-	-- ['sell_set_take_profit'] = "тейк профит",
-	-- ['sell_set_limit'] = "тейк профит",
-	 
- 
-
-	 
 	SetCell(t_id, 25, 0,  words.word('buy_block')); 
 	SetCell(t_id, 26, 0,   words.word('SPRED_LONG_TREND_DOWN')); 
 	SetCell(t_id, 27, 0,   words.word('SPRED_LONG_TREND_DOWN_SPRED')); 
 	SetCell(t_id, 28, 0,  words.word('not_buy_high')); 
-
- 
- 
 end; 
+
+
 function current_limit_plus()  
 	SetCell(t_id, 11, 2,  word.current_limit_plus); 
 	SetCell(t_id, 13, 2,  word.current_limit_plus); 
@@ -250,12 +242,6 @@ function current_limit_plus()
 	Green(t_id,26, 2);
 	Green(t_id,27, 2);
 	Green(t_id,28, 2);
-
-	
- 
- 
- 
-
 
 end;
 function current_limit_minus()  
@@ -282,8 +268,7 @@ function current_limit_minus()
 
  
 end;
---SetCell(t_stat, 11, 1,  tostring(setting.count_buy)..'/'..tostring(setting.count_contract_buy)..'/'..tostring(setting.emulation_count_contract_buy).."(e)");  
---SetCell(t_stat, 12, 1,  tostring(setting.count_sell)..'/'..tostring(setting.count_contract_sell)..'/'..tostring(setting.emulation_count_contract_sell).."(e)");
+
  
 function use_contract_limit()  
 
@@ -309,23 +294,19 @@ function use_contract_limit()
 
 	
 	show_panel_bue_sell();
+	-- панель покупки
+	show_panel_buy()
 
+	-- панель регилировки стопов
+	show_info_stop ();
 
-	-- -- количество контрактов в работе
--- stopClass.contract_work = 0;
-
--- -- количество контрактов добавленных трейдером
--- stopClass.contract_add = 0;
-
-
--- -- расстояние от максимальной покупки
--- stopClass.spred = 1.0; 
--- -- увеличение промежутка между стопами
--- stopClass.spred_range = 0.1;
+	current_limit();
 end;
 
 
 function show_info_stop ()
+
+	if stopClass.show_panel == false  then return end;  
 	-- количество контрактов добавленных трейдером
 	SetCell(t_id, 31, 1,   tostring(stopClass.contract_add .. ' ( '..  stopClass.contract_work .. words.word('stop_contract_work') ..' )' )); 
 		
@@ -517,11 +498,12 @@ function event_callback_message (t_id, msg, par1, par2)
 	if par1 == 1 and par2 == 3  and  msg == 1 then
 		panelBids.CreateNewTableBids();
 		panelBids.show();
+		return;
 	end; 
 	-- панель логов
 	if par1 == 2 and par2 == 3  and  msg == 1 then
 		signalShowLog.CreateNewTableLogEvent();
-		
+		return;
 	end;
 
 
@@ -578,17 +560,20 @@ function event_callback_message (t_id, msg, par1, par2)
 	
  
 	if par1 == 11 and par2 == 2  and  msg == 1 then
-		
-		setting.LIMIT_BID = setting.LIMIT_BID + 1;
+		setting.LIMIT_BID = setting.LIMIT_BID + 1;	
+		SetCell(t_id, 11, 1,   tostring( setting.LIMIT_BID )  .. ' / '..  tostring( setting.limit_count_buy) .. ' / '.. 	 tostring( setting.use_contract )) ; 
 		use_contract_limit();
+		loger.save( " №3   ".. setting.LIMIT_BID ) 
 		return;
 	end;
+
 	if par1 == 11 and par2 == 3  and  msg == 1 then
-		
-		if(setting.LIMIT_BID > 1) then
-				setting.LIMIT_BID = setting.LIMIT_BID - 1;
+		if setting.LIMIT_BID > 1 then
+				setting.LIMIT_BID = setting.LIMIT_BID - 1; 
+				SetCell(t_id, 11, 1,   tostring( setting.LIMIT_BID )  .. ' / '..  tostring( setting.limit_count_buy) .. ' / '.. 	 tostring( setting.use_contract )) ; 
 				use_contract_limit();
-			end; 
+				loger.save( " №4   ".. setting.LIMIT_BID ) 
+		end;   
 		return;
 	end;
 

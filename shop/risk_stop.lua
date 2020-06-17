@@ -73,6 +73,9 @@ end;
 -- функция сбора заявок для стопов
 -- определяем максимальную и минимальную цену покупки
 function getOrdersForBid()
+    -- есть или нет контракты в стопах в работе
+    local exist_work = true;
+
    -- setStopDefault();
 
     -- if stopClass.triger_update_up  then
@@ -80,7 +83,7 @@ function getOrdersForBid()
     -- при условии что заявок нет и его надо обновить
     --     return;
     -- end;
-    
+
     if #setting.sellTable == 1 or  #setting.sellTable == 2 then 
         stopClass.triger_update_up = true;
     end;
@@ -89,8 +92,12 @@ function getOrdersForBid()
     stopClass.contract_work = 0;
     for contractStop = 1 ,  #setting.sellTable do 
             -- берём все заявки которые куплены
+
+
         if  setting.sellTable[contractStop].type == 'buy' and    setting.sellTable[contractStop].work then
             
+            exist_work = false;
+
             if stopClass.triger_update_up  then
             -- если стоп сработал хотя бы раз, то больше максимальную цену не обновляем
                     if setting.sellTable[contractStop].price > stopClass.price_max then 
@@ -107,12 +114,33 @@ function getOrdersForBid()
             end 
         end;
         -- смотрим сколько осталось контрактов
-
         if  setting.sellTable[contractStop].type == 'sell' and    setting.sellTable[contractStop].work then
             stopClass.contract_work = stopClass.contract_work + setting.sellTable[contractStop].use_contract;
         end;
     end;
+
+    -- количество контрактов в работе stopClass.contract_work = 0;
+    -- количество контрактов добавленных трейдером stopClass.contract_add = 0;
  
+ 
+    if exist_work and stopClass.contract_work ~= 0 and stopClass.contract_add == 0 then
+        -- снимаем все стопы
+        backStop();
+        
+        signalShowLog.addSignal(setting.datetime, 35, false, stopClass.contract_work);  
+    end;
+
+ 
+    if exist_work and stopClass.contract_work ~= 0 and stopClass.contract_add ~= 0 then
+        -- обновляем стопы
+        backStop();
+        -- генерируем объёкт из стоп заявок
+        -- и ставим стоп
+        generationCollectionStop(); 
+
+        signalShowLog.addSignal(setting.datetime, 36, false, ( stopClass.contract_work ~= 0 + stopClass.contract_add));  
+    end;
+
 end;
 
 

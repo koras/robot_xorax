@@ -64,8 +64,7 @@ end;
     --    local C = t[i].close; -- Получить значение Close для указанной свечи (цена закрытия свечи)
     --    local V = t[i].volume; -- Получить значение Volume для указанной свечи (объем сделок в свече)
 	--    local T = t[i].datetime; -- Получить значение datetime для указанной свечи
-	
-			loger.save(arrGraff[keys].numberCandle.. ' №' .. #setting.array_candle)
+	 
   
 			SetCell(t_graff, keys, 0, tostring(arrGraff[keys].open))
 			SetCell(t_graff, keys, 1, tostring(arrGraff[keys].high))
@@ -119,13 +118,13 @@ function CreateNewTableGraff()
 		InsertRow(t_graff, -1);
 	end;
 	for i = 0, 3 do
-		Blue(4, i);
-		Blue(8, i);
-		Gray(10, i);
-		Gray(12, i);
-		Gray(14, i);
-		Gray(16, i);
-		Gray(18, i);
+	--	Blue(4, i);
+	--	Blue(8, i);
+	--	Gray(10, i);
+	----	Gray(12, i);
+	--	Gray(14, i);
+	--	Gray(16, i);
+	--	Gray(18, i);
 	end; 
 
 

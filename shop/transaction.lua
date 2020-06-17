@@ -84,11 +84,12 @@ local function send(typeMarket, price, quantity,type, trans_id_buy )
 		
 		 -- Направленность стоп-цены. Возможные значения: «4» - меньше или равно, «5» – больше или равно
 		local direction  = tostring(4);
+		Transaction.ACTION = "NEW_STOP_ORDER";
 		Transaction.CONDITION = direction;
-		Transaction.STOPPRICE    = tostring(price);
+		Transaction.STOPPRICE = tostring(price);
 		Transaction.STOP_ORDER_KIND = type;
 
-		signalShowLog.addSignal(setting.datetime, 35 , false, tostring(price));
+	--	signalShowLog.addSignal(setting.datetime, 35 , false, tostring(price));
 
 	 end;
 

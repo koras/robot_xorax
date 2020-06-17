@@ -142,24 +142,7 @@ basis = 9
       getPrice();
       control.show(); 
 
-      -- для тестирования
-      if setting.developer then 
-            setting.sellTable = test_bids.getOrder(setting.current_price);
-        --   panelBids.show();
-         --  test_bids.testLabelBids();
-           riskStop.update_stop();
-
-
-
-            -- утановка параметров на то что сработал стоп
-            local testOrder = {
-               ['close']= 41.25,
-               ['trans_id']= "123123"
-             };
-
-       
-
-      end;
+ 
 
 
 
@@ -298,7 +281,7 @@ end
          then
 
             if not CheckBit(trade.flags, 0) and not CheckBit(trade.flags, 1) then
-               loger.save('Заявка 11111 №'..trade.order_num..' appruve Sell Sell Sell')
+               loger.save('Заявка 11111  '..trade.order_num..' appruve Sell Sell Sell')
                market.sellContract(trade);
                riskStop.appruveOrderStop(trade)
             end
@@ -311,7 +294,7 @@ end
          end
       
          if not CheckBit(trade.flags, 0) and not CheckBit(trade.flags, 1) then
-            loger.save('Заявка 11111 №'..trade.order_num..' appruve')
+       
             riskStop.updateOrderNumber(trade)
          end
 
@@ -327,7 +310,7 @@ end
       -- Здесь Ваш код для действий при полном, или частичном исполнении заявки
       -- ...
       -- Выводит сообщение
-      loger.save('SE_OnExecutionOrder() БАЛАНС заявки №'..order.order_num..' изменился с '..(order.qty - (order.last_execution_count or 0))..' на '..order.balance)
+      loger.save('SE_OnExecutionOrder() БАЛАНС заявки  '..order.order_num..' изменился с '..(order.qty - (order.last_execution_count or 0))..' на '..order.balance)
    end
 
    -- успешное ВЫПОЛНЕНИИ ТРАНЗАКЦИИ

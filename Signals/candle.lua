@@ -56,8 +56,8 @@ local function getSignal(collbackFunc)
  
     setting.number_of_candle = getNumCandles(setting.tag); 
 
-   bars_temp,res,legend = getCandlesByIndex(setting.tag, 0, setting.number_of_candle-2*len-shift,2*len)
-
+   bars_temp,res,legend = getCandlesByIndex(setting.tag, 0, setting.number_of_candle-2*len-shift, 2*len)
+ 
   --  local lines_count = getLinesCount(setting.tag) 
     bars={}
 
@@ -66,6 +66,7 @@ local function getSignal(collbackFunc)
     i=len
     j=2*len
     while i>=1 do
+        message(bars_temp[j-1].datetime.hour);
      if(bars_temp[j-1].datetime.hour == nul)then
      end
             if bars_temp[j-1].datetime.hour >= 10 then
@@ -139,7 +140,7 @@ function setArrayCandles(barCandle, numberCandle)
                 setting.candle_current_high = barCandle.high;
                 setting.candle_current_low = barCandle.low; 
                 setting.datetime = barCandle.datetime;
-            --    loger.save(numberCandle .. " №1  ".. setting.array_candle[candle].numberCandle ) 
+                
             end;
 
 
@@ -148,8 +149,7 @@ function setArrayCandles(barCandle, numberCandle)
                  
                 -- обновляем высокую цену на текущей свече
 
-                
-           --     loger.save(numberCandle .." №2 ".. setting.array_candle[candle].high ) 
+                 
                 if setting.candle_current_high < setting.array_candle[candle].high  then
                     setting.candle_current_high = setting.array_candle[candle].high;
                 end
@@ -158,8 +158,7 @@ function setArrayCandles(barCandle, numberCandle)
                 if setting.candle_current_low > setting.array_candle[candle].low  then
                     setting.candle_current_low = setting.array_candle[candle].low;
                 end
-                
-                loger.save(numberCandle .." №2   ".. setting.array_candle[candle].numberCandle ) 
+                 
                 -- проверяем уровень
             
             end;

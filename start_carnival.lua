@@ -140,24 +140,7 @@ basis = 9
       getPrice();
       control.show(); 
 
-      -- для тестирования
-      if setting.developer then 
-            setting.sellTable = test_bids.getOrder(setting.current_price);
-        --   panelBids.show();
-         --  test_bids.testLabelBids();
-           riskStop.update_stop();
-
-
-
-            -- утановка параметров на то что сработал стоп
-            local testOrder = {
-               ['close']= 41.25,
-               ['trans_id']= "123123"
-             };
-
-       
  
-      end;
 
 
 
