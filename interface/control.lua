@@ -270,13 +270,23 @@ function current_limit_minus()
 end;
 
  
-function use_contract_limit()  
+function use_contract_limit()   
+
+	if fuck_windows then 
+		fuck_windows = false;
+		wt_control =  wt_control + 1;
+	else
+		fuck_windows = true;
+		wt_control =  wt_control - 1;
+	end;
+
+	SetWindowPos(t_control, 5, 5, wt_control, ht_control)
 
 	local buy_session = "b:"..tostring(setting.count_buy).."/"..tostring(setting.count_contract_buy).."";
 	local sell_session = "s:"..tostring(setting.count_sell).."/"..tostring(setting.count_contract_sell).."";
 
 
-	SetCell(t_control, 11, 1,   tostring( setting.LIMIT_BID )  .. ' / '..  tostring( setting.limit_count_buy) .. ' / '.. 	 tostring( setting.use_contract )) ; 
+	SetCell(t_control, 11, 1,   tostring( setting.LIMIT_BID   .. ' / '..  setting.limit_count_buy.. ' / '..  setting.use_contract )) ; 
 							
 	 
 	SetCell(t_control, 12, 1,   buy_session.. " | "..sell_session); 
@@ -470,6 +480,10 @@ end;
 
 
 
+ wt_control = 582;
+ ht_control = 600;
+ fuck_windows = true;
+
 --- simple create a table
 function CreateNewTable() 
 if createTable  then return; end;
@@ -486,7 +500,8 @@ init.create = true;
 	t = CreateWindow(t_control); 
 	SetWindowCaption(t_control, word.Trading_Bot_Control_Panel); 
    SetTableNotificationCallback(t_control, event_callback_message_control);  
-  -- SetWindowPos(tt, 0, 70, 292, 140)
+   
+	SetWindowPos(t_control, 5, 5, wt_control, ht_control)
 end;
 
 
@@ -561,7 +576,9 @@ function event_callback_message_control (t_control, msg, par1, par2)
  
 	if par1 == 11 and par2 == 2  and  msg == 1 then
 		setting.LIMIT_BID = setting.LIMIT_BID + 1;	
-		SetCell(t_control, 11, 1,   tostring( setting.LIMIT_BID )  .. ' / '..  tostring( setting.limit_count_buy) .. ' / '.. 	 tostring( setting.use_contract )) ; 
+	
+		
+
 		use_contract_limit();
 		SetWindowCaption(t_control,   word.Trading_Bot_Control_Panel .. tostring( setting.LIMIT_BID )); 
 		loger.save( " №3   ".. setting.LIMIT_BID ) 
@@ -576,8 +593,8 @@ function event_callback_message_control (t_control, msg, par1, par2)
 				--return
 				loger.save( " №4   ".. setting.LIMIT_BID ) ;
 				SetWindowCaption(t_control, word.Trading_Bot_Control_Panel ..  tostring( setting.LIMIT_BID) ); 
+				
 
-				SetCell(t_control, 11, 1,   tostring( setting.LIMIT_BID )  .. ' / '..  tostring( setting.limit_count_buy) .. ' / '.. 	 tostring( setting.use_contract )) ; 
 			--	use_contract_limit();
 				loger.save( " №4   ".. setting.LIMIT_BID ) 
 				return;

@@ -88,7 +88,7 @@ function long(price_long, datetime, levelLocal , event) -- решение
                         callBUY(price_long,  datetime);
                     end;
                     -- обновляем изменения в панели управления
-                    control.use_contract_limit();
+                    
             end;  
               
 end
@@ -321,6 +321,7 @@ function callBUY_emulation(price_callBUY_emulation ,datetime)
             sellTransaction_emulation(data) 
             panelBids.show();
             risk_stop.update_stop();
+            control.use_contract_limit();
 end 
 
 
@@ -479,6 +480,7 @@ function callBUY(price_callBUY ,datetime)
             signalShowLog.addSignal(datetime, 23, false, price_callBUYl); 
             signalShowLog.addSignal(datetime, 23, false, setting.use_contract); 
     panelBids.show();
+    control.use_contract_limit();
 end 
 
   

@@ -121,7 +121,7 @@ basis = 9
    function  update()
       control.stats();
       market.setLitmitBid();
-      use_contract_limit();
+  
 
       -- riskStop.appruveOrderStop(trade)
    end
@@ -149,7 +149,7 @@ basis = 9
       local Price = false;
           
       while Run do 
-
+        
 
          local testOrder = {
             ['close']= 41.25,
@@ -163,7 +163,8 @@ basis = 9
          --  statsPanel.stats();
            fractalSignal.last();
 
-         
+          
+
           if setting.status  then  
             tradeSignal.getSignal(setting.tag, eventTranc);
             candles.getSignal( updateTick);
