@@ -812,14 +812,15 @@ function event_callback_message_control (t_control, msg, par1, par2)
 	-- Кнопка использовать стопы или нет
 	if par1 == 30 and par2 == 2  and  msg == 1 then
 		if stopClass.use_stop then 
-			stopClass.use_stop = false; 
+			stopClass.use_stop = false;
+			riskStop.backStop()
 		else
 			stopClass.use_stop = true; 
 		end;
-		use_stop();
-		update_stop();
-		use_contract_limit(); 
-	--	show_info_stop()
+			use_stop();
+			riskStop.update_stop();
+			use_contract_limit(); 
+		--	show_info_stop()
 		return;
 	end;
 

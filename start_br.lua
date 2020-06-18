@@ -278,17 +278,30 @@ end
    function OnStopOrder(trade)
       loger.save(' OnStopOrder' )
 
+      loger.save('riskStop.updateOrderNumber(trade)')
+
+      riskStop.updateOrderNumber(trade);
+
       if  bit.band(trade.flags,4)>0
          then
 
             if not CheckBit(trade.flags, 0) and not CheckBit(trade.flags, 1) then
                loger.save('Заявка 11111  '..trade.order_num..' appruve Sell Sell Sell')
                market.sellContract(trade);
+               -- когда сработал стоп
                riskStop.appruveOrderStop(trade)
+               
             end
 
+            -- if not CheckBit(trade.flags, 0)   then
+            --    loger.save('Заявка 33333  '..trade.order_num..'   Sell Sell Sell')
+            --  --  market.sellContract(trade);
+            --    riskStop.appruveOrderStop(trade)
+               
+            -- end
+          --  riskStop.appruveOrderStop(trade)
          -- заявка на продажу
-      loger.save(' trade.flags Sell ')
+            loger.save(' trade.flags Sell ')
          else
          -- заявка на покупку
       loger.save(' trade.flags Buy ')
@@ -298,6 +311,8 @@ end
        
             riskStop.updateOrderNumber(trade)
          end
+
+
 
    end
 
@@ -344,6 +359,7 @@ end
       candleGraff.deleteTableGraff();
 
       DelAllLabels(setting.tag);
+      riskStop.backStop()
 
    end;
     

@@ -51,6 +51,11 @@ end;
  
 -- расчёт цены для следующего стоп заявки
 function getMaxPriceRange(countStop)
+        if stopClass.price_max <= 0 then 
+            stopClass.price_max = setting.current_price;
+        end;
+
+
      -- расчёт максимального отступа от максимальной цены
     local mPrice  =  stopClass.price_max - stopClass.spred;
     if countStop > 1 then
@@ -304,6 +309,7 @@ end;
 -- снимаем старые стоп заявки
 function backStop()
     -- обнуляем заявки
+    loger.save("backStop  "..#stopClass.array_stop );
     if #stopClass.array_stop > 0 then
 
         for s = 1 ,  #stopClass.array_stop do 
@@ -314,9 +320,18 @@ function backStop()
             --   dataParam.label = label.set('stop', countPrice ,  setting.datetime, countContract, 'stop '..countContract)
             else
                 -- снимаем стоп заявку
+                  loger.save("stopClass.array_stop[s].work ".. stopClass.array_stop[s].work)
+                  loger.save("stopClass.array_stop[s].order_num ".. stopClass.array_stop[s].order_num)
+                  loger.save("stopClass.array_stop[s].trans_id ".. stopClass.array_stop[s].trans_id)
                 if  stopClass.array_stop[s].work == 1 then 
-                    local order_num = stopClass.array_stop[s].order_num;
-                    local trans_id = stopClass.array_stop[s].trans_id;
+
+                    -- стоп больше не используется
+                    stopClass.array_stop[s].work = 3;
+
+                    local order_num = tostring(stopClass.array_stop[s].order_num);
+                    local trans_id = tostring(stopClass.array_stop[s].trans_id);
+                    
+                    loger.save("1  transaction.delete(trans_id, order_num); ".. trans_id .." , ".. order_num)
                     transaction.delete(trans_id, order_num);
                 end;
             end;
@@ -364,6 +379,9 @@ function sendTransStop(countContract, countPrice )
         -- dataParam.work = 0; 
 
         local type = "SIMPLE_STOP_ORDER";
+
+        
+        loger.save("transaction.send  ".. countPrice.." , ".. countContract)
         dataParam.trans_id =  transaction.send('sell', countPrice, countContract, type, 0 );
         -- отправляем транкзакцию 
     end;
@@ -376,10 +394,13 @@ end;
 -- обновление заявки по которой пришла информация
 -- присваиваем номер заявке, если он отсутствует
 -- вызывается в OnStopOrder
+
 function updateOrderNumber(order) 
+
     for stopItter = 1 ,  #stopClass.array_stop do 
-        if order.trans_id == stopClass.array_stop[stopItter].trans_id and stopClass.array_stop[stopItter].work == 1 then
-            stopClass.array_stop[stopItter].work = 2;
+ 
+        if order.trans_id == stopClass.array_stop[stopItter].trans_id and stopClass.array_stop[stopItter].work == 0 then
+            stopClass.array_stop[stopItter].work = 1;
             stopClass.array_stop[stopItter].order_num = order.order_num;
         end;
     end;
@@ -403,6 +424,11 @@ function appruveOrderStop(order)
         local appruveStop = false;
         local countContract = 0;
         -- помечаем заявку как исполненной
+
+        
+                
+        loger.save(" #stopClass.array_stop#stopClass.array_stop#stopClass.array_stop "..#stopClass.array_stop )
+
         for stopItter = 1 ,  #stopClass.array_stop do 
 
             if setting.emulation then 
@@ -425,6 +451,8 @@ function appruveOrderStop(order)
                     DelLabel(setting.tag, stopClass.array_stop[stopItter].label);
                 end;
             else 
+                
+                loger.save(" stopClass.array_stop[stopItter].work ".. stopClass.array_stop[stopItter].work )
                 --  режим торговли  
                 if order.trans_id == stopClass.array_stop[stopItter].trans_id and stopClass.array_stop[stopItter].work == 1 then
                     stopClass.array_stop[stopItter].work = 2;
@@ -441,6 +469,9 @@ function appruveOrderStop(order)
                     
                     local order_num = stopClass.array_stop[stopItter].order_num;
                     local trans_id = stopClass.array_stop[stopItter].trans_id;
+
+                    
+                  loger.save(" transaction.delete(trans_id, order_num); ".. trans_id .." , ".. order_num)
                     transaction.delete(trans_id, order_num);
                 end;
             end;
@@ -527,6 +558,7 @@ function removeOldOrderSell(countContract)
                     orderStop.order_num = arrayOrders[i].order_num;
                      
                     local obj = { ['trans_id'] = setting.sellTable[i].trans_id };
+                    
                     sellTransaction(orderStop,  obj);
                     countContract = 0; 
                  end;
