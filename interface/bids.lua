@@ -39,7 +39,7 @@ local wordTitleTableBids = {
 	['title'] = 'Current bids  sell/buy'
 };
   
-
+ 
 
 
 function getEventLog(_event)
@@ -136,6 +136,7 @@ if #setting.sellTable == 0   then return; end;
 
 
 		if bid.type == 'sell' and bid.work then
+			loger.save('if bid.type == sell and bid.work then: ');
 			for num = 0 , 8 do
 				Red(t_id_TableBids, b, num); 
 			end

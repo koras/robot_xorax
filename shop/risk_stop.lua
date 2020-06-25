@@ -6,6 +6,7 @@ local panelBids = dofile(getScriptPath() .. "\\interface\\bids.lua");
 
 -- local markets = dofile(getScriptPath() .. "\\shop\\market.lua");
   
+usestop = false;
 
 -- класс для работы с стопами, риск-менеджмент
 -- Главное не сколько заработаешь, а сколько не потеряешь
@@ -15,6 +16,7 @@ local panelBids = dofile(getScriptPath() .. "\\interface\\bids.lua");
 -- при срабатывании стопа, должны убираться контракты которые находятся на самом вверху
 -- и закрываться позиции по покупке. Более такие позиции не учитываются в логике
 function update_stop()
+    if usestop==false then return; end;
     
     -- можно ли использовать стопы
     if stopClass.use_stop   then 
@@ -34,6 +36,7 @@ end;
 
  -- расчёт максимального расстояния в зависимости от количества используемых контрактов при старте
 function calculateMaxStopStart()
+    if usestop==false then return; end;
     -- зависимость контрактов
     stopClass.spred = setting.LIMIT_BID / setting.use_contract * setting.profit_range ;
     stopClass.spred = setting.LIMIT_BID * setting.SPRED_LONG_TREND_DOWN / setting.use_contract  + stopClass.spred + stopClass.spred_range ;
@@ -42,6 +45,7 @@ function calculateMaxStopStart()
 
  
 function setStopDefault()
+    if usestop==false then return; end;
    -- stopClass.price_max = 0;
     stopClass.price_min = 10000000;
     stopClass.spred = 0.8;
@@ -51,6 +55,7 @@ end;
  
 -- расчёт цены для следующего стоп заявки
 function getMaxPriceRange(countStop)
+    if usestop==false then return; end;
         if stopClass.price_max <= 0 then 
             stopClass.price_max = setting.current_price;
         end;
@@ -78,6 +83,7 @@ end;
 -- функция сбора заявок для стопов
 -- определяем максимальную и минимальную цену покупки
 function getOrdersForBid()
+    if usestop==false then return; end;
     -- есть или нет контракты в стопах в работе
     local exist_work = true;
 
@@ -153,6 +159,7 @@ end;
 
 -- Ставим новый стоп, но если сработал стоп, увеличиваем стоп на количество срабатываемых стопов и уменьшаем количество стопов
 function generationCollectionStop() 
+    if usestop==false then return; end;
     local contract_work = stopClass.contract_work + stopClass.contract_add;
 
     if stopClass.triger_stop == 0 then 
@@ -308,6 +315,7 @@ end;
 
 -- снимаем старые стоп заявки
 function backStop()
+    if usestop==false then return; end;
     -- обнуляем заявки
     loger.save("backStop  "..#stopClass.array_stop );
     if #stopClass.array_stop > 0 then
@@ -320,9 +328,9 @@ function backStop()
             --   dataParam.label = label.set('stop', countPrice ,  setting.datetime, countContract, 'stop '..countContract)
             else
                 -- снимаем стоп заявку
-                  loger.save("stopClass.array_stop[s].work ".. stopClass.array_stop[s].work)
-                  loger.save("stopClass.array_stop[s].order_num ".. stopClass.array_stop[s].order_num)
-                  loger.save("stopClass.array_stop[s].trans_id ".. stopClass.array_stop[s].trans_id)
+                --  loger.save("stopClass.array_stop[s].work ".. stopClass.array_stop[s].work)
+                --  loger.save("stopClass.array_stop[s].order_num ".. stopClass.array_stop[s].order_num)
+                --  loger.save("stopClass.array_stop[s].trans_id ".. stopClass.array_stop[s].trans_id)
                 if  stopClass.array_stop[s].work == 1 then 
 
                     -- стоп больше не используется
@@ -352,6 +360,7 @@ end;
 
 
 function sendTransStop(countContract, countPrice )
+    if usestop==false then return; end;
     
     
     local dataParam = {};
@@ -396,6 +405,7 @@ end;
 -- вызывается в OnStopOrder
 
 function updateOrderNumber(order) 
+    if usestop==false then return; end;
 
     for stopItter = 1 ,  #stopClass.array_stop do 
  
@@ -419,6 +429,7 @@ end;
 -- необходимо снять старые заявки на продажу, если есть таковые
 -- когда срабатывает стоп, передвижение стопов запрещено
 function appruveOrderStop(order) 
+    if usestop==false then return; end;
     if stopClass.use_stop then 
 
         local appruveStop = false;
@@ -503,6 +514,7 @@ end;
 -- перебираем старые заявки, сверху вних по цене.
 -- подсчитываем 
 function removeOldOrderSell(countContract)
+    if usestop==false then return; end;
 
     if countContract == 0 then return end;
 

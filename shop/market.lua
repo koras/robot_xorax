@@ -37,18 +37,22 @@ end
 -- levelLocal  сила сигнала
 -- event -- продажа или покупка
 
-local function decision(event, price, datetime, levelLocal) -- решение
+local function decision(price, datetime, levelLocal, event) -- решение
     long(price, datetime, levelLocal , event);
 end
 
 local level = 1;
   
+-- обновляем транкзакцию для того чтобы при тестировании не отправлялись заросы
+function updateTransaction(_transaction)
+    transaction = _transaction;
+end;
 
 
 
 
 -- автоматическая торговля
-function long(price_long, datetime, levelLocal , event) -- решение 
+function long(price, datetime, levelLocal , event) -- решение 
 
             -- логика выставления заявки на покупку контракта
 
@@ -56,26 +60,26 @@ function long(price_long, datetime, levelLocal , event) -- решение
  
             -- подсчитаем скольк заявок у нас на продажу
             -- проверём, покупали здесь или нет, в этом промежутке
-            checkRangeBuy = contitionMarket.getRandBuy(price_long, setting.sellTable);
+            checkRangeBuy = contitionMarket.getRandBuy(price, setting.sellTable);
             -- проверём, стоит ли продажа в этом промежутке
-            checkRangeSell = contitionMarket.getRandSell(price_long, setting.sellTable);
+            checkRangeSell = contitionMarket.getRandSell(price, setting.sellTable);
             -- уровень свечи 
-            randCandle = contitionMarket.getRandCandle(price_long, datetime);
+            randCandle = contitionMarket.getRandCandle(price, datetime);
              -- Падение рынка
-            failMarket = contitionMarket.getFailMarket(price_long, datetime) ;
+            failMarket = contitionMarket.getFailMarket(price, datetime) ;
             -- лимит по заявкам
             limitBuy = contitionMarket.getLimitBuy(datetime); 
             -- блокировка покупки при падении рынка
-            getFailBuy = contitionMarket.getFailBuy(price_long,datetime);
+            getFailBuy = contitionMarket.getFailBuy(price,datetime);
             -- Запрет на покупку (блокируется кнопкой)
-            buyButtonBlock = contitionMarket.buyButtonBlock(price_long,datetime);
+            buyButtonBlock = contitionMarket.buyButtonBlock(price,datetime);
             -- Запрет на покупку если цена выше коридора
-            not_buy_high = contitionMarket.not_buy_high(price_long,datetime);
+            not_buy_high = contitionMarket.not_buy_high(price,datetime);
 
 
             if limitBuy and checkRangeBuy and checkRangeSell and randCandle  and failMarket and getFailBuy and buyButtonBlock and not_buy_high then
                 setting.SPRED_LONG_TREND_DOWN  = setting.SPRED_LONG_TREND_DOWN + setting.SPRED_LONG_TREND_DOWN_SPRED;
-                setting.SPRED_LONG_TREND_DOWN_LAST_PRICE = price_long; -- записываем последнюю покупку
+                setting.SPRED_LONG_TREND_DOWN_LAST_PRICE = price; -- записываем последнюю покупку
                 
                 -- сколько подряд покупок было
                 setting.each_to_buy_step = setting.each_to_buy_step + 1;
@@ -83,9 +87,9 @@ function long(price_long, datetime, levelLocal , event) -- решение
                      
                     if setting.emulation  then
                         -- в режиме эмуляции контракт на покупку исполнен в полном объёме
-                        callBUY_emulation(price_long,  datetime);
+                        callBUY_emulation(price,  datetime);
                     else 
-                        callBUY(price_long,  datetime);
+                        callBUY(price,  datetime);
                     end;
                     -- обновляем изменения в панели управления
                     
@@ -107,7 +111,7 @@ function buyContract(result)
                 setting.sellTable[contract].executed = true;
                 -- выставляем на продажу контракт.
                 sellTransaction(result, setting.sellTable[contract]);
-                panelBids.show();
+              
                 risk_stop.update_stop();
                 return;
             end;
@@ -156,7 +160,7 @@ function sellTransaction(order, countContracts)
                                                             ['buy_contract']= order.price, -- стоимость покупку
                                                         };
             setting.sellTable[(#setting.sellTable+1)] = data;
-
+            panelBids.show();
 end;
 
 
@@ -498,6 +502,7 @@ end;
 M.transCallback   = transCallback;
  
  
+M.updateTransaction   = updateTransaction ;
 M.callSELL_emulation   = callSELL_emulation ;
 M.buyContract   = buyContract ;
 M.sellContract   = sellContract ;

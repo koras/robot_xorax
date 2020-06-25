@@ -88,7 +88,7 @@ end
 
 local function  calculatePrice( price,datetime)
     -- 
-    -- для тестирования  collbackFunc( price, 1, datetime, 'BUY' );
+    
 
     -- цена выросла
     if oldPrice == 0 then
@@ -100,7 +100,7 @@ local function  calculatePrice( price,datetime)
         if(countingTicsVolume > CRITICAL_VOLUME)  then
             --  цена и объём  растёт   
       --  loger.save((oldPrice + rangeLocal) .. "   цена и объём  растёт  "..price)
-        collbackFunc( price, countingTicsVolume, datetime, 'buy');
+        collbackFunc( price, datetime, countingTicsVolume,   'buy');
         end
     end
      
@@ -113,7 +113,8 @@ local function  calculatePrice( price,datetime)
      --   loger.save(countingTicsVolume.. "  countingTicsVolume " .. CRITICAL_VOLUME)
         if(countingTicsVolume > CRITICAL_VOLUME) then
             --  цена  и объём падает
-        collbackFunc( price, countingTicsVolume, datetime, 'sell' );
+        collbackFunc( price, datetime,  countingTicsVolume, 'sell' );
+  
         end
     end
     oldPrice = price;

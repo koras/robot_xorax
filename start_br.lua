@@ -58,9 +58,12 @@ local panelBids = dofile(getScriptPath() .. "\\interface\\bids.lua");
 
 
 local test_bids = dofile(getScriptPath() .. "\\tests\\test_bids.lua");
+local test_signal = dofile(getScriptPath() .. "\\tests\\test_signal.lua");
  
 local riskStop = dofile(getScriptPath() .. "\\shop\\risk_stop.lua");
  
+
+
  
 
    
@@ -81,7 +84,9 @@ basis = 9
     Size = 0;
    function OnInit()
       riskStop.calculateMaxStopStart();
-  
+      panelBids.CreateNewTableBids();
+      signalShowLog.CreateNewTableLogEvent();
+      
       local Error = '';
       ds,Error = CreateDataSource(setting.CLASS_CODE, setting.SEC_CODE, setting.INTERVAL); 
     --  while (Error == "" or Error == nil) and DS:Size() == 0 do sleep(1) end
@@ -114,7 +119,10 @@ basis = 9
     
    function eventTranc( priceLocal , levelLocal ,datetime, event) 
       -- buy or sell
-      market.decision(event, priceLocal, datetime , levelLocal) ;
+      -- long(price_long, datetime, levelLocal , event)
+
+     -- collbackFunc( price, countingTicsVolume, datetime, 'buy');
+      market.decision( priceLocal, datetime, levelLocal, event) ;
    end
     
 
@@ -129,7 +137,7 @@ basis = 9
 
    function main() 
       candles.getSignal( market.callSELL_emulation);
-
+      
       tradeSignal.getSignal(setting.tag, eventTranc);
     --  signalShowLog.CreateNewTableLogEvent();
 
@@ -137,19 +145,24 @@ basis = 9
       loger.save("start log");
 
    --   statsPanel.show();
-    --  panelBids.show();
+      panelBids.show();
       update();
       getPrice();
       control.show(); 
 
+ 
  
 
 
 
       local Price = false;
           
+ 
+
       while Run do 
-        
+         if  setting.developer  then 
+            test_signal.testSendSignalBue();
+         end;
 
          local testOrder = {
             ['close']= 41.25,

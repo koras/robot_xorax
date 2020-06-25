@@ -18,15 +18,15 @@ end
 
         -- Пытается открыть файл в режиме "чтения/записи"
 local function saveSignal(text) 
-          --  f = io.open(logSignal,"a");
-          --  if f == nil then 
-          --    f = io.open(logSignal,"w"); 
-          --   f:close();
-          --   f = io.open(logSignal,"a");
-          -- end; 
-          --    f:write(text .. "\n")
-          --    -- Закрывает файл
-          --   f:close(); 
+           f = io.open(logSignal,"a");
+           if f == nil then 
+             f = io.open(logSignal,"w"); 
+            f:close();
+            f = io.open(logSignal,"a");
+          end; 
+             f:write(text .. "\n")
+             -- Закрывает файл
+            f:close(); 
 end
 
  

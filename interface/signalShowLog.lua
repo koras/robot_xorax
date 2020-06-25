@@ -40,7 +40,8 @@ local function addSignal(datetime, event, status, number)
 
 	loger.saveSignal(txt);
 
-	if(datetime ~= nul) then 
+	if(datetime == nul) then 
+	else
 		loger.saveSignal('time time ');
 		time = datetime.hour..':'..datetime.min..':'..datetime.sec;
 	end;
@@ -203,7 +204,7 @@ function CreateNewTableLogEvent()
 	SetWindowCaption(t_id_TableLog, wordTitleTableLog.log_signal);  
 
  
-   SetWindowPos(t_id_TableLog, 0, 70, 520, 340);
+   SetWindowPos(t_id_TableLog, 0, 150, 520, 640);
 
 
 	for i = 1, 35 do

@@ -42,78 +42,72 @@ end;
 
 bigCandle = 0;
 
+
+-- вызывается для сигналов
 local function getSignal(collbackFunc)
 
        
     shift = 0;
     len = 100
-    basis = 9
 
-
-    seconds = os.time(datetime); -- в seconds будет значение 1427052491
-    
-    shift = 0;
- 
+    -- seconds = os.time(datetime); -- в seconds 
+     
     setting.number_of_candle = getNumCandles(setting.tag); 
 
-   bars_temp,res,legend = getCandlesByIndex(setting.tag, 0, setting.number_of_candle-2*len-shift, 2*len)
- 
-  --  local lines_count = getLinesCount(setting.tag) 
-    bars={}
-
+    bars_temp,res,legend = getCandlesByIndex(setting.tag, 0, setting.number_of_candle-2*len-shift, 2*len)
  
 
     i=len
     j=2*len
     while i>=1 do
-        message(bars_temp[j-1].datetime.hour);
-     if(bars_temp[j-1].datetime.hour == nul)then
-     end
-            if bars_temp[j-1].datetime.hour >= 10 then
- 
-                  local bar = bars_temp[j-1];
-                  if bigCandle <= i  then
-                    bigCandle  = i; 
-                    setting.datetime  = bar.datetime;
-                     
- 
 
-                        if  setting.old_number_of_candle == setting.number_of_candle and setting.number_of_candle ~=0 then
-  
-                            
-                             setArrayCandles(bar, setting.number_of_candle);
- 
-                        else 
-                            
-                            local localCandle = bar;
-                            localCandle.numberCandle = setting.number_of_candle;
+        if bars_temp[j-1].datetime.hour ~= nul then
 
-                            setting.array_candle[#setting.array_candle + 1] = localCandle;
+                if bars_temp[j-1].datetime.hour >= 10 then
+    
+                    local bar = bars_temp[j-1];
 
-                            setting.old_number_of_candle = setting.number_of_candle;
-                            setting.current_price = bar.close;
-                            setting.candle_current_high = bar.high;
-                            setting.candle_current_low = bar.low;
 
-                         --   setting.candle_current_high = setting.buffer_old_candles_high;
-                         --   setting.candle_current_low = setting.buffer_old_candles_low;
-                        end
- 
-                      --  setArrayCandles(bar, setting.number_of_candle);
+                    if bigCandle <= i  then
+                            bigCandle  = i; 
+                            -- чтобы всегда был доступ к текущему времени
+                            setBarCandle(bar,collbackFunc);
+                    end;
+                    i=i-1
 
-                        calculateSignal(bars_temp[j-1]);
-                        collbackFunc(bars_temp[j-1]);
-                end
- 
-                        bars[i]=bars_temp[j-1];
-                        i=i-1
+                end;
+                j=j-1
             end
-            j=j-1
+        t = len+1
     end
-    t = len+1
-    return value
-	  
 end
+
+
+
+
+-- логика обновления данных
+function setBarCandle(bar,collbackFunc)
+
+        setting.datetime  = bar.datetime; 
+        if  setting.old_number_of_candle == setting.number_of_candle and setting.number_of_candle ~=0 then
+                setArrayCandles(bar, setting.number_of_candle);
+        else 
+                bar.numberCandle = setting.number_of_candle;
+                setting.array_candle[#setting.array_candle + 1] = bar;
+                setting.old_number_of_candle = setting.number_of_candle;
+                setting.current_price = bar.close;
+                setting.candle_current_high = bar.high;
+                setting.candle_current_low = bar.low;
+
+        end;
+
+        calculateSignal(bar);
+        collbackFunc(bar);
+end;
+
+
+
+
     --    local O = t[i].open; -- Получить значение Open для указанной свечи (цена открытия свечи)
     --    local H = t[i].high; -- Получить значение High для указанной свечи (наибольшая цена свечи)
     --    local L = t[i].low; -- Получить значение Low для указанной свечи (наименьшая цена свечи)
@@ -129,9 +123,6 @@ function setArrayCandles(barCandle, numberCandle)
 
     if #setting.array_candle > 0 then 
         for candle = 1 ,  #setting.array_candle do 
-             
-
-
             if setting.array_candle[candle].numberCandle == numberCandle then
                 -- основные вычесления и обновления текущих свечей
                 calculateCandle(candle, barCandle);
@@ -158,9 +149,7 @@ function setArrayCandles(barCandle, numberCandle)
                 if setting.candle_current_low > setting.array_candle[candle].low  then
                     setting.candle_current_low = setting.array_candle[candle].low;
                 end
-                 
                 -- проверяем уровень
-            
             end;
 
         end;
@@ -182,14 +171,10 @@ end
 
 
 
+-- единоразовые вычисления
 function calculateCandle(key, barC) 
 
     if start_init  then
-
-
-      --  loger.save( "+++++++++++++ ".. setting.candle_current_high ) 
-        -- разовая операция 
-        -- условия по умолчанию выше какого диапозона не покупать
         setting.not_buy_high  = setting.not_buy_high_UP + barC.close;
         setting.current_price = barC.close;
 
@@ -199,14 +184,8 @@ function calculateCandle(key, barC)
 
         setting.candle_current_high = barC.high;
         setting.candle_current_low = barC.low;
-
-         
-
         start_init  = false;
     end;
-
-
-
 end;
 
 
