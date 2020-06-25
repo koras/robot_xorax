@@ -64,6 +64,7 @@ function long(price, datetime, levelLocal , event) -- решение
             -- проверём, стоит ли продажа в этом промежутке
             checkRangeSell = contitionMarket.getRandSell(price, setting.sellTable);
             -- уровень свечи 
+            
             randCandle = contitionMarket.getRandCandle(price, datetime);
              -- Падение рынка
             failMarket = contitionMarket.getFailMarket(price, datetime) ;
@@ -83,8 +84,6 @@ function long(price, datetime, levelLocal , event) -- решение
                 
                 -- сколько подряд покупок было
                 setting.each_to_buy_step = setting.each_to_buy_step + 1;
-         
-                     
                     if setting.emulation  then
                         -- в режиме эмуляции контракт на покупку исполнен в полном объёме
                         callBUY_emulation(price,  datetime);

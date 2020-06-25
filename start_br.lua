@@ -117,12 +117,12 @@ basis = 9
  
     
     
-   function eventTranc( priceLocal , levelLocal ,datetime, event) 
+   function eventTranc( price, datetime, levelLocal ,  event) 
       -- buy or sell
       -- long(price_long, datetime, levelLocal , event)
 
      -- collbackFunc( price, countingTicsVolume, datetime, 'buy');
-      market.decision( priceLocal, datetime, levelLocal, event) ;
+      market.decision( price, datetime, levelLocal, event) ;
    end
     
 
