@@ -39,7 +39,7 @@ local wordTitleTableBids = {
 	['title'] = 'Current bids  sell/buy'
 };
   
-
+ 
 
 
 function getEventLog(_event)
@@ -89,19 +89,19 @@ end;
 	
 
 if #setting.sellTable == 0   then return; end;
-	loger.save('event #setting.sellTable  : ' .. #setting.sellTable     );
+
 	 
 	local b = 0;
 	local itter = 0;
  
 
-	loger.save('333 event #setting.sellTable  : ' .. #setting.sellTable     );
+
 	--local itter = 1
 	 if #setting.sellTable > 1 then
 		 itter = #setting.sellTable;
 
 	 end
-	 loger.save('111 event #setting.sellTable  : ' .. #setting.sellTable     );
+
 
 --	for b = #setting.sellTable  , itter , -1 do
 	for b = 1 ,  #setting.sellTable do
@@ -136,6 +136,7 @@ if #setting.sellTable == 0   then return; end;
 
 
 		if bid.type == 'sell' and bid.work then
+			loger.save('if bid.type == sell and bid.work then: ');
 			for num = 0 , 8 do
 				Red(t_id_TableBids, b, num); 
 			end

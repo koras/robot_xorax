@@ -48,7 +48,7 @@ local rangeVolume = 10
 
 
     -- новая свеча
-    if (setting.old_number_of_candles  ~= setting.number_of_candles ) then 
+    if (setting.old_number_of_candles + setting.count_of_candle  ~= setting.number_of_candles ) then 
         setting.old_number_of_candles = setting.number_of_candles;
         -- если новая свечка
         volumeRange =  volume;
@@ -88,7 +88,7 @@ end
 
 local function  calculatePrice( price,datetime)
     -- 
-    -- для тестирования  collbackFunc( price, 1, datetime, 'BUY' );
+    
 
     -- цена выросла
     if oldPrice == 0 then
@@ -99,21 +99,22 @@ local function  calculatePrice( price,datetime)
     if oldPrice + rangeLocal < price   then
         if(countingTicsVolume > CRITICAL_VOLUME)  then
             --  цена и объём  растёт   
-        loger.save((oldPrice + rangeLocal) .. "   цена и объём  растёт  "..price)
-        collbackFunc( price, countingTicsVolume, datetime, 'buy');
+      --  loger.save((oldPrice + rangeLocal) .. "   цена и объём  растёт  "..price)
+        collbackFunc( price, datetime, countingTicsVolume,   'buy');
         end
     end
      
 
     -- цена упала
     if oldPrice - rangeLocal > price then
-        loger.save((oldPrice + rangeLocal) .. "   цена упала "..price)
+      --  loger.save((oldPrice + rangeLocal) .. "   цена упала "..price)
      --   oldPrice = price;
 
-        loger.save(countingTicsVolume.. "  countingTicsVolume " .. CRITICAL_VOLUME)
+     --   loger.save(countingTicsVolume.. "  countingTicsVolume " .. CRITICAL_VOLUME)
         if(countingTicsVolume > CRITICAL_VOLUME) then
             --  цена  и объём падает
-        collbackFunc( price, countingTicsVolume, datetime, 'sell' );
+        collbackFunc( price, datetime,  countingTicsVolume, 'sell' );
+  
         end
     end
     oldPrice = price;

@@ -24,7 +24,7 @@ stopClass.contract_add = 0;
 -- расстояние от максимальной покупки
 -- зависимость от используемых контрактов
 stopClass.spred = 1.0;
-stopClass.spred_default = 0.2;
+stopClass.spred_default = 0.04;
 -- на сколько исзменять параметр в панели управления
 stopClass.spred_limit = 0.02;
 
@@ -47,7 +47,7 @@ stopClass.spred_range_limit = 0.01;
 stopClass.triger_stop = 0;
 
 -- обновили максимальную цену, передвигаем стоп, сбрасываем тригер на обновление
-stopClass.triger_update_up = false;
+stopClass.triger_update_up = true;
 
 -- стоп заявки
 stopClass.array_stop = {};

@@ -122,7 +122,7 @@ M.callSELL   = callSELL;
 M.callSELLEmulation   = callSELLEmulation;
  
 M.bid   = bid ;
-M.decision = decision;
+
 M.setDirect = setDirect;
 
  

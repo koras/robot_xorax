@@ -27,12 +27,14 @@ package.path = package.path
         require("table")
  
  
-        setting = {};
-        stopClass = {};
+setting = {};
+stopClass = {};
+engine = {};
 
-dofile(getScriptPath() .. "\\setting\\account.lua");
+-- dofile(getScriptPath() .. "\\setting\\account.lua");
 dofile(getScriptPath() .. "\\setting\\work.lua");
 dofile(getScriptPath() .. "\\setting\\stop.lua");
+dofile(getScriptPath() .. "\\setting\\engine.lua");
  
 local uTransaction = dofile(getScriptPath() .. "\\shop\\transaction.lua");
 
@@ -43,18 +45,25 @@ local loger = dofile(getScriptPath() .. "\\modules\\loger.lua");
 local label = dofile(getScriptPath() .. "\\modules\\drawLabel.lua");
 local control = dofile(getScriptPath() .. "\\interface\\control.lua");
 local statsPanel = dofile(getScriptPath() .. "\\interface\\stats.lua");
+local candleGraff = dofile(getScriptPath() .. "\\interface\\candleGraff.lua");
+
+ 
+
 --local interfaceBids = dofile(getScriptPath() .. "\\interface\\bids.lua");
 local signalShowLog = dofile(getScriptPath() .. "\\interface\\signalShowLog.lua");
-local FRACTALS = dofile(getScriptPath() .. "\\LuaIndicators\\FRACTALS.lua"); 
+-- local FRACTALS = dofile(getScriptPath() .. "\\LuaIndicators\\FRACTALS.lua"); 
 local market = dofile(getScriptPath() .. "\\shop\\market.lua");
 local deleteBids = dofile(getScriptPath() .. "\\shop\\deleteBids.lua");
 local panelBids = dofile(getScriptPath() .. "\\interface\\bids.lua");
 
 
 local test_bids = dofile(getScriptPath() .. "\\tests\\test_bids.lua");
+local test_signal = dofile(getScriptPath() .. "\\tests\\test_signal.lua");
  
 local riskStop = dofile(getScriptPath() .. "\\shop\\risk_stop.lua");
  
+
+
  
 
    
@@ -75,7 +84,9 @@ basis = 9
     Size = 0;
    function OnInit()
       riskStop.calculateMaxStopStart();
-  
+      panelBids.CreateNewTableBids();
+      signalShowLog.CreateNewTableLogEvent();
+      
       local Error = '';
       ds,Error = CreateDataSource(setting.CLASS_CODE, setting.SEC_CODE, setting.INTERVAL); 
     --  while (Error == "" or Error == nil) and DS:Size() == 0 do sleep(1) end
@@ -106,24 +117,28 @@ basis = 9
  
     
     
-   function eventTranc( priceLocal , levelLocal ,datetime, event) 
+   function eventTranc( price, datetime, levelLocal ,  event) 
       -- buy or sell
-      market.decision(event, priceLocal, datetime , levelLocal) ;
+      -- long(price_long, datetime, levelLocal , event)
+
+     -- collbackFunc( price, countingTicsVolume, datetime, 'buy');
+      market.decision( price, datetime, levelLocal, event) ;
    end
     
 
    function  update()
       control.stats();
       market.setLitmitBid();
-      use_contract_limit();
-
       -- riskStop.appruveOrderStop(trade)
    end
 
 
    function main() 
-      candles.getSignal(tag, market.callSELL_emulation);
 
+      
+      candles.getSignal( updateTick);
+      candles.getSignal( market.callSELL_emulation);
+      
       tradeSignal.getSignal(setting.tag, eventTranc);
     --  signalShowLog.CreateNewTableLogEvent();
 
@@ -131,42 +146,24 @@ basis = 9
       loger.save("start log");
 
    --   statsPanel.show();
-    --  panelBids.show();
+      panelBids.show();
       update();
       getPrice();
       control.show(); 
 
-      -- для тестирования
-      if setting.developer then 
-            setting.sellTable = test_bids.getOrder(setting.current_price);
-        --   panelBids.show();
-         --  test_bids.testLabelBids();
-           riskStop.update_stop();
-
-
-
-            -- утановка параметров на то что сработал стоп
-            local testOrder = {
-               ['close']= 41.25,
-               ['trans_id']= "123123"
-             };
-
-       
-
-          --   riskStop.appruveOrderStop(testOrder);
-            
-          --   riskStop.removeOldOrderSell(11);
-          --   stopClass.triger_update_up = true;
-          --   riskStop.update_stop();
-         --   test_bids.saleBids(setting.current_price) 
-      end;
+ 
+ 
 
 
 
       local Price = false;
           
-      while Run do 
+ 
 
+      while Run do 
+         if  setting.developer  then 
+            test_signal.testSendSignalBue();
+         end;
 
          local testOrder = {
             ['close']= 41.25,
@@ -180,10 +177,11 @@ basis = 9
          --  statsPanel.stats();
            fractalSignal.last();
 
-         
+          
+
           if setting.status  then  
             tradeSignal.getSignal(setting.tag, eventTranc);
-            candles.getSignal(tag, updateTick);
+            candles.getSignal( updateTick);
          end;
       end;  
    end;
@@ -210,10 +208,12 @@ basis = 9
    -- Функция вызывается терминалом когда с сервера приходит информация по заявке 
    function OnOrder(order)
 
+      -- присваиваем номера заявкам
+      market.saleExecution(order);
+
       if  bit.band(order.flags,3) == 0 then
  
- 
-       --  loger.save("====================================================== "); 
+  
          if bit.band(order.flags, 2) == 0 then
 
          else
@@ -226,11 +226,9 @@ basis = 9
       end;
       
       if bit.band(order.flags,1) + bit.band(order.flags,2) == 0  then 
+ 
 
-
-         loger.save("исполнена loger.save(  order.price ".. order.price) 
-
-         loger.save("исполнена loger.save( trans_id  ".. order.trans_id) 
+         loger.save('sellContract 2 ')
          market.sellContract(order);
       
       
@@ -254,7 +252,7 @@ basis = 9
       market.buyContract(trade);
       loger.save('OnTrade end 222  -- исполняется покупка контракта')
    else
-      loger.save('OnTrade end 111 -- исполняется продажа контракта ')
+      loger.save('sellContract 1 ')
        market.sellContract(trade);
    end;
 
@@ -267,6 +265,8 @@ basis = 9
          loger.save('OnTrade end  -- исполняется покупка контракта')
       else
          loger.save('OnTrade end  -- исполняется продажа контракта 1')
+         
+         loger.save('sellContract 3 ')
           market.sellContract(trade);
       end;
 
@@ -293,28 +293,40 @@ end
 
    -- Функция вызывается терминалом когда с сервера приходит информация по сделке
    function OnStopOrder(trade)
-      loger.save(' OnStopOrder' )
+      loger.save(' OnStopOrder - ' )
+      -- заявку выставили и приходит коллбек выставленой заявки 
+      -- это просто заявка а не лимитка
+      market.saleExecution(trade);
+
+      -- обновляем номера стоп заявок при выставлении
+      riskStop.updateOrderNumber(trade);
 
       if  bit.band(trade.flags,4)>0
          then
 
             if not CheckBit(trade.flags, 0) and not CheckBit(trade.flags, 1) then
-               loger.save('Заявка 11111 №'..trade.order_num..' appruve Sell Sell Sell')
-               market.sellContract(trade);
+               loger.save('Заявка 11111  '..trade.order_num..' appruve Sell Sell Sell')
+               
+               loger.save('sellContract 4 ')
+            --   market.sellContract(trade);
+               -- когда сработал стоп
                riskStop.appruveOrderStop(trade)
+               
             end
 
-         -- заявка на продажу
-      loger.save(' trade.flags Sell ')
+
+            loger.save(' trade.flags Sell ')
          else
          -- заявка на покупку
       loger.save(' trade.flags Buy ')
          end
       
          if not CheckBit(trade.flags, 0) and not CheckBit(trade.flags, 1) then
-            loger.save('Заявка 11111 №'..trade.order_num..' appruve')
+       
             riskStop.updateOrderNumber(trade)
          end
+
+
 
    end
 
@@ -328,7 +340,7 @@ end
       -- Здесь Ваш код для действий при полном, или частичном исполнении заявки
       -- ...
       -- Выводит сообщение
-      loger.save('SE_OnExecutionOrder() БАЛАНС заявки №'..order.order_num..' изменился с '..(order.qty - (order.last_execution_count or 0))..' на '..order.balance)
+      loger.save('SE_OnExecutionOrder() БАЛАНС заявки  '..order.order_num..' изменился с '..(order.qty - (order.last_execution_count or 0))..' на '..order.balance)
    end
 
    -- успешное ВЫПОЛНЕНИИ ТРАНЗАКЦИИ
@@ -358,8 +370,11 @@ end
       signalShowLog.deleteTable();
       statsPanel.deleteTableStats();
       panelBids.deleteTable();
+      candleGraff.deleteTableGraff();
 
       DelAllLabels(setting.tag);
+      riskStop.backStop()
+
    end;
     
 
