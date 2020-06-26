@@ -6,7 +6,7 @@ local panelBids = dofile(getScriptPath() .. "\\interface\\bids.lua");
 
 -- local markets = dofile(getScriptPath() .. "\\shop\\market.lua");
   
-usestop = false;
+usestop = true;
 
 -- класс для работы с стопами, риск-менеджмент
 -- Главное не сколько заработаешь, а сколько не потеряешь
@@ -48,7 +48,7 @@ function setStopDefault()
     if usestop==false then return; end;
    -- stopClass.price_max = 0;
     stopClass.price_min = 10000000;
-    stopClass.spred = 0.8;
+    stopClass.spred = 0.03;
   --  stopClass.spred_range = 0.1;
     stopClass.contract_work = 0;
 end;
@@ -437,8 +437,7 @@ function appruveOrderStop(order)
         -- помечаем заявку как исполненной
 
         
-                
-        loger.save(" #stopClass.array_stop#stopClass.array_stop#stopClass.array_stop "..#stopClass.array_stop )
+                 
 
         for stopItter = 1 ,  #stopClass.array_stop do 
 
@@ -482,7 +481,7 @@ function appruveOrderStop(order)
                     local trans_id = stopClass.array_stop[stopItter].trans_id;
 
                     
-                  loger.save(" transaction.delete(trans_id, order_num); ".. trans_id .." , ".. order_num)
+                    loger.save(" transaction.delete(trans_id, order_num); ".. trans_id .." , ".. order_num)
                     transaction.delete(trans_id, order_num);
                 end;
             end;
@@ -498,6 +497,7 @@ function appruveOrderStop(order)
             if stopClass.count_stop > 0 then  
                 -- сколько контрактов было в стопе
                 signalShowLog.addSignal(setting.datetime, 33, false, stopClass.triger_stop); 
+                signalShowLog.addSignal(setting.datetime, 33, false, countContract); 
                 -- снимаем заявки которые установлены на верху, в зависимости от количества заявок
                 removeOldOrderSell( countContract );
                 -- обновляем таблицу с заявками 
@@ -544,23 +544,31 @@ function removeOldOrderSell(countContract)
         loger.save("удаляем контракты " .. countContract);
         for i = 1, #setting.sellTable do
 
-            if   setting.sellTable[i].type == "sell" and 
-            countContract >= setting.sellTable[i].contract or 
-            setting.sellTable[i].type == "sell" and 
-            countContract ~= 0 then
+         --   loger.save(" setting.sellTable[i].contract " ..  setting.sellTable[i].contract);
+          --  loger.save(" setting.sellTable[i].type " ..  setting.sellTable[i].type);
+           -- loger.save(" countContract " .. countContract);
+
+            if   setting.sellTable[i].type == "sell" and   countContract >= setting.sellTable[i].contract or  
+                setting.sellTable[i].type == "sell" and  countContract ~= 0 then
                 
                  -- удаляем контракт  
                 setting.sellTable[i].work = false;
                 loger.save(setting.sellTable[i].price .. ",".. setting.sellTable[i].contract)
-
+                loger.save(" -- заявка не покупку не должна быть активная, поэтому собираем массив заявок  " .. countContract);
+                loger.save(" -- arrayOrders[i].price  " .. arrayOrders[i].price);
                 signalShowLog.addSignal(setting.datetime, 34, false, arrayOrders[i].price); 
                 -- заявка не покупку не должна быть активная, поэтому собираем массив заявок 
                 
                 --  setting.sellTable[sellT].trans_id == saleContract.trans_id_buy 
                  if  countContract >= setting.sellTable[i].contract then
                     -- просто удаляем контракт
+                     loger.save(" -- просто удаляем контракт " .. setting.sellTable[i].trans_id_buy);
+
                     arrayOrdersBuys[#arrayOrdersBuys + 1]  = setting.sellTable[i].trans_id_buy;
                     countContract = countContract -  setting.sellTable[i].contract ;  
+                     
+                   transaction.delete(setting.sellTable[i].trans_id, setting.sellTable[i].order_num);
+
                  else 
                     -- надо перевыставить одну заявку на продажу, ставим лимитку, чтоб не заморачиваться 
                     
@@ -571,7 +579,7 @@ function removeOldOrderSell(countContract)
                      
                     local obj = { ['trans_id'] = setting.sellTable[i].trans_id };
                     
-                    sellTransaction(orderStop,  obj);
+                  --  sellTransaction(orderStop,  obj);
                     countContract = 0; 
                  end;
             end

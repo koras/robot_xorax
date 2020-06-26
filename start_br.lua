@@ -51,7 +51,7 @@ local candleGraff = dofile(getScriptPath() .. "\\interface\\candleGraff.lua");
 
 --local interfaceBids = dofile(getScriptPath() .. "\\interface\\bids.lua");
 local signalShowLog = dofile(getScriptPath() .. "\\interface\\signalShowLog.lua");
-local FRACTALS = dofile(getScriptPath() .. "\\LuaIndicators\\FRACTALS.lua"); 
+-- local FRACTALS = dofile(getScriptPath() .. "\\LuaIndicators\\FRACTALS.lua"); 
 local market = dofile(getScriptPath() .. "\\shop\\market.lua");
 local deleteBids = dofile(getScriptPath() .. "\\shop\\deleteBids.lua");
 local panelBids = dofile(getScriptPath() .. "\\interface\\bids.lua");
@@ -129,13 +129,14 @@ basis = 9
    function  update()
       control.stats();
       market.setLitmitBid();
-  
-
       -- riskStop.appruveOrderStop(trade)
    end
 
 
    function main() 
+
+      
+      candles.getSignal( updateTick);
       candles.getSignal( market.callSELL_emulation);
       
       tradeSignal.getSignal(setting.tag, eventTranc);
@@ -207,6 +208,9 @@ basis = 9
    -- Функция вызывается терминалом когда с сервера приходит информация по заявке 
    function OnOrder(order)
 
+      -- присваиваем номера заявкам
+      market.saleExecution(order);
+
       if  bit.band(order.flags,3) == 0 then
  
   
@@ -222,11 +226,9 @@ basis = 9
       end;
       
       if bit.band(order.flags,1) + bit.band(order.flags,2) == 0  then 
+ 
 
-
-         loger.save("исполнена loger.save(  order.price ".. order.price) 
-
-         loger.save("исполнена loger.save( trans_id  ".. order.trans_id) 
+         loger.save('sellContract 2 ')
          market.sellContract(order);
       
       
@@ -250,7 +252,7 @@ basis = 9
       market.buyContract(trade);
       loger.save('OnTrade end 222  -- исполняется покупка контракта')
    else
-      loger.save('OnTrade end 111 -- исполняется продажа контракта ')
+      loger.save('sellContract 1 ')
        market.sellContract(trade);
    end;
 
@@ -263,6 +265,8 @@ basis = 9
          loger.save('OnTrade end  -- исполняется покупка контракта')
       else
          loger.save('OnTrade end  -- исполняется продажа контракта 1')
+         
+         loger.save('sellContract 3 ')
           market.sellContract(trade);
       end;
 
@@ -289,10 +293,12 @@ end
 
    -- Функция вызывается терминалом когда с сервера приходит информация по сделке
    function OnStopOrder(trade)
-      loger.save(' OnStopOrder' )
+      loger.save(' OnStopOrder - ' )
+      -- заявку выставили и приходит коллбек выставленой заявки 
+      -- это просто заявка а не лимитка
+      market.saleExecution(trade);
 
-      loger.save('riskStop.updateOrderNumber(trade)')
-
+      -- обновляем номера стоп заявок при выставлении
       riskStop.updateOrderNumber(trade);
 
       if  bit.band(trade.flags,4)>0
@@ -300,20 +306,15 @@ end
 
             if not CheckBit(trade.flags, 0) and not CheckBit(trade.flags, 1) then
                loger.save('Заявка 11111  '..trade.order_num..' appruve Sell Sell Sell')
-               market.sellContract(trade);
+               
+               loger.save('sellContract 4 ')
+            --   market.sellContract(trade);
                -- когда сработал стоп
                riskStop.appruveOrderStop(trade)
                
             end
 
-            -- if not CheckBit(trade.flags, 0)   then
-            --    loger.save('Заявка 33333  '..trade.order_num..'   Sell Sell Sell')
-            --  --  market.sellContract(trade);
-            --    riskStop.appruveOrderStop(trade)
-               
-            -- end
-          --  riskStop.appruveOrderStop(trade)
-         -- заявка на продажу
+
             loger.save(' trade.flags Sell ')
          else
          -- заявка на покупку

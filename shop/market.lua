@@ -121,6 +121,7 @@ end;
 
 
 
+
 -- только выставляется заявка на продажу
 -- or
 -- может вызываеться при срабатывании стопа
@@ -146,7 +147,7 @@ function sellTransaction(order, countContracts)
                                                             ['number']= 0, 
                                                             ['datetime']= order.datetime, 
                                                             ['trans_id']= trans_id_sell, 
-                                                            ['order_num_buy']=  order.order_num, 
+                                                            ['order_num']=  order.order_num, 
                                                             ['trans_id_buy']=  countContracts.trans_id, 
                                                              
                                                             ['use_contract']=   setting.use_contract, 
@@ -162,6 +163,25 @@ function sellTransaction(order, countContracts)
             panelBids.show();
 end;
 
+
+
+-- исполнение выставление контракта на продажу
+
+function saleExecution(result)
+    if #setting.sellTable > 0 then
+        for contract = 1 ,  #setting.sellTable do 
+            if  setting.sellTable[contract].type == 'sell' and  
+            setting.sellTable[contract].executed == false  and 
+            setting.sellTable[contract].trans_id == result.trans_id  then
+
+
+                setting.sellTable[contract].executed = true;
+                setting.sellTable[contract].order_num = result.order_num
+            end;
+        end;
+    end;
+    
+end;
 
 
  
@@ -246,7 +266,7 @@ function deleteBuyCost(result, saleContract)
  
                     setting.sellTable[sellT].work = false;
 
-                    if  setting.limit_count_buy > local_contract.use_contract and   setting.limit_count_buy > 0 then
+                    if setting.limit_count_buy > 0 then
                         setting.limit_count_buy = setting.limit_count_buy - local_contract.use_contract;
                     end;
 
@@ -291,7 +311,7 @@ end
 
 
 
--- price_callBUY_emulation - цена
+-- выставление заявки на покупку в эмуляции
 function callBUY_emulation(price_callBUY_emulation ,datetime)
     local trans_id_buy = getRand() 
      
@@ -501,6 +521,7 @@ end;
 M.transCallback   = transCallback;
  
  
+M.saleExecution   = saleExecution ;
 M.updateTransaction   = updateTransaction ;
 M.callSELL_emulation   = callSELL_emulation ;
 M.buyContract   = buyContract ;

@@ -18,6 +18,7 @@ init.create = false;
 
 local word = {
 	['status'] = "Status",
+	['long'] = "         LONG",
 	['buy'] = "Buy",
 	['Buyplus'] = "Buy",
 	['sell'] = "",
@@ -47,8 +48,6 @@ local word = {
 	['SPRED_LONG_TREND_DOWN'] = "trend down", -- рынок падает, увеличиваем растояние между покупками
 	['SPRED_LONG_TREND_DOWN_SPRED'] = "down market range", -- на сколько увеличиваем растояние
 	['not_buy_high'] = "not buy high", -- условия; Выше какого диапазона не покупать(на хаях)
-	 
-	 
 };
   
 -- OFFSET SPREAD
@@ -61,12 +60,7 @@ local function show()
 	for i = 0, 3 do
 		Blue(t_control,4, i);
 		Gray(t_control,10, i); 
-
 		Gray(t_control,16, i);
-	--	WhiteGreen(t_control,18, i);
- 
-	--	Gray(t_control,21, i);
-	--	Gray(t_control,22, i);
 		Gray(t_control,24, i);
 		Gray(t_control,30, i);
 	 end; 
@@ -100,6 +94,7 @@ local function show()
 	use_stop();
 	show_stop();
 	show_panel_bue_sell();
+	mode_long();
 end
 
 function sell_take_or_limit()   
@@ -110,6 +105,17 @@ function sell_take_or_limit()
 	end; 
 end; 
  
+ 
+function mode_long() 
+	setting.emulation=true;
+	SetCell(t_control, 2, 3,  word.long); 
+	Green(t_control,1, 3);
+	Green(t_control,2, 3);
+	Green(t_control,3, 3);
+end;
+
+
+
 
 -- функция использования и отображения стопов
 function use_stop()
@@ -194,23 +200,10 @@ end;
 
 
 
-
-
  
--- ['profit_size'] = "profit size:",
--- ['profit_range'] = "profit range:",
-
 function current_limit() 
 	SetCell(t_control, 11, 0,   words.word('current_limit')); 
 	SetCell(t_control, 13, 0,   words.word('current_limit_max'));  
-
-
-	SetCell(t_control, 1, 3,   words.word('panel_bids')); 
-	SetCell(t_control, 2, 3,   words.word('panel_logs'));  
- 
-	WhiteBlue(t_control,1, 3);
-	WhiteBlue(t_control,2, 3);
-	
 	SetCell(t_control, 25, 0,  words.word('buy_block')); 
 	SetCell(t_control, 26, 0,   words.word('SPRED_LONG_TREND_DOWN')); 
 	SetCell(t_control, 27, 0,   words.word('SPRED_LONG_TREND_DOWN_SPRED')); 
@@ -218,23 +211,20 @@ function current_limit()
 end; 
 
 
+
+
+
+
 function current_limit_plus()  
 	SetCell(t_control, 11, 2,  word.current_limit_plus); 
 	SetCell(t_control, 13, 2,  word.current_limit_plus); 
  
 	SetCell(t_control, 30, 2,  words.word('sell_set_take_or_limit_change')); 
-
-
- 
-
-
 	SetCell(t_control, 25, 2,  word.current_limit_plus); 
 	SetCell(t_control, 26, 2,  word.current_limit_plus); 
 	SetCell(t_control, 27, 2,  word.current_limit_plus); 
 	SetCell(t_control, 28, 2,  word.current_limit_plus); 
 
-	
- 
 	Green(t_control,11, 2);
 	Green(t_control,13, 2);
  
@@ -247,17 +237,10 @@ end;
 function current_limit_minus()  
 	SetCell(t_control, 11, 3,  word.current_limit_minus); 
 	SetCell(t_control, 13, 3,  word.current_limit_minus); 
- 
- 
-
 	SetCell(t_control, 25, 3,  word.current_limit_minus); 
 	SetCell(t_control, 26, 3,  word.current_limit_minus); 
 	SetCell(t_control, 27, 3,  word.current_limit_minus); 
 	SetCell(t_control, 28, 3,  word.current_limit_minus); 
-
- 
-	
-	
 	Red(t_control,11, 3);
 	Red(t_control,13, 3);
   
@@ -265,8 +248,6 @@ function current_limit_minus()
 	Red(t_control,26, 3);
 	Red(t_control,27, 3);
 	Red(t_control,28, 3);
-
- 
 end;
 
  
@@ -287,14 +268,8 @@ function use_contract_limit()
 
 
 	SetCell(t_control, 11, 1,   tostring( setting.LIMIT_BID   .. ' / '..  setting.limit_count_buy.. ' / '..  setting.use_contract )) ; 
-							
-	 
 	SetCell(t_control, 12, 1,   buy_session.. " | "..sell_session); 
-
-
 	SetCell(t_control, 13, 1,   tostring(setting.use_contract)); 
- 
- 
 -- потом только решение за человеком / сколько подряд раз уже купили
 	SetCell(t_control, 25, 1,   tostring( setting.each_to_buy_to_block ) .." ( ".. setting.each_to_sell_step .. ') /'.. setting.each_to_buy_step ); 
 	SetCell(t_control, 26, 1,   tostring( setting.SPRED_LONG_TREND_DOWN .." - ".. setting.profit_range.. " ("..setting.SPRED_LONG_TREND_DOWN_NEXT_BUY ..")" )); 
@@ -510,16 +485,16 @@ function event_callback_message_control (t_control, msg, par1, par2)
 
 		-- панель заявок 
 
-	if par1 == 1 and par2 == 3  and  msg == 1 then
-		panelBids.CreateNewTableBids();
-		panelBids.show();
-		return;
-	end; 
-	-- панель логов
-	if par1 == 2 and par2 == 3  and  msg == 1 then
-		signalShowLog.CreateNewTableLogEvent();
-		return;
-	end;
+	-- if par1 == 1 and par2 == 3  and  msg == 1 then
+	-- 	panelBids.CreateNewTableBids();
+	-- 	panelBids.show();
+	-- 	return;
+	-- end; 
+	-- -- панель логов
+	-- if par1 == 2 and par2 == 3  and  msg == 1 then
+	-- 	signalShowLog.CreateNewTableLogEvent();
+	-- 	return;
+	-- end;
 
 
 
@@ -884,6 +859,7 @@ function event_callback_message_control (t_control, msg, par1, par2)
 			show_info_stop ()
 		return;
 	end;
+
 	if par1 == 34 and par2 == 3  and  msg == 1 then
 		if stopClass.show_panel == false then return end;
 		if stopClass.spred_range >  stopClass.spred_range_default then 
@@ -897,27 +873,6 @@ function event_callback_message_control (t_control, msg, par1, par2)
 	end;
 
 
-
-
-	-- if par1 == 30 and par2 == 0  and  msg == 1 then 
-	-- 	-- утановка параметров на то что сработал стоп
-	-- 	local testOrder = {
-	-- 	  ['close']= 41.25,
-	-- 	  ['trans_id']= "123123"
-	-- 	};
-	-- 	 riskStop.appruveOrderStop(testOrder); 
-	-- return;
-	-- end; 
-
-	-- if par1 == 30 and par2 == 1  and  msg == 1 then 
-	-- 	-- утановка параметров на то что сработал стоп
-	-- 	local testOrder = {
-	-- 	['close']= 41.15,
-	-- 	['trans_id']= "123121233"
-	-- 	};
-	-- 	riskStop.appruveOrderStop(testOrder); 
-	-- return;
-	-- end; 
 
 
 

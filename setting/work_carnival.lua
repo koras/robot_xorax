@@ -93,7 +93,7 @@ setting.tag = "my_br";
    setting.SPRED_LONG_BUY_down = 0.01; -- условия; не покупаем если здесь ранее мы купили | вниз диапозон
 
    setting.not_buy_high_UP = 1; -- условия; цена входа при запуске скрипта
-   setting.not_buy_high = 36.85; -- условия; Выше какого диапазона не покупать(на хаях)
+   setting.not_buy_high = 0; -- условия; Выше какого диапазона не покупать(на хаях)
    setting.take_profit_offset = 0.01;   
    setting.take_profit_spread = 0.01;  
           

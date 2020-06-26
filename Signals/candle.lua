@@ -3,7 +3,7 @@
 
 local M = {}
 
-local start_init = true;
+start_init = true;
 
 local loger = dofile(getScriptPath() .. "\\modules\\loger.lua")
  
@@ -124,6 +124,8 @@ function setArrayCandles(barCandle, numberCandle)
     if #setting.array_candle > 0 then 
         for candle = 1 ,  #setting.array_candle do 
             if setting.array_candle[candle].numberCandle == numberCandle then
+                
+	        	 
                 -- основные вычесления и обновления текущих свечей
                 calculateCandle(candle, barCandle);
                 -- обновляем данные
@@ -174,8 +176,10 @@ end
 -- единоразовые вычисления
 function calculateCandle(key, barC) 
 
-    if start_init  then
-        setting.not_buy_high  = setting.not_buy_high_UP + barC.close;
+    if start_init  then 
+        if setting.not_buy_high == 0 then 
+            setting.not_buy_high  =  barC.close + setting.not_buy_high_UP; 
+        end;
         setting.current_price = barC.close;
 
         setting.array_candle[key].high = barC.high;

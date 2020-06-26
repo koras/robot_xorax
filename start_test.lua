@@ -109,11 +109,6 @@ end;
     
       trans();
       while Run do  
-
-
-       --  candles.getSignal( updateTick);
-   
-
  
       end;  
    end;
@@ -239,7 +234,6 @@ end
       
          if not CheckBit(trade.flags, 0) and not CheckBit(trade.flags, 1) then
             loger.save('Заявка 11111 №'..trade.order_num..' appruve')
-          --  riskStop.updateOrderNumber(trade)
          end
 
    end
