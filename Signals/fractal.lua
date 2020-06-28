@@ -36,8 +36,7 @@ local function last()
           ['high'] = t[num].high,
           ['low'] = t[num].low
       };
-
-   --   loger.save( 't[num].high'  .. t[num].high )    
+ 
 
 
       if (t[num].high)>0 then

@@ -53,10 +53,7 @@ end;
 
 -- автоматическая торговля
 function long(price, datetime, levelLocal , event) -- решение 
-
-            -- логика выставления заявки на покупку контракта
-
-          --  getfractal(price);
+ 
  
             -- подсчитаем скольк заявок у нас на продажу
             -- проверём, покупали здесь или нет, в этом промежутке
@@ -234,6 +231,9 @@ function sellContract(result)
                 signalShowLog.addSignal(setting.sellTable[contract].datetime, 26, false, result.price); 
                 deleteBuyCost(result, setting.sellTable[contract])
                 control.use_contract_limit();  
+                
+                risk_stop.update_stop();
+
             end;
         end;
     end;
@@ -409,7 +409,7 @@ function callSELL_emulation(result)
                      --   panelBids.show(); 
                      control.use_contract_limit();  
                      deleteBuy_emulation(setting.sellTable[sellT])
-                       risk_stop.update_stop();
+                     risk_stop.update_stop();
                        
                 end;
             end; 
@@ -437,7 +437,7 @@ end;
 
 
 
--- исполнение продажи кпо контракту
+-- исполнение продажи по контракту
 -- contract - контракт который продали
 -- общие расчёты 
 function execution_sell(contract)

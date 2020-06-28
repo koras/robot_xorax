@@ -66,8 +66,7 @@ test_transaction.send = tSend;
 
 -- отправка сигнала на покупку
 -- с каждым вызовом отправляется новый сигнал отличный от текущего
-function testSendSignalBue()
-    loger.save('отравляем транкзакцию 11');
+function testSendSignalBue() 
     if   setting.developer then 
         market.updateTransaction(test_transaction);
 

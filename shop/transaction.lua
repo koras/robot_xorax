@@ -95,16 +95,7 @@ local function send(typeMarket, price, quantity,type, trans_id_buy )
 
 	-- Неверно указаны единицы измерения защитного интервала take profit стоп-заявки. "0.01"
 
---    loger.save(' setting.CLASS_CODE '..setting.CLASS_CODE);
---    loger.save(' setting.SEC_CODE '..setting.SEC_CODE);
---    loger.save(' setting.ACCOUNT '..setting.ACCOUNT);
-   
---   loger.save( 'Transaction ' .. Transaction.OPERATION .. ' tostring(price) ' ..'  ' .. tostring(price).. ' ' .. ' '.. Transaction.TRANS_ID );
---   loger.save( 'SEC_CODE ' .. setting.SEC_CODE );
---    loger.save( 'Transaction SECCODE ' .. Transaction['SECCODE'] );
---    loger.save( 'Transaction CLASS_CODE ' .. Transaction.CLASSCODE  );
---    loger.save( 'Transaction ACCOUNT ' .. Transaction.ACCOUNT ); 
-   
+ 
 
 
 	  local res  =   sendTransaction(Transaction);   

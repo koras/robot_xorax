@@ -217,7 +217,7 @@ basis = 9
          if bit.band(order.flags, 2) == 0 then
 
          else
-           loger.save("SELL SELL SELL SELL SELL "); 
+            
             deleteBids.transCallback(order);
          end;
 
@@ -227,8 +227,7 @@ basis = 9
       
       if bit.band(order.flags,1) + bit.band(order.flags,2) == 0  then 
  
-
-         loger.save('sellContract 2 ')
+         
          market.sellContract(order);
       
       
@@ -249,10 +248,8 @@ basis = 9
 
    if bit.band(trade.flags, 2) == 0 then
       -- исполняется покупка контракта 
-      market.buyContract(trade);
-      loger.save('OnTrade end 222  -- исполняется покупка контракта')
-   else
-      loger.save('sellContract 1 ')
+      market.buyContract(trade); 
+   else 
        market.sellContract(trade);
    end;
 
@@ -261,17 +258,12 @@ basis = 9
 
       if bit.band(trade.flags, 2) == 0 then
          -- исполняется покупка контракта 
-         market.buyContract(trade);
-         loger.save('OnTrade end  -- исполняется покупка контракта')
-      else
-         loger.save('OnTrade end  -- исполняется продажа контракта 1')
-         
-         loger.save('sellContract 3 ')
+         market.buyContract(trade); 
+      else 
+           
           market.sellContract(trade);
       end;
-
-      loger.save('trade.flags -- '..bit.band(trade.flags, 2))
-      loger.save('trade.flags ++ '..tostring(trade.flags))
+ 
 
    end
     
@@ -305,20 +297,16 @@ end
          then
 
             if not CheckBit(trade.flags, 0) and not CheckBit(trade.flags, 1) then
-               loger.save('Заявка 11111  '..trade.order_num..' appruve Sell Sell Sell')
-               
-               loger.save('sellContract 4 ')
+       
             --   market.sellContract(trade);
                -- когда сработал стоп
                riskStop.appruveOrderStop(trade)
                
             end
 
-
-            loger.save(' trade.flags Sell ')
+ 
          else
-         -- заявка на покупку
-      loger.save(' trade.flags Buy ')
+         -- заявка на покупку 
          end
       
          if not CheckBit(trade.flags, 0) and not CheckBit(trade.flags, 1) then
