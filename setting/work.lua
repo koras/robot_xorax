@@ -43,7 +43,7 @@ setting.tag = "my_br";
    setting.developer = false;    
 
    -- лимит количества заявок на сессию работы робота.
-   setting.LIMIT_BID = 10;
+   setting.LIMIT_BID = 1;
    
    -- сколько использовать контрактов по умолчанию в режиме скальпинга
    setting.use_contract = 1;

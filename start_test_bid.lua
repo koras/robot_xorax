@@ -1,9 +1,4 @@
--- https://www.lua.org/ftp/
-
-
--- Бесплатный робот торгующий в боковике "robot XoraX"
--- https://t.me/robots_xorax
--- https://smart-lab.ru/blog/621155.php
+-- только для иестирования
 
 
 local lua51path = "C:\\Program Files (x86)\\Lua\\5.1\\" -- путь, куда установлен дистрибутив Lua 5.1 for Windows
@@ -36,8 +31,11 @@ dofile(getScriptPath() .. "\\setting\\work.lua");
 dofile(getScriptPath() .. "\\setting\\stop.lua");
 dofile(getScriptPath() .. "\\setting\\engine.lua");
  
-local uTransaction = dofile(getScriptPath() .. "\\shop\\transaction.lua");
-
+ 
+local transaction = dofile(getScriptPath() .. "\\shop\\transaction.lua");
+local vecm = dofile(getScriptPath() .. "\\modules\\vector.lua");
+local v3 = dofile(getScriptPath() .. "\\modules\\Vec3.lua");
+ 
 local candles = dofile(getScriptPath() .. "\\Signals\\candle.lua");
 local tradeSignal = dofile(getScriptPath() .. "\\Signals\\tradeSignal.lua"); 
 local fractalSignal = dofile(getScriptPath() .. "\\Signals\\fractal.lua"); 
@@ -51,19 +49,16 @@ local candleGraff = dofile(getScriptPath() .. "\\interface\\candleGraff.lua");
 
 --local interfaceBids = dofile(getScriptPath() .. "\\interface\\bids.lua");
 local signalShowLog = dofile(getScriptPath() .. "\\interface\\signalShowLog.lua");
--- local FRACTALS = dofile(getScriptPath() .. "\\LuaIndicators\\FRACTALS.lua"); 
+
 local market = dofile(getScriptPath() .. "\\shop\\market.lua");
 local deleteBids = dofile(getScriptPath() .. "\\shop\\deleteBids.lua");
 local panelBids = dofile(getScriptPath() .. "\\interface\\bids.lua");
 
 
 local test_bids = dofile(getScriptPath() .. "\\tests\\test_bids.lua");
-local test_signal = dofile(getScriptPath() .. "\\tests\\test_signal.lua");
  
 local riskStop = dofile(getScriptPath() .. "\\shop\\risk_stop.lua");
  
-
-
  
 
    
@@ -75,127 +70,49 @@ function init()
   --   control.show();
 
 end;
-    
-    
-shift = 0;
-len = 100
-basis = 9
+     
 
     Size = 0;
    function OnInit()
-      riskStop.calculateMaxStopStart();
-      panelBids.CreateNewTableBids();
-      signalShowLog.CreateNewTableLogEvent();
-      
-      local Error = '';
-      ds,Error = CreateDataSource(setting.CLASS_CODE, setting.SEC_CODE, setting.INTERVAL); 
-    --  while (Error == "" or Error == nil) and DS:Size() == 0 do sleep(1) end
     
-       
-     if Error ~= "" and Error ~= nil then message("1111111111111111111111 : "..Error) return end
-    -- GET_GRAFFIC
-      
-      GET_GRAFFIC   = ds:SetEmptyCallback();
-    --  ds:SetUpdateCallback(MyFuncName);
-    
-      Size =ds:Size();  
-      
-        p = tostring(getParamEx(setting.CLASS_CODE, setting.SEC_CODE, "offer").param_value + 10*getParamEx(setting.CLASS_CODE, setting.SEC_CODE, "SEC_PRICE_STEP").param_value); 
-       SEC_PRICE_STEP = tostring(getParamEx2(setting.CLASS_CODE, setting.SEC_CODE, "SEC_PRICE_STEP").param_value);	
    end;
    
    function getPrice()
    
-       SEC_PRICE_STEP = tostring(getParamEx2(setting.CLASS_CODE, setting.SEC_CODE, "SEC_PRICE_STEP").param_value);
-         if GET_GRAFFIC then
-      else 
-       Run  = false;
-        end;
-        
+  
    end;
      
  
     
     
-   function eventTranc( price, datetime, levelLocal ,  event) 
-      -- buy or sell
-      -- long(price_long, datetime, levelLocal , event)
-
-     -- collbackFunc( price, countingTicsVolume, datetime, 'buy');
-      market.decision( price, datetime, levelLocal, event) ;
+   function eventTranc( priceLocal , levelLocal ,datetime, event) 
+  
    end
     
 
    function  update()
-      control.stats();
-      market.setLitmitBid(); 
+ 
    end
 
+ 
 
    function main() 
-
-      
-      candles.getSignal( updateTick);
-      candles.getSignal( market.callSELL_emulation);
-      
-      tradeSignal.getSignal(setting.tag, eventTranc);
-    --  signalShowLog.CreateNewTableLogEvent();
-
- 
-      loger.save("start log");
-
-   --   statsPanel.show();
-      panelBids.show();
-      update();
-      getPrice();
-      control.show(); 
-
- 
  
 
-
-
-      local Price = false;
-          
- 
-
-      while Run do 
-         if  setting.developer  then 
-            test_signal.testSendSignalBue();
-         end;
-
-         local testOrder = {
-            ['close']= 41.25,
-            ['trans_id']= "123123"
-          };
-
-          
-               -- сработал стоп, проверка 
-
-         update();
-         --  statsPanel.stats();
-           fractalSignal.last();
-
-          
-
-          if setting.status  then  
-            tradeSignal.getSignal(setting.tag, eventTranc);
-            candles.getSignal( updateTick);
-         end;
-      end;  
    end;
-   
 
--- срабатывает при обновлении свечи
+
+
+
+   
+ -- срабатывает при обновлении свечи
    function updateTick(result)
 
       if  setting.emulation then
          -- обработка во время эмуляции
-         market.callSELL_emulation(result);
+      --   market.callSELL_emulation(result);
          -- сработал стоп в режиме эмуляции
-
-        -- loger.save('appruveOrderStop  updateTickupdateTickupdateTickupdateTick ' )
-         riskStop.appruveOrderStop(result)
+      --   riskStop.appruveOrderStop(result)
       end;
       
    end;
@@ -209,17 +126,14 @@ basis = 9
    -- Функция вызывается терминалом когда с сервера приходит информация по заявке 
    function OnOrder(order)
 
-      -- присваиваем номера заявкам
-      market.saleExecution(order);
-
       if  bit.band(order.flags,3) == 0 then
  
   
          if bit.band(order.flags, 2) == 0 then
 
          else
-            
-            deleteBids.transCallback(order);
+           loger.save("SELL SELL SELL SELL SELL "); 
+         
          end;
 
 
@@ -227,9 +141,10 @@ basis = 9
       end;
       
       if bit.band(order.flags,1) + bit.band(order.flags,2) == 0  then 
+
+
+         loger.save("исполнена loger.save(  order.price ".. order.price) 
  
-         
-         market.sellContract(order);
       
       
       end;
@@ -249,9 +164,11 @@ basis = 9
 
    if bit.band(trade.flags, 2) == 0 then
       -- исполняется покупка контракта 
-      market.buyContract(trade); 
-   else 
-       market.sellContract(trade);
+
+      loger.save('OnTrade end 222  -- исполняется покупка контракта')
+   else
+      loger.save('OnTrade end 111 -- исполняется продажа контракта ')
+     
    end;
 
 
@@ -259,13 +176,8 @@ basis = 9
 
       if bit.band(trade.flags, 2) == 0 then
          -- исполняется покупка контракта 
-         market.buyContract(trade); 
-      else 
-           
-          market.sellContract(trade);
-      end;
- 
-
+  
+      end; 
    end
     
        
@@ -286,38 +198,27 @@ end
 
    -- Функция вызывается терминалом когда с сервера приходит информация по сделке
    function OnStopOrder(trade)
-      loger.save(' OnStopOrder - ' )
-      -- заявку выставили и приходит коллбек выставленой заявки 
-      -- это просто заявка а не лимитка
-      market.saleExecution(trade);
-
-      -- обновляем номера стоп заявок при выставлении
-      riskStop.updateOrderNumber(trade);
+      loger.save(' OnStopOrder' )
 
       if  bit.band(trade.flags,4)>0
          then
 
             if not CheckBit(trade.flags, 0) and not CheckBit(trade.flags, 1) then
-       
-            --   market.sellContract(trade);
-               -- когда сработал стоп
-
-               loger.save(' -- когда сработал стоп run stop - ' )
-               riskStop.appruveOrderStop(trade)
-               
+               loger.save('Заявка 11111 №'..trade.order_num..' appruve Sell Sell Sell')
+            
+             --  riskStop.appruveOrderStop(trade)
             end
 
- 
+         -- заявка на продажу
+      loger.save(' trade.flags Sell ')
          else
-         -- заявка на покупку 
+         -- заявка на покупку
+      loger.save(' trade.flags Buy ')
          end
       
          if not CheckBit(trade.flags, 0) and not CheckBit(trade.flags, 1) then
-              
-            riskStop.updateOrderNumber(trade)
+            loger.save('Заявка 11111 №'..trade.order_num..' appruve')
          end
-
-
 
    end
 
@@ -331,7 +232,7 @@ end
       -- Здесь Ваш код для действий при полном, или частичном исполнении заявки
       -- ...
       -- Выводит сообщение
-      loger.save('SE_OnExecutionOrder() БАЛАНС заявки  '..order.order_num..' изменился с '..(order.qty - (order.last_execution_count or 0))..' на '..order.balance)
+      loger.save('SE_OnExecutionOrder() БАЛАНС заявки №'..order.order_num..' изменился с '..(order.qty - (order.last_execution_count or 0))..' на '..order.balance)
    end
 
    -- успешное ВЫПОЛНЕНИИ ТРАНЗАКЦИИ
@@ -364,7 +265,6 @@ end
       candleGraff.deleteTableGraff();
 
       DelAllLabels(setting.tag);
-      riskStop.backStop()
 
    end;
     
