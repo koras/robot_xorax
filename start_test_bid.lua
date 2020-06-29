@@ -43,7 +43,7 @@ local loger = dofile(getScriptPath() .. "\\modules\\loger.lua");
 local label = dofile(getScriptPath() .. "\\modules\\drawLabel.lua");
 local control = dofile(getScriptPath() .. "\\interface\\control.lua");
 local statsPanel = dofile(getScriptPath() .. "\\interface\\stats.lua");
-local candleGraff = dofile(getScriptPath() .. "\\interface\\candleGraff.lua");
+local candleGraff = dofile(getScriptPath() .. "\\interface\\candleGraff.lua"); 
 
  
 
@@ -90,15 +90,34 @@ end;
    end
     
 
-   function  update()
- 
-   end
-
  
 
    function main() 
  
+      local type = "TAKE_PROFIT_STOP_ORDER";
+    --  if setting.sell_take_or_limit == false  then
+          type = "SIMPLE_STOP_ORDER";
+    --  end;
 
+    -- type = "NEW_ORDER";
+     res =  transaction.send("BUY", 40, 1, type, 0);
+
+
+      loger.save("res 1 " ..res); 
+
+      n = getNumberOf("orders")
+      order={}
+   --   message("total ".. tostring(n) .." of all orders", 1)
+      for i=0,n-1 do
+          order = getItem("orders", i)
+        r =   "order: num=" ..    tostring(order["order_num"]) .. " qty="..          tostring(order["qty"]) .. " value=" ..           tostring(order["value"])
+
+          
+    --  loger.save("r "..r ); 
+      end;
+
+      while Run do 
+      end;
    end;
 
 
@@ -126,6 +145,21 @@ end;
    -- Функция вызывается терминалом когда с сервера приходит информация по заявке 
    function OnOrder(order)
 
+      message("OnOrder Номер заявки в торговой системе "..tostring(order.order_num));-- NUMBER    
+      
+       -- Если выставлен Buy, запоминает номер заявки в торговой системе
+      if order.trans_id == BuyUniqTransID and BuyOrderNum == 0 then 
+         BuyOrderNum = order.order_num;
+      end;
+      -- Если выставлен Sell, запоминает номер заявки в торговой системе
+      if order.trans_id == SellUniqTransID and SellOrderNum == 0 then 
+         SellOrderNum = order.order_num;
+      end;
+
+
+
+      loger.save("OnOrder"); 
+
       if  bit.band(order.flags,3) == 0 then
  
   
@@ -145,8 +179,7 @@ end;
 
          loger.save("исполнена loger.save(  order.price ".. order.price) 
  
-      
-      
+
       end;
    end
 
@@ -156,6 +189,7 @@ end;
    -- Функция вызывается терминалом когда с сервера приходит информация по сделке
    function OnTrade(trade) 
 
+      loger.save('OnTrade')
    local sell = CheckBit(trade.flags, 1);
 
    if (sell  == 0) then
@@ -198,12 +232,27 @@ end
 
    -- Функция вызывается терминалом когда с сервера приходит информация по сделке
    function OnStopOrder(trade)
+
+
       loger.save(' OnStopOrder' )
+      loger.save("Регистрационный номер стоп-заявки на сервере QUIK "..tostring(trade.order_num));-- NUMBER    
+      if  bit.test(trade.flags, 0)  then
+
+         stopOrder_num = trade.order_num
+         type = "KILL_STOP_ORDER";
+         transId_del_order = trade.trans_id
+         transaction.delete(transId_del_order,stopOrder_num, type)
+      else 
+         loger.save(' return OnStopOrder ' )
+         return;
+       --  riskStop.appruveOrderStop(trade)
+      end;
+
 
       if  bit.band(trade.flags,4)>0
          then
 
-            if not CheckBit(trade.flags, 0) and not CheckBit(trade.flags, 1) then
+            if not bit.test(trade.flags, 0) and not bit.test(trade.flags, 1) then
                loger.save('Заявка 11111 №'..trade.order_num..' appruve Sell Sell Sell')
             
              --  riskStop.appruveOrderStop(trade)
@@ -216,7 +265,7 @@ end
       loger.save(' trade.flags Buy ')
          end
       
-         if not CheckBit(trade.flags, 0) and not CheckBit(trade.flags, 1) then
+         if not bit.test(trade.flags, 0) and not bit.test(trade.flags, 1) then
             loger.save('Заявка 11111 №'..trade.order_num..' appruve')
          end
 
@@ -245,6 +294,7 @@ end
 
 
    function OnTransReply(trans_reply) 
+      loger.save('OnTransReply')
 
    end;
      
@@ -257,14 +307,7 @@ end
    
    function OnStop()
 
-      Run = false;
-      control.deleteTable();
-      signalShowLog.deleteTable();
-      statsPanel.deleteTableStats();
-      panelBids.deleteTable();
-      candleGraff.deleteTableGraff();
-
-      DelAllLabels(setting.tag);
+      Run = false; 
 
    end;
     

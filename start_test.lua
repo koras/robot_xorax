@@ -184,6 +184,7 @@ end;
    -- OnTrade показывает статусы сделок.
    -- Функция вызывается терминалом когда с сервера приходит информация по заявке 
    function OnOrder(order)
+      loger.save("OnOrder "); 
 
       if  bit.band(order.flags,3) == 0 then
  
@@ -214,6 +215,7 @@ end;
 -- OnTransReply -> OnTrade -> OnOrder 
    -- Функция вызывается терминалом когда с сервера приходит информация по сделке
    function OnTrade(trade) 
+      loger.save('OnTrade')
 
    local sell = CheckBit(trade.flags, 1);
 
