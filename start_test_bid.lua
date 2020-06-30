@@ -1,7 +1,7 @@
--- С‚РѕР»СЊРєРѕ РґР»СЏ РёРµСЃС‚РёСЂРѕРІР°РЅРёСЏ
+-- только для иестирования
 
 
-local lua51path = "C:\\Program Files (x86)\\Lua\\5.1\\" -- РїСѓС‚СЊ, РєСѓРґР° СѓСЃС‚Р°РЅРѕРІР»РµРЅ РґРёСЃС‚СЂРёР±СѓС‚РёРІ Lua 5.1 for Windows
+local lua51path = "C:\\Program Files (x86)\\Lua\\5.1\\" -- путь, куда установлен дистрибутив Lua 5.1 for Windows
 
 package.cpath = "./?.dll;./?51.dll;"
         .. lua51path .. "?.dll;"
@@ -93,13 +93,13 @@ end;
  
 
    function main() 
- 
-      local type = "TAKE_PROFIT_STOP_ORDER";
-    --  if setting.sell_take_or_limit == false  then
-          type = "SIMPLE_STOP_ORDER";
-    --  end;
 
-    -- type = "NEW_ORDER";
+      local type = "TAKE_PROFIT_STOP_ORDER";
+      -- это стоп
+          type = "SIMPLE_STOP_ORDER";
+ 
+      -- простая лимитка
+     type = "NEW_ORDER";
      res =  transaction.send("BUY", 40, 1, type, 0);
 
 
@@ -124,34 +124,56 @@ end;
 
 
    
- -- СЃСЂР°Р±Р°С‚С‹РІР°РµС‚ РїСЂРё РѕР±РЅРѕРІР»РµРЅРёРё СЃРІРµС‡Рё
+ -- срабатывает при обновлении свечи
    function updateTick(result)
 
       if  setting.emulation then
-         -- РѕР±СЂР°Р±РѕС‚РєР° РІРѕ РІСЂРµРјСЏ СЌРјСѓР»СЏС†РёРё
+         -- обработка во время эмуляции
       --   market.callSELL_emulation(result);
-         -- СЃСЂР°Р±РѕС‚Р°Р» СЃС‚РѕРї РІ СЂРµР¶РёРјРµ СЌРјСѓР»СЏС†РёРё
+         -- сработал стоп в режиме эмуляции
       --   riskStop.appruveOrderStop(result)
       end;
       
    end;
 
-
+   del = true;
    
    
    -- https://quikluacsharp.ru/quik-qlua/primer-prostogo-torgovogo-dvizhka-simple-engine-qlua-lua/
 
-   -- OnTrade РїРѕРєР°Р·С‹РІР°РµС‚ СЃС‚Р°С‚СѓСЃС‹ СЃРґРµР»РѕРє.
-   -- Р¤СѓРЅРєС†РёСЏ РІС‹Р·С‹РІР°РµС‚СЃСЏ С‚РµСЂРјРёРЅР°Р»РѕРј РєРѕРіРґР° СЃ СЃРµСЂРІРµСЂР° РїСЂРёС…РѕРґРёС‚ РёРЅС„РѕСЂРјР°С†РёСЏ РїРѕ Р·Р°СЏРІРєРµ 
+   -- OnTrade показывает статусы сделок.
+   -- Функция вызывается терминалом когда с сервера приходит информация по заявке 
    function OnOrder(order)
 
-      message("OnOrder РќРѕРјРµСЂ Р·Р°СЏРІРєРё РІ С‚РѕСЂРіРѕРІРѕР№ СЃРёСЃС‚РµРјРµ "..tostring(order.order_num));-- NUMBER    
-      
-       -- Р•СЃР»Рё РІС‹СЃС‚Р°РІР»РµРЅ Buy, Р·Р°РїРѕРјРёРЅР°РµС‚ РЅРѕРјРµСЂ Р·Р°СЏРІРєРё РІ С‚РѕСЂРіРѕРІРѕР№ СЃРёСЃС‚РµРјРµ
+      loger.save("OnOrder Номер заявки в торговой системе "..tostring(order.order_num));-- NUMBER 
+      if  bit.test(order.flags, 0)   then
+
+      if del  and order.trans_id ~= 0 then
+         stopOrder_num = order.order_num
+         type = "KILL_ORDER";
+         transId_del_order = order.trans_id
+         transaction.delete(transId_del_order,stopOrder_num, type)
+         loger.save('  order.order_num '..  order.order_num .. '  order.trans_id '..   order.trans_id)
+
+         del = false;
+      end;
+
+
+      else 
+         loger.save(' return OnStopOrder ' )
+         return;
+       --  riskStop.appruveOrderStop(trade)
+      end;
+
+
+
+
+
+       -- Если выставлен Buy, запоминает номер заявки в торговой системе
       if order.trans_id == BuyUniqTransID and BuyOrderNum == 0 then 
          BuyOrderNum = order.order_num;
       end;
-      -- Р•СЃР»Рё РІС‹СЃС‚Р°РІР»РµРЅ Sell, Р·Р°РїРѕРјРёРЅР°РµС‚ РЅРѕРјРµСЂ Р·Р°СЏРІРєРё РІ С‚РѕСЂРіРѕРІРѕР№ СЃРёСЃС‚РµРјРµ
+      -- Если выставлен Sell, запоминает номер заявки в торговой системе
       if order.trans_id == SellUniqTransID and SellOrderNum == 0 then 
          SellOrderNum = order.order_num;
       end;
@@ -177,7 +199,7 @@ end;
       if bit.band(order.flags,1) + bit.band(order.flags,2) == 0  then 
 
 
-         loger.save("РёСЃРїРѕР»РЅРµРЅР° loger.save(  order.price ".. order.price) 
+         loger.save("исполнена loger.save(  order.price ".. order.price) 
  
 
       end;
@@ -186,7 +208,7 @@ end;
 
 
 -- OnTransReply -> OnTrade -> OnOrder 
-   -- Р¤СѓРЅРєС†РёСЏ РІС‹Р·С‹РІР°РµС‚СЃСЏ С‚РµСЂРјРёРЅР°Р»РѕРј РєРѕРіРґР° СЃ СЃРµСЂРІРµСЂР° РїСЂРёС…РѕРґРёС‚ РёРЅС„РѕСЂРјР°С†РёСЏ РїРѕ СЃРґРµР»РєРµ
+   -- Функция вызывается терминалом когда с сервера приходит информация по сделке
    function OnTrade(trade) 
 
       loger.save('OnTrade')
@@ -197,11 +219,11 @@ end;
    end;
 
    if bit.band(trade.flags, 2) == 0 then
-      -- РёСЃРїРѕР»РЅСЏРµС‚СЃСЏ РїРѕРєСѓРїРєР° РєРѕРЅС‚СЂР°РєС‚Р° 
+      -- исполняется покупка контракта 
 
-      loger.save('OnTrade end 222  -- РёСЃРїРѕР»РЅСЏРµС‚СЃСЏ РїРѕРєСѓРїРєР° РєРѕРЅС‚СЂР°РєС‚Р°')
+      loger.save('OnTrade end 222  -- исполняется покупка контракта')
    else
-      loger.save('OnTrade end 111 -- РёСЃРїРѕР»РЅСЏРµС‚СЃСЏ РїСЂРѕРґР°Р¶Р° РєРѕРЅС‚СЂР°РєС‚Р° ')
+      loger.save('OnTrade end 111 -- исполняется продажа контракта ')
      
    end;
 
@@ -209,7 +231,7 @@ end;
    if not CheckBit(trade.flags, 0) and not CheckBit(trade.flags, 1) then
 
       if bit.band(trade.flags, 2) == 0 then
-         -- РёСЃРїРѕР»РЅСЏРµС‚СЃСЏ РїРѕРєСѓРїРєР° РєРѕРЅС‚СЂР°РєС‚Р° 
+         -- исполняется покупка контракта 
   
       end; 
    end
@@ -218,7 +240,7 @@ end;
    end
 
 
--- Р¤СѓРЅРєС†РёСЏ РІРѕР·РІСЂР°С‰Р°РµС‚ true, РµСЃР»Рё Р±РёС‚ СЃ РЅРѕРјРµСЂРѕРј index С„Р»Р°РіРѕРІ flags СѓСЃС‚Р°РЅРѕРІР»РµРЅ РІ 1
+-- Функция возвращает true, если бит с номером index флагов flags установлен в 1
 function bit_set( flags, index )
    local n=1;
    n=bit.lshift(1, index);
@@ -230,12 +252,12 @@ function bit_set( flags, index )
 end
 
 
-   -- Р¤СѓРЅРєС†РёСЏ РІС‹Р·С‹РІР°РµС‚СЃСЏ С‚РµСЂРјРёРЅР°Р»РѕРј РєРѕРіРґР° СЃ СЃРµСЂРІРµСЂР° РїСЂРёС…РѕРґРёС‚ РёРЅС„РѕСЂРјР°С†РёСЏ РїРѕ СЃРґРµР»РєРµ
+   -- Функция вызывается терминалом когда с сервера приходит информация по сделке
    function OnStopOrder(trade)
 
 
       loger.save(' OnStopOrder' )
-      loger.save("Р РµРіРёСЃС‚СЂР°С†РёРѕРЅРЅС‹Р№ РЅРѕРјРµСЂ СЃС‚РѕРї-Р·Р°СЏРІРєРё РЅР° СЃРµСЂРІРµСЂРµ QUIK "..tostring(trade.order_num));-- NUMBER    
+      loger.save("Регистрационный номер стоп-заявки на сервере QUIK "..tostring(trade.order_num));-- NUMBER    
       if  bit.test(trade.flags, 0)  then
 
          stopOrder_num = trade.order_num
@@ -253,20 +275,20 @@ end
          then
 
             if not bit.test(trade.flags, 0) and not bit.test(trade.flags, 1) then
-               loger.save('Р—Р°СЏРІРєР° 11111 в„–'..trade.order_num..' appruve Sell Sell Sell')
+               loger.save('Заявка 11111 №'..trade.order_num..' appruve Sell Sell Sell')
             
              --  riskStop.appruveOrderStop(trade)
             end
 
-         -- Р·Р°СЏРІРєР° РЅР° РїСЂРѕРґР°Р¶Сѓ
+         -- заявка на продажу
       loger.save(' trade.flags Sell ')
          else
-         -- Р·Р°СЏРІРєР° РЅР° РїРѕРєСѓРїРєСѓ
+         -- заявка на покупку
       loger.save(' trade.flags Buy ')
          end
       
          if not bit.test(trade.flags, 0) and not bit.test(trade.flags, 1) then
-            loger.save('Р—Р°СЏРІРєР° 11111 в„–'..trade.order_num..' appruve')
+            loger.save('Заявка 11111 №'..trade.order_num..' appruve')
          end
 
    end
@@ -276,20 +298,20 @@ end
 
    
 
-      -- Р’С‹Р·С‹РІР°РµС‚СЃСЏ РґРІРёР¶РєРѕРј РїСЂРё РїРѕР»РЅРѕРј, РёР»Рё С‡Р°СЃС‚РёС‡РЅРѕРј РРЎРџРћР›РќР•РќРР Р—РђРЇР’РљР
+      -- Вызывается движком при полном, или частичном ИСПОЛНЕНИИ ЗАЯВКИ
    function SE_OnExecutionOrder(order)
-      -- Р—РґРµСЃСЊ Р’Р°С€ РєРѕРґ РґР»СЏ РґРµР№СЃС‚РІРёР№ РїСЂРё РїРѕР»РЅРѕРј, РёР»Рё С‡Р°СЃС‚РёС‡РЅРѕРј РёСЃРїРѕР»РЅРµРЅРёРё Р·Р°СЏРІРєРё
+      -- Здесь Ваш код для действий при полном, или частичном исполнении заявки
       -- ...
-      -- Р’С‹РІРѕРґРёС‚ СЃРѕРѕР±С‰РµРЅРёРµ
-      loger.save('SE_OnExecutionOrder() Р‘РђР›РђРќРЎ Р·Р°СЏРІРєРё в„–'..order.order_num..' РёР·РјРµРЅРёР»СЃСЏ СЃ '..(order.qty - (order.last_execution_count or 0))..' РЅР° '..order.balance)
+      -- Выводит сообщение
+      loger.save('SE_OnExecutionOrder() БАЛАНС заявки №'..order.order_num..' изменился с '..(order.qty - (order.last_execution_count or 0))..' на '..order.balance)
    end
 
-   -- СѓСЃРїРµС€РЅРѕРµ Р’Р«РџРћР›РќР•РќРР РўР РђРќР—РђРљР¦РР
+   -- успешное ВЫПОЛНЕНИИ ТРАНЗАКЦИИ
    function SE_OnTransOK(trans)
-      -- Р—РґРµСЃСЊ Р’Р°С€ РєРѕРґ РґР»СЏ РґРµР№СЃС‚РІРёР№ РїСЂРё СѓСЃРїРµС€РЅРѕРј РІС‹РїРѕР»РЅРµРЅРёРё С‚СЂР°РЅР·Р°РєС†РёРё
+      -- Здесь Ваш код для действий при успешном выполнении транзакции
       -- ...
-      -- Р’С‹РІРѕРґРёС‚ СЃРѕРѕР±С‰РµРЅРёРµ
-      loger.save('SE_OnTransOK() РўСЂР°РЅР·Р°РєС†РёСЏ в„–'..trans.trans_id..' РЈРЎРџР•РЁРќРћ РІС‹РїРѕР»РЅРµРЅР°')
+      -- Выводит сообщение
+      loger.save('SE_OnTransOK() Транзакция №'..trans.trans_id..' УСПЕШНО выполнена')
    end
 
 
@@ -312,11 +334,14 @@ end
    end;
     
 
-   -- Р¤СѓРЅРєС†РёСЏ РїСЂРѕРІРµСЂСЏРµС‚ СѓСЃС‚Р°РЅРѕРІР»РµРЅ Р±РёС‚, РёР»Рё РЅРµС‚ (РІРѕР·РІСЂР°С‰Р°РµС‚ true, РёР»Рё false)
+   -- Функция проверяет установлен бит, или нет (возвращает true, или false)
   function CheckBit(flags, _bit)
-   -- РџСЂРѕРІРµСЂСЏРµС‚, С‡С‚Рѕ РїРµСЂРµРґР°РЅРЅС‹Рµ Р°СЂРіСѓРјРµРЅС‚С‹ СЏРІР»СЏСЋС‚СЃСЏ С‡РёСЃР»Р°РјРё
-   if type(flags) ~= "number" then loger.save("РћС€РёР±РєР°!!! Checkbit: 1-Р№ Р°СЂРіСѓРјРµРЅС‚ РЅРµ С‡РёСЃР»Рѕ!") end
-   if type(_bit) ~= "number" then loger.save("РћС€РёР±РєР°!!! Checkbit: 2-Р№ Р°СЂРіСѓРјРµРЅС‚ РЅРµ С‡РёСЃР»Рѕ!") end
+
+
+   
+   -- Проверяет, что переданные аргументы являются числами
+   if type(flags) ~= "number" then loger.save("Ошибка!!! Checkbit: 1-й аргумент не число!") end
+   if type(_bit) ~= "number" then loger.save("Ошибка!!! Checkbit: 2-й аргумент не число!") end
  
    if _bit == 0 then _bit = 0x1
    elseif _bit == 1 then _bit = 0x2
