@@ -93,29 +93,20 @@ end;
  
 
    function main() 
-
       local type = "TAKE_PROFIT_STOP_ORDER";
       -- это стоп
           type = "SIMPLE_STOP_ORDER";
- 
       -- простая лимитка
      type = "NEW_ORDER";
      res =  transaction.send("BUY", 40, 1, type, 0);
-
-
       loger.save("res 1 " ..res); 
-
       n = getNumberOf("orders")
       order={}
    --   message("total ".. tostring(n) .." of all orders", 1)
       for i=0,n-1 do
           order = getItem("orders", i)
-        r =   "order: num=" ..    tostring(order["order_num"]) .. " qty="..          tostring(order["qty"]) .. " value=" ..           tostring(order["value"])
-
-          
-    --  loger.save("r "..r ); 
+        r = "order: num=" ..  tostring(order["order_num"]) .. " qty=".. tostring(order["qty"]) .. " value=" ..  tostring(order["value"])
       end;
-
       while Run do 
       end;
    end;
@@ -126,7 +117,6 @@ end;
    
  -- срабатывает при обновлении свечи
    function updateTick(result)
-
       if  setting.emulation then
          -- обработка во время эмуляции
       --   market.callSELL_emulation(result);

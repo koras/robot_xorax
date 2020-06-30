@@ -126,7 +126,7 @@ function sellTransaction(order, countContracts)
 
     local type = "TAKE_PROFIT_STOP_ORDER";
     if setting.sell_take_or_limit == false  then
-        type = "SIMPLE_STOP_ORDER";
+        type = "NEW_ORDER";
     end;
 
     local  trans_id_sell  =  getRand();
@@ -496,12 +496,10 @@ function callBUY(price_callBUY ,datetime)
                 data.emulation=  setting.emulation;
                 data.contract=  setting.use_contract;
                 data.buy_contract= price_callBUYl; -- стоимость продажи
-            
-            
+
             setting.sellTable[(#setting.sellTable+1)] = data;
             -- Выставили контракт на покупку
-            signalShowLog.addSignal(datetime, 23, false, price_callBUYl); 
-            signalShowLog.addSignal(datetime, 23, false, setting.use_contract); 
+            signalShowLog.addSignal(datetime, 23, false, price_callBUYl);  
     panelBids.show();
     control.use_contract_limit();
 end 

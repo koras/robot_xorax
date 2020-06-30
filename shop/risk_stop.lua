@@ -330,10 +330,10 @@ function backStop()
 
                     -- стоп больше не используется
                     stopClass.array_stop[s].work = 3;
-
                     local order_num = tostring(stopClass.array_stop[s].order_num);
                     local trans_id = tostring(stopClass.array_stop[s].trans_id);
                     local order_type = tostring(stopClass.array_stop[s].order_type);
+
                     transaction.delete(trans_id, order_num, order_type);
                 end;
             end;
@@ -401,19 +401,14 @@ end;
 
 function updateOrderNumber(order) 
     if usestop==false then return; end;
-
     for stopItter = 1 ,  #stopClass.array_stop do 
- 
-
         if order.trans_id == stopClass.array_stop[stopItter].trans_id and stopClass.array_stop[stopItter].work == 0 then
             stopClass.array_stop[stopItter].work = 1;
             stopClass.array_stop[stopItter].order_num = order.order_num;
+            stopClass.array_stop[stopItter].order_type = "TAKE_PROFIT_STOP_ORDER";
         end;
     end;
 end;
-
-
- 
 
 
 function getRand()

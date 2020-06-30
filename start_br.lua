@@ -150,11 +150,6 @@ basis = 9
       getPrice();
       control.show(); 
 
- 
- 
-
-
-
       local Price = false;
           
  
@@ -175,8 +170,6 @@ basis = 9
          update();
          --  statsPanel.stats();
            fractalSignal.last();
-
-          
 
           if setting.status  then  
             tradeSignal.getSignal(setting.tag, eventTranc);
@@ -208,15 +201,13 @@ basis = 9
    -- OnTrade показывает статусы сделок.
    -- Функция вызывается терминалом когда с сервера приходит информация по заявке 
    function OnOrder(order)
+      -- только для лимитных заявок
 
       -- присваиваем номера заявкам
       market.saleExecution(order);
 
       if  bit.band(order.flags,3) == 0 then
- 
-  
          if bit.band(order.flags, 2) == 0 then
-
          else
             
             deleteBids.transCallback(order);

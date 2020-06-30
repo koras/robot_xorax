@@ -155,4 +155,4 @@ setting.tag = "my_br";
    setting.profit_add_candle =  0.0; 
 -- открыта или закрыта панель покупок
  
-  
+setting.comment_quik = 'Robot XoraX';
