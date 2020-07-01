@@ -95,10 +95,7 @@ local function set(Operation, Price , datetime, count, textInfo)
            label_params['FONT_HEIGHT'] = 14;
           label_params['HINT'] = 'Price ' .. Price .. " \n "..textInfo
 
-
-        
-      -- loger.save(Operation.. '  ' .. '  '..  Price .. " ������� ��� ������� ���� � ����� - "..     label_params['DATE'] ..'   '..label_params['TIME'].. '  '.. label_params['IMAGE_PATH'] )
-       -- loger.save(  datetime.hour ..'   '..datetime.min.. '  '.. '00' )
+ 
        return   AddLabel(setting.tag, label_params);
 end
 

@@ -11,19 +11,13 @@ setting.ACCOUNT =  '4105F8Y';
 setting.CLASS_CODE =  "SPBFUT";  
 
 -- код бумаги. Название бумаги разная от месяца к месяцу 
-setting.SEC_CODE =  "BRN0" ; 
+setting.SEC_CODE =  "BRQ0" ; 
 
 -- тег графика, необходимо указывать в том графике из которого робот будет получать данные. 
 -- график нужен в минутном таймфрейме(обязательно)
 setting.tag = "my_br";  
+  
  
-
-
-
-
-
-
-
 -- минимальная прибыль
    setting.profit_range =  0.02; 
 
@@ -43,7 +37,7 @@ setting.tag = "my_br";
    setting.developer = false;    
 
    -- лимит количества заявок на сессию работы робота.
-   setting.LIMIT_BID = 10;
+   setting.LIMIT_BID = 1;
    
    -- сколько использовать контрактов по умолчанию в режиме скальпинга
    setting.use_contract = 1;
@@ -161,4 +155,4 @@ setting.tag = "my_br";
    setting.profit_add_candle =  0.0; 
 -- открыта или закрыта панель покупок
  
-  
+setting.comment_quik = 'Robot XoraX';

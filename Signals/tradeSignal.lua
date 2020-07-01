@@ -99,18 +99,13 @@ local function  calculatePrice( price,datetime)
     if oldPrice + rangeLocal < price   then
         if(countingTicsVolume > CRITICAL_VOLUME)  then
             --  цена и объём  растёт   
-      --  loger.save((oldPrice + rangeLocal) .. "   цена и объём  растёт  "..price)
         collbackFunc( price, datetime, countingTicsVolume,   'buy');
         end
     end
      
 
     -- цена упала
-    if oldPrice - rangeLocal > price then
-      --  loger.save((oldPrice + rangeLocal) .. "   цена упала "..price)
-     --   oldPrice = price;
-
-     --   loger.save(countingTicsVolume.. "  countingTicsVolume " .. CRITICAL_VOLUME)
+    if oldPrice - rangeLocal > price then 
         if(countingTicsVolume > CRITICAL_VOLUME) then
             --  цена  и объём падает
         collbackFunc( price, datetime,  countingTicsVolume, 'sell' );

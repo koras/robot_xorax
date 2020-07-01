@@ -128,8 +128,7 @@ basis = 9
 
    function  update()
       control.stats();
-      market.setLitmitBid();
-      -- riskStop.appruveOrderStop(trade)
+      market.setLitmitBid(); 
    end
 
 
@@ -151,11 +150,6 @@ basis = 9
       getPrice();
       control.show(); 
 
- 
- 
-
-
-
       local Price = false;
           
  
@@ -170,14 +164,12 @@ basis = 9
             ['trans_id']= "123123"
           };
 
-    --    riskStop.appruveOrderStop(testOrder);
+          
                -- сработал стоп, проверка 
 
          update();
          --  statsPanel.stats();
            fractalSignal.last();
-
-          
 
           if setting.status  then  
             tradeSignal.getSignal(setting.tag, eventTranc);
@@ -194,6 +186,8 @@ basis = 9
          -- обработка во время эмуляции
          market.callSELL_emulation(result);
          -- сработал стоп в режиме эмуляции
+
+        -- loger.save('appruveOrderStop  updateTickupdateTickupdateTickupdateTick ' )
          riskStop.appruveOrderStop(result)
       end;
       
@@ -207,17 +201,15 @@ basis = 9
    -- OnTrade показывает статусы сделок.
    -- Функция вызывается терминалом когда с сервера приходит информация по заявке 
    function OnOrder(order)
+      -- только для лимитных заявок
 
       -- присваиваем номера заявкам
       market.saleExecution(order);
 
       if  bit.band(order.flags,3) == 0 then
- 
-  
          if bit.band(order.flags, 2) == 0 then
-
          else
-           loger.save("SELL SELL SELL SELL SELL "); 
+            
             deleteBids.transCallback(order);
          end;
 
@@ -227,8 +219,7 @@ basis = 9
       
       if bit.band(order.flags,1) + bit.band(order.flags,2) == 0  then 
  
-
-         loger.save('sellContract 2 ')
+         
          market.sellContract(order);
       
       
@@ -249,10 +240,8 @@ basis = 9
 
    if bit.band(trade.flags, 2) == 0 then
       -- исполняется покупка контракта 
-      market.buyContract(trade);
-      loger.save('OnTrade end 222  -- исполняется покупка контракта')
-   else
-      loger.save('sellContract 1 ')
+      market.buyContract(trade); 
+   else 
        market.sellContract(trade);
    end;
 
@@ -261,17 +250,12 @@ basis = 9
 
       if bit.band(trade.flags, 2) == 0 then
          -- исполняется покупка контракта 
-         market.buyContract(trade);
-         loger.save('OnTrade end  -- исполняется покупка контракта')
-      else
-         loger.save('OnTrade end  -- исполняется продажа контракта 1')
-         
-         loger.save('sellContract 3 ')
+         market.buyContract(trade); 
+      else 
+           
           market.sellContract(trade);
       end;
-
-      loger.save('trade.flags -- '..bit.band(trade.flags, 2))
-      loger.save('trade.flags ++ '..tostring(trade.flags))
+ 
 
    end
     
@@ -305,24 +289,22 @@ end
          then
 
             if not CheckBit(trade.flags, 0) and not CheckBit(trade.flags, 1) then
-               loger.save('Заявка 11111  '..trade.order_num..' appruve Sell Sell Sell')
-               
-               loger.save('sellContract 4 ')
+       
             --   market.sellContract(trade);
                -- когда сработал стоп
+
+               loger.save(' -- когда сработал стоп run stop - ' )
                riskStop.appruveOrderStop(trade)
                
             end
 
-
-            loger.save(' trade.flags Sell ')
+ 
          else
-         -- заявка на покупку
-      loger.save(' trade.flags Buy ')
+         -- заявка на покупку 
          end
       
          if not CheckBit(trade.flags, 0) and not CheckBit(trade.flags, 1) then
-       
+              
             riskStop.updateOrderNumber(trade)
          end
 

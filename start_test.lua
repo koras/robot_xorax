@@ -33,7 +33,9 @@ dofile(getScriptPath() .. "\\setting\\engine.lua");
  
  
 local transaction = dofile(getScriptPath() .. "\\shop\\transaction.lua");
-
+local vecm = dofile(getScriptPath() .. "\\modules\\vector.lua");
+local v3 = dofile(getScriptPath() .. "\\modules\\Vec3.lua");
+ 
 local candles = dofile(getScriptPath() .. "\\Signals\\candle.lua");
 local tradeSignal = dofile(getScriptPath() .. "\\Signals\\tradeSignal.lua"); 
 local fractalSignal = dofile(getScriptPath() .. "\\Signals\\fractal.lua"); 
@@ -47,7 +49,7 @@ local candleGraff = dofile(getScriptPath() .. "\\interface\\candleGraff.lua");
 
 --local interfaceBids = dofile(getScriptPath() .. "\\interface\\bids.lua");
 local signalShowLog = dofile(getScriptPath() .. "\\interface\\signalShowLog.lua");
-local FRACTALS = dofile(getScriptPath() .. "\\LuaIndicators\\FRACTALS.lua"); 
+
 local market = dofile(getScriptPath() .. "\\shop\\market.lua");
 local deleteBids = dofile(getScriptPath() .. "\\shop\\deleteBids.lua");
 local panelBids = dofile(getScriptPath() .. "\\interface\\bids.lua");
@@ -103,15 +105,64 @@ end;
    end;
 
 
-   function main() 
+   function angle(x1, y1, z1, x2, y2, z2)
+             return math.deg(math.acos((x1*x2+y1*y2) / (((x1^2+y1^2)^0.5) * ((x2^2+y2^2)^0.5)))) 
+    end
 
-      candles.getSignal( updateTick);
-    
-      trans();
-      while Run do  
- 
-      end;  
+
+    function getAngle(Ax1, Ay1, Bx2, By2, Cx1, Cy2)
+        
+    end;
+
+
+   function main() 
+      -- например
+
+      
+      local a = {}
+      local b = {}
+      local c = {}
+      local AB = {}
+      local AC = {}
+
+      a.x = 1133; 
+      a.y = 4135;
+      b.x = 1504 ;
+      b.y = 4100;
+
+       
+
+      c.x = b.x;
+      c.y = a.y;
+
+      -- вычисляем вектор угла AB
+      AB.x = (b.x - a.x) ;
+      AB.y = (b.y - a.y) ;
+
+      -- вычисляем вектор угла AC
+      AC.x = (c.x - a.x) ;
+      AC.y = (c.y - a.y) ;
+
+      local x3  = (b.x - a.x);
+      local y3  = (b.y - a.y);
+
+
+    local  res =  math.acos( (x3*x3+y3*0) / ( ((x3^2+y3^2)^0.5) * ((x3^2+0^2)^0.5))); 
+
+    message("result = " ..   math.deg(res) )
+
+
+  --    local ans = math.acos(a:dot(b) / (a:len() * b:len()))
+  --    message(math.deg(ans))
+
+  --   local result = angle(x1, y1, z1, x2, y2, z2);
+    --  message("result = " .. result);
+
    end;
+
+
+
+
    
  -- срабатывает при обновлении свечи
    function updateTick(result)
@@ -133,6 +184,7 @@ end;
    -- OnTrade показывает статусы сделок.
    -- Функция вызывается терминалом когда с сервера приходит информация по заявке 
    function OnOrder(order)
+      loger.save("OnOrder "); 
 
       if  bit.band(order.flags,3) == 0 then
  
@@ -163,6 +215,7 @@ end;
 -- OnTransReply -> OnTrade -> OnOrder 
    -- Функция вызывается терминалом когда с сервера приходит информация по сделке
    function OnTrade(trade) 
+      loger.save('OnTrade')
 
    local sell = CheckBit(trade.flags, 1);
 
@@ -184,16 +237,8 @@ end;
 
       if bit.band(trade.flags, 2) == 0 then
          -- исполняется покупка контракта 
-   
-         loger.save('OnTrade end  -- исполняется покупка контракта')
-      else
-         loger.save('OnTrade end  -- исполняется продажа контракта 1')
-
-      end;
-
-      loger.save('trade.flags -- '..bit.band(trade.flags, 2))
-      loger.save('trade.flags ++ '..tostring(trade.flags))
-
+  
+      end; 
    end
     
        
