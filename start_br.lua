@@ -218,7 +218,7 @@ basis = 9
       end;
       
       if bit.band(order.flags,1) + bit.band(order.flags,2) == 0  then 
-      --   loger.save('OnOrder sellContract  присваиваем номера заявкам 1' )
+         loger.save('OnOrder sellContract  присваиваем номера заявкам 1' )
          market.sellContract(order);
       end;
    end

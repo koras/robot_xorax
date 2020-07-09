@@ -16,11 +16,11 @@ usestop = true;
 -- при срабатывании стопа, должны убираться контракты которые находятся на самом вверху
 -- и закрываться позиции по покупке. Более такие позиции не учитываются в логике
 function update_stop()
+    loger.save('========== перевыставляем стопы =================');
     if usestop==false then return; end;
     
     -- можно ли использовать стопы
-    if stopClass.use_stop   then 
-        loger.save(' перевыставляем стопы' )
+    if stopClass.use_stop   then  
         -- получаем заявки для ордеров
         -- определяем максимальную и минимальную цену покупки
         getOrdersForBid();
@@ -155,7 +155,7 @@ function getOrdersForBid()
 end;
 
 
-
+-- сколько стопов уже
 
 -- Ставим новый стоп, но если сработал стоп, увеличиваем стоп на количество срабатываемых стопов и уменьшаем количество стопов
 function generationCollectionStop() 
@@ -329,14 +329,17 @@ function backStop()
             else
 
                 if  stopClass.array_stop[s].work == 1 or stopClass.array_stop[s].work == 2 then  
-                    -- стоп больше не используется
-                    stopClass.array_stop[s].work = 3;
+                    -- стоп больше не используется 
                     local order_num = tostring(stopClass.array_stop[s].order_num);
                     local trans_id = tostring(stopClass.array_stop[s].trans_id);
                     local order_type = tostring(stopClass.array_stop[s].order_type);
 
                     loger.save("-- снимаем стоп заявку   " .. #stopClass.array_stop .. " work = "..stopClass.array_stop[s].work.."  order_num = ".. order_num .. ' trans_id = '..trans_id );
-                    transaction.delete(trans_id, order_num, order_type);
+                    if order_num ~= 0 then 
+                        loger.save("-- delete  " );
+                        stopClass.array_stop[s].work = 3;
+                        transaction.delete(trans_id, order_num, order_type);        
+                    end;
                 end;
             end;
         end;
@@ -365,6 +368,7 @@ function sendTransStop(countContract, countPrice )
             -- work = 0 - отправляем на сервер
             -- work = 1 - заявка выставлена
             -- work = 2 - заявка снята пл какой либо причине
+            -- work = 3 - заявка снята пл какой либо причине
             dataParam.work = 1;
             dataParam.order_num = 0;
              
@@ -401,13 +405,22 @@ end;
 -- вызывается в OnStopOrder
 
 function updateOrderNumber(order) 
+
     if usestop==false then return; end;
     for stopItter = 1 ,  #stopClass.array_stop do 
-        if order.trans_id == stopClass.array_stop[stopItter].trans_id and stopClass.array_stop[stopItter].work == 0 then
-            stopClass.array_stop[stopItter].work = 1;
+
+        loger.save("updateOrderNumber  обновление заявки по которой пришла информация "..   #stopClass.array_stop .. 
+        '  order.order_num= '.. order.order_num..
+        '  work = '.. topClass.array_stop[stopItter].work..
+        '  trans_id = '.. topClass.array_stop[stopItter].trans_id
+    );
+
+        if order.trans_id == stopClass.array_stop[stopItter].trans_id and stopClass.array_stop[stopItter].work == 1 then
+            stopClass.array_stop[stopItter].work = 2;
             stopClass.array_stop[stopItter].order_num = order.order_num;
             stopClass.array_stop[stopItter].order_type = "TAKE_PROFIT_STOP_ORDER";
         end;
+        
     end;
 end;
 
