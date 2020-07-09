@@ -37,8 +37,7 @@ local function send(typeMarket, price, quantity , type, trans_id_buy )
 	
 
 	 --	 if type == "TAKE_PROFIT_AND_STOP_LIMIT_ORDER" then 
-	 if type == "TAKE_PROFIT_STOP_ORDER" then 
-
+	 if type == "TAKE_PROFIT_STOP_ORDER" then  
 		
 		Transaction.STOP_ORDER_KIND = type;
 		Transaction.ACTION = "NEW_STOP_ORDER"; 
@@ -102,12 +101,7 @@ function delete(transId_del_order,stopOrder_num, type)
 		Transaction.ACTION = "KILL_ORDER";
 	else
 		Transaction.ACTION = "KILL_ORDER";
-	
-	
 	end
-
-
-
 
 	Transaction.CLASSCODE  		= setting.CLASS_CODE;
 	Transaction.SECCODE    		= setting.SEC_CODE;
@@ -118,11 +112,7 @@ function delete(transId_del_order,stopOrder_num, type)
 	Transaction.ORDER_KEY  		= tostring(stopOrder_num);
 	Transaction.TYPE = "L";
 
-	loger.save("Transaction delete delete delete delete "..tostring(transId_del_order))
-	loger.save("Transaction.ACTION "..tostring(Transaction.ACTION))
-	loger.save("Transaction  transId_del_order "..tostring( transId_del_order))
-	loger.save("Transaction  stopOrder_num "..tostring( stopOrder_num))
-	loger.save("Transaction  type "..tostring( type))
+	loger.save("Delete :  " .. tostring(transId_del_order) .. "  Transaction.ACTION = "..tostring(Transaction.ACTION))
 
 	local res = sendTransaction(Transaction)
 	if string.len(res) ~= 0 then

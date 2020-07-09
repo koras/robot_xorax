@@ -218,11 +218,8 @@ basis = 9
       end;
       
       if bit.band(order.flags,1) + bit.band(order.flags,2) == 0  then 
- 
-         
+      --   loger.save('OnOrder sellContract  присваиваем номера заявкам 1' )
          market.sellContract(order);
-      
-      
       end;
    end
 
@@ -231,7 +228,6 @@ basis = 9
 -- OnTransReply -> OnTrade -> OnOrder 
    -- Функция вызывается терминалом когда с сервера приходит информация по сделке
    function OnTrade(trade) 
-
    local sell = CheckBit(trade.flags, 1);
 
    if (sell  == 0) then
@@ -242,6 +238,8 @@ basis = 9
       -- исполняется покупка контракта 
       market.buyContract(trade); 
    else 
+
+      loger.save('OnTrade исполняется покупка контракта 1' )
        market.sellContract(trade);
    end;
 
@@ -252,7 +250,7 @@ basis = 9
          -- исполняется покупка контракта 
          market.buyContract(trade); 
       else 
-           
+           loger.save('OnTrade исполняется покупка контракта 2' )
           market.sellContract(trade);
       end;
  
@@ -276,8 +274,7 @@ end
 
 
    -- Функция вызывается терминалом когда с сервера приходит информация по сделке
-   function OnStopOrder(trade)
-      loger.save(' OnStopOrder - ' )
+   function OnStopOrder(trade) 
       -- заявку выставили и приходит коллбек выставленой заявки 
       -- это просто заявка а не лимитка
       market.saleExecution(trade);
@@ -289,11 +286,8 @@ end
          then
 
             if not CheckBit(trade.flags, 0) and not CheckBit(trade.flags, 1) then
-       
-            --   market.sellContract(trade);
-               -- когда сработал стоп
 
-               loger.save(' -- когда сработал стоп run stop - ' )
+               loger.save(' -- когда сработал стоп run stop -  ' )
                riskStop.appruveOrderStop(trade)
                
             end

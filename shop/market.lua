@@ -98,7 +98,7 @@ function buyContract(result)
     -- сперва находим контракт который купили и ставим статус что мы купили контракт
     if #setting.sellTable > 0 then 
     for contract = 1 ,  #setting.sellTable do 
-    loger.save(setting.sellTable[contract].type);  
+    -- loger.save(setting.sellTable[contract].type);  
             if  setting.sellTable[contract].type == 'buy' and  
             setting.sellTable[contract].executed == false  and 
             setting.sellTable[contract].trans_id == result.trans_id  then
@@ -107,8 +107,7 @@ function buyContract(result)
                 setting.sellTable[contract].executed = true;
                 -- выставляем на продажу контракт.
                 sellTransaction(result, setting.sellTable[contract]);
-              
-                risk_stop.update_stop();
+               
                 return;
             end;
         end;
@@ -237,6 +236,7 @@ function sellContract(result)
             end;
         end;
     end;
+    loger.save("вызов update_stop 1 " );
     risk_stop.update_stop();
 end;
 
@@ -275,7 +275,8 @@ function deleteBuyCost(result, saleContract)
                     -- calculateProfit(setting.sellTable[sellT]);
                     signalShowLog.addSignal(setting.sellTable[sellT].datetime, 8, false, result.price); 
                     -- надо удалить контракт по которому мы покупали
-                    risk_stop.update_stop();
+                    loger.save("вызов update_stop 2 " );
+                    risk_stop.update_stop(); 
                     panelBids.show();
             end;
         end;
@@ -344,6 +345,7 @@ function callBUY_emulation(price_callBUY_emulation ,datetime)
  
             sellTransaction_emulation(data) 
             panelBids.show();
+            loger.save("вызов update_stop 3" );
             risk_stop.update_stop();
             control.use_contract_limit();
 end 
@@ -408,7 +410,8 @@ function callSELL_emulation(result)
                         -- надо удалить контракт по которому мы покупали 
                      --   panelBids.show(); 
                      control.use_contract_limit();  
-                     deleteBuy_emulation(setting.sellTable[sellT])
+                     deleteBuy_emulation(setting.sellTable[sellT]);
+                     loger.save("вызов update_stop 4" );
                      risk_stop.update_stop();
                        
                 end;

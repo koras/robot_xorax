@@ -750,7 +750,7 @@ function event_callback_message_control (t_control, msg, par1, par2)
 	-- количество контрактов которые добавляет трейдер
 	if par1 == 31 and par2 == 2  and  msg == 1 then
 			stopClass.contract_add = stopClass.contract_add + 1; 
-			update_stop();
+			riskStop.update_stop();
 			use_contract_limit();
 			show_info_stop ()
 			return;
@@ -758,7 +758,7 @@ function event_callback_message_control (t_control, msg, par1, par2)
 	if par1 == 31 and par2 == 3  and  msg == 1 then
 		if stopClass.contract_add > 0 then
 			stopClass.contract_add = stopClass.contract_add - 1;
-			update_stop();
+			riskStop.update_stop();
 			use_contract_limit();
 			show_info_stop ()
 			end; 
@@ -768,7 +768,7 @@ function event_callback_message_control (t_control, msg, par1, par2)
 	-- количество стопов
 	if par1 == 32 and par2 == 2  and  msg == 1 then
 		stopClass.count_stop  = stopClass.count_stop  + 1; 
-		update_stop();
+		riskStop.update_stop();
 		use_contract_limit();
 		show_info_stop ()
 		return;
@@ -776,7 +776,7 @@ function event_callback_message_control (t_control, msg, par1, par2)
 	if par1 == 32 and par2 == 3  and  msg == 1 then
 		if stopClass.count_stop > 1 then
 			stopClass.count_stop = stopClass.count_stop  - 1;
-			update_stop();
+			riskStop.update_stop();
 			use_contract_limit();
 			show_info_stop ()
 			end; 
@@ -806,8 +806,7 @@ function event_callback_message_control (t_control, msg, par1, par2)
 		else
 			stopClass.show_panel = true; 
 		end;
-		show_stop();
-	--	update_stop();
+		show_stop(); 
 		use_contract_limit(); 
 		
 		return;
@@ -820,8 +819,7 @@ function event_callback_message_control (t_control, msg, par1, par2)
 			stopClass.show_panel_bue_sell = false; 
 		else
 			stopClass.show_panel_bue_sell = true; 
-		end; 
-	--	update_stop();
+		end;  
 		use_contract_limit(); 
 		show_panel_bue_sell();
 		
@@ -835,7 +833,7 @@ function event_callback_message_control (t_control, msg, par1, par2)
 	-- растояние до максимальной покупки, меняется только при максимальной покупке
 	if par1 == 33 and par2 == 2  and  msg == 1 then
 		stopClass.spred  = stopClass.spred  + stopClass.spred_limit; 
-		update_stop();
+		riskStop.update_stop();
 		use_contract_limit();
 		show_info_stop ()
 		return;
@@ -843,7 +841,7 @@ function event_callback_message_control (t_control, msg, par1, par2)
 	if par1 == 33 and par2 == 3  and  msg == 1 then
 		if stopClass.spred >  stopClass.spred_default then
 			stopClass.spred = stopClass.spred  - stopClass.spred_limit;
-			update_stop();
+			riskStop.update_stop();
 			use_contract_limit();
 			show_info_stop ()
 			end; 
@@ -854,7 +852,7 @@ function event_callback_message_control (t_control, msg, par1, par2)
 	if par1 == 34 and par2 == 2  and  msg == 1 then
 		if stopClass.show_panel == false then return end;
 			stopClass.spred_range  = stopClass.spred_range  + stopClass.spred_range_limit; 
-			update_stop();
+			riskStop.update_stop();
 			use_contract_limit();
 			show_info_stop ()
 		return;
@@ -864,7 +862,7 @@ function event_callback_message_control (t_control, msg, par1, par2)
 		if stopClass.show_panel == false then return end;
 		if stopClass.spred_range >  stopClass.spred_range_default then 
 			stopClass.spred_range = stopClass.spred_range  - stopClass.spred_range_limit;
-			update_stop();
+			riskStop.update_stop();
 			 
 			use_contract_limit();
 			show_info_stop ()
