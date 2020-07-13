@@ -40,7 +40,7 @@ function calculateMaxStopStart()
     if usestop==false then return; end;
     -- зависимость контрактов
 
-    stopClass.spred =  0.3;
+    stopClass.spred =  0.05;
   --  stopClass.spred = setting.LIMIT_BID / setting.use_contract * setting.profit_range ;
   --  stopClass.spred = setting.LIMIT_BID * setting.SPRED_LONG_TREND_DOWN / setting.use_contract  + stopClass.spred + stopClass.spred_range ;
  end;
@@ -49,9 +49,9 @@ function calculateMaxStopStart()
  
 function setStopDefault()
     if usestop==false then return; end;
-   -- stopClass.price_max = 0;
+    
     stopClass.price_min = 10000000;
-    stopClass.spred = 0.03;
+    stopClass.spred = 0.01;
   --  stopClass.spred_range = 0.1;
     stopClass.contract_work = 0;
 end;
@@ -254,18 +254,18 @@ end;
 
 
 function  appruveOrderStopEmulation(order) 
-    if stopClass.use_stop and  setting.emulation then 
 
-        
+
+    if stopClass.use_stop and  setting.emulation and stopClass.array_stop.price ~= nil then 
         -- помечаем заявку как исполненной
-        for stopItter = 1 ,  #stopClass.array_stop do 
-        
+   
                 -- в режиме эмуляции сработал стоп, здесь смотрим цену
             if order.close <= stopClass.array_stop.price and stopClass.array_stop.work == 1 or
                 order.close <= stopClass.array_stop.price and stopClass.array_stop.work == 2  then 
 
                 stopClass.array_stop.work = 3;
                 signalShowLog.addSignal(setting.datetime, 31, false, stopClass.array_stop.price);  
+                
                 
                     -- снимаем стоп
                 DelLabel(setting.tag, stopClass.array_stop.label);
@@ -275,7 +275,6 @@ function  appruveOrderStopEmulation(order)
                 removeOldOrderSell();
                 panelBids.show();
             end;
-        end;  
     end; 
 end;
 
@@ -285,10 +284,8 @@ end;
 -- когда срабатывает стоп, передвижение стопов запрещено
 function appruveOrderStop(order)  
 
-    if stopClass.use_stop then 
         -- помечаем заявку как исполненной
-        for stopItter = 1 ,  #stopClass.array_stop do 
-            if setting.emulation == false then 
+    if stopClass.use_stop and setting.emulation == false then 
                 loger.save("appruveOrderStop work = ".. stopClass.array_stop.work..'  trans_id = '.. stopClass.array_stop.trans_id.." = "..order.trans_id   )
                 --  режим торговли  
                 if  order.trans_id == stopClass.array_stop.trans_id and stopClass.array_stop.work == 1 or
@@ -303,8 +300,7 @@ function appruveOrderStop(order)
                     -- обновляем таблицу с заявками 
                     panelBids.show(); 
                 end;
-            end;
-        end; 
+         
     end; 
 end;
 
@@ -328,7 +324,7 @@ function removeOldOrderSell()
                 
                  -- удаляем контракт  
                 setting.sellTable[i].work = false; 
-                signalShowLog.addSignal(setting.datetime, 34, false, arrayOrders[i].price);  
+                signalShowLog.addSignal(setting.datetime, 34, false, setting.sellTable[i].price);  
                 loger.save(" помечаем заявку как неактивную sell,".. setting.sellTable[i].contract); 
  
                    arrayOrdersBuys[#arrayOrdersBuys + 1]  = setting.sellTable[i].trans_id_buy; 
@@ -346,7 +342,7 @@ function removeOldOrderSell()
                         -- setting.sellTable[sellT].trans_id == saleContract.trans_id_buy 
                         if setting.sellTable[o].trans_id == arrayOrdersBuys[i] then 
                             setting.sellTable[o].work = false;
-                            loger.save(" помечаем заявку как неактивную buy,".. arrayOrders[i].type);
+                            loger.save(" помечаем заявку как неактивную buy,".. setting.sellTable[o].price);
                         end
                     end
                 end

@@ -186,8 +186,6 @@ basis = 9
          -- обработка во время эмуляции
          market.callSELL_emulation(result);
          -- сработал стоп в режиме эмуляции
-
-         
          riskStop.appruveOrderStopEmulation(result)
       end;
       
@@ -281,7 +279,7 @@ end
 
       -- обновляем номера стоп заявок при выставлении
       loger.save(' -- riskStop.updateOrderNumber 1  ' )
-      
+
       riskStop.updateOrderNumber(trade);
 
       if  bit.band(trade.flags,4)>0
