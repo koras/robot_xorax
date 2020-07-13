@@ -385,7 +385,6 @@ end;
 function callSELL_emulation(result)
 
     local price_callSELL_emulation = result.close;
-    local trans_id_buy = "0";
 
     if #setting.sellTable > 0 then 
             for sellT = 1 ,  #setting.sellTable do 
@@ -402,7 +401,7 @@ function callSELL_emulation(result)
                         setting.count_contract_sell = setting.count_contract_sell  + setting.sellTable[sellT].contract; 
                         setting.profit =  setting.sellTable[sellT].price - setting.sellTable[sellT].buy_contract + setting.profit;
 
-                        if setting.limit_count_buy > setting.sellTable[sellT].contract  then 
+                        if setting.limit_count_buy >= setting.sellTable[sellT].contract  then 
                             setting.limit_count_buy = setting.limit_count_buy - setting.sellTable[sellT].contract;
                         end;
 
@@ -411,7 +410,7 @@ function callSELL_emulation(result)
                      --   panelBids.show(); 
                      control.use_contract_limit();  
                      deleteBuy_emulation(setting.sellTable[sellT]);
-                     loger.save("вызов update_stop 4" );
+                     loger.save("вызов update_stop 4 "  .. setting.limit_count_buy .. " setting.limit_count_buy " .. setting.sellTable[sellT].contract );
                      risk_stop.update_stop();
                        
                 end;
@@ -448,7 +447,7 @@ function execution_sell(contract)
 --setting.each_to_buy_step
     -- увеличивает лимит используемых контрактов 
     
-    if  contract.contract > 0 and setting.limit_count_buy  > contract.contract  then 
+    if  contract.contract > 0 and setting.limit_count_buy  >= contract.contract  then 
         setting.limit_count_buy = setting.limit_count_buy - contract.contract;
     end;
 

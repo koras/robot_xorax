@@ -1,9 +1,7 @@
 -- scriptTest.lua (in your scripts directory)
 local M = {}
-  
 local init = {}
-
-arrTableLog = {};
+arrTableLog = {}
 
 local showLabel = false;
 local showLabelPrice = true;
@@ -36,7 +34,7 @@ local function addSignal(datetime, event, status, number)
 
 	local time  = '';
 	local txt =  ' event :' .. event  ;
---	local txt = datetime.hour..':'..datetime.min..':'..datetime.sec .. ' event :' .. event .. ", number: ".. number  ;
+	
 
 	loger.saveSignal(txt);
 

@@ -88,7 +88,6 @@ end;
 -- определяем максимальную и минимальную цену покупки
 -- необходимо для определения куда ставить стоп
 function getOrdersForBid() 
- 
     if #setting.sellTable == 0 then return; end;
     
     stopClass.contract_work = 0;
@@ -133,10 +132,11 @@ function generationCollectionStop()
     
     loger.save('generationCollectionStop ставим стопы '  )
     local contract_work = stopClass.contract_work + stopClass.contract_add;
-    if contract_work > 0  then  
-            loger.save('generationCollectionStop  ставм стоп   контрактов = '.. contract_work.." по цене : "..maxPrice )
+
+    if contract_work > 0  then   
                     -- смотрим куда поставить стоп
                     maxPrice = getMaxPriceRange() 
+                    loger.save('generationCollectionStop  ставм стоп   контрактов = '.. contract_work.." по цене : "..maxPrice )
                     sendTransStop(contract_work, maxPrice);
     end; 
 end;
@@ -149,7 +149,7 @@ function backStop()
 
         if stopClass.array_stop.emulation then
                 -- удаляем метку
-                DelLabel(setting.tag, stopClass.array_stop[s].label);
+                DelLabel(setting.tag, stopClass.array_stop.label);
          else
             if  stopClass.array_stop.work == 1 or stopClass.array_stop.work == 2 then  
                     -- стоп больше не используется 
@@ -176,8 +176,9 @@ end;
 
 
 function sendTransStop(countContract, countPrice )
+
+
     if usestop==false then return; end;
-    
     
     local dataParam = {};
             dataParam.emulation = setting.emulation;
@@ -197,9 +198,10 @@ function sendTransStop(countContract, countPrice )
         -- рисуем стоп
         dataParam.work = 1;
         dataParam.order_type = 1;
-        dataParam.order_type = "TAKE_PROFIT_STOP_ORDER";
+        dataParam.order_type = "SIMPLE_STOP_ORDER";
         dataParam.trans_id = getRand();
         dataParam.label = label.set('stop', countPrice ,  setting.datetime, countContract, 'stop '..countContract)
+        loger.save("dataParam.label =".. dataParam.label  )
          
     else
         -- здесь статус меняется полсле того как пришёл статус об установке стопа 
@@ -212,6 +214,9 @@ function sendTransStop(countContract, countPrice )
         loger.save("sendTransStop   ставим стоп ".. countPrice .. '  trans_id='.. dataParam.trans_id  )
         -- отправляем транкзакцию 
     end;
+
+
+    loger.save("sendTransStop ставим стоп "  )
 
     stopClass.array_stop = dataParam; 
     
@@ -261,16 +266,14 @@ function  appruveOrderStopEmulation(order)
 
                 stopClass.array_stop.work = 3;
                 signalShowLog.addSignal(setting.datetime, 31, false, stopClass.array_stop.price);  
- 
+                
                     -- снимаем стоп
                 DelLabel(setting.tag, stopClass.array_stop.label);
 
                 loger.save("-- appruveOrderStopEmulation признак срабатывания стопа "  )
                     -- признак срабатывания стопа
-                removeOldOrderSell( );
-
+                removeOldOrderSell();
                 panelBids.show();
-  
             end;
         end;  
     end; 

@@ -280,7 +280,8 @@ end
       market.saleExecution(trade);
 
       -- обновляем номера стоп заявок при выставлении
-            loger.save(' -- riskStop.updateOrderNumber 1  ' )
+      loger.save(' -- riskStop.updateOrderNumber 1  ' )
+      
       riskStop.updateOrderNumber(trade);
 
       if  bit.band(trade.flags,4)>0
