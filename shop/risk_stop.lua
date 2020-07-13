@@ -3,7 +3,9 @@ local label = dofile(getScriptPath() .. "\\modules\\drawLabel.lua");
 local transaction = dofile(getScriptPath() .. "\\shop\\transaction.lua");
 local signalShowLog = dofile(getScriptPath() .. "\\interface\\signalShowLog.lua");
 local panelBids = dofile(getScriptPath() .. "\\interface\\bids.lua");
-
+ 
+--local controlPanel = dofile(getScriptPath() .. "\\interface\\control.lua");
+ 
 -- local markets = dofile(getScriptPath() .. "\\shop\\market.lua");
   
 usestop = true;
@@ -156,7 +158,8 @@ function backStop()
                 local order_num = tostring(stopClass.array_stop.order_num);
                 local trans_id = tostring(stopClass.array_stop.trans_id);
                 local order_type = tostring(stopClass.array_stop.order_type);
-                loger.save("-- снимаем стоп заявку   " .. stopClass.array_stop .. " work = "..stopClass.array_stop.work.."  order_num = ".. order_num .. ' trans_id = '..trans_id );
+
+                loger.save("-- снимаем стоп заявку   " .. stopClass.array_stop .. " work = "..stopClass.array_stop.work.."  order_num = ".. order_num );
 
             if order_num ~= 0 then 
                 loger.save("-- delete  " );
@@ -266,12 +269,14 @@ function  appruveOrderStopEmulation(order)
                 stopClass.array_stop.work = 3;
                 signalShowLog.addSignal(setting.datetime, 31, false, stopClass.array_stop.price);  
                 
-                
+
                     -- снимаем стоп
                 DelLabel(setting.tag, stopClass.array_stop.label);
+                button_worked_stop();
 
                 loger.save("-- appruveOrderStopEmulation признак срабатывания стопа "  )
                     -- признак срабатывания стопа
+                    
                 removeOldOrderSell();
                 panelBids.show();
             end;
@@ -297,6 +302,8 @@ function appruveOrderStop(order)
                     loger.save("-- appruveOrderStop  признак срабатывания стопа "  )
                     stopClass.array_stop.work = 3;
                     removeOldOrderSell();
+                    
+                    button_worked_stop();
                     -- обновляем таблицу с заявками 
                     panelBids.show(); 
                 end;

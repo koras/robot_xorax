@@ -128,6 +128,8 @@ function use_stop()
 		Red(t_control,30, 1);
 	end;
 end;	
+
+
   
 function show_stop()
 	if stopClass.show_panel  then  
@@ -403,6 +405,18 @@ function button_finish()
 	Gray(t_control,1, 0);
 	Gray(t_control,2, 0);
 	Gray(t_control,3, 0);
+end;
+
+
+ 
+function button_worked_stop() 
+	setting.status=false;  
+	SetCell(t_control, 2, 0,  words.word('setSTOP'))
+	Red(t_control,1, 0);
+	Red(t_control,2, 0);
+	Red(t_control,3, 0);
+	
+	use_contract_limit();
 end;
 
 
@@ -889,6 +903,7 @@ function deleteTable()
 end;
 
  
+M.button_worked_stop =  button_worked_stop;
 M.buy_stop_auto =  buy_stop_auto;
 M.buy_process =  buy_process;
 M.buy_stop =  buy_stop;
