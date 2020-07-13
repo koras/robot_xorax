@@ -187,8 +187,8 @@ basis = 9
          market.callSELL_emulation(result);
          -- сработал стоп в режиме эмуляции
 
-        -- loger.save('appruveOrderStop  updateTickupdateTickupdateTickupdateTick ' )
-         riskStop.appruveOrderStop(result)
+         
+         riskStop.appruveOrderStopEmulation(result)
       end;
       
    end;
@@ -280,16 +280,15 @@ end
       market.saleExecution(trade);
 
       -- обновляем номера стоп заявок при выставлении
+            loger.save(' -- riskStop.updateOrderNumber 1  ' )
       riskStop.updateOrderNumber(trade);
 
       if  bit.band(trade.flags,4)>0
          then
 
             if not CheckBit(trade.flags, 0) and not CheckBit(trade.flags, 1) then
-
                loger.save(' -- когда сработал стоп run stop -  ' )
                riskStop.appruveOrderStop(trade)
-               
             end
 
  
@@ -299,6 +298,7 @@ end
       
          if not CheckBit(trade.flags, 0) and not CheckBit(trade.flags, 1) then
               
+            loger.save(' -- riskStop.updateOrderNumber 2  ' )
             riskStop.updateOrderNumber(trade)
          end
 
@@ -349,6 +349,7 @@ end
       candleGraff.deleteTableGraff();
 
       DelAllLabels(setting.tag);
+      -- когда закрываем приложение, надо снять стопы
       riskStop.backStop()
 
    end;
