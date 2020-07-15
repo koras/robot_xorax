@@ -27,10 +27,7 @@ stopClass.spred = 1.0;
 stopClass.spred_default = 0.04;
 -- на сколько исзменять параметр в панели управления
 stopClass.spred_limit = 0.02;
-
--- количество стопов
-stopClass.count_stop = 2;
-
+ 
 
 
 -- увеличение промежутка между стопами
@@ -51,3 +48,6 @@ stopClass.triger_update_up = true;
 
 -- стоп заявки
 stopClass.array_stop = {};
+stopClass.array_stop.work = 0;
+stopClass.array_stop.order_num = 0;
+stopClass.array_stop.trans_id = 0;

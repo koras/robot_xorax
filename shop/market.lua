@@ -98,7 +98,7 @@ function buyContract(result)
     -- сперва находим контракт который купили и ставим статус что мы купили контракт
     if #setting.sellTable > 0 then 
     for contract = 1 ,  #setting.sellTable do 
-    loger.save(setting.sellTable[contract].type);  
+    -- loger.save(setting.sellTable[contract].type);  
             if  setting.sellTable[contract].type == 'buy' and  
             setting.sellTable[contract].executed == false  and 
             setting.sellTable[contract].trans_id == result.trans_id  then
@@ -107,8 +107,7 @@ function buyContract(result)
                 setting.sellTable[contract].executed = true;
                 -- выставляем на продажу контракт.
                 sellTransaction(result, setting.sellTable[contract]);
-              
-                risk_stop.update_stop();
+               
                 return;
             end;
         end;
@@ -170,9 +169,8 @@ function saleExecution(result)
             if  setting.sellTable[contract].type == 'sell' and  
             setting.sellTable[contract].executed == false  and 
             setting.sellTable[contract].trans_id == result.trans_id  then
-
-
-                setting.sellTable[contract].executed = true;
+                loger.save("saleExecution true ".. result.order_num .. " -- исполнение выставление контракта на продажу присваиваем номер " );
+              --  setting.sellTable[contract].executed = true;
                 setting.sellTable[contract].order_num = result.order_num
             end;
         end;
@@ -185,15 +183,17 @@ end;
 
 -- исполнение продажи контракта
 function sellContract(result)
-    loger.save("sellContract  " );
+  --  loger.save("sellContract  " );
     -- сперва находим контракт который купили и ставим статус что мы купили контракт
     if #setting.sellTable > 0 then
         for contract = 1 ,  #setting.sellTable do 
+
+    
+
             if  setting.sellTable[contract].type == 'sell' and  
                     setting.sellTable[contract].executed == false  and 
                     setting.sellTable[contract].trans_id == result.trans_id  then
                 
-
                     setting.SPRED_LONG_TREND_DOWN_LAST_PRICE = 0;
                     -- статистика
                     setting.count_sell = setting.count_sell + 1;
@@ -205,6 +205,7 @@ function sellContract(result)
                     setting.profit = sell  - buy  + setting.profit;
 
 
+                    loger.save("-- если кнопка покупки заблокирована автоматически по причине падение"  );
                     -- если кнопка покупки заблокирована автоматически по причине падение
                     if  setting.each_to_buy_status_block then
                         setting.each_to_sell_step = setting.each_to_sell_step + 1;
@@ -232,12 +233,16 @@ function sellContract(result)
                     signalShowLog.addSignal(setting.sellTable[contract].datetime, 26, false, result.price); 
                     deleteBuyCost(result, setting.sellTable[contract])
                     control.use_contract_limit();  
-                     
+                      
+                    loger.save("sellContract продали контракт " );
 
             end;
         end;
-    end;
-    risk_stop.update_stop();
+
+        
+      --  loger.save("вызов update_stop 1 " );
+        risk_stop.update_stop();
+    end; 
 end;
 
 
@@ -275,7 +280,8 @@ function deleteBuyCost(result, saleContract)
                     -- calculateProfit(setting.sellTable[sellT]);
                     signalShowLog.addSignal(setting.sellTable[sellT].datetime, 8, false, result.price); 
                     -- надо удалить контракт по которому мы покупали
-                    risk_stop.update_stop();
+                    loger.save("вызов update_stop 2 " );
+                    risk_stop.update_stop(); 
                     panelBids.show();
             end;
         end;
@@ -344,6 +350,7 @@ function callBUY_emulation(price_callBUY_emulation ,datetime)
  
             sellTransaction_emulation(data) 
             panelBids.show();
+            loger.save("вызов update_stop 3" );
             risk_stop.update_stop();
             control.use_contract_limit();
 end 
@@ -383,7 +390,6 @@ end;
 function callSELL_emulation(result)
 
     local price_callSELL_emulation = result.close;
-    local trans_id_buy = "0";
 
     if #setting.sellTable > 0 then 
             for sellT = 1 ,  #setting.sellTable do 
@@ -400,7 +406,7 @@ function callSELL_emulation(result)
                         setting.count_contract_sell = setting.count_contract_sell  + setting.sellTable[sellT].contract; 
                         setting.profit =  setting.sellTable[sellT].price - setting.sellTable[sellT].buy_contract + setting.profit;
 
-                        if setting.limit_count_buy > setting.sellTable[sellT].contract  then 
+                        if setting.limit_count_buy >= setting.sellTable[sellT].contract  then 
                             setting.limit_count_buy = setting.limit_count_buy - setting.sellTable[sellT].contract;
                         end;
 
@@ -408,7 +414,8 @@ function callSELL_emulation(result)
                         -- надо удалить контракт по которому мы покупали 
                      --   panelBids.show(); 
                      control.use_contract_limit();  
-                     deleteBuy_emulation(setting.sellTable[sellT])
+                     deleteBuy_emulation(setting.sellTable[sellT]);
+                     loger.save("вызов update_stop 4 "  .. setting.limit_count_buy .. " setting.limit_count_buy " .. setting.sellTable[sellT].contract );
                      risk_stop.update_stop();
                        
                 end;
@@ -445,7 +452,7 @@ function execution_sell(contract)
 --setting.each_to_buy_step
     -- увеличивает лимит используемых контрактов 
     
-    if  contract.contract > 0 and setting.limit_count_buy  > contract.contract  then 
+    if  contract.contract > 0 and setting.limit_count_buy  >= contract.contract  then 
         setting.limit_count_buy = setting.limit_count_buy - contract.contract;
     end;
 
