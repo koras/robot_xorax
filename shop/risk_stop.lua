@@ -238,7 +238,7 @@ function sendTransStop(countContract, countPrice )
 
  
 
-    end;
+    end; 
 end;
  
 
@@ -249,7 +249,7 @@ end;
 function updateOrderNumber(order) 
     
  
-        if  stopClass.array_stop.work ~= nil and order.trans_id == stopClass.array_stop.trans_id and  stopClass.array_stop.work == 1 and    order.order_num ~= 0 then
+        if  order.trans_id == stopClass.array_stop.trans_id and  stopClass.array_stop.work == 1  then
 
             
         loger.save("updateOrderNumber  обновление заявки по которой пришла информация "..    
@@ -260,8 +260,9 @@ function updateOrderNumber(order)
 
             stopClass.array_stop.work = 2;
             stopClass.array_stop.order_num = order.order_num;
-            stopClass.array_stop.order_type = "TAKE_PROFIT_STOP_ORDER";
-
+        --    stopClass.array_stop.order_type = "TAKE_PROFIT_STOP_ORDER";
+            stopClass.array_stop.order_type = "SIMPLE_STOP_ORDER";
+             
         end;
          
 end;
