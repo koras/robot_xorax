@@ -169,9 +169,8 @@ function saleExecution(result)
             if  setting.sellTable[contract].type == 'sell' and  
             setting.sellTable[contract].executed == false  and 
             setting.sellTable[contract].trans_id == result.trans_id  then
-
-
-                setting.sellTable[contract].executed = true;
+                loger.save("saleExecution true ".. result.order_num .. " -- исполнение выставление контракта на продажу присваиваем номер " );
+              --  setting.sellTable[contract].executed = true;
                 setting.sellTable[contract].order_num = result.order_num
             end;
         end;
@@ -184,15 +183,17 @@ end;
 
 -- исполнение продажи контракта
 function sellContract(result)
-    loger.save("sellContract  " );
+  --  loger.save("sellContract  " );
     -- сперва находим контракт который купили и ставим статус что мы купили контракт
     if #setting.sellTable > 0 then
         for contract = 1 ,  #setting.sellTable do 
+
+    
+
             if  setting.sellTable[contract].type == 'sell' and  
                     setting.sellTable[contract].executed == false  and 
                     setting.sellTable[contract].trans_id == result.trans_id  then
                 
-
                     setting.SPRED_LONG_TREND_DOWN_LAST_PRICE = 0;
                     -- статистика
                     setting.count_sell = setting.count_sell + 1;
@@ -204,6 +205,7 @@ function sellContract(result)
                     setting.profit = sell  - buy  + setting.profit;
 
 
+                    loger.save("-- если кнопка покупки заблокирована автоматически по причине падение"  );
                     -- если кнопка покупки заблокирована автоматически по причине падение
                     if  setting.each_to_buy_status_block then
                         setting.each_to_sell_step = setting.each_to_sell_step + 1;
@@ -231,13 +233,16 @@ function sellContract(result)
                     signalShowLog.addSignal(setting.sellTable[contract].datetime, 26, false, result.price); 
                     deleteBuyCost(result, setting.sellTable[contract])
                     control.use_contract_limit();  
-                     
+                      
+                    loger.save("sellContract продали контракт " );
 
             end;
         end;
-    end;
-    loger.save("вызов update_stop 1 " );
-    risk_stop.update_stop();
+
+        
+      --  loger.save("вызов update_stop 1 " );
+        risk_stop.update_stop();
+    end; 
 end;
 
 

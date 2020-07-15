@@ -296,38 +296,30 @@ function show_info_stop ()
 	if stopClass.show_panel == false  then return end;  
 	-- количество контрактов добавленных трейдером
 	SetCell(t_control, 31, 1,   tostring(stopClass.contract_add .. ' ( '..  stopClass.contract_work .. words.word('stop_contract_work') ..' )' )); 
-		
-	SetCell(t_control, 32, 1,   tostring(stopClass.count_stop .. " (" .. stopClass.triger_stop ..")" )); 
+		 
 	-- -- расстояние от максимальной покупки
 	SetCell(t_control, 33, 1,   tostring(stopClass.spred .. " (".. words.word('stop_from_price') .. stopClass.price_max ..")")); 
-	-- увеличение промежутка между стопами
-	SetCell(t_control, 34, 1,   tostring(stopClass.spred_range)); 
+	
 
 	
 	SetCell(t_control, 31, 0,  words.word('stop_add_contract')); 
-	SetCell(t_control, 32, 0,  words.word('stop_count_contract')); 
+	
 	SetCell(t_control, 33, 0,  words.word('stop_range_price')); 
-	SetCell(t_control, 34, 0,  words.word('stop_range_price_stop')); 
 
 	SetCell(t_control, 31, 2,  word.current_limit_plus); 
-	SetCell(t_control, 32, 2,  word.current_limit_plus); 
 	SetCell(t_control, 33, 2,  word.current_limit_plus); 
-	SetCell(t_control, 34, 2,  word.current_limit_plus); 
 	SetCell(t_control, 31, 3,  word.current_limit_minus); 
-	SetCell(t_control, 32, 3,  word.current_limit_minus); 
+	
 	SetCell(t_control, 33, 3,  word.current_limit_minus); 
-	SetCell(t_control, 34, 3,  word.current_limit_minus); 
 
 		
 	Red(t_control,31, 3);
-	Red(t_control,32, 3);
+	
 	Red(t_control,33, 3);
-	Red(t_control,34, 3);
 
 	Green(t_control,31, 2);
-	Green(t_control,32, 2);
+	
 	Green(t_control,33, 2);
-	Green(t_control,34, 2);
 
 
  
@@ -335,35 +327,19 @@ end;
 function hide_info_stop ()
 	-- количество контрактов добавленных трейдером
 	SetCell(t_control, 31, 1, tostring( "" )); 
-	SetCell(t_control, 32, 1, tostring( "" )); 
-	SetCell(t_control, 33, 1, tostring( "" )); 
-	SetCell(t_control, 34, 1, tostring( "" )); 
-	
+	SetCell(t_control, 33, 1, tostring( "" ));  
 	SetCell(t_control, 31, 0, tostring( "" )); 
-	SetCell(t_control, 32, 0, tostring( "" )); 
 	SetCell(t_control, 33, 0, tostring( "" )); 
-	SetCell(t_control, 34, 0, tostring( "" )); 
-	
-
 	SetCell(t_control, 31, 2, tostring( "" )); 
-	SetCell(t_control, 32, 2, tostring( "" )); 
 	SetCell(t_control, 33, 2, tostring( "" )); 
-	SetCell(t_control, 34, 2, tostring( "" )); 
 	SetCell(t_control, 31, 3, tostring( "" )); 
-	SetCell(t_control, 32, 3, tostring( "" )); 
 	SetCell(t_control, 33, 3, tostring( "" )); 
-	SetCell(t_control, 34, 3, tostring( "" )); 
 
 		
 	White(t_control,31, 3);
-	White(t_control,32, 3);
 	White(t_control,33, 3);
-	White(t_control,34, 3);
-
 	White(t_control,31, 2);
-	White(t_control,32, 2);
 	White(t_control,33, 2);
-	White(t_control,34, 2); 
 end;
  
 function mode_emulation_on() 
@@ -415,7 +391,6 @@ function button_worked_stop()
 	Red(t_control,1, 0);
 	Red(t_control,2, 0);
 	Red(t_control,3, 0);
-	
 	use_contract_limit();
 end;
 
@@ -565,12 +540,8 @@ function event_callback_message_control (t_control, msg, par1, par2)
  
 	if par1 == 11 and par2 == 2  and  msg == 1 then
 		setting.LIMIT_BID = setting.LIMIT_BID + 1;	
-	
-		
-
 		use_contract_limit();
 		SetWindowCaption(t_control,   word.Trading_Bot_Control_Panel .. tostring( setting.LIMIT_BID )); 
-		loger.save( " №3   ".. setting.LIMIT_BID ) 
 		return;
 	end;
 
@@ -580,12 +551,10 @@ function event_callback_message_control (t_control, msg, par1, par2)
 				setting.LIMIT_BID = setting.LIMIT_BID - 1; 
 				use_contract_limit();
 				--return
-				loger.save( " №4   ".. setting.LIMIT_BID ) ;
 				SetWindowCaption(t_control, word.Trading_Bot_Control_Panel ..  tostring( setting.LIMIT_BID) ); 
 				
 
 			--	use_contract_limit();
-				loger.save( " №4   ".. setting.LIMIT_BID ) 
 				return;
 		end;   
 		return;
@@ -756,10 +725,7 @@ function event_callback_message_control (t_control, msg, par1, par2)
 	 
 
 
-	-- SetCell(t_control, 31, 0,  words.word('stop_add_contract')); 
-	-- SetCell(t_control, 32, 0,  words.word('stop_count_contract')); 
-	-- SetCell(t_control, 33, 0,  words.word('stop_range_price')); 
-	-- SetCell(t_control, 34, 0,  words.word('stop_range_price_stop')); 
+	
 
 	-- количество контрактов которые добавляет трейдер
 	if par1 == 31 and par2 == 2  and  msg == 1 then
@@ -779,23 +745,7 @@ function event_callback_message_control (t_control, msg, par1, par2)
 		return;
 	end;
  
-	-- количество стопов
-	if par1 == 32 and par2 == 2  and  msg == 1 then
-		stopClass.count_stop  = stopClass.count_stop  + 1; 
-		riskStop.update_stop();
-		use_contract_limit();
-		show_info_stop ()
-		return;
-	end;
-	if par1 == 32 and par2 == 3  and  msg == 1 then
-		if stopClass.count_stop > 1 then
-			stopClass.count_stop = stopClass.count_stop  - 1;
-			riskStop.update_stop();
-			use_contract_limit();
-			show_info_stop ()
-			end; 
-		return;
-	end; 
+ 
 
 
 	-- Кнопка использовать стопы или нет
@@ -861,29 +811,8 @@ function event_callback_message_control (t_control, msg, par1, par2)
 			end; 
 		return;
 	end;
-	 
-	-- растояние между стопами если стопов более 1
-	if par1 == 34 and par2 == 2  and  msg == 1 then
-		if stopClass.show_panel == false then return end;
-			stopClass.spred_range  = stopClass.spred_range  + stopClass.spred_range_limit; 
-			riskStop.update_stop();
-			use_contract_limit();
-			show_info_stop ()
-		return;
-	end;
 
-	if par1 == 34 and par2 == 3  and  msg == 1 then
-		if stopClass.show_panel == false then return end;
-		if stopClass.spred_range >  stopClass.spred_range_default then 
-			stopClass.spred_range = stopClass.spred_range  - stopClass.spred_range_limit;
-			riskStop.update_stop();
-			 
-			use_contract_limit();
-			show_info_stop ()
-			end; 
-		return;
-	end;
-
+	
 
 
 

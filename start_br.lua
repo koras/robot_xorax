@@ -216,7 +216,7 @@ basis = 9
       end;
       
       if bit.band(order.flags,1) + bit.band(order.flags,2) == 0  then 
-         loger.save('OnOrder sellContract  присваиваем номера заявкам 1' )
+      --   loger.save('OnOrder sellContract  присваиваем номера заявкам 1' )
          market.sellContract(order);
       end;
    end
@@ -278,31 +278,26 @@ end
       market.saleExecution(trade);
 
       -- обновляем номера стоп заявок при выставлении
-      loger.save(' -- riskStop.updateOrderNumber 1  ' )
+      loger.save(' OnStopOrder -- обновляем номера стоп заявок при выставлении   '.. trade.trans_id   )
+   
 
       riskStop.updateOrderNumber(trade);
 
       if  bit.band(trade.flags,4)>0
          then
-
             if not CheckBit(trade.flags, 0) and not CheckBit(trade.flags, 1) then
-               loger.save(' -- когда сработал стоп run stop -  ' )
+               loger.save('вызываем riskStop.appruveOrderStop '.. trade.trans_id );
                riskStop.appruveOrderStop(trade)
             end
 
- 
          else
          -- заявка на покупку 
          end
       
          if not CheckBit(trade.flags, 0) and not CheckBit(trade.flags, 1) then
-              
-            loger.save(' -- riskStop.updateOrderNumber 2  ' )
+            loger.save(' -- riskStop.updateOrderNumber изменения по стоп заявке, исполнелись наверное  ' )
             riskStop.updateOrderNumber(trade)
          end
-
-
-
    end
 
 

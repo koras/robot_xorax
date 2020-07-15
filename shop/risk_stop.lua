@@ -18,11 +18,15 @@ usestop = true;
 -- при срабатывании стопа, должны убираться контракты которые находятся на самом вверху
 -- и закрываться позиции по покупке. Более такие позиции не учитываются в логике
 function update_stop()
-    loger.save('========== перевыставляем стопы =================');
+
+
+    
     if usestop==false then return; end;
+    loger.save(' ' );
+    loger.save('=================================' );
     
     -- можно ли использовать стопы
-    if stopClass.use_stop   then  
+    if stopClass.use_stop   then   
         -- получаем заявки для ордеров
         -- определяем максимальную и минимальную цену покупки
         getOrdersForBid();
@@ -42,7 +46,7 @@ function calculateMaxStopStart()
     if usestop==false then return; end;
     -- зависимость контрактов
 
-    stopClass.spred =  0.05;
+    stopClass.spred =  0.02;
   --  stopClass.spred = setting.LIMIT_BID / setting.use_contract * setting.profit_range ;
   --  stopClass.spred = setting.LIMIT_BID * setting.SPRED_LONG_TREND_DOWN / setting.use_contract  + stopClass.spred + stopClass.spred_range ;
  end;
@@ -111,14 +115,18 @@ function getOrdersForBid()
                 -- минимальная цена покупки
                 stopClass.price_min = setting.sellTable[contractStop].price ;
             end 
-        end;
-        -- смотрим сколько осталось контрактов
+        end; 
 
-        if  setting.sellTable[contractStop].type == 'sell' and    setting.sellTable[contractStop].work  then
+        if  setting.sellTable[contractStop].type == 'sell' and  setting.sellTable[contractStop].work  then
+
             stopClass.contract_work = stopClass.contract_work + setting.sellTable[contractStop].use_contract;
-            loger.save('-- смотрим сколько осталось контрактов  '.. stopClass.contract_work );
+         --   loger.save('-- смотрим сколько осталось контрактов  '.. stopClass.contract_work );
 
         end;
+    end;
+
+    if stopClass.contract_work == 0 then 
+        loger.save('-- нет контрактов в работе '  );
     end;
 end;
 
@@ -129,16 +137,16 @@ end;
 
 -- сколько стопов уже
 
--- Ставим новый стоп, но если сработал стоп, увеличиваем стоп на количество срабатываемых стопов и уменьшаем количество стопов
+-- Ставим новый стоп, увеличиваем стоп на количество срабатываемых стопов и уменьшаем количество стопов
 function generationCollectionStop()  
     
-    loger.save('generationCollectionStop ставим стопы '  )
-    local contract_work = stopClass.contract_work + stopClass.contract_add;
 
+    local contract_work = stopClass.contract_work + stopClass.contract_add;
+    
     if contract_work > 0  then   
                     -- смотрим куда поставить стоп
                     maxPrice = getMaxPriceRange() 
-                    loger.save('generationCollectionStop  ставм стоп   контрактов = '.. contract_work.." по цене : "..maxPrice )
+                   -- loger.save('generationCollectionStop  ставм стоп   контрактов = '.. contract_work.." по цене : "..maxPrice )
                     sendTransStop(contract_work, maxPrice);
     end; 
 end;
@@ -147,25 +155,32 @@ end;
 -- снимаем старые стоп заявки
 function backStop()
     -- обнуляем заявки
-        loger.save(" backStop -- снимаем старые стоп заявки  " );
+    
 
         if stopClass.array_stop.emulation then
                 -- удаляем метку
                 DelLabel(setting.tag, stopClass.array_stop.label);
          else
-            if  stopClass.array_stop.work == 1 or stopClass.array_stop.work == 2 then  
+            -- только 2, потому что только 2 заявкам присвоен  номер
+            if  stopClass.array_stop.work == 2 then  
+               -- loger.save(" delete  delete  delete  delete  delete  delete  delete  delete  delete  delete  delete "  );
                     -- стоп больше не используется 
                 local order_num = tostring(stopClass.array_stop.order_num);
                 local trans_id = tostring(stopClass.array_stop.trans_id);
                 local order_type = tostring(stopClass.array_stop.order_type);
 
-                loger.save("-- снимаем стоп заявку   " .. stopClass.array_stop .. " work = "..stopClass.array_stop.work.."  order_num = ".. order_num );
+                loger.save(" "  );
+                loger.save("------------------------------------------------------------------------------------------ "  );
+                loger.save("-- снимаем стоп заявку   "   .. " trans_id "..trans_id .. "   order_num = ".. order_num );
 
-            if order_num ~= 0 then 
-                loger.save("-- delete  " );
-                stopClass.array_stop.work = 3;
-                transaction.delete(trans_id, order_num, order_type);        
-            end;
+                if order_num ~= 0 then 
+
+                    transaction.delete(trans_id, order_num, order_type); 
+
+                    stopClass.array_stop.work = 0;
+                    stopClass.array_stop.trans_id = 0;
+                    stopClass.array_stop.order_num = 0;  
+                end;
         end;
     end;
         
@@ -183,46 +198,47 @@ function sendTransStop(countContract, countPrice )
 
     if usestop==false then return; end;
     
-    local dataParam = {};
-            dataParam.emulation = setting.emulation;
-            dataParam.price = countPrice;
-            dataParam.contract = countContract;
-             
-            dataParam.label = 0;
-            -- work = 0 - отправляем на сервер
-            -- work = 1 - заявка выставлена
-            -- work = 2 - заявка снята пл какой либо причине
-            -- work = 3 - заявка снята пл какой либо причине
-            dataParam.work = 1;
-            dataParam.order_num = 0;
-             
-    
-    if setting.emulation then
-        -- рисуем стоп
-        dataParam.work = 1;
-        dataParam.order_type = 1;
-        dataParam.order_type = "SIMPLE_STOP_ORDER";
-        dataParam.trans_id = getRand();
-        dataParam.label = label.set('stop', countPrice ,  setting.datetime, countContract, 'stop '..countContract)
-        loger.save("dataParam.label =".. dataParam.label  )
-         
-    else
-        -- здесь статус меняется полсле того как пришёл статус об установке стопа 
-        -- dataParam.work = 0; 
+    if stopClass.array_stop.work == 3  or stopClass.array_stop.work == 0 then    
+     
 
-        local type = "SIMPLE_STOP_ORDER";
+        local dataParam = {};
+        stopClass.array_stop.emulation = setting.emulation;
+        stopClass.array_stop.price = countPrice;
+                stopClass.array_stop.contract = countContract;
+                
+                stopClass.array_stop.label = 0;
+                -- work = 0 - отправляем на сервер
+                -- work = 1 - заявка выставлена
+                -- work = 2 - заявка снята пл какой либо причине
+                -- work = 3 - заявка снята пл какой либо причине
+                stopClass.array_stop.work = 1;
+                stopClass.array_stop.order_num = 0;
+                
+        
+        if setting.emulation then
+            -- рисуем стоп
+            stopClass.array_stop.work = 1;
+            stopClass.array_stop.order_type = 1;
+            stopClass.array_stop.order_type = "SIMPLE_STOP_ORDER";
+            stopClass.array_stop.trans_id = getRand();
+            stopClass.array_stop.label = label.set('stop', countPrice ,  setting.datetime, countContract, 'stop '..countContract)
+            loger.save("dataParam.label =".. stopClass.array_stop.label  )
+            
+        else
+            -- здесь статус меняется полсле того как пришёл статус об установке стопа 
+            -- dataParam.work = 0; 
 
-        dataParam.trans_id =  transaction.send('sell', countPrice, countContract, type, 0 );
+            local type = "SIMPLE_STOP_ORDER";
 
-        loger.save("sendTransStop   ставим стоп ".. countPrice .. '  trans_id='.. dataParam.trans_id  )
-        -- отправляем транкзакцию 
+            stopClass.array_stop.trans_id = transaction.send('sell', countPrice, countContract, type, 0 );
+
+            loger.save("sendTransStop   ставим стоп ".. countPrice .. '  trans_id='.. stopClass.array_stop.trans_id  )
+            -- отправляем транкзакцию 
+        end;
+
+ 
+
     end;
-
-
-    loger.save("sendTransStop ставим стоп "  )
-
-    stopClass.array_stop = dataParam; 
-    
 end;
  
 
@@ -231,14 +247,16 @@ end;
 -- вызывается в OnStopOrder
 
 function updateOrderNumber(order) 
+    
  
+        if  stopClass.array_stop.work ~= nil and order.trans_id == stopClass.array_stop.trans_id and  stopClass.array_stop.work == 1 and    order.order_num ~= 0 then
 
-        loger.save("updateOrderNumber  обновление заявки по которой пришла информация "..   #
+            
+        loger.save("updateOrderNumber  обновление заявки по которой пришла информация "..    
         '  order.order_num= '.. order.order_num..
-        '  work = '.. topClass.array_stop.work..
-        '  trans_id = '.. topClass.array_stop.trans_id );
+        '  work = '.. stopClass.array_stop.work..
+        '  trans_id = '.. stopClass.array_stop.trans_id );
 
-        if   order.trans_id == stopClass.array_stop.trans_id and     stopClass.array_stop.work == 1 and    order.order_num ~= 0 then
 
             stopClass.array_stop.work = 2;
             stopClass.array_stop.order_num = order.order_num;
@@ -253,35 +271,7 @@ function getRand()
     return tostring(math.random(2000000000));
 end;
  
-
-
-
-function  appruveOrderStopEmulation(order) 
-
-
-    if stopClass.use_stop and  setting.emulation and stopClass.array_stop.price ~= nil then 
-        -- помечаем заявку как исполненной
-   
-                -- в режиме эмуляции сработал стоп, здесь смотрим цену
-            if order.close <= stopClass.array_stop.price and stopClass.array_stop.work == 1 or
-                order.close <= stopClass.array_stop.price and stopClass.array_stop.work == 2  then 
-
-                stopClass.array_stop.work = 3;
-                signalShowLog.addSignal(setting.datetime, 31, false, stopClass.array_stop.price);  
-                
-
-                    -- снимаем стоп
-                DelLabel(setting.tag, stopClass.array_stop.label);
-                button_worked_stop();
-
-                loger.save("-- appruveOrderStopEmulation признак срабатывания стопа "  )
-                    -- признак срабатывания стопа
-                    
-                removeOldOrderSell();
-                panelBids.show();
-            end;
-    end; 
-end;
+ 
 
  
 -- сработал стоп (OnStopOrder)
@@ -291,16 +281,20 @@ function appruveOrderStop(order)
 
         -- помечаем заявку как исполненной
     if stopClass.use_stop and setting.emulation == false then 
-                loger.save("appruveOrderStop work = ".. stopClass.array_stop.work..'  trans_id = '.. stopClass.array_stop.trans_id.." = "..order.trans_id   )
+        
+        loger.save("      "   )
+        loger.save("      "   )
+        loger.save("      "   )
+        loger.save("STOP STOP STOP STOP  trans_id = ".. stopClass.array_stop.trans_id.." = "..order.trans_id   )
                 --  режим торговли  
-                if  order.trans_id == stopClass.array_stop.trans_id and stopClass.array_stop.work == 1 or
-                    order.trans_id == stopClass.array_stop.trans_id and stopClass.array_stop.work == 2  then
-                    
-                    
-                    signalShowLog.addSignal(setting.datetime, 32, false, stopClass.array_stop.price); 
+                if order.trans_id == stopClass.array_stop.trans_id and stopClass.array_stop.work == 2  then
+                     
                     -- признак срабатывания стопа
                     loger.save("-- appruveOrderStop  признак срабатывания стопа "  )
-                    stopClass.array_stop.work = 3;
+                    stopClass.array_stop.work = 0;
+                    stopClass.array_stop.trans_id = 0;
+                    stopClass.array_stop.price = 0;
+
                     removeOldOrderSell();
                     
                     button_worked_stop();
@@ -317,8 +311,7 @@ end;
 -- перебираем старые заявки, сверху вних по цене.
 -- подсчитываем 
 function removeOldOrderSell()
-    if usestop==false then return; end;
-    loger.save("перебираем старые заявки, сверху вних по цене. countContract :")
+    if usestop==false then return; end; 
   
     local arrayOrders = {};
     -- коллекция транкзакция на покупку контрактов, для поиска, чтоб не учитывать в будущем
@@ -360,6 +353,48 @@ function removeOldOrderSell()
 end;
 
  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function  appruveOrderStopEmulation(order) 
+
+
+    if stopClass.use_stop and  setting.emulation and stopClass.array_stop.price ~= nil then 
+        -- помечаем заявку как исполненной
+   
+                -- в режиме эмуляции сработал стоп, здесь смотрим цену
+            if order.close <= stopClass.array_stop.price and stopClass.array_stop.work == 1 or
+                order.close <= stopClass.array_stop.price and stopClass.array_stop.work == 2  then 
+
+                stopClass.array_stop.work = 3;
+                signalShowLog.addSignal(setting.datetime, 31, false, stopClass.array_stop.price);  
+
+                    -- снимаем стоп
+                DelLabel(setting.tag, stopClass.array_stop.label);
+                button_worked_stop();
+
+                loger.save("-- appruveOrderStopEmulation признак срабатывания стопа "  )
+                    -- признак срабатывания стопа
+                    
+                removeOldOrderSell();
+                panelBids.show();
+            end;
+    end; 
+end;
  
  
 stopClass.calculateMaxStopStart = calculateMaxStopStart;
