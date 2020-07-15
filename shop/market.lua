@@ -297,8 +297,9 @@ function callBUY_emulation(price_callBUY_emulation ,datetime)
     setting.count_contract_buy = setting.count_contract_buy  + setting.use_contract;
     local data = {};
   
-                setting.SPRED_LONG_TREND_DOWN_LAST_PRICE = 0;
+                --setting.SPRED_LONG_TREND_DOWN_LAST_PRICE   = price_callBUY_emulation;
 
+              --  loger.save(" setting.SPRED_LONG_TREND_DOWN_LAST_PRICE".. setting.SPRED_LONG_TREND_DOWN_LAST_PRICE )
                  data.price = price_callBUY_emulation;
                  data.datetime= datetime;
                  data.trans_id=  trans_id_buy;
