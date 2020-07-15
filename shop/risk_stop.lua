@@ -109,8 +109,6 @@ function getOrdersForBid()
                 stopClass.price_max = setting.sellTable[contractStop].price ;
                         
             end 
-     
-            
             if setting.sellTable[contractStop].price < stopClass.price_min then 
                 -- минимальная цена покупки
                 stopClass.price_min = setting.sellTable[contractStop].price ;

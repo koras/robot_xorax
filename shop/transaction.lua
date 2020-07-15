@@ -94,11 +94,10 @@ function delete(transId_del_order,stopOrder_num, type)
  
 	Transaction.ACTION    		= "KILL_STOP_ORDER";
 
-	if type  ==  "TAKE_PROFIT_STOP_ORDER" or type  ==  "KILL_STOP_ORDER"  then  
+	if type  ==  "TAKE_PROFIT_STOP_ORDER" or type  ==  "KILL_STOP_ORDER" or type =="SIMPLE_STOP_ORDER"  then  
 		Transaction.ACTION  = "KILL_STOP_ORDER";
-	
-	elseif type == 'NEW_ORDER' then
-		Transaction.ACTION = "KILL_ORDER";
+--	elseif type == 'NEW_ORDER' then
+--		Transaction.ACTION = "KILL_ORDER";
 	else
 		Transaction.ACTION = "KILL_ORDER";
 	end
