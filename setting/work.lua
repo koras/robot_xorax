@@ -19,7 +19,7 @@ setting.tag = "my_br";
   
  
 -- минимальная прибыль
-   setting.profit_range =  0.02; 
+   setting.profit_range =  0.05; 
 
    -- минимальная прибыль при больших заявках, не используется 
    setting.profit_range_array =  0.03;  
@@ -37,7 +37,7 @@ setting.tag = "my_br";
    setting.developer = false;    
 
    -- лимит количества заявок на сессию работы робота.
-   setting.LIMIT_BID = 1;
+   setting.LIMIT_BID = 10;
    
    -- сколько использовать контрактов по умолчанию в режиме скальпинга
    setting.use_contract = 1;

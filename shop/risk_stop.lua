@@ -46,7 +46,7 @@ function calculateMaxStopStart()
     if usestop==false then return; end;
     -- зависимость контрактов
 
-    stopClass.spred =  0.02;
+    stopClass.spred =  0.20;
   --  stopClass.spred = setting.LIMIT_BID / setting.use_contract * setting.profit_range ;
   --  stopClass.spred = setting.LIMIT_BID * setting.SPRED_LONG_TREND_DOWN / setting.use_contract  + stopClass.spred + stopClass.spred_range ;
  end;
