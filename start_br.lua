@@ -278,7 +278,7 @@ end
       market.saleExecution(trade);
 
       -- обновляем номера стоп заявок при выставлении
-      loger.save(' OnStopOrder -- обновляем номера стоп заявок при выставлении   '.. trade.trans_id   )
+    --  loger.save(' OnStopOrder -- обновляем номера стоп заявок при выставлении   '.. trade.trans_id   )
    
 
       riskStop.updateOrderNumber(trade);
