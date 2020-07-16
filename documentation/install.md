@@ -2,8 +2,8 @@
 
 #### Шаг 1
 
-Сперва необходимо скачать архив с lua по ссылке c [yandex disk](https://yadi.sk/d/55qjoDJaATPYPQ)
-Архив необходимо распоковать и положить в папке «C:\Program Files (x86)» можно и в другое место, самое главное указать или подредактировать путь в файле start.lua
+Необходимо скачать архив с lua по ссылке c [yandex disk](https://yadi.sk/d/55qjoDJaATPYPQ)
+Архив необходимо распаковать и положить в папке «C:\Program Files (x86)» можно и в другое место, самое главное указать или подредактировать путь в файле start.lua
 
 ![tag](https://raw.githubusercontent.com/koras/robot_xorax/master/images/readme/lua_yandex.PNG)
 
@@ -13,7 +13,7 @@
 
 
 #### Шаг 3
-Скачиваете последнюю версию робота [все релизы](https://github.com/koras/robot_xorax/releases) в удобном для вас формате. Распаковываете туда куда вам удобно. Мы рекоммендуем распаковать прям в папку QUIK. Перед скачиванием лучше конечно уточнить группе telegramm  [@robots_xorax](https://t.me/robots_xorax), какая более стабильная и рекоммендуемая версия
+Скачиваете последнюю версию робота [все релизы](https://github.com/koras/robot_xorax/releases) в удобном для вас формате. Распаковываете туда куда вам удобно. Мы рекомендуем распаковать в папку QUIK. Перед скачиванием лучше конечно уточнить группе telegramm  [@robots_xorax](https://t.me/robots_xorax), какая более стабильная и рекоммендуемая версия
 
 
 #### Шаг 4
@@ -26,7 +26,7 @@
 Для торговли на срочном рынке: 
 
  - Нефть:
-необходимо в редакторе Notepad++ который вы скачивали на шаге 2 открыть файл setting/work_rb.lua в роботе и указать свой номер счёта
+В редакторе Notepad++ который вы скачали на шаге 2 открыть файл setting/work_rb.lua в роботе и указать свой номер счёта
  setting.ACCOUNT=""
 
 ![account](https://raw.githubusercontent.com/koras/robot_xorax/master/images/readme/accounts.PNG)
@@ -47,7 +47,7 @@
 
 ![Луа скрипты](https://raw.githubusercontent.com/koras/robot_xorax/master/images/readme/quik_lua_script.PNG)
 
-Далее нажимаете добавить и находите в роботе файл "start_br.lua" - для торговле фьючерсами нажимаете "Запустить"
+Далее нажимаете добавить и находите в роботе файл "start_br.lua" - для торговли фьючерсами нажимаете "Запустить"
 
 ![start robot quik](https://raw.githubusercontent.com/koras/robot_xorax/master/images/readme/add_quik_robot.PNG)
   
