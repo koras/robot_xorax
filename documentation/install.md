@@ -31,12 +31,11 @@
 
 ![account](https://raw.githubusercontent.com/koras/robot_xorax/master/images/readme/accounts.PNG)
 
-- Прописать текущий код бумаги setting.SEC_CODE 
+Прописать текущий код бумаги setting.SEC_CODE 
 все "коды" можно посмотреть на сайте [moex](https://www.moex.com/ru/derivatives/contracts.aspx?p=act) в колонке "Краткий код"
 
  
 ![код инструмента](https://raw.githubusercontent.com/koras/robot_xorax/master/images/readme/code_instrument.PNG)
-
 
 #### Шаг 6
 - В графике надо указать идентификатор "my_br"
@@ -57,6 +56,8 @@
 
 
 
-[последние релизы] https://github.com/koras/robot_xorax/releases
+
+[Последние релизы](https://github.com/koras/robot_xorax/releases)
+
 [Группы в телеграмм @robots_xorax](https://t.me/robots_xorax)
 
