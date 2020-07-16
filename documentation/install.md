@@ -31,17 +31,32 @@
 
 ![account](https://raw.githubusercontent.com/koras/robot_xorax/master/images/readme/accounts.PNG)
 
+- Прописать текущий код бумаги setting.SEC_CODE 
+все "коды" можно посмотреть на сайте [moex](https://www.moex.com/ru/derivatives/contracts.aspx?p=act) в колонке "Краткий код"
+
  
-- Прописать  текущий код бумаги setting.SEC_CODE
-- В графике надо указать Идентификатор my_br
+![код инструмента](https://raw.githubusercontent.com/koras/robot_xorax/master/images/readme/code_instrument.PNG)
+
+
+#### Шаг 6
+- В графике надо указать идентификатор "my_br"
  
 ![tag](https://raw.githubusercontent.com/koras/robot_xorax/master/images/readme/tag.PNG)
 
+#### Шаг 7
+Необходимо открыть quik и в верхнем меню в "Cервисы" выбрать "Lua скрипты"
 
+![Луа скрипты](https://raw.githubusercontent.com/koras/robot_xorax/master/images/readme/quik_lua_script.PNG)
+
+Далее нажимаете добавить и находите в роботе файл "start_br.lua" - для торговле фьючерсами нажимаете "Запустить"
+
+![start robot quik](https://raw.githubusercontent.com/koras/robot_xorax/master/images/readme/add_quik_robot.PNG)
+  
+
+У вас должна открыться рабочая панель для управления роботом
 
 
 
 [последние релизы] https://github.com/koras/robot_xorax/releases
-
 [Группы в телеграмм @robots_xorax](https://t.me/robots_xorax)
 
