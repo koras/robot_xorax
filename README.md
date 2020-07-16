@@ -26,8 +26,8 @@
 
 
 - [Установка робота](https://github.com/koras/robot_xorax/blob/master/documentation/install.md)
-
-- [Настройки робота](https://github.com/koras/robot_xorax/blob/master/documentation/settings_robots.md)
+- [Активные окна](https://github.com/koras/robot_xorax/blob/master/documentation/windows.md)
+- [Контрольная панель](https://github.com/koras/robot_xorax/blob/master/documentation/control_panel.md)
 
 
 Скрин результата работы
