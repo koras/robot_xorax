@@ -1,4 +1,5 @@
 # Robot XoraX
+
 Бесплатный робот для торговле фьючерсными контрактами Brent
 
 Робот умеет выставлять заявки на продажу и покупку. У робота свой алгоритм торговли. 
@@ -17,11 +18,19 @@
 
 Лимит на блокировку покупки. 
 
+
 ![Лимит на блокировку покупки](https://raw.githubusercontent.com/koras/robot_xorax/master/images/readme/risk_buy_block.PNG)
 
 Если цена будет падать и робот купит 3 контракта подряд, не продав не одного контракта, то сработает блокировка покупки, пока вы сами не разблокируете руками. При продаже хотя-бы одного контракта, идёт сброс лимита в 0. Это сделано с первую очередь для того, чтобы ограничить убытки, если цена резко пойдёт вниз на пол доллара или больше и вы не успеете отключить робота 
 
-скрин работы
+
+
+- [Установка робота](https://github.com/koras/robot_xorax/blob/master/documentation/install.md)
+
+- [Настройки робота](https://github.com/koras/robot_xorax/blob/master/documentation/settings_robots.md)
+
+
+Скрин результата работы
 
 ![Лимит на блокировку покупки](https://raw.githubusercontent.com/koras/robot_xorax/master/images/readme/scrin_work.PNG)
 
@@ -29,18 +38,12 @@
  
 
  
-
-установка:
-- Необходимо указать номер счёта. Его надо прописать в файле setting/account.lua  ( setting.ACCOUNT="")
-- Прописать  текущий код бумаги setting.SEC_CODE в файле setting/account.lua 
-- В графике надо указать Идентификатор my_br
  
-![tag](https://raw.githubusercontent.com/koras/robot_xorax/master/images/readme/tag.PNG)
 
 
 
-скачать https://github.com/koras/robot_xorax/releases
 
+Последние релизы https://github.com/koras/robot_xorax/releases
 
 Группы в телеграмм https://t.me/robots_xorax
 
