@@ -17,7 +17,10 @@
 
     5) Максимальный лимит контрактов. 
         Сколько контрактов может использовать робот / В работе / контрактов за одну сделку
-    ![Максимальный лимит контрактов](https://raw.githubusercontent.com/koras/robot_xorax/master/images/readme/panel_limit.PNG)
+
+![Максимальный лимит контрактов](https://raw.githubusercontent.com/koras/robot_xorax/master/images/readme/panel_limit.PNG)
+
+
 
     
 
