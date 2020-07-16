@@ -30,10 +30,8 @@ package.path = package.path
 setting = {};
 stopClass = {};
 engine = {};
-
--- dofile(getScriptPath() .. "\\setting\\account.lua");
-dofile(getScriptPath() .. "\\setting\\work.lua");
-dofile(getScriptPath() .. "\\setting\\stop.lua");
+ 
+dofile(getScriptPath() .. "\\setting\\work_br.lua"); 
 dofile(getScriptPath() .. "\\setting\\engine.lua");
  
 local uTransaction = dofile(getScriptPath() .. "\\shop\\transaction.lua");
