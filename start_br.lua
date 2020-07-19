@@ -2,8 +2,7 @@
 
 
 -- Бесплатный робот торгующий в боковике "robot XoraX"
--- https://t.me/robots_xorax
--- https://smart-lab.ru/blog/621155.php
+-- https://t.me/robots_xorax 
 
 
 local lua51path = "C:\\Program Files (x86)\\Lua\\5.1\\" -- путь, куда установлен дистрибутив Lua 5.1 for Windows
@@ -156,11 +155,7 @@ basis = 9
          if  setting.developer  then 
             test_signal.testSendSignalBue();
          end;
-
-         local testOrder = {
-            ['close']= 41.25,
-            ['trans_id']= "123123"
-          };
+ 
 
           
                -- сработал стоп, проверка 
@@ -199,8 +194,11 @@ basis = 9
    function OnOrder(order)
       -- только для лимитных заявок
 
+      loger.save("OnOrder work order_num = ".. order.order_num.. "  trans_id = ".. order.trans_id)
+    
       -- присваиваем номера заявкам
       market.saleExecution(order);
+      riskStop.updateOrderNumber(order); 
 
       if  bit.band(order.flags,3) == 0 then
          if bit.band(order.flags, 2) == 0 then
@@ -217,6 +215,12 @@ basis = 9
       --   loger.save('OnOrder sellContract  присваиваем номера заявкам 1' )
          market.sellContract(order);
       end;
+
+      if not CheckBit( order.flags, 0) and not CheckBit( order.flags, 1) then
+         loger.save("OnOrder stop 1  сработал стоп order_num = ".. order.order_num.. "  trans_id = ".. order.trans_id)
+          riskStop.appruveOrderStop(order);
+      end;
+
    end
 
 
@@ -224,6 +228,9 @@ basis = 9
 -- OnTransReply -> OnTrade -> OnOrder 
    -- Функция вызывается терминалом когда с сервера приходит информация по сделке
    function OnTrade(trade) 
+        
+
+      loger.save('OnTrade '..  trade.order_num )
    local sell = CheckBit(trade.flags, 1);
 
    if (sell  == 0) then
@@ -248,9 +255,7 @@ basis = 9
       else 
            loger.save('OnTrade исполняется покупка контракта 2' )
           market.sellContract(trade);
-      end;
- 
-
+      end; 
    end
     
        
@@ -278,14 +283,26 @@ end
       -- обновляем номера стоп заявок при выставлении
     --  loger.save(' OnStopOrder -- обновляем номера стоп заявок при выставлении   '.. trade.trans_id   )
    
-
+      -- http://luaq.ru/OnStopOrder.html
       riskStop.updateOrderNumber(trade);
 
       if  bit.band(trade.flags,4)>0
          then
             if not CheckBit(trade.flags, 0) and not CheckBit(trade.flags, 1) then
-               loger.save('вызываем riskStop.appruveOrderStop '.. trade.trans_id );
-               riskStop.appruveOrderStop(trade)
+           --    loger.save('вызываем 11 riskStop.appruveOrderStop '.. trade.trans_id );
+
+               if   CheckBit(trade.flags, 8) then 
+            --      loger.save('вызываем  CheckBit(trade.flags, 8 '.. trade.trans_id );
+               
+               else
+             --     loger.save('вызываем  riskStop.appruveOrderStop false '.. trade.trans_id );
+               end; 
+               if trade.stop_order_type == 1 and  CheckBit(trade.flags, 8) then 
+             --     loger.save('вызываем  222 riskStop.appruveOrderStop '.. trade.trans_id );
+                --  riskStop.appruveOrderStop(trade)
+               end; 
+
+
             end
 
          else
@@ -293,7 +310,7 @@ end
          end
       
          if not CheckBit(trade.flags, 0) and not CheckBit(trade.flags, 1) then
-            loger.save(' -- riskStop.updateOrderNumber изменения по стоп заявке, исполнелись наверное  ' )
+         --   loger.save(' -- riskStop.updateOrderNumber изменения по стоп заявке, исполнелись наверное  ' )
             riskStop.updateOrderNumber(trade)
          end
    end

@@ -157,13 +157,7 @@ setting.tag = "my_br";
  
 setting.comment_quik = 'Robot XoraX';
 
-
-
-
-
-
-
-
+ 
 
 -- Использовать стопы или нет, по умолчанию да
 stopClass.use_stop = true;
@@ -216,3 +210,6 @@ stopClass.array_stop = {};
 stopClass.array_stop.work = 0;
 stopClass.array_stop.order_num = 0;
 stopClass.array_stop.trans_id = 0;
+stopClass.array_stop.price = 0;
+-- обновление стопов
+stopClass.update = true;

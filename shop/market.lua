@@ -235,13 +235,13 @@ function sellContract(result)
                     control.use_contract_limit();  
                       
                     loger.save("sellContract продали контракт " );
+                    risk_stop.update_stop();
 
             end;
         end;
 
         
-      --  loger.save("вызов update_stop 1 " );
-        risk_stop.update_stop();
+      --  loger.save("вызов update_stop 1 " ); 
     end; 
 end;
 
@@ -280,8 +280,8 @@ function deleteBuyCost(result, saleContract)
                     -- calculateProfit(setting.sellTable[sellT]);
                     signalShowLog.addSignal(setting.sellTable[sellT].datetime, 8, false, result.price); 
                     -- надо удалить контракт по которому мы покупали
-                    loger.save("вызов update_stop 2 " );
-                    risk_stop.update_stop(); 
+                     loger.save("вызов update_stop 2 " );
+                   -- risk_stop.update_stop(); 
                     panelBids.show();
             end;
         end;
