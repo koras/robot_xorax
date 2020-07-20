@@ -185,7 +185,7 @@ stopClass.contract_add = 0;
 stopClass.spred = 1.0;
 stopClass.spred_default = 0.04;
 -- на сколько исзменять параметр в панели управления
-stopClass.spred_limit = 0.02;
+stopClass.spred_limit = 0.11;
  
 
 
@@ -211,5 +211,6 @@ stopClass.array_stop.work = 0;
 stopClass.array_stop.order_num = 0;
 stopClass.array_stop.trans_id = 0;
 stopClass.array_stop.price = 0;
+stopClass.array_stop.stop_number = 0;
 -- обновление стопов
 stopClass.update = true;

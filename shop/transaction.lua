@@ -4,7 +4,23 @@ local M = {}
  
 local loger = dofile(getScriptPath() .. "\\modules\\loger.lua")
 
-local function send(typeMarket, price, quantity , type, trans_id_buy )
+
+ 
+function setTransDefault()
+
+ 	 	Transaction ={} 
+		Transaction.CLASSCODE  = setting.CLASS_CODE;
+		Transaction.SECCODE    = setting.SEC_CODE;
+		Transaction.ACCOUNT    = setting.ACCOUNT;
+		Transaction.USE_CASE_SENSITIVE_CONSTANTS = 'PROGRAM';
+		Transaction.CLIENT_CODE		= setting.comment_quik; 
+		Transaction.EXPIRY_DATE = "TODAY";
+end;
+
+
+
+
+local function send(typeMarket, price, quantity , type, trans_id_buy, direction )
 	
 	local operation = "S" 
 	  if typeMarket == "BUY" then
@@ -16,12 +32,9 @@ local function send(typeMarket, price, quantity , type, trans_id_buy )
 	  --https://quikluacsharp.ru/quik-qlua/prostoj-ma-robot-qlua-s-vystavleniem-tejk-profit-i-stop-limit/
 
 	  -- http://luaq.ru/sendTransaction.html
-	local Transaction={} 
+ 
 	
-		Transaction.CLASSCODE  = setting.CLASS_CODE;
-		Transaction.SECCODE    = setting.SEC_CODE;
-		Transaction.ACCOUNT    = setting.ACCOUNT;
-		Transaction.USE_CASE_SENSITIVE_CONSTANTS = 'PROGRAM';
+	  	setTransDefault();
 		Transaction.TYPE  = 'L';
  
 		Transaction.trans_id   = tostring(trans_id);
@@ -29,9 +42,7 @@ local function send(typeMarket, price, quantity , type, trans_id_buy )
 		Transaction.OPERATION  = operation; -- ???????? ("B" - buy, ??? "S" - sell)
 	 
 		Transaction.QUANTITY   = tostring(quantity); -- ?????????? 
-		Transaction.PRICE      = tostring(price);
-		Transaction.CLIENT_CODE= setting.comment_quik;
-		Transaction.EXPIRY_DATE = "TODAY";
+		Transaction.PRICE      = tostring(price); 
 	-- Transaction.COMMENT"]    = "??????"
 
 	
@@ -59,7 +70,7 @@ local function send(typeMarket, price, quantity , type, trans_id_buy )
 
 	elseif type == "SIMPLE_STOP_ORDER" then
 		
-		local direction  = tostring(4);
+		local direction  = tostring(direction);
 	   Transaction.ACTION = "NEW_STOP_ORDER";
 	   Transaction.CONDITION = direction;
 	   Transaction.STOPPRICE = tostring(price);
@@ -88,10 +99,9 @@ end
 
  
 function delete(transId_del_order,stopOrder_num, type)
-
-	local Transaction={} 
-
  
+ 
+	setTransDefault();
 	Transaction.ACTION    		= "KILL_STOP_ORDER";
 
 	if type  ==  "TAKE_PROFIT_STOP_ORDER" or type  ==  "KILL_STOP_ORDER" or type =="SIMPLE_STOP_ORDER"  then  
@@ -102,10 +112,7 @@ function delete(transId_del_order,stopOrder_num, type)
 		Transaction.ACTION = "KILL_ORDER";
 	end
 
-	Transaction.CLASSCODE  		= setting.CLASS_CODE;
-	Transaction.SECCODE    		= setting.SEC_CODE;
-	Transaction.ACCOUNT   		= setting.ACCOUNT; 
-	Transaction.CLIENT_CODE		= setting.comment_quik;
+  
 	Transaction.TRANS_ID  		= tostring(transId_del_order);
 	Transaction.STOP_ORDER_KEY  = tostring(stopOrder_num);
 	Transaction.ORDER_KEY  		= tostring(stopOrder_num);
@@ -124,6 +131,71 @@ end;
 
 
 
+
+
+
+
+
+
+local function sendStop(typeMarket, priceParam, quantity , direction )
+
+	setTransDefault();
+	local price = ""
+	local STOPPRICE =  tostring(priceParam )
+
+	local operation = "S" 
+	  if typeMarket == "BUY" then
+		operation = "B" 
+		 price = tostring(priceParam + 1);
+	  else
+		 price = tostring(priceParam - 1);
+
+	  end
+
+	  local trans_id = random_max(); 
+
+	  --https://quikluacsharp.ru/quik-qlua/prostoj-ma-robot-qlua-s-vystavleniem-tejk-profit-i-stop-limit/
+	  -- http://luaq.ru/sendTransaction.html
+  
+		Transaction.TYPE  = 'L';
+		Transaction.trans_id   = tostring(trans_id); 
+		Transaction.OPERATION  = operation; --  ("B" - buy, OR "S" - sell)
+	 
+		Transaction.QUANTITY   = tostring(quantity);  
+		Transaction.PRICE      = price;   
+		   Transaction.ACTION = "NEW_STOP_ORDER";
+		   
+		--  Направленность стоп-цены. Возможные значения: «4» — меньше или равно, «5» – больше или равно
+	   	Transaction.CONDITION =  tostring(direction);
+	   	Transaction.STOPPRICE = STOPPRICE ;
+	   	Transaction.STOP_ORDER_KIND = "SIMPLE_STOP_ORDER";
+
+ 
+	  	local res  =  sendTransaction(Transaction);    
+		loger.save('sendStop '.. tostring(res))
+
+	if res ~= "" then	
+		message("res 2 "..res);
+		loger.save( 'Transaction  ' .. res )
+	  return nil, res
+	   
+	else   
+		
+		loger.save( 'create stop bid   trans_id=' ..  tostring( trans_id  ) )
+		return trans_id ;
+	end
+
+end
+
+
+
+
+
+
+
+
+
+
 function random_max()
  
 	local res = (16807*(RANDOM_SEED or 137137))%2147483647
@@ -134,5 +206,6 @@ end
 
 M.delete = delete
 M.send = send
+M.sendStop = sendStop
  
 return M

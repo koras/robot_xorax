@@ -161,7 +161,7 @@ end;
 
 
 
--- исполнение выставление контракта на продажу
+-- присваиваем номер заявке на продажу
 
 function saleExecution(result)
     if #setting.sellTable > 0 then
@@ -172,6 +172,7 @@ function saleExecution(result)
                 loger.save("saleExecution true ".. result.order_num .. " -- исполнение выставление контракта на продажу присваиваем номер " );
               --  setting.sellTable[contract].executed = true;
                 setting.sellTable[contract].order_num = result.order_num
+                risk_stop.update_stop();
             end;
         end;
     end;

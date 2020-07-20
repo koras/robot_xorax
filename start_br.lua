@@ -198,7 +198,7 @@ basis = 9
     
       -- присваиваем номера заявкам
       market.saleExecution(order);
-      riskStop.updateOrderNumber(order); 
+    --  riskStop.updateOrderNumber(order); 
 
       if  bit.band(order.flags,3) == 0 then
          if bit.band(order.flags, 2) == 0 then
@@ -212,7 +212,7 @@ basis = 9
       end;
       
       if bit.band(order.flags,1) + bit.band(order.flags,2) == 0  then 
-      --   loger.save('OnOrder sellContract  присваиваем номера заявкам 1' )
+          loger.save('OnOrder sellContract  присваиваем номера заявкам 1' )
          market.sellContract(order);
       end;
 
@@ -230,7 +230,11 @@ basis = 9
    function OnTrade(trade) 
         
 
-      loger.save('OnTrade '..  trade.order_num )
+   loger.save('OnTrade '..  trade.order_num )
+
+
+   riskStop.updateOrderNumber(trade);
+
    local sell = CheckBit(trade.flags, 1);
 
    if (sell  == 0) then
@@ -284,7 +288,7 @@ end
     --  loger.save(' OnStopOrder -- обновляем номера стоп заявок при выставлении   '.. trade.trans_id   )
    
       -- http://luaq.ru/OnStopOrder.html
-      riskStop.updateOrderNumber(trade);
+   --   riskStop.updateOrderNumber(trade);
 
       if  bit.band(trade.flags,4)>0
          then
@@ -311,7 +315,19 @@ end
       
          if not CheckBit(trade.flags, 0) and not CheckBit(trade.flags, 1) then
          --   loger.save(' -- riskStop.updateOrderNumber изменения по стоп заявке, исполнелись наверное  ' )
-            riskStop.updateOrderNumber(trade)
+         --   riskStop.updateOrderNumber(trade)
+         end
+
+
+
+         if not bit.test(trade.flags, 15)   then 
+            loger.save(' calculation 2 '..trade.order_num..' trans_id '..tostring(trade.trans_id))
+            loger.save(' calculation 2 '..trade.order_num..' .condition'..tostring(trade.condition))
+            loger.save(' calculation 2 .condition_price '..trade.condition_price ..' .condition'..tostring(trade.linkedorder))
+            riskStop.updateStopNumber(trade);
+
+         else
+          
          end
    end
 

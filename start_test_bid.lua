@@ -1,7 +1,7 @@
--- ˜˜˜˜˜˜ ˜˜˜ ˜˜˜˜˜˜˜˜˜˜˜˜
+-- ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 
-local lua51path = "C:\\Program Files (x86)\\Lua\\5.1\\" -- ˜˜˜˜, ˜˜˜˜ ˜˜˜˜˜˜˜˜˜˜ ˜˜˜˜˜˜˜˜˜˜˜ Lua 5.1 for Windows
+local lua51path = "C:\\Program Files (x86)\\Lua\\5.1\\" -- ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Lua 5.1 for Windows
 
 package.cpath = "./?.dll;./?51.dll;"
         .. lua51path .. "?.dll;"
@@ -91,14 +91,17 @@ end;
  
 
    function main() 
-      local type = "TAKE_PROFIT_STOP_ORDER"; 
-          type = "SIMPLE_STOP_ORDER"; 
-     type = "NEW_ORDER";
-     res =  transaction.send("BUY", 43.50, 1, type, 0);
+ 
+    -- type = "NEW_ORDER";
+    local direction = 4;
+    local quantity = 1;
+  --   res =  transaction.send("BUY", 43.10, 1, type, 0,  direction);
+      res =  transaction.sendStop("BUY", 42.60, quantity , direction );
+    -- res =  transaction.sendStop("SELL", 43.10, quantity , direction );
+
       loger.save("res 1 " ..res); 
       n = getNumberOf("orders")
-      order={}
-   --   message("total ".. tostring(n) .." of all orders", 1)
+      order={} 
       for i=0,n-1 do
           order = getItem("orders", i)
         r = "order: num=" ..  tostring(order["order_num"]) .. " qty=".. tostring(order["qty"]) .. " value=" ..  tostring(order["value"])
@@ -111,12 +114,12 @@ end;
 
 
    
- -- ˜˜˜˜˜˜˜˜˜˜˜ ˜˜˜ ˜˜˜˜˜˜˜˜˜˜ ˜˜˜˜˜
+ -- ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
    function updateTick(result)
       if  setting.emulation then
-         -- ˜˜˜˜˜˜˜˜˜ ˜˜ ˜˜˜˜˜ ˜˜˜˜˜˜˜˜
+         -- ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
       --   market.callSELL_emulation(result);
-         -- ˜˜˜˜˜˜˜˜ ˜˜˜˜ ˜ ˜˜˜˜˜˜ ˜˜˜˜˜˜˜˜
+         -- ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
       --   riskStop.appruveOrderStop(result)
       end;
       
@@ -132,13 +135,27 @@ end;
       loger.save("OnOrder NUMBER   = "..tostring(order.order_num));-- NUMBER 
 
 
+      if bit.band( order.flags, 0) and bit.band( order.flags, 1) then
 
-      if not CheckBit( order.flags, 0) and not CheckBit( order.flags, 1) then
+         loger.save("OnOrder 0  stop order.order_num ".. order.order_num) 
+         loger.save("OnOrder 0 stop trans_id ".. order.trans_id) 
+      end;
 
-         loger.save("OnOrder stop 1  order.price ".. order.order_num) 
-      else
-         loger.save("OnOrder stop 2  order.price ".. order.order_num) 
+      if bit.band( order.flags, 0) then
 
+         loger.save("OnOrder 1 stop order.order_num ".. order.order_num)  
+      end;
+
+
+      if bit.band( order.flags, 1) then
+
+         loger.save("OnOrder 3 stop order.order_num ".. order.order_num)  
+      end;
+
+
+
+      if not bit.band( order.flags, 0) and not bit.band( order.flags, 1) then
+         loger.save("OnOrder stop 5 order.price ".. order.order_num) 
       end;
 
 
@@ -149,7 +166,7 @@ end;
             stopOrder_num = order.order_num
             type = "KILL_ORDER";
             transId_del_order = order.trans_id
-            transaction.delete(transId_del_order,stopOrder_num, type)
+          --  transaction.delete(transId_del_order,stopOrder_num, type)
             loger.save('  order.order_num '..  order.order_num .. '  order.trans_id '..   order.trans_id)
 
             del = false;
@@ -166,11 +183,11 @@ end;
 
 
 
-       -- ˜˜˜˜ ˜˜˜˜˜˜˜˜˜ Buy, ˜˜˜˜˜˜˜˜˜˜ ˜˜˜˜˜ ˜˜˜˜˜˜ ˜ ˜˜˜˜˜˜˜˜ ˜˜˜˜˜˜˜
+       -- ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Buy, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
       if order.trans_id == BuyUniqTransID and BuyOrderNum == 0 then 
          BuyOrderNum = order.order_num;
       end;
-      -- ˜˜˜˜ ˜˜˜˜˜˜˜˜˜ Sell, ˜˜˜˜˜˜˜˜˜˜ ˜˜˜˜˜ ˜˜˜˜˜˜ ˜ ˜˜˜˜˜˜˜˜ ˜˜˜˜˜˜˜
+      -- ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Sell, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
       if order.trans_id == SellUniqTransID and SellOrderNum == 0 then 
          SellOrderNum = order.order_num;
       end;
@@ -196,7 +213,7 @@ end;
       if bit.band(order.flags,1) + bit.band(order.flags,2) == 0  then 
 
 
-         loger.save("˜˜˜˜˜˜˜˜˜ loger.save(  order.price ".. order.price) 
+         loger.save("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ loger.save(  order.price ".. order.price) 
  
 
       end;
@@ -204,20 +221,14 @@ end;
 
 
 
--- OnTransReply -> OnTrade -> OnOrder 
-   -- ˜˜˜˜˜˜˜ ˜˜˜˜˜˜˜˜˜˜ ˜˜˜˜˜˜˜˜˜˜ ˜˜˜˜˜ ˜ ˜˜˜˜˜˜˜ ˜˜˜˜˜˜˜˜ ˜˜˜˜˜˜˜˜˜˜ ˜˜ ˜˜˜˜˜˜
-   function OnTrade(trade) 
+  function OnTrade(trade) 
 
       loger.save('OnTrade')
+      loger.save("OnTrade OnTrade trade.trans_id "..tostring(trade.trans_id));-- NUMBER
+      loger.save("OnTrade OnTrade trade.trade_num "..tostring(trade.trade_num));-- NUMBER  
+      loger.save("OnTrade OnTradetrade.order_num "..tostring(trade.order_num));-- NUMBER   
 
-      
-
-      message("OnTrade OnTrade "..tostring(trade.trans_id));-- NUMBER
-      message("OnTrade OnTrade 222 "..tostring(trade.trade_num));-- NUMBER  
-      message("OnTrade OnTrade 44444 "..tostring(trade.order_num));-- NUMBER   
-
-
-   local sell = CheckBit(trade.flags, 1);
+   local sell = bit.band(trade.flags, 1);
 
 
 
@@ -226,23 +237,23 @@ end;
    end;
 
    
-      if not CheckBit(trade.flags, 0) and not CheckBit(trade.flags, 1) then
-         loger.save('OnTrade 111 âûçûâàåì 11 riskStop.appruveOrderStop '.. trade.trans_id );
+      if not bit.band(trade.flags, 0) and not bit.band(trade.flags, 1) then
+         loger.save('OnTrade 111 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 11 riskStop.appruveOrderStop '.. trade.trans_id );
 
-         if   CheckBit(trade.flags, 8) then 
-            loger.save('OnTrade 222  âûçûâàåì  CheckBit(trade.flags, 8 '.. trade.trans_id );
+         if   bit.band(trade.flags, 8) then 
+            loger.save('OnTrade 222  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  CheckBit(trade.flags, 8 '.. trade.trans_id );
          
          else
-            loger.save('OnTrade 333 âûçûâàåì  riskStop.appruveOrderStop false '.. trade.trans_id );
+            loger.save('OnTrade 333 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  riskStop.appruveOrderStop false '.. trade.trans_id );
          end; 
-         if trade.stop_order_type == 1 and  CheckBit(trade.flags, 8) then 
+         if trade.stop_order_type == 1 and  bit.band(trade.flags, 8) then 
             loger.save('OnTrade 444  riskStop.appruveOrderStop '.. trade.trans_id );
   
          end; 
 
 
    else
-   -- çàÿâêà íà ïîêóïêó 
+   -- ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
    end
 
 
@@ -251,15 +262,15 @@ end;
 
       loger.save('OnTrade end 222  --  '..tostring(trade.trans_id) .. "   == " ..tostring(trade.order_num))
    else
-      loger.save('OnTrade end 111 -- ˜˜˜˜˜˜˜˜˜˜˜ ˜˜˜˜˜˜˜ ˜˜˜˜˜˜˜˜˜ ')
+      loger.save('OnTrade end 111  ')
      
    end;
 
 
-   if not CheckBit(trade.flags, 0) and not CheckBit(trade.flags, 1) then
+   if not bit.band(trade.flags, 0) and not bit.band(trade.flags, 1) then
 
       if bit.band(trade.flags, 2) == 0 then
-         -- ˜˜˜˜˜˜˜˜˜˜˜ ˜˜˜˜˜˜˜ ˜˜˜˜˜˜˜˜˜ 
+         -- ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
   
       end; 
    end
@@ -268,7 +279,7 @@ end;
    end
 
 
--- ˜˜˜˜˜˜˜ ˜˜˜˜˜˜˜˜˜˜ true, ˜˜˜˜ ˜˜˜ ˜ ˜˜˜˜˜˜˜ index ˜˜˜˜˜˜ flags ˜˜˜˜˜˜˜˜˜˜ ˜ 1
+-- ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ true, ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ index ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ flags ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ 1
 function bit_set( flags, index )
    local n=1;
    n=bit.lshift(1, index);
@@ -280,45 +291,59 @@ function bit_set( flags, index )
 end
 
 
-   -- ˜˜˜˜˜˜˜ ˜˜˜˜˜˜˜˜˜˜ ˜˜˜˜˜˜˜˜˜˜ ˜˜˜˜˜ ˜ ˜˜˜˜˜˜˜ ˜˜˜˜˜˜˜˜ ˜˜˜˜˜˜˜˜˜˜ ˜˜ ˜˜˜˜˜˜
+   -- ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
    function OnStopOrder(trade)
-      
-   message(" QUIK "..tostring(stop_order.order_num));-- NUMBER    
-       loger.save(' OnStopOrder' )
+       
+     --  loger.save(' OnStopOrder' )
       loger.save(" QUIK "..tostring(trade.order_num));-- NUMBER    
+
+
+
       if  bit.test(trade.flags, 0)  then
 
          stopOrder_num = trade.order_num
          type = "KILL_STOP_ORDER";
          transId_del_order = trade.trans_id
-         transaction.delete(transId_del_order,stopOrder_num, type)
+       --  transaction.delete(transId_del_order,stopOrder_num, type)
       else 
-         loger.save(' return OnStopOrder '..trade.trans_id .."  stop_order.order_num"..stop_order.order_num )
+         loger.save(' return OnStopOrder '..trade.trans_id .."  stop_order.order_num "..trade.order_num )
          return;
        --  riskStop.appruveOrderStop(trade)
       end;
 
 
-      if  bit.band(trade.flags,4)>0
-         then
+        if  bit.band(trade.flags,4)>0 then
 
             if not bit.test(trade.flags, 0) and not bit.test(trade.flags, 1) then
-               loger.save('˜˜˜˜˜˜ 11111 ˜'..trade.order_num..' appruve Sell Sell Sell')
+               loger.save('ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 11111 ï¿½'..trade.order_num..' appruve Sell Sell Sell')
             
              --  riskStop.appruveOrderStop(trade)
             end
 
-         -- ˜˜˜˜˜˜ ˜˜ ˜˜˜˜˜˜˜
-      loger.save(' trade.flags Sell ')
+            -- ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+             loger.save(' trade.flags Sell ')
          else
-         -- ˜˜˜˜˜˜ ˜˜ ˜˜˜˜˜˜˜
-      loger.save(' trade.flags Buy ')
+         -- ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+           loger.save(' trade.flags Buy ')
          end
       
          if not bit.test(trade.flags, 0) and not bit.test(trade.flags, 1) then
-            loger.save('˜˜˜˜˜˜ 11111 ˜'..trade.order_num..' appruve')
+            loger.save('ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 11111 ï¿½'..trade.order_num..' appruve')
          end
 
+          
+      
+         if  bit.test(trade.flags, 15)   then
+            loger.save(' calculation 1 '..trade.order_num..' condition '..tostring(trade.condition))
+            loger.save(' calculation 1 '..trade.order_num..' trans_id '..tostring(trade.trans_id))
+            loger.save(' calculation 1 .condition_price '..trade.condition_price ..' condition '..tostring(trade.linkedorder))
+
+         else
+            loger.save(' calculation 2 '..trade.order_num..' trans_id '..tostring(trade.trans_id))
+            loger.save(' calculation 2 '..trade.order_num..' .condition'..tostring(trade.condition))
+            loger.save(' calculation 2 .condition_price '..trade.condition_price ..' .condition'..tostring(trade.linkedorder))
+
+         end
    end
 
 
@@ -326,20 +351,20 @@ end
 
    
 
-      -- ˜˜˜˜˜˜˜˜˜˜ ˜˜˜˜˜˜˜ ˜˜˜ ˜˜˜˜˜˜, ˜˜˜ ˜˜˜˜˜˜˜˜˜ ˜˜˜˜˜˜˜˜˜˜ ˜˜˜˜˜˜
+      -- ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
    function SE_OnExecutionOrder(order)
-      -- ˜˜˜˜˜ ˜˜˜ ˜˜˜ ˜˜˜ ˜˜˜˜˜˜˜˜ ˜˜˜ ˜˜˜˜˜˜, ˜˜˜ ˜˜˜˜˜˜˜˜˜ ˜˜˜˜˜˜˜˜˜˜ ˜˜˜˜˜˜
+      -- ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
       -- ...
-      -- ˜˜˜˜˜˜˜ ˜˜˜˜˜˜˜˜˜
-      loger.save('SE_OnExecutionOrder() ˜˜˜˜˜˜ ˜˜˜˜˜˜ ˜'..order.order_num..' ˜˜˜˜˜˜˜˜˜ ˜ '..(order.qty - (order.last_execution_count or 0))..' ˜˜ '..order.balance)
+      -- ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+      loger.save('SE_OnExecutionOrder() ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½'..order.order_num..' ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ '..(order.qty - (order.last_execution_count or 0))..' ï¿½ï¿½ '..order.balance)
    end
 
-   -- ˜˜˜˜˜˜˜˜ ˜˜˜˜˜˜˜˜˜˜ ˜˜˜˜˜˜˜˜˜˜
+   -- ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
    function SE_OnTransOK(trans)
-      -- ˜˜˜˜˜ ˜˜˜ ˜˜˜ ˜˜˜ ˜˜˜˜˜˜˜˜ ˜˜˜ ˜˜˜˜˜˜˜˜ ˜˜˜˜˜˜˜˜˜˜ ˜˜˜˜˜˜˜˜˜˜
+      -- ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
       -- ...
-      -- ˜˜˜˜˜˜˜ ˜˜˜˜˜˜˜˜˜
-      loger.save('SE_OnTransOK() ˜˜˜˜˜˜˜˜˜˜ ˜'..trans.trans_id..' ˜˜˜˜˜˜˜ ˜˜˜˜˜˜˜˜˜')
+      -- ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+      loger.save('SE_OnTransOK() ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½'..trans.trans_id..' ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½')
    end
 
 
@@ -363,14 +388,14 @@ end
    end;
     
 
-   -- ˜˜˜˜˜˜˜ ˜˜˜˜˜˜˜˜˜ ˜˜˜˜˜˜˜˜˜˜ ˜˜˜, ˜˜˜ ˜˜˜ (˜˜˜˜˜˜˜˜˜˜ true, ˜˜˜ false)
+   -- ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ true, ï¿½ï¿½ï¿½ false)
   function CheckBit(flags, _bit)
 
 
    
-   -- ˜˜˜˜˜˜˜˜˜, ˜˜˜ ˜˜˜˜˜˜˜˜˜˜ ˜˜˜˜˜˜˜˜˜ ˜˜˜˜˜˜˜˜ ˜˜˜˜˜˜˜
-   if type(flags) ~= "number" then loger.save("˜˜˜˜˜˜!!! Checkbit: 1-˜ ˜˜˜˜˜˜˜˜ ˜˜ ˜˜˜˜˜!") end
-   if type(_bit) ~= "number" then loger.save("˜˜˜˜˜˜!!! Checkbit: 2-˜ ˜˜˜˜˜˜˜˜ ˜˜ ˜˜˜˜˜!") end
+   -- ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+   if type(flags) ~= "number" then loger.save("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½!!! Checkbit: 1-ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½!") end
+   if type(_bit) ~= "number" then loger.save("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½!!! Checkbit: 2-ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½!") end
  
    if _bit == 0 then _bit = 0x1
    elseif _bit == 1 then _bit = 0x2
