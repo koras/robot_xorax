@@ -114,6 +114,15 @@ end
 	SetCell(t_stat, 28, 1, tostring(setting.fractal_candle));
 	SetCell(t_stat, 29, 1, tostring(setting.fractal_down_range));
 	SetCell(t_stat, 30, 1, tostring(setting.fractal_under_up));
+
+	
+	SetCell(t_stat, 32, 1, tostring(   setting.number_of_candle));
+	SetCell(t_stat, 33, 1, tostring(   setting.candle_current_high));
+	SetCell(t_stat, 34, 1, tostring(   setting.candle_current_low));
+
+
+
+
  
 
 end;

@@ -15,13 +15,13 @@ engine.candle_price_max_hight = 0.5;
 
 
 -- минутные свечи. используются для подсчёта 
-setting.count_of_candle = 1;
+setting.count_of_candle = 5;
  
 
 -- второй минимум
 setting.low_formacia = { };  
 
-
+setting.candle_test = 0;
 
 setting.candle_current_high = 0.00; -- верхняя граница свечи; для промежутка покупки
 setting.candle_current_low = 0.00; -- верхняя граница свечи; для промежутка покупки

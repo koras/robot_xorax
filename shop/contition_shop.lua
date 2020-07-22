@@ -89,7 +89,8 @@ end;
                         -- свечка меньше текущего профита 
 	                --	[13] = 'Текущая свеча меньше преполагаемого профита, низкая волатильность',   
                         checkRange = false; 
-                        signalShowLog.addSignal(datetime, 19, false, setting.profit_range);
+                        signalShowLog.addSignal(datetime, 19, false, setting.candle_current_high);
+                        signalShowLog.addSignal(datetime, 19, false,  setting.candle_current_low); 
                         signalShowLog.addSignal(datetime, 13, false, range_candle);
                 else
                         
