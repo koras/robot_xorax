@@ -141,7 +141,7 @@ basis = 9
  
       loger.save("start log");
 
-      statsPanel.show();
+     -- statsPanel.show();
       panelBids.show();
       update();
       getPrice();
@@ -159,7 +159,7 @@ basis = 9
                -- сработал стоп, проверка 
 
          update();
-           statsPanel.stats();
+         --  statsPanel.stats();
            fractalSignal.last();
 
           if setting.status  then  
