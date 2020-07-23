@@ -28,11 +28,8 @@ end;
 
 
 
-
 local function  setRange(range)
-
-rangeLocal = rangegetNumCandle
-
+    rangeLocal = rangegetNumCandle
 end;
 
 local function  getRange()
@@ -41,6 +38,14 @@ end;
 
 
 bigCandle = 0;
+
+
+local function initCandle(barCandleLocal)
+    if start_init  then
+        setting.not_buy_high  = setting.not_buy_high_UP + barCandleLocal.close;
+        start_init  = false;
+    end
+end
 
 
 -- вызывается для сигналов
@@ -55,8 +60,6 @@ local function getSignal(collbackFunc)
     setting.number_of_candle = getNumCandles(setting.tag); 
 
     bars_temp,res,legend = getCandlesByIndex(setting.tag, 0, setting.number_of_candle-2*len-shift, 2*len)
- 
-
     i=len
     j=2*len
     while i>=1 do
@@ -66,7 +69,7 @@ local function getSignal(collbackFunc)
                 if bars_temp[j-1].datetime.hour >= 10 then
     
                     local bar = bars_temp[j-1];
-
+                    initCandle(bar);
 
                     if bigCandle <= i  then
                             bigCandle  = i; 
@@ -183,26 +186,13 @@ function setArrayCandles(barCandle, numberCandle)
                 if barCandle.close < min then 
                     min  = barCandle.close;
                 end
-               
-                -- for testing a candlelight corridor
-                --  loger.save(setting.array_candle[candle].numberCandle .. " min= ".. setting.array_candle[candle].high.. "(".. setting.candle_current_high..")/".. setting.array_candle[candle].low .. "(".. setting.candle_current_low .. ") barCandle.low "..barCandle.low);
-                      
-
+                
             else
-              
-            --    loger.save("setting.candle_test === ".. setting.candle_test );  
-             --   loger.save("setting.array_candle[candle].numberCandle === ".. setting.array_candle[candle].numberCandle);  
-
                 if setting.candle_test ~= setting.array_candle[candle].numberCandle then 
                     setting.candle_test = setting.array_candle[candle].numberCandle;
-               --     loger.save("setting.candle_current_high === ".. setting.array_candle[candle].numberCandle );  
                 end;
 
             end;
-
-     
-
-
         end;
 
         
@@ -250,24 +240,9 @@ function setArrayCandles(barCandle, numberCandle)
 end;
 
 
-
- 
-
-
-
--- проверка формаций
-
-function checkFormation()
- --   setting.candle_current_low  
-  --  setting.low_formacia
-end
-
-
-
-
-
-
 M.getSignal = getSignal
 M.setRange = setRange
 M.getRange = getRange
 return M
+
+-- setting.not_buy_high

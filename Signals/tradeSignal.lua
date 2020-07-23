@@ -94,8 +94,7 @@ local function  calculatePrice( price,datetime)
     if oldPrice == 0 then
         oldPrice = price;
         return
-    end
---0.03  цена выросла 31.1   oldPrice 31.1
+    end 
     if oldPrice + rangeLocal < price   then
         if(countingTicsVolume > CRITICAL_VOLUME)  then
             --  цена и объём  растёт   
@@ -126,12 +125,12 @@ end;
 
 
 
-local function  setRange(range)
+-- local function  setRange(range)
 
-rangeLocal = rangegetNumCandle
+-- rangeLocal = rangegetNumCandle
  
 
-end;
+-- end;
 
 local function  getRange()
     return rangeLocal;
