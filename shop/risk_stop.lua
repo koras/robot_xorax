@@ -21,12 +21,8 @@ function update_stop()
 
 
     if usestop==false then return; end;
-
-    loger.save(' ' );
-    loger.save('================================= '.. setting.current_price  );
     
     if setting.current_price  <= stopClass.array_stop.price then 
-        loger.save('======setting.current_price'..setting.current_price.." stopClass.array_stop.price"..stopClass.array_stop.price );
         stopClass.update = false;
     end;
 
