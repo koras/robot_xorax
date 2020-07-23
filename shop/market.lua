@@ -77,11 +77,9 @@ function long(price, datetime, levelLocal , event) -- решение
 
             if limitBuy and checkRangeBuy and checkRangeSell and randCandle  and failMarket and getFailBuy and buyButtonBlock and not_buy_high then
                 setting.SPRED_LONG_TREND_DOWN  = setting.SPRED_LONG_TREND_DOWN + setting.SPRED_LONG_TREND_DOWN_SPRED;
+
                 setting.SPRED_LONG_TREND_DOWN_LAST_PRICE = price; -- записываем последнюю покупку
                 
-
-                 
-
 
                     if setting.emulation  then
                         -- в режиме эмуляции контракт на покупку исполнен в полном объёме
@@ -195,7 +193,6 @@ function sellContract(result)
                     setting.sellTable[contract].executed == false  and 
                     setting.sellTable[contract].trans_id == result.trans_id  then
                 
-                   -- setting.SPRED_LONG_TREND_DOWN_LAST_PRICE = 0;
                     -- статистика
                     setting.count_sell = setting.count_sell + 1;
                     setting.count_contract_sell = setting.count_contract_sell +  setting.sellTable[contract].use_contract;
@@ -289,7 +286,6 @@ function callBUY_emulation(price_callBUY_emulation ,datetime)
     setting.count_contract_buy = setting.count_contract_buy  + setting.use_contract;
     local data = {};
   
-                setting.SPRED_LONG_TREND_DOWN_LAST_PRICE = 0;
 
                 data.price = price_callBUY_emulation;
                 data.datetime= datetime;
@@ -455,7 +451,6 @@ function execution_sell(contract)
     --setting.each_to_buy_step
         -- увеличивает лимит используемых контрактов 
         
-    
         setting.SPRED_LONG_TREND_DOWN_LAST_PRICE = 0;
     
         if  contract.contract > 0 and setting.limit_count_buy  >= contract.contract  then 
