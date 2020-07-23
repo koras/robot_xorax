@@ -38,7 +38,10 @@ local countingTicsVolume = 0;
 
 -- свечки
 local CRITICAL_VOLUME= 0;
+-- свечки
+local count_of_candle = 0;
 
+ 
 
 
 local function  calculateVolume( volume)
@@ -47,8 +50,9 @@ local function  calculateVolume( volume)
 local rangeVolume = 10
 
 
+  --  loger.save("setting.count_of_candle "..  count_of_candle .. " setting.old_number_of_candles "..setting.old_number_of_candles.. "  ".. setting.number_of_candles  ); 
     -- новая свеча
-    if (setting.old_number_of_candles + setting.count_of_candle  ~= setting.number_of_candles ) then 
+    if (setting.old_number_of_candles + count_of_candle  ~= setting.number_of_candles ) then 
         setting.old_number_of_candles = setting.number_of_candles;
         -- если новая свечка
         volumeRange =  volume;
@@ -72,6 +76,7 @@ local rangeVolume = 10
         countingTicsVolume =  countingTicsVolume + 1;
     end
 
+ 
 
     if lastTickVolume - rangeVolume >= updateValue  then 
         volumeRange = oldVolume - volume;
@@ -138,6 +143,9 @@ end;
   
 
 local function getSignal(tg, callback)
+ 
+
+
     seconds = os.time(datetime); -- в seconds будет значение 1427052491
 
     collbackFunc = callback;
@@ -164,6 +172,9 @@ local function getSignal(tg, callback)
                     end
                     if sk then
                             bars[i]=bars_temp[j-1] 
+
+                            
+      
                           calculateSignal( bars[len] )
                           i=i-1
                     end

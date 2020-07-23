@@ -9,6 +9,7 @@ local loger = dofile(getScriptPath() .. "\\modules\\loger.lua")
  
 local signalShowLog = dofile(getScriptPath() .. "\\interface\\signalShowLog.lua");
 local candleGraff = dofile(getScriptPath() .. "\\interface\\candleGraff.lua");
+local control = dofile(getScriptPath() .. "\\interface\\control.lua");
  
 
 local function  calculateVolume( volume)
@@ -202,8 +203,9 @@ function setArrayCandles(barCandle, numberCandle)
             setting.candle_current_high =  barCandle.close;   
         end;
 
-       if max ~=0 then  
-            setting.candle_current_high = max;   
+       if max ~=0 and setting.candle_current_high ~= max  then  
+            setting.candle_current_high = max; 
+            control.use_contract_limit();    
        end;
 
        
@@ -211,8 +213,9 @@ function setArrayCandles(barCandle, numberCandle)
         setting.candle_current_low =  barCandle.close;   
         end;
 
-       if min ~= minDefault then  
+       if min ~= minDefault and setting.candle_current_low ~= min then  
             setting.candle_current_low = min;   
+            control.use_contract_limit();  
         end;
 
 

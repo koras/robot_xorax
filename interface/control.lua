@@ -210,7 +210,8 @@ function current_limit()
 	SetCell(t_control, 26, 0,   words.word('SPRED_LONG_TREND_DOWN')); 
 	SetCell(t_control, 27, 0,   words.word('SPRED_LONG_TREND_DOWN_SPRED')); 
 	SetCell(t_control, 28, 0,  words.word('not_buy_high')); 
-end; 
+	SetCell(t_control, 29, 0,  words.word('count_calculate_candle')); 
+end;  
 
 
 
@@ -226,6 +227,7 @@ function current_limit_plus()
 	SetCell(t_control, 26, 2,  word.current_limit_plus); 
 	SetCell(t_control, 27, 2,  word.current_limit_plus); 
 	SetCell(t_control, 28, 2,  word.current_limit_plus); 
+	SetCell(t_control, 29, 2,  word.current_limit_plus); 
 
 	Green(t_control,11, 2);
 	Green(t_control,13, 2);
@@ -234,6 +236,7 @@ function current_limit_plus()
 	Green(t_control,26, 2);
 	Green(t_control,27, 2);
 	Green(t_control,28, 2);
+	Green(t_control,29, 2);
 
 end;
 function current_limit_minus()  
@@ -243,6 +246,7 @@ function current_limit_minus()
 	SetCell(t_control, 26, 3,  word.current_limit_minus); 
 	SetCell(t_control, 27, 3,  word.current_limit_minus); 
 	SetCell(t_control, 28, 3,  word.current_limit_minus); 
+	SetCell(t_control, 29, 3,  word.current_limit_minus); 
 	Red(t_control,11, 3);
 	Red(t_control,13, 3);
   
@@ -250,6 +254,7 @@ function current_limit_minus()
 	Red(t_control,26, 3);
 	Red(t_control,27, 3);
 	Red(t_control,28, 3);
+	Red(t_control,29, 3);
 end;
 
  
@@ -277,8 +282,10 @@ function use_contract_limit()
 	SetCell(t_control, 26, 1,   tostring( setting.SPRED_LONG_TREND_DOWN .." - ".. setting.profit_range.. " ("..setting.SPRED_LONG_TREND_DOWN_NEXT_BUY ..")" )); 
 	SetCell(t_control, 27, 1,   tostring( setting.SPRED_LONG_TREND_DOWN_SPRED )); 
 	SetCell(t_control, 28, 1,   tostring( setting.not_buy_high .. ' (-'..setting.profit_range ..')' )); 
-	 
 
+	SetCell(t_control, 29, 1,   tostring( setting.count_of_candle .. " ("..setting.candle_current_high .."/"..setting.candle_current_low..")" )); 
+	 
+ 
 	
 	show_panel_bue_sell();
 	-- панель покупки
@@ -732,7 +739,6 @@ function event_callback_message_control (t_control, msg, par1, par2)
 			stopClass.contract_add = stopClass.contract_add + 1; 
 			riskStop.update_stop();
 			use_contract_limit();
-			show_info_stop ()
 			return;
 	end;
 	if par1 == 31 and par2 == 3  and  msg == 1 then
@@ -740,7 +746,6 @@ function event_callback_message_control (t_control, msg, par1, par2)
 			stopClass.contract_add = stopClass.contract_add - 1;
 			riskStop.update_stop();
 			use_contract_limit();
-			show_info_stop ()
 			end; 
 		return;
 	end;
@@ -815,7 +820,24 @@ function event_callback_message_control (t_control, msg, par1, par2)
 	
 
 
+	-- растояние до максимальной покупки, меняется только при максимальной покупке
+	if par1 == 29 and par2 == 2  and  msg == 1 then
+		setting.count_of_candle  = setting.count_of_candle + 1; 
+ 
+		use_contract_limit(); 
+		return;
+	end;
+	if par1 == 29 and par2 == 3  and  msg == 1 then
+		message(setting.count_of_candle );
+		if setting.count_of_candle >  0 then
+			setting.count_of_candle = setting.count_of_candle - 1;
+			use_contract_limit(); 
+			end; 
+		return;
+	end;
 
+
+	 
 
 	
 	if par1 == 4 and par2 == 0  and  msg == 1 then 

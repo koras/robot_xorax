@@ -156,8 +156,6 @@ basis = 9
             test_signal.testSendSignalBue();
          end;
  
-
-          
                -- сработал стоп, проверка 
 
          update();
