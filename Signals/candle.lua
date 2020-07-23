@@ -88,16 +88,24 @@ end
 -- логика обновления данных
 function setBarCandle(bar, collbackFunc) 
 
+        bar.numberCandle = setting.number_of_candle;
+
         if  setting.old_number_of_candle ~= setting.number_of_candle  then
-                loger.save("numberCandle numberCandle ".. setting.number_of_candle ); 
-                bar.numberCandle = setting.number_of_candle;
+            
                 setting.array_candle[#setting.array_candle + 1] = bar;
                 setting.old_number_of_candle = setting.number_of_candle; 
+
+        else
+            -- обновляем бар в таблице
+            setting.array_candle[#setting.array_candle] = bar;
         end;
+
+         
 
         setArrayCandles(bar, setting.number_of_candle);
         setting.current_price = bar.close;
-        setting.datetime  = bar.datetime; 
+        setting.datetime  = bar.datetime;  
+
         calculateSignal(bar);
         collbackFunc(bar);
 end;
@@ -119,9 +127,12 @@ function setArrayCandles(barCandle, numberCandle)
     local localCandle = barCandle;
     localCandle.numberCandle = numberCandle;
 
+
+
     if #setting.array_candle > 0 then 
          
         local min = 1000000000;
+        local minDefault = 1000000000;
         local max = 0;
 
         for candle = 1 ,  #setting.array_candle do 
@@ -173,8 +184,8 @@ function setArrayCandles(barCandle, numberCandle)
                     min  = barCandle.close;
                 end
                
-                 
-              --  loger.save(setting.array_candle[candle].numberCandle .. " min= ".. setting.array_candle[candle].high.." > ".. setting.array_candle[candle].low .." barCandle.low"..barCandle.low);
+                -- for testing a candlelight corridor
+                --  loger.save(setting.array_candle[candle].numberCandle .. " min= ".. setting.array_candle[candle].high.. "(".. setting.candle_current_high..")/".. setting.array_candle[candle].low .. "(".. setting.candle_current_low .. ") barCandle.low "..barCandle.low);
                       
 
             else
@@ -206,6 +217,14 @@ function setArrayCandles(barCandle, numberCandle)
        end;
 
        
+       if setting.candle_current_low == 0 then  
+        setting.candle_current_low =  barCandle.close;   
+        end;
+
+       if min ~= minDefault then  
+            setting.candle_current_low = min;   
+        end;
+
 
     else
         
@@ -217,8 +236,9 @@ function setArrayCandles(barCandle, numberCandle)
         end 
 
         setting.datetime = localCandle.datetime; 
-        if setting.candle_current_low > setting.candle_current_low then 
-            loger.save("update low "..localCandle.high);
+
+        if setting.candle_current_low > localCandle.low then 
+            loger.save("update low "..localCandle.low);
             setting.candle_current_low = localCandle.low;
         end 
 
@@ -244,25 +264,6 @@ end
 
 
 
-
--- единоразовые вычисления
-function calculateCandle(key, barC) 
-
-    if start_init  then 
-        if setting.not_buy_high == 0 then 
-            setting.not_buy_high  =  barC.close + setting.not_buy_high_UP; 
-        end;
-        setting.current_price = barC.close;
-
-        setting.array_candle[key].high = barC.high;
-        setting.array_candle[key].low  = barC.low;
-        setting.array_candle[key].close  = barC.close;
-
-        setting.candle_current_high = barC.high;
-        setting.candle_current_low = barC.low;
-        start_init  = false;
-    end;
-end;
 
 
 
