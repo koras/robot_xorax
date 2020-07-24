@@ -140,12 +140,9 @@ end;
 function generationCollectionStop()  
     
 
-    local contract_work = stopClass.contract_work + stopClass.contract_add;
-    loger.save("generationCollectionStop -----------stopClass.contract_add "..tostring(stopClass.contract_add)   );
-    loger.save("generationCollectionStop -----------stopClass.contract_work "..tostring(stopClass.contract_work)   );
-    loger.save("generationCollectionStop -----------contract_work "..tostring(contract_work)   );
-             
-
+    local contract_work = stopClass.contract_work + stopClass.contract_add; 
+    loger.save("Ставим новый стоп generationCollectionStop contract_work = "..tostring(contract_work)   );
+            
     if contract_work > 0  then   
                     -- смотрим куда поставить стоп
                     maxPrice = getMaxPriceRange() 
@@ -161,9 +158,8 @@ function backStop()
 
     loger.save(" "  );
     loger.save("backStop  trans_id "..tostring(stopClass.array_stop.trans_id) .. "   order_num = ".. tostring(stopClass.array_stop.order_num) );
-    loger.save("backStop  stop_number "..tostring(stopClass.array_stop.stop_number));
-    
-     
+
+
 
         if stopClass.array_stop.emulation then
                 -- удаляем метку
@@ -185,9 +181,8 @@ function backStop()
                 local trans_id = tostring(stopClass.array_stop.trans_id);
                 local order_type = tostring(stopClass.array_stop.order_type);
  
-                loger.save("backStop 2 -- trans_id "..tostring(stopClass.array_stop.trans_id));
-                loger.save("backStop 2 -----stop_number "..tostring(stop_number)   );
-                loger.save("backStop 2 -----order_type "..tostring(order_type)   );
+                loger.save("backStop 2 -- trans_id "..tostring(stopClass.array_stop.trans_id.." stop_number ".. stop_number)   );
+
              
                 transaction.delete(trans_id, stop_number, order_type); 
 
@@ -281,11 +276,11 @@ end;
 
 function updateStopNumber(order) 
 
+    loger.save("updateOrderNumber 1 order_num=".. order.order_num .." trans_id=".. stopClass.array_stop.trans_id )  
     if  order.trans_id == stopClass.array_stop.trans_id and  
     stopClass.array_stop.order_num == 0 and
     stopClass.array_stop.work == 1  then
-        loger.save("updateOrderNumber  order_num=".. order.order_num )  
-        loger.save("updateOrderNumber  trans_id=".. stopClass.array_stop.trans_id )  
+        loger.save("updateOrderNumber 2  order_num=".. order.order_num .." trans_id=".. stopClass.array_stop.trans_id )  
         stopClass.array_stop.stop_number = order.order_num;  
     end;
 end;

@@ -284,7 +284,7 @@ end
    function OnStopOrder(trade) 
       -- заявку выставили и приходит коллбек выставленой заявки 
       -- это просто заявка а не лимитка
-      market.saleExecution(trade);
+      market.saleExecutionStopOrder(trade);
 
       -- обновляем номера стоп заявок при выставлении
     --  loger.save(' OnStopOrder -- обновляем номера стоп заявок при выставлении   '.. trade.trans_id   )
@@ -322,17 +322,11 @@ end
 
           
 
-         if not bit.test(trade.flags, 15)   then 
-            loger.save('OnStopOrder 2 '..trade.order_num..' trans_id '..tostring(trade.trans_id))
-            loger.save('OnStopOrder 2 '..trade.order_num..' .condition'..tostring(trade.condition))
-            loger.save('OnStopOrder 2 .condition_price '..trade.condition_price ..' .condition'..tostring(trade.linkedorder))
-            -- loger.save(' calculation 2 '..trade.order_num..' trans_id '..tostring(trade.trans_id))
-            -- loger.save(' calculation 2 '..trade.order_num..' .condition'..tostring(trade.condition))
-            -- loger.save(' calculation 2 .condition_price '..trade.condition_price ..' .condition'..tostring(trade.linkedorder))
-            riskStop.updateStopNumber(trade);
-
+         if  bit.test(trade.flags, 15)   then 
          else
-          
+
+            loger.save('OnStopOrder->updateStopNumber order_num='..trade.order_num..' trans_id '..tostring(trade.trans_id));
+            riskStop.updateStopNumber(trade);
          end
    end
 
