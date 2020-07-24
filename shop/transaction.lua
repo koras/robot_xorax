@@ -180,8 +180,8 @@ local function sendStop(typeMarket, priceParam, quantity , direction )
 	  return nil, res
 	   
 	else   
-		
-		loger.save( 'create stop bid   trans_id=' ..  tostring( trans_id  ) )
+		loger.save( '==============='  )
+		loger.save( 'Выставляем стоп  trans_id=' ..  tostring( trans_id  ) )
 		return trans_id ;
 	end
 

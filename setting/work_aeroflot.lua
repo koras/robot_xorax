@@ -5,34 +5,34 @@
 -- @xorax <=> @koras
 
 -- счёт клиента, как вариант его можно узнать в зваяках в таблице заявок
-setting.ACCOUNT =  '4105F8Y'; 
+setting.ACCOUNT =  'L01-00000F00'; 
 
 -- класс бумаги. У фьючерсов в основном он одинаков
-setting.CLASS_CODE =  "SPBFUT";  
+setting.CLASS_CODE =  "TQBR";  
 
 -- код бумаги. Название бумаги разная от месяца к месяцу 
-setting.SEC_CODE =  "BRQ0" ; 
+setting.SEC_CODE =  "AFLT" ; 
 
 -- тег графика, необходимо указывать в том графике из которого робот будет получать данные. 
 -- график нужен в минутном таймфрейме(обязательно)
-setting.tag = "my_br";  
+setting.tag = "aeroflot";  
   
- 
--- тип инструмента, каждый тип имеет свои настройки
--- 1 фьючерс
--- 2 акции на moex
-setting.type_instrument = 1;  
+
+  -- тип инструмента, каждый тип имеет свои настройки
+  -- 1 фьючерс
+  -- 2 акции на moex
+  setting.type_instrument = 2;  
 
 
  
 -- минимальная прибыль
-   setting.profit_range =  0.05; 
+   setting.profit_range =  0.35; 
 
    -- минимальная прибыль при больших заявках, не используется 
    setting.profit_range_array =  0.03;  
 
    -- погрешность, необходимо для предотвращения проскальзывания при активной торговле
-   setting.profit_infelicity =  0.01;  
+   setting.profit_infelicity =  0.02;  
    
     -- подсчёт прибыли, считается после каждой продажи
    setting.profit =  0.00; 
@@ -47,9 +47,9 @@ setting.type_instrument = 1;
    setting.LIMIT_BID = 10;
    
    -- сколько использовать контрактов по умолчанию в режиме скальпинга
-   setting.use_contract = 1;
+   setting.use_contract = 2;
    -- включён или выключен режим эмуляции по умолчанию
-   setting.emulation = false;
+   setting.emulation = true;
    setting.candles = {}; -- свечи
          
    setting.status = false;
@@ -71,7 +71,9 @@ setting.type_instrument = 1;
 
 
    setting.count_contract_buy = 0; -- сколько куплено контрактов за сессию
-   setting.count_contract_sell = 0; -- сколько продано контрактов за сессию 
+   setting.count_contract_sell = 0; -- сколько продано контрактов за сессию
+  -- setting.emulation_count_contract_buy = 0; -- сколько куплено контрактов за сессию (режим эмуляции) 
+  --  setting.emulation_count_contract_sell = 0; -- сколько продано контрактов за сессию (режим эмуляции)
 
     -- Выставлять контракт на продажу через тейки или лимитки
     -- Если рыно слабо ходит то выгоднее лимитки. Так как при выставлении тейков, продаваться будет ниже, что не выгодно.
@@ -85,16 +87,16 @@ setting.type_instrument = 1;
    setting.limit_count_buy = 0; -- лимит на покупку ( сколько контрактов купили на текущий момент )
    -- setting.limit_count_buy_emulation = 0; -- лимит на покупку в эмуляции ( сколько контрактов купили на текущий момент )
           
-   setting.SPRED_LONG_BUY_UP = 0.02; -- условия; не покупаем если здесь ранее мы купили | вверх диапозон;
-   setting.SPRED_LONG_BUY_down = 0.01; -- условия; не покупаем если здесь ранее мы купили | вниз диапозон
+   setting.SPRED_LONG_BUY_UP = 0.12; -- условия; не покупаем если здесь ранее мы купили | вверх диапозон;
+   setting.SPRED_LONG_BUY_down = 0.11; -- условия; не покупаем если здесь ранее мы купили | вниз диапозон
 
    setting.not_buy_high_UP = 0.5; -- условия; цена входа при запуске скрипта
    setting.not_buy_high = 0; -- условия; Выше какого диапазона не покупать(на хаях)
 
 
 
-   setting.take_profit_offset = 0.01;   
-   setting.take_profit_spread = 0.01;  
+   setting.take_profit_offset = 0.05;   
+   setting.take_profit_spread = 0.05;  
           
    -- тип интервала на свече, обязательный параметр
    setting.INTERVAL = INTERVAL_M1;
@@ -165,7 +167,9 @@ setting.comment_quik = 'Robot XoraX';
  
 
 -- Использовать стопы или нет, по умолчанию да
-stopClass.use_stop = true;
+stopClass.use_stop = false;
+
+
 -- Показывать или скрывать панель стопов, по умолчинию скрыта
 stopClass.show_panel = false;
 
@@ -237,7 +241,7 @@ engine.candle_price_max_hight = 0.5;
 
 
 -- минутные свечи. используются для подсчёта 
-setting.count_of_candle = 5;
+setting.count_of_candle = 45;
  
 
 -- второй минимум
@@ -266,10 +270,12 @@ stopClass.show_panel_bue_sell = false;
  
 
 -- версия продукта 
-setting.version = "0.1.132";
+setting.version = "0.1.13";
 
 
 setting.use_windows = false;
+ 
+
  
 
    -- примерное время работы, пока не используется

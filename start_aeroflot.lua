@@ -30,7 +30,7 @@ setting = {};
 stopClass = {};
 engine = {};
  
-dofile(getScriptPath() .. "\\setting\\work_br.lua"); 
+dofile(getScriptPath() .. "\\setting\\work_aeroflot.lua"); 
 dofile(getScriptPath() .. "\\setting\\engine.lua");
  
 local uTransaction = dofile(getScriptPath() .. "\\shop\\transaction.lua");
@@ -191,7 +191,7 @@ basis = 9
    -- Функция вызывается терминалом когда с сервера приходит информация по заявке 
    function OnOrder(order)
       -- только для лимитных заявок
-      if order.trans_id == 0 then return end;
+
       loger.save("OnOrder work order_num = ".. order.order_num.. "  trans_id = ".. order.trans_id)
     
       -- присваиваем номера заявкам
@@ -210,11 +210,7 @@ basis = 9
       end;
       
       if bit.band(order.flags,1) + bit.band(order.flags,2) == 0  then 
-         loger.save('  ' )
-         loger.save('  ' )
-         loger.save('  ' )
-         loger.save('  ' )
-         loger.save('OnOrder sellContract   ' )
+          loger.save('OnOrder sellContract  присваиваем номера заявкам 1' )
          market.sellContract(order);
       end;
 
@@ -284,7 +280,7 @@ end
    function OnStopOrder(trade) 
       -- заявку выставили и приходит коллбек выставленой заявки 
       -- это просто заявка а не лимитка
-      market.saleExecutionStopOrder(trade);
+      market.saleExecution(trade);
 
       -- обновляем номера стоп заявок при выставлении
     --  loger.save(' OnStopOrder -- обновляем номера стоп заявок при выставлении   '.. trade.trans_id   )
@@ -320,13 +316,16 @@ end
          --   riskStop.updateOrderNumber(trade)
          end
 
-          
 
-         if  bit.test(trade.flags, 15)   then 
-         else
 
-            loger.save('OnStopOrder->updateStopNumber order_num='..trade.order_num..' trans_id '..tostring(trade.trans_id));
+         if not bit.test(trade.flags, 15)   then 
+            loger.save(' calculation 2 '..trade.order_num..' trans_id '..tostring(trade.trans_id))
+            loger.save(' calculation 2 '..trade.order_num..' .condition'..tostring(trade.condition))
+            loger.save(' calculation 2 .condition_price '..trade.condition_price ..' .condition'..tostring(trade.linkedorder))
             riskStop.updateStopNumber(trade);
+
+         else
+          
          end
    end
 

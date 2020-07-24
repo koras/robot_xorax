@@ -83,9 +83,13 @@ local function show()
 	button_finish();
 	buy_process();
 
+	 if setting.emulation then 
+		mode_emulation_on(); 
+	 else 
+		mode_emulation_off() 
+	 end
 
-	mode_emulation_on();
-
+	 mode_long();
 	
 	current_limit();
 	current_limit_plus();
@@ -94,7 +98,7 @@ local function show()
 	use_stop();
 	show_stop();
 	show_panel_bue_sell();
-	mode_long();
+--	mode_long();
 end
 
 function sell_take_or_limit()   
@@ -107,7 +111,6 @@ end;
  
  
 function mode_long() 
-	setting.emulation=true;
 	SetCell(t_control, 2, 3,  word.long); 
 	Green(t_control,1, 3);
 	Green(t_control,2, 3);
@@ -260,15 +263,19 @@ end;
  
 function use_contract_limit()   
 
-	if fuck_windows then 
-		fuck_windows = false;
-		wt_control =  wt_control + 1;
-	else
-		fuck_windows = true;
-		wt_control =  wt_control - 1;
+	
+	if setting.use_windows then 
+			if fuck_windows then 
+			fuck_windows = false;
+			wt_control =  wt_control + 1;
+		else
+			fuck_windows = true;
+			wt_control =  wt_control - 1;
+		end;
+		SetWindowPos(t_control, 5, 5, wt_control, ht_control)
 	end;
 
-	SetWindowPos(t_control, 5, 5, wt_control, ht_control)
+ 
 
 	local buy_session = "b:"..tostring(setting.count_buy).."/"..tostring(setting.count_contract_buy).."";
 	local sell_session = "s:"..tostring(setting.count_sell).."/"..tostring(setting.count_contract_sell).."";
