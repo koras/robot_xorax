@@ -431,7 +431,7 @@ end;
 
 
 function check_buy_status_block()
-    loger.save("-- если кнопка покупки заблокирована автоматически по причине падение"  );
+ --   loger.save("-- если кнопка покупки заблокирована автоматически по причине падение"  );
     -- если кнопка покупки заблокирована автоматически по причине падение
     if  setting.each_to_buy_status_block then
         setting.each_to_sell_step = setting.each_to_sell_step + 1;

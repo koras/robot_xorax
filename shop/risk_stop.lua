@@ -214,8 +214,7 @@ function sendTransStop(countContract, countPrice )
  
     if usestop==false then return; end;
  
-    loger.save("sendTransStop order_num =  ".. stopClass.array_stop.order_num )
-    loger.save("sendTransStop trans_id =  ".. stopClass.array_stop.trans_id )
+    loger.save("sendTransStop: order_num=".. stopClass.array_stop.order_num.." trans_id =  ".. stopClass.array_stop.trans_id )
     
     if stopClass.array_stop.work == 3 and  stopClass.array_stop.trans_id == 0 and stopClass.array_stop.order_num == 0 or 
     stopClass.array_stop.work == 0 and  stopClass.array_stop.trans_id == 0 and stopClass.array_stop.order_num == 0
@@ -259,13 +258,7 @@ function sendTransStop(countContract, countPrice )
 
             loger.save("sendTransStop   ставим стоп ".. countPrice .. '  trans_id='.. stopClass.array_stop.trans_id  )
             -- отправляем транкзакцию 
-
-
-
         end;
-
- 
-
     end; 
 end;
  

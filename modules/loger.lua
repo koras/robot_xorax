@@ -22,12 +22,12 @@ end
 
    -- Пытается открыть файл в режиме "чтения/записи"
 local function save(text)  
-  --saveFile(dataLog, text) 
+  saveFile(dataLog, text) 
 end
 
     -- Пытается открыть файл в режиме "чтения/записи"
 local function saveSignal(text) 
- -- saveFile(logSignal, text) 
+  saveFile(logSignal, text) 
 end
 
 M.save = save
