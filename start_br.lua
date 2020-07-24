@@ -191,7 +191,7 @@ basis = 9
    -- Функция вызывается терминалом когда с сервера приходит информация по заявке 
    function OnOrder(order)
       -- только для лимитных заявок
-
+      if order.trans_id == 0 then return end;
       loger.save("OnOrder work order_num = ".. order.order_num.. "  trans_id = ".. order.trans_id)
     
       -- присваиваем номера заявкам
@@ -210,7 +210,11 @@ basis = 9
       end;
       
       if bit.band(order.flags,1) + bit.band(order.flags,2) == 0  then 
-          loger.save('OnOrder sellContract  присваиваем номера заявкам 1' )
+         loger.save('  ' )
+         loger.save('  ' )
+         loger.save('  ' )
+         loger.save('  ' )
+         loger.save('OnOrder sellContract   ' )
          market.sellContract(order);
       end;
 
@@ -316,12 +320,15 @@ end
          --   riskStop.updateOrderNumber(trade)
          end
 
-
+          
 
          if not bit.test(trade.flags, 15)   then 
-            loger.save(' calculation 2 '..trade.order_num..' trans_id '..tostring(trade.trans_id))
-            loger.save(' calculation 2 '..trade.order_num..' .condition'..tostring(trade.condition))
-            loger.save(' calculation 2 .condition_price '..trade.condition_price ..' .condition'..tostring(trade.linkedorder))
+            loger.save('OnStopOrder 2 '..trade.order_num..' trans_id '..tostring(trade.trans_id))
+            loger.save('OnStopOrder 2 '..trade.order_num..' .condition'..tostring(trade.condition))
+            loger.save('OnStopOrder 2 .condition_price '..trade.condition_price ..' .condition'..tostring(trade.linkedorder))
+            -- loger.save(' calculation 2 '..trade.order_num..' trans_id '..tostring(trade.trans_id))
+            -- loger.save(' calculation 2 '..trade.order_num..' .condition'..tostring(trade.condition))
+            -- loger.save(' calculation 2 .condition_price '..trade.condition_price ..' .condition'..tostring(trade.linkedorder))
             riskStop.updateStopNumber(trade);
 
          else

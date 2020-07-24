@@ -273,6 +273,8 @@ stopClass.show_panel_bue_sell = false;
 setting.version = "0.1.13";
 
 
+setting.use_windows = false;
+ 
 
  
 

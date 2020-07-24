@@ -239,7 +239,7 @@ function setArrayCandles(barCandle, numberCandle)
 
     end;
  
-    candleGraff.addSignal(setting.array_candle); 
+ --   candleGraff.addSignal(setting.array_candle); 
 end;
 
 

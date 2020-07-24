@@ -169,7 +169,10 @@ function saleExecution(result)
             if  setting.sellTable[contract].type == 'sell' and  
             setting.sellTable[contract].executed == false  and 
             setting.sellTable[contract].trans_id == result.trans_id  then
+                loger.save("saleExecution true Присваеваем заявке на продажу номер " );
                 loger.save("saleExecution true ".. result.order_num .. " -- исполнение выставление контракта на продажу присваиваем номер " );
+                loger.save("saleExecution true order_num=".. setting.sellTable[contract].order_num .. "  " );
+                loger.save("saleExecution true trans_id=".. result.trans_id .. "  " );
               --  setting.sellTable[contract].executed = true;
                 setting.sellTable[contract].order_num = result.order_num
                 risk_stop.update_stop();
@@ -219,15 +222,17 @@ function sellContract(result)
                     deleteBuyCost(result, setting.sellTable[contract])
                     control.use_contract_limit();  
                       
-                    loger.save("sellContract продали контракт " );
-                    risk_stop.update_stop();
-
+                    loger.save("sellContract продали контракт result.trans_id = "..result.trans_id ); 
+                    loger.save("sellContract topClass trans_id = "..stopClass.array_stop.trans_id ); 
+                    loger.save("sellContract topClass order_num = "..stopClass.array_stop.order_num ); 
+    
             end;
         end;
-
-        
-      --  loger.save("вызов update_stop 1 " ); 
+ 
+         
     end; 
+    loger.save("вызов update_stop 1 " ); 
+    risk_stop.update_stop();
 end;
 
 

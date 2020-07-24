@@ -160,9 +160,9 @@ function backStop()
     -- обнуляем заявки
 
     loger.save(" "  );
-    loger.save("backStop ----   trans_id "..tostring(stopClass.array_stop.trans_id) .. "   order_num = ".. tostring(stopClass.array_stop.order_num) );
+    loger.save("backStop  trans_id "..tostring(stopClass.array_stop.trans_id) .. "   order_num = ".. tostring(stopClass.array_stop.order_num) );
     loger.save("backStop  stop_number "..tostring(stopClass.array_stop.stop_number));
-    loger.save("backStop  stopClass.array_stop.work "..tostring(stopClass.array_stop.work));
+    
      
 
         if stopClass.array_stop.emulation then
@@ -175,14 +175,9 @@ function backStop()
                 DelLabel(setting.tag, stopClass.array_stop.label);
          else
             -- только 2, потому что только 2 заявкам присвоен  номер
-            if  stopClass.array_stop.work == 2 and 
-            stopClass.array_stop.stop_number ~= 0 and 
-            stopClass.array_stop.trans_id ~= 0 or
-            
-            stopClass.array_stop.work == 1 and 
-            stopClass.array_stop.stop_number ~= 0 and 
-            stopClass.array_stop.trans_id ~= 0  
-            
+
+            if  stopClass.array_stop.work == 2 and  stopClass.array_stop.stop_number ~= 0 and  stopClass.array_stop.trans_id ~= 0 or
+            stopClass.array_stop.work == 1 and   stopClass.array_stop.stop_number ~= 0 and  stopClass.array_stop.trans_id ~= 0  
             then  
                     -- стоп больше не используется 
                 local stop_number = tostring(stopClass.array_stop.stop_number);
@@ -190,10 +185,9 @@ function backStop()
                 local trans_id = tostring(stopClass.array_stop.trans_id);
                 local order_type = tostring(stopClass.array_stop.order_type);
  
-                loger.save("backStop -- trans_id "..tostring(stopClass.array_stop.trans_id));
-             
-                loger.save("backStop -----stop_number "..tostring(stop_number)   );
-                loger.save("backStop -----order_type "..tostring(order_type)   );
+                loger.save("backStop 2 -- trans_id "..tostring(stopClass.array_stop.trans_id));
+                loger.save("backStop 2 -----stop_number "..tostring(stop_number)   );
+                loger.save("backStop 2 -----order_type "..tostring(order_type)   );
              
                 transaction.delete(trans_id, stop_number, order_type); 
 
@@ -217,15 +211,11 @@ end;
 function sendTransStop(countContract, countPrice )
 
     stopClass.array_stop.order_type = "SIMPLE_STOP_ORDER";
-
-    loger.save("sendTransStop countContract =  "..countContract  )
-    loger.save("sendTransStop  countPrice=  ".. countPrice  )
+ 
     if usestop==false then return; end;
-
-    
-    loger.save("sendTransStop stopClass.array_stop.work =  ".. stopClass.array_stop.work )
-    loger.save("sendTransStop stopClass.array_stop.order_num =  ".. stopClass.array_stop.order_num )
-    loger.save("sendTransStop stopClass.array_stop.trans_id =  ".. stopClass.array_stop.trans_id )
+ 
+    loger.save("sendTransStop order_num =  ".. stopClass.array_stop.order_num )
+    loger.save("sendTransStop trans_id =  ".. stopClass.array_stop.trans_id )
     
     if stopClass.array_stop.work == 3 and  stopClass.array_stop.trans_id == 0 and stopClass.array_stop.order_num == 0 or 
     stopClass.array_stop.work == 0 and  stopClass.array_stop.trans_id == 0 and stopClass.array_stop.order_num == 0
@@ -301,7 +291,8 @@ function updateStopNumber(order)
     if  order.trans_id == stopClass.array_stop.trans_id and  
     stopClass.array_stop.order_num == 0 and
     stopClass.array_stop.work == 1  then
-      loger.save("updateOrderNumber  обновление заявки по которой пришла информация ".. order.order_num )  
+        loger.save("updateOrderNumber  order_num=".. order.order_num )  
+        loger.save("updateOrderNumber  trans_id=".. stopClass.array_stop.trans_id )  
         stopClass.array_stop.stop_number = order.order_num;  
     end;
 end;
@@ -326,7 +317,6 @@ function appruveOrderStop(order)
         loger.save("STOP STOP STOP STOP  trans_id = ".. stopClass.array_stop.trans_id.." = "..order.trans_id   )
         loger.save("STOP STOP STOP STOP  order_num = ".. stopClass.array_stop.order_num.." = "..order.order_num   )
    
-           
          --  режим торговли  
                 if order.trans_id == stopClass.array_stop.trans_id and 
                 order.order_num == stopClass.array_stop.order_num  and 

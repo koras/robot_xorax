@@ -5,7 +5,7 @@
 -- @xorax <=> @koras
 
 -- счёт клиента, как вариант его можно узнать в зваяках в таблице заявок
-setting.ACCOUNT =  '4105F8Y'; 
+setting.ACCOUNT =  'Здесь Ваш счёт'; 
 
 -- класс бумаги. У фьючерсов в основном он одинаков
 setting.CLASS_CODE =  "SPBFUT";  
@@ -49,7 +49,7 @@ setting.type_instrument = 1;
    -- сколько использовать контрактов по умолчанию в режиме скальпинга
    setting.use_contract = 1;
    -- включён или выключен режим эмуляции по умолчанию
-   setting.emulation = true;
+   setting.emulation = false;
    setting.candles = {}; -- свечи
          
    setting.status = false;
@@ -71,9 +71,7 @@ setting.type_instrument = 1;
 
 
    setting.count_contract_buy = 0; -- сколько куплено контрактов за сессию
-   setting.count_contract_sell = 0; -- сколько продано контрактов за сессию
-  -- setting.emulation_count_contract_buy = 0; -- сколько куплено контрактов за сессию (режим эмуляции) 
-  --  setting.emulation_count_contract_sell = 0; -- сколько продано контрактов за сессию (режим эмуляции)
+   setting.count_contract_sell = 0; -- сколько продано контрактов за сессию 
 
     -- Выставлять контракт на продажу через тейки или лимитки
     -- Если рыно слабо ходит то выгоднее лимитки. Так как при выставлении тейков, продаваться будет ниже, что не выгодно.
@@ -167,9 +165,7 @@ setting.comment_quik = 'Robot XoraX';
  
 
 -- Использовать стопы или нет, по умолчанию да
-stopClass.use_stop = false;
-
-
+stopClass.use_stop = true;
 -- Показывать или скрывать панель стопов, по умолчинию скрыта
 stopClass.show_panel = false;
 
@@ -270,10 +266,10 @@ stopClass.show_panel_bue_sell = false;
  
 
 -- версия продукта 
-setting.version = "0.1.13";
+setting.version = "0.1.132";
 
 
-
+setting.use_windows = false;
  
 
    -- примерное время работы, пока не используется
