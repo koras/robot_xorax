@@ -1,8 +1,5 @@
 -- файл для тестирования заявок 
 -- послать сигнал на покупку, тестирования ответа и реакции на различные ситуации
-
-
- 
 local market = dofile(getScriptPath() .. "\\shop\\market.lua");
 
 local loger = dofile(getScriptPath() .. "\\modules\\loger.lua");
@@ -10,8 +7,6 @@ local loger = dofile(getScriptPath() .. "\\modules\\loger.lua");
 local S = {};
 
 S.base = {};
-
-
 
 -- инициализация свечи
 function testInit()
@@ -30,9 +25,7 @@ function testInit()
     base.volume = 100; -- Получить значение Volume для указанной свечи (объем сделок в свече)
     base.datetime = testDatetime; -- Получить значение datetime для указанной свечи
     S.base[#S.base + 1] = base;
-end;
-
-
+end
 
 function testbaseCreate()
     local base = {};
@@ -50,24 +43,17 @@ function testbaseCreate()
     base.volume = 100; -- Получить значение Volume для указанной свечи (объем сделок в свече)
     base.datetime = testDatetime; -- Получить значение datetime для указанной свечи
     S.base[#S.base + 1] = base;
-end;
+end
 
+function tSend(data) loger.save('отравляем транкзакцию'); end
 
-
-function tSend(data)
-    loger.save('отравляем транкзакцию');
-end;
-
-local test_transaction =  {};
+local test_transaction = {};
 test_transaction.send = tSend;
-
-
- 
 
 -- отправка сигнала на покупку
 -- с каждым вызовом отправляется новый сигнал отличный от текущего
-function testSendSignalBue() 
-    if   setting.developer then 
+function testSendSignalBue()
+    if setting.developer then
         market.updateTransaction(test_transaction);
 
         updateTransaction(test_transaction);
@@ -75,20 +61,18 @@ function testSendSignalBue()
         testbaseCreate();
 
         -- покупка
-            if #S.base > 0 then 
-                for testItter = 1 ,  #S.base do 
-                    market.decision(S.base[testItter].close, S.base[testItter].datetime) 
-                end;
-            end;
-    --- market.decision( priceLocal, datetime, levelLocal, event) ;
+        if #S.base > 0 then
+            for testItter = 1, #S.base do
+                market.decision(S.base[testItter].close,
+                                S.base[testItter].datetime)
+            end
+        end
+        --- market.decision( priceLocal, datetime, levelLocal, event) ;
 
-    setting.developer = fale;
-    end;
+        setting.developer = fale;
+    end
 
-end;
-
-
-
+end
 
 S.testSendSignalBue = testSendSignalBue;
 

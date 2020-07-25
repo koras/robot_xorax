@@ -1,13 +1,9 @@
 local vector = {}
 vector.__index = vector
 
-local function is_vector(t)
-    return getmetatable(t) == vector
-end
+local function is_vector(t) return getmetatable(t) == vector end
 
-function vector.new(x, y)
-    return setmetatable({ x = x or 0, y = y or 0 }, vector)
-end
+function vector.new(x, y) return setmetatable({x = x or 0, y = y or 0}, vector) end
 
 -- operator overloading
 function vector.__add(lhs, rhs)
@@ -39,43 +35,26 @@ function vector.__unm(t)
     return vector.new(-t.x, -t.y)
 end
 
-function vector:__tostring()
-    return "("..self.x..", "..self.y..")"
-end
+function vector:__tostring() return "(" .. self.x .. ", " .. self.y .. ")" end
 
-function vector.__eq(lhs, rhs)
-    return lhs.x == rhs.x and lhs.y == rhs.y
-end
+function vector.__eq(lhs, rhs) return lhs.x == rhs.x and lhs.y == rhs.y end
 
 function vector.__lt(lhs, rhs)
     return lhs.x < rhs.x or (not (rhs.x < lhs.x) and lhs.y < rhs.y)
 end
 
-function vector.__le(lhs, rhs)
-    return lhs.x <= rhs.x or lhs.y <= rhs.y
-end
-
+function vector.__le(lhs, rhs) return lhs.x <= rhs.x or lhs.y <= rhs.y end
 
 -- actual functions
-function vector:clone()
-    return vector.new(self.x, self.y)
-end
+function vector:clone() return vector.new(self.x, self.y) end
 
-function vector:length()
-    return math.sqrt(self.x * self.x + self.y * self.y)
-end
+function vector:length() return math.sqrt(self.x * self.x + self.y * self.y) end
 
-function vector:length_squared()
-    return self.x * self.x + self.y * self.y
-end
+function vector:length_squared() return self.x * self.x + self.y * self.y end
 
-function vector:is_unit()
-    return self:length_squared() == 1
-end
+function vector:is_unit() return self:length_squared() == 1 end
 
-function vector:unpack()
-    return self.x, self.y
-end
+function vector:unpack() return self.x, self.y end
 
 function vector:normalize()
     local len = self:length()
@@ -85,9 +64,7 @@ function vector:normalize()
     end
 end
 
-function vector:normalized()
-    return self:clone():normalize()
-end
+function vector:normalized() return self:clone():normalize() end
 
 function vector.dot(lhs, rhs)
     assert(is_vector(lhs) and is_vector(rhs), "Type mismatch: vector expected")
@@ -135,6 +112,5 @@ function vector.lerp(from, to, t)
     assert(type(t) == "number", "Type mismatch: number expected for t")
     return from * t + (to * (1 - t))
 end
-
 
 return vector
