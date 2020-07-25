@@ -9,7 +9,7 @@ local panelBids = dofile(getScriptPath() .. "\\interface\\bids.lua");
 
 -- local markets = dofile(getScriptPath() .. "\\shop\\market.lua");
 
-usestop = true;
+local usestop = true;
 
 -- класс для работы с стопами, риск-менеджмент
 -- Главное не сколько заработаешь, а сколько не потеряешь

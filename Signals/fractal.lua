@@ -20,7 +20,6 @@ local function last()
     local t, n, l = getCandlesByIndex(setting.tag, 0,
                                       number_of_candles - 2 * len - shift,
                                       2 * len)
-    local lines_count = getLinesCount(setting.tag)
 
     local Up = false
     local Down = false
