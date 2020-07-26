@@ -54,7 +54,7 @@ function init()
 end
  
 
-Size = 0;
+--Size = 0;
 function OnInit()
     riskStop.calculateMaxStopStart();
     panelBids.CreateNewTableBids();
@@ -65,7 +65,7 @@ function OnInit()
                                  setting.INTERVAL); 
 
     if Error ~= "" and Error ~= nil then
-        message("1111111111111111111111 : " .. Error)
+        message("Error : " .. Error)
         return
     end
     -- GET_GRAFFIC
@@ -73,15 +73,15 @@ function OnInit()
     GET_GRAFFIC = ds:SetEmptyCallback();
     --  ds:SetUpdateCallback(MyFuncName);
 
-    Size = ds:Size();
+  --  Size = ds:Size();
 
-    local p = tostring(
-            getParamEx(setting:CLASS_CODE, setting:SEC_CODE, "offer").param_value +
-                10 *
-                getParamEx(setting.CLASS_CODE, setting.SEC_CODE,
-                           "SEC_PRICE_STEP").param_value);
-    SEC_PRICE_STEP = tostring(getParamEx2(setting.CLASS_CODE, setting.SEC_CODE,
-                                          "SEC_PRICE_STEP").param_value);
+    -- local p = tostring(
+    --         getParamEx(setting:CLASS_CODE, setting:SEC_CODE, "offer").param_value +
+    --             10 *
+    --             getParamEx(setting.CLASS_CODE, setting.SEC_CODE,
+    --                        "SEC_PRICE_STEP").param_value);
+    -- SEC_PRICE_STEP = tostring(getParamEx2(setting.CLASS_CODE, setting.SEC_CODE,
+    --                                       "SEC_PRICE_STEP").param_value);
 end
 
 function getPrice()
