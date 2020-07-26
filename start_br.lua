@@ -52,10 +52,7 @@ function init()
     --   control.show();
 
 end
-
-shift = 0;
-len = 100
-basis = 9
+ 
 
 Size = 0;
 function OnInit()
@@ -64,9 +61,8 @@ function OnInit()
     signalShowLog.CreateNewTableLogEvent();
 
     local Error = '';
-    ds, Error = CreateDataSource(setting.CLASS_CODE, setting.SEC_CODE,
-                                 setting.INTERVAL);
-    --  while (Error == "" or Error == nil) and DS:Size() == 0 do sleep(1) end
+    local ds, Error = CreateDataSource(setting.CLASS_CODE, setting.SEC_CODE,
+                                 setting.INTERVAL); 
 
     if Error ~= "" and Error ~= nil then
         message("1111111111111111111111 : " .. Error)
@@ -79,8 +75,8 @@ function OnInit()
 
     Size = ds:Size();
 
-    p = tostring(
-            getParamEx(setting.CLASS_CODE, setting.SEC_CODE, "offer").param_value +
+    local p = tostring(
+            getParamEx(setting:CLASS_CODE, setting:SEC_CODE, "offer").param_value +
                 10 *
                 getParamEx(setting.CLASS_CODE, setting.SEC_CODE,
                            "SEC_PRICE_STEP").param_value);
@@ -90,8 +86,7 @@ end
 
 function getPrice()
 
-    SEC_PRICE_STEP = tostring(getParamEx2(setting.CLASS_CODE, setting.SEC_CODE,
-                                          "SEC_PRICE_STEP").param_value);
+    SEC_PRICE_STEP = tostring(getParamEx2(setting.CLASS_CODE, setting.SEC_CODE,       "SEC_PRICE_STEP").param_value);
     if GET_GRAFFIC then
     else
         Run = false;

@@ -9,7 +9,7 @@ local S = {};
 S.base = {};
 
 -- инициализация свечи
-function testInit()
+local function testInit()
     local base = {};
 
     local testDatetime = {};
@@ -27,7 +27,7 @@ function testInit()
     S.base[#S.base + 1] = base;
 end
 
-function testbaseCreate()
+local function testbaseCreate()
     local base = {};
 
     local testDatetime = {};
@@ -45,18 +45,17 @@ function testbaseCreate()
     S.base[#S.base + 1] = base;
 end
 
-function tSend(data) loger.save('отравляем транкзакцию'); end
+local function tSend(data) loger.save('отравляем транкзакцию'); end
 
 local test_transaction = {};
 test_transaction.send = tSend;
 
 -- отправка сигнала на покупку
 -- с каждым вызовом отправляется новый сигнал отличный от текущего
-function testSendSignalBue()
+local function testSendSignalBue()
     if setting.developer then
         market.updateTransaction(test_transaction);
 
-        updateTransaction(test_transaction);
 
         testbaseCreate();
 
@@ -69,7 +68,7 @@ function testSendSignalBue()
         end
         --- market.decision( priceLocal, datetime, levelLocal, event) ;
 
-        setting.developer = fale;
+        setting.developer = false;
     end
 
 end

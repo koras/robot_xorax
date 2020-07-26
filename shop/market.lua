@@ -3,24 +3,24 @@
 -- 751,97 ₽
 -- 7,5  = 0.01
 local loger = dofile(getScriptPath() .. "\\modules\\loger.lua");
-local label = dofile(getScriptPath() .. "\\modules\\drawLabel.lua");
+-- local label = dofile(getScriptPath() .. "\\modules\\drawLabel.lua");
 local transaction = dofile(getScriptPath() .. "\\shop\\transaction.lua");
 local signalShowLog =
     dofile(getScriptPath() .. "\\interface\\signalShowLog.lua");
-local statsPanel = dofile(getScriptPath() .. "\\interface\\stats.lua");
+--local statsPanel = dofile(getScriptPath() .. "\\interface\\stats.lua");
 local panelBids = dofile(getScriptPath() .. "\\interface\\bids.lua");
-local interfaceBids = dofile(getScriptPath() .. "\\interface\\bids.lua");
+--local interfaceBids = dofile(getScriptPath() .. "\\interface\\bids.lua");
 local contitionMarket = dofile(getScriptPath() .. "\\shop\\contition_shop.lua");
-local deleteBids = dofile(getScriptPath() .. "\\shop\\deleteBids.lua");
+--local deleteBids = dofile(getScriptPath() .. "\\shop\\deleteBids.lua");
 local control = dofile(getScriptPath() .. "\\interface\\control.lua");
 local risk_stop = dofile(getScriptPath() .. "\\shop\\risk_stop.lua");
-
-M = {};
 
 -- SHORT  = FALSE
 -- LONG = true
 
 local DIRECT = 'LONG';
+
+local function getRand() return tostring(math.random(2000000000)); end
 
 local function setDirect(localDirect) DIRECT = localDirect; end
 
@@ -29,42 +29,36 @@ local function setLitmitBid() LIMIT = setting.LIMIT_BID; end
 -- levelLocal  сила сигнала
 -- event -- продажа или покупка
 
-local function decision(price, datetime, levelLocal, event) -- решение
-    long(price, datetime, levelLocal, event);
-end
-
+ 
 local level = 1;
 
 -- обновляем транкзакцию для того чтобы при тестировании не отправлялись заросы
-function updateTransaction(_transaction) transaction = _transaction; end
+local function updateTransaction(_transaction) transaction = _transaction; end
 
 -- автоматическая торговля
-function long(price, datetime, levelLocal, event) -- решение 
-
+local function long(price, datetime, levelLocal, event) -- решение
     -- подсчитаем скольк заявок у нас на продажу
-    -- проверём, покупали здесь или нет, в этом промежутке
-    checkRangeBuy = contitionMarket.getRandBuy(price, setting.sellTable);
-    -- проверём, стоит ли продажа в этом промежутке
-    checkRangeSell = contitionMarket.getRandSell(price, setting.sellTable);
-    -- уровень свечи 
-
-    randCandle = contitionMarket.getRandCandle(price, datetime);
-    -- Падение рынка
-    failMarket = contitionMarket.getFailMarket(price, datetime);
-    -- лимит по заявкам
-    limitBuy = contitionMarket.getLimitBuy(datetime);
-    -- блокировка покупки при падении рынка
-    getFailBuy = contitionMarket.getFailBuy(price, datetime);
-    -- Запрет на покупку (блокируется кнопкой)
-    buyButtonBlock = contitionMarket.buyButtonBlock(price, datetime);
-    -- Запрет на покупку если цена выше коридора
-    not_buy_high = contitionMarket.not_buy_high(price, datetime);
+    -- Не покупать, если была покупка по текущей цене или в промежутке
+    local checkRangeBuy = contitionMarket.getRandBuy(price, setting.sellTable);
+    -- Не покупать, если стоит ли продажа в этом промежутке, не продали контракт
+    local checkRangeSell = contitionMarket.getRandSell(price, setting.sellTable);
+    --  Не покупать, если свечной анализ показывает низкий уровень промежутка продаж/покупок 
+    local randCandle = contitionMarket.getRandCandle(price, datetime);
+    -- Не покупать, если рынок падает а мы раньше купили, но не продали согласно правилам
+    local failMarket = contitionMarket.getFailMarket(price, datetime);
+    -- Не покупать, если лимит по заявкам выделеным на покупку исчерпан
+    local limitBuy = contitionMarket.getLimitBuy(datetime);
+    -- Не покупать, если сработала блокировка покупки при падении рынка
+    local getFailBuy = contitionMarket.getFailBuy(price, datetime);
+    -- Не покупать, если кнопка покупки заблокирована  (блокируется кнопкой)
+    local buyButtonBlock = contitionMarket.buyButtonBlock(price, datetime);
+    -- Не покупать, если цена выше коридора покупок
+    local not_buy_high = contitionMarket.not_buy_high(price, datetime);
 
     if limitBuy and checkRangeBuy and checkRangeSell and randCandle and
         failMarket and getFailBuy and buyButtonBlock and not_buy_high then
         setting.SPRED_LONG_TREND_DOWN = setting.SPRED_LONG_TREND_DOWN +
                                             setting.SPRED_LONG_TREND_DOWN_SPRED;
-
         setting.SPRED_LONG_TREND_DOWN_LAST_PRICE = price; -- записываем последнюю покупку
 
         if setting.emulation then
@@ -74,13 +68,17 @@ function long(price, datetime, levelLocal, event) -- решение
             callBUY(price, datetime);
         end
         -- обновляем изменения в панели управления
-
     end
 
 end
 
+local function decision(price, datetime, levelLocal, event) -- решение
+    long(price, datetime, levelLocal, event);
+end
+
+
 -- исполнение покупки контракта
-function buyContract(result)
+local function buyContract(result)
     -- сперва находим контракт который купили и ставим статус что мы купили контракт
     if #setting.sellTable > 0 then
         for contract = 1, #setting.sellTable do
@@ -104,7 +102,7 @@ end
 -- только выставляется заявка на продажу
 -- or
 -- может вызываеться при срабатывании стопа
-function sellTransaction(order, countContracts)
+local function sellTransaction(order, countContracts)
 
     local type = "TAKE_PROFIT_STOP_ORDER";
     if setting.sell_take_or_limit == false then type = "NEW_ORDER"; end
@@ -143,7 +141,7 @@ end
 
 -- присваиваем номер заявке на продажу
 
-function saleExecution(result)
+local function saleExecution(result)
     if #setting.sellTable > 0 then
         for contract = 1, #setting.sellTable do
             if setting.sellTable[contract].type == 'sell' and
@@ -162,7 +160,7 @@ function saleExecution(result)
 
 end
 
-function saleExecutionStopOrder(result)
+local function saleExecutionStopOrder(result)
     if #setting.sellTable > 0 then
         for contract = 1, #setting.sellTable do
             if setting.sellTable[contract].type == 'sell' and
@@ -181,7 +179,7 @@ function saleExecutionStopOrder(result)
 end
 
 -- исполнение продажи контракта
-function sellContract(result)
+local function sellContract(result)
     --  loger.save("sellContract  " );
     -- сперва находим контракт который купили и ставим статус что мы купили контракт
     if #setting.sellTable > 0 then
@@ -233,7 +231,7 @@ end
 
 -- выставление заявки на покупку 
 -- вызывается для эмуляции и не только
-function callBUY(price_callBUY, datetime)
+local function callBUY(price_callBUY, datetime)
 
     local price_callBUYl = commonBUY(price_callBUY, datetime);
     local trans_id_buy = transaction.send("BUY", price_callBUYl,
@@ -264,7 +262,7 @@ function callBUY(price_callBUY, datetime)
 end
 
 -- выставление заявки на покупку в эмуляции
-function callBUY_emulation(price_callBUY_emulation, datetime)
+local function callBUY_emulation(price_callBUY_emulation, datetime)
     local trans_id_buy = getRand()
 
     price_callBUY_emulation = commonBUY(price_callBUY_emulation, datetime);
@@ -299,7 +297,7 @@ function callBUY_emulation(price_callBUY_emulation, datetime)
 end
 
 -- выставляем заявку на продажу в режиме эмуляции
-function sellTransaction_emulation(contractBuy)
+local function sellTransaction_emulation(contractBuy)
     local price_sellTransaction_emulation = 0;
     local trans_id_sell = getRand();
 
@@ -328,7 +326,7 @@ function sellTransaction_emulation(contractBuy)
 end
 
 -- исполнение продажи контракта в режиме эмуляции
-function callSELL_emulation(result)
+local function callSELL_emulation(result)
 
     local price_callSELL_emulation = result.close;
 
@@ -372,7 +370,7 @@ end
 -- здесь ищем контракт который мы купили ранее 
 -- после продажи контракта надо его пометить, что мы больше не используем
 -- режим эмуляции
-function deleteBuy_emulation(contract_sell)
+local function deleteBuy_emulation(contract_sell)
     if #setting.sellTable > 0 then
         for contract_buy_tr = 1, #setting.sellTable do
 
@@ -388,7 +386,7 @@ function deleteBuy_emulation(contract_sell)
     end
 end
 
-function check_buy_status_block()
+local function check_buy_status_block()
     --   loger.save("-- если кнопка покупки заблокирована автоматически по причине падение"  );
     -- если кнопка покупки заблокирована автоматически по причине падение
     if setting.each_to_buy_status_block then
@@ -407,7 +405,7 @@ end
 -- исполнение продажи по контракту
 -- contract - контракт который продали
 -- общие расчёты 
-function execution_sell(contract)
+local function execution_sell(contract)
 
     -- setting.each_to_buy_step
     -- увеличивает лимит используемых контрактов 
@@ -439,7 +437,7 @@ function execution_sell(contract)
 end
 
 -- надо отметить в контркте на покупку что заявка исполнена
-function deleteBuyCost(result, saleContract)
+local function deleteBuyCost(result, saleContract)
     if #setting.sellTable > 0 then
         for sellT = 1, #setting.sellTable do
             if setting.sellTable[sellT].type == 'buy' and
@@ -482,7 +480,7 @@ function deleteBuyCost(result, saleContract)
     end
 end
 
-function commonBUY(_pricecommonBUY, datetime)
+local function commonBUY(_pricecommonBUY, datetime)
     -- сколько подряд покупок было
     setting.each_to_buy_step = setting.each_to_buy_step + 1;
     -- текущаая свеча
@@ -506,10 +504,7 @@ function commonBUY(_pricecommonBUY, datetime)
     return pricecommonBUY;
 end
 
-function getRand() return tostring(math.random(2000000000)); end
-
-M.transCallback = transCallback;
-
+local M = {};
 M.saleExecutionStopOrder = saleExecutionStopOrder;
 M.saleExecution = saleExecution;
 M.updateTransaction = updateTransaction;
@@ -517,7 +512,6 @@ M.callSELL_emulation = callSELL_emulation;
 M.buyContract = buyContract;
 M.sellContract = sellContract;
 M.sellTransaction = sellTransaction;
-M.bid = bid;
 M.decision = decision;
 M.setDirect = setDirect;
 M.setLitmitBid = setLitmitBid;

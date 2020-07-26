@@ -12,7 +12,7 @@ function vectorize_if_regular_table(t)
         Vec3.__index = Vec3
         setmetatable(t, Vec3)
     end
-    return t
+            return t
 end
 
 -- Public functions.

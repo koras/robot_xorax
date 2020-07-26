@@ -19,7 +19,7 @@ dofile(getScriptPath() .. "\\setting\\work_br.lua");
 dofile(getScriptPath() .. "\\setting\\engine.lua");
 
 local transaction = dofile(getScriptPath() .. "\\shop\\transaction.lua");
-local vecm = dofile(getScriptPath() .. "\\modules\\vector.lua");
+-- local vecm = dofile(getScriptPath() .. "\\modules\\vector.lua");
 local v3 = dofile(getScriptPath() .. "\\modules\\Vec3.lua");
 
 local candles = dofile(getScriptPath() .. "\\Signals\\candle.lua");
@@ -43,7 +43,7 @@ local test_bids = dofile(getScriptPath() .. "\\tests\\test_bids.lua");
 
 local riskStop = dofile(getScriptPath() .. "\\shop\\risk_stop.lua");
 
-Run = true;
+local Run = true;
 
 function init()
 
@@ -52,7 +52,7 @@ function init()
 
 end
 
-Size = 0;
+local Size = 0;
 function OnInit() end
 
 function getPrice() end

@@ -1,8 +1,6 @@
 -- scriptTest.lua (in your scripts directory)
 local M = {}
-  
 local init = {}
-  
 local loger = dofile(getScriptPath() .. "\\interface\\color.lua")
 local loger = dofile(getScriptPath() .. "\\modules\\loger.lua")
 
@@ -48,36 +46,34 @@ local word = {
 	['candle_buy_number_down_price'] = "    candle buy number down price:",  -- сколько свечей должно пройти чтобы отпустить продажу 
 
 
-	['timeWork'] = "    time work:",  -- сколько свечей должно пройти чтобы отпустить продажу 
+	--['timeWork'] = "    time work:",  -- сколько свечей должно пройти чтобы отпустить продажу 
  
 	['timeWork'] =  {
 	   { '10:00', '14:00'},
-	   { '14:05', '18:45'}, 
+	   { '14:05', '18:45'},
 	   { '19:00', '23:50'}
-	},   
-	
+	},
 	['closed_buy'] =  {
 	   { '13:00', '14:00'},
-	   { '18:00', '19:02'}, 
+	   { '18:00', '19:02'},
 	   { '22:55', '23:55'}
 	},
 };
  
  
 
-local function stats()  
-	 
-	SetCell(t_information, 6, 1,  tostring(#bid)) 
-	SetCell(t_information, 7, 1,  tostring(LIMIT_BID+1)) 
-	SetCell(t_information, 8, 1,  tostring(profit).. ' point') 
-	SetCell(t_information, 8, 2,  tostring(profit*7).. ' ruble') 
+local function stats() 
+	SetCell(t_information, 6, 1,  tostring(#bid))
+	SetCell(t_information, 7, 1,  tostring(LIMIT_BID+1))
+	SetCell(t_information, 8, 1,  tostring(profit).. ' point')
+	SetCell(t_information, 8, 2,  tostring(profit*7).. ' ruble')
 
-	SetCell(t_information, 10, 1,  tostring(count_sell)) 
-	SetCell(t_information, 11, 1,  tostring(count_buy)) 
+	SetCell(t_information, 10, 1,  tostring(count_sell))
+	SetCell(t_information, 11, 1,  tostring(count_buy))
 
-	SetCell(t_information, 13, 1,  tostring(setting.SPRED_LONG_TREND_DOWN_LAST_PRICE)) 
-	SetCell(t_information, 14, 1,  tostring(setting.SPRED_LONG_LOST_SELL)) 
-	SetCell(t_information, 17, 1,  tostring(SPRED))  
+	SetCell(t_information, 13, 1,  tostring(setting.SPRED_LONG_TREND_DOWN_LAST_PRICE))
+	SetCell(t_information, 14, 1,  tostring(setting.SPRED_LONG_LOST_SELL))
+	SetCell(t_information, 17, 1,  tostring(SPRED)) 
  
 
 end
@@ -106,7 +102,7 @@ local function show()
  
 	SetCell(t_information, 6, 0, word.open_position);
 	SetCell(t_information, 7, 0, word.open_limit);
-	SetCell(t_information,, 8, 0, word.profit);
+	SetCell(t_information, 8, 0, word.profit);
  
 
 	SetCell(t_information, 10, 0, word.count_sell);
