@@ -14,7 +14,6 @@ local contitionMarket = dofile(getScriptPath() .. "\\shop\\contition_shop.lua");
 -- local deleteBids = dofile(getScriptPath() .. "\\shop\\deleteBids.lua");
 local control = dofile(getScriptPath() .. "\\interface\\control.lua");
 local risk_stop = dofile(getScriptPath() .. "\\shop\\risk_stop.lua");
-dofile(getScriptPath() .. "\\setting\\work_br.lua");
 
 -- SHORT  = FALSE
 -- LONG = true
