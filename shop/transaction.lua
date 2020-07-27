@@ -40,7 +40,13 @@ end
     Transaction.OPERATION = operation; --  ("B" - buy, ??? "S" - sell)
 
     Transaction.QUANTITY = tostring(quantity)
-    Transaction.PRICE = tostring(price)
+
+    if setting.type_instrument  == 3 then 
+        price =  tostring(math.ceil(price));
+    else 
+        price =  tostring(price);
+    end;
+    Transaction.PRICE = price;
 
     --	 if type == "TAKE_PROFIT_AND_STOP_LIMIT_ORDER" then 
     if type == "TAKE_PROFIT_STOP_ORDER" then
@@ -48,8 +54,8 @@ end
         Transaction.STOP_ORDER_KIND = type;
         Transaction.ACTION = "NEW_STOP_ORDER";
         Transaction.OFFSET_UNITS = "PRICE_UNITS";
-        Transaction.STOPPRICE = tostring(price);
-        Transaction.STOPPRICE2 = tostring(price);
+        Transaction.STOPPRICE = price;
+        Transaction.STOPPRICE2 = price;
         Transaction.OFFSET = tostring(setting.take_profit_offset);
         Transaction.KILL_IF_LINKED_ORDER_PARTLY_FILLED = "NO";
         Transaction.USE_BASE_ORDER_BALANCE = "NO";
@@ -66,19 +72,19 @@ end
         local direction = tostring(direction);
         Transaction.ACTION = "NEW_STOP_ORDER";
         Transaction.CONDITION = direction;
-        Transaction.STOPPRICE = tostring(price);
+        Transaction.STOPPRICE = price;
         Transaction.STOP_ORDER_KIND = type;
 
     elseif type == "NEW_ORDER" then
 
-        Transaction.PRICE = tostring(price);
+        Transaction.PRICE = price;
     end
 
     local res = sendTransaction(Transaction);
     message('res 3 ' .. tostring(res));
 
     if res ~= "" then
-        message("res 2 " .. res);
+        message("res 2 " .. res.. " "..setting.type_instrument );
         loger.save('Transaction  ' .. res)
         return nil, res
 
@@ -133,6 +139,14 @@ function sendStop(typeMarket, priceParam, quantity, direction)
         price = tostring(priceParam - 1);
 
     end
+
+    
+    if setting.type_instrument  == 3 then 
+        price =  tostring(math.ceil(price));
+    else 
+        
+        price =  tostring(price);
+    end;
 
     local trans_id = random_max();
 

@@ -67,7 +67,7 @@ function sellTransaction(order, countContracts)
     local trans_id_sell = getRand();
     --  local price = setting.profit_range + order.price + setting.profit_infelicity;
     local price = setting.profit_range + order.price;
-
+    message(tostring(price));
     if setting.emulation == false then
         trans_id_sell = transaction.send("SELL", price, setting.use_contract,
                                          type, order.order_num);
@@ -174,12 +174,18 @@ function commonBUY(_price, datetime)
     setting.each_to_buy_step = setting.each_to_buy_step + 1;
     -- текущаая свеча
     -- ставим заявку на покупку выше на 0.01
-    local price = _price + setting.profit_infelicity; -- и надо снять заявку если не отработал
+    local price = 0;
+    if setting.type_instrument == 3 then 
+         price =  tonumber(_price + setting.profit_infelicity); -- и надо снять заявку если не отработал
+    else
+        price =  _price + setting.profit_infelicity; -- и надо снять заявку если не отработал
+    end 
+
 
     setting.candles_buy_last = setting.number_of_candles;
 
     if setting.emulation then
-        signalShowLog.addSignal(datetime, 20, false, price);
+        signalShowLog.addSignal(datetime, 20, false, tostring(price));
         setting.count_buyin_a_row_emulation =
             setting.count_buyin_a_row_emulation + 1;
     else
@@ -500,6 +506,7 @@ function long(price, datetime, levelLocal, event) -- решение
         setting.SPRED_LONG_TREND_DOWN = setting.SPRED_LONG_TREND_DOWN +
                                             setting.SPRED_LONG_TREND_DOWN_SPRED;
         setting.SPRED_LONG_TREND_DOWN_LAST_PRICE = price; -- записываем последнюю покупку
+ 
 
         if setting.emulation then
             -- в режиме эмуляции контракт на покупку исполнен в полном объёме

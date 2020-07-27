@@ -13,8 +13,8 @@ M = {};
 -- не покупаем если купили в текущем состоянии
 function getRandBuy(price)
 
-    -- ['SPRED_LONG_BUY_UP'] = 0.02, -- условия, не покупаем если здесь ранее мы купили | вверх диапозон,
-    -- ['SPRED_LONG_BUY_down'] = 0.00, -- условия, не покупаем если здесь ранее мы купили | вниз диапозон
+    -- ['SPRED_LONG_BUY_UP -- условия, не покупаем если здесь ранее мы купили | вверх диапозон,
+    -- ['SPRED_LONG_BUY_down, -- условия, не покупаем если здесь ранее мы купили | вниз диапозон
     local checkRange = true;
     if #setting.sellTable > 0 then
         for j_checkRangBuy = 1, #setting.sellTable do

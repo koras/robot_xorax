@@ -27,6 +27,12 @@ setting.profit_range = 0.0005;
 -- минимальная прибыль при больших заявках, не используется 
 setting.profit_range_array = 0.0003;
 
+-- изменение  минимальной прибыли в панели
+setting.profit_range_panel = 0.0001;
+
+-- минимальная прибыль при больших заявках, не используется 
+setting.profit_range_array = 0.0002;
+
 -- погрешность, необходимо для предотвращения проскальзывания при активной торговле
 setting.profit_infelicity = 0.0001;
 
@@ -207,7 +213,7 @@ engine.candle_price_range = 0.0005; -- для нефти например
 engine.candle_price_max_hight = 0.005;
 
 -- минутные свечи. используются для подсчёта 
-setting.count_of_candle = 5;
+setting.count_of_candle = 15;
 
 -- второй минимум
 setting.low_formacia = {};
