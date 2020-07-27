@@ -268,8 +268,7 @@ function use_contract_limit()
                                            setting.SPRED_LONG_TREND_DOWN_NEXT_BUY ..
                                            ")"));
     SetCell(t_control, 27, 1, tostring(setting.SPRED_LONG_TREND_DOWN_SPRED));
-    SetCell(t_control, 28, 1, tostring(setting.not_buy_high .. ' (-' ..
-                                           setting.profit_range .. ')'));
+    SetCell(t_control, 28, 1, tostring(setting.not_buy_high));
 
     SetCell(t_control, 29, 1, tostring(setting.count_of_candle .. " (" ..
                                            setting.candle_current_high .. "/" ..
@@ -630,13 +629,13 @@ function event_callback_message_control(t_control, msg, par1, par2)
 
     -- на сколько увеличиваем растояние при падении рынка между покупками
     if par1 == 28 and par2 == 2 and msg == 1 then
-        setting.not_buy_high = setting.not_buy_high + 0.05;
+        setting.not_buy_high = setting.not_buy_high + setting.not_buy_high_change;
         use_contract_limit();
         return;
     end
     if par1 == 28 and par2 == 3 and msg == 1 then
-        if setting.not_buy_high > 0.05 then
-            setting.not_buy_high = setting.not_buy_high - 0.05;
+        if setting.not_buy_high > setting.not_buy_high_change then
+            setting.not_buy_high = setting.not_buy_high - setting.not_buy_high_change;
             use_contract_limit();
         end
         return;

@@ -94,6 +94,7 @@ setting.tag = "my_br";
 
    setting.not_buy_high_UP = 1; -- условия; цена входа при запуске скрипта
    setting.not_buy_high = 0; -- условия; Выше какого диапазона не покупать(на хаях)
+   setting.not_buy_high_change = 0.05; --  изменения в контрольеой панели
    setting.take_profit_offset = 0.01;   
    setting.take_profit_spread = 0.01;  
           

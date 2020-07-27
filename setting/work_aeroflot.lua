@@ -92,6 +92,7 @@ setting.tag = "aeroflot";
 
    setting.not_buy_high_UP = 0.5; -- условия; цена входа при запуске скрипта
    setting.not_buy_high = 0; -- условия; Выше какого диапазона не покупать(на хаях)
+   setting.not_buy_high_change = 0.05; --  изменения в контрольеой панели
 
 
 

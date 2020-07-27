@@ -14,6 +14,9 @@ local PicPathSTOP = getScriptPath() .. '\\images\\line_stop.jpeg';
 local loger = dofile(getScriptPath() .. "\\modules\\loger.lua")
 
 local function set(Operation, Price, datetime, count, textInfo)
+    
+    loger.save( "set  ");
+
     count = 1;
     loger.save(Operation .. 'Operation  ' .. '  Price ' .. Price);
 

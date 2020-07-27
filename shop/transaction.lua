@@ -4,7 +4,7 @@ local Transaction = {}
 
 local loger = dofile(getScriptPath() .. "\\modules\\loger.lua")
 
-function setTransDefault()
+local  function setTransDefault()
 
     Transaction = {}
     Transaction.CLASSCODE = setting.CLASS_CODE;
@@ -15,7 +15,14 @@ function setTransDefault()
     Transaction.EXPIRY_DATE = "TODAY";
 end
 
-local function send(typeMarket, price, quantity, type, trans_id_buy, direction)
+ function send(typeMarket, price, quantity, type, trans_id_buy, direction)
+
+    setTransDefault();
+
+    loger.save("send = " .. tostring(Transaction.CLASSCODE));
+    loger.save("send = " .. tostring(Transaction.SECCODE));
+    loger.save("send = " .. tostring(Transaction.ACCOUNT));
+    loger.save("send = " .. tostring(setting.SEC_CODE));
 
     local operation = "S"
     if typeMarket == "BUY" then operation = "B" end
@@ -25,17 +32,15 @@ local function send(typeMarket, price, quantity, type, trans_id_buy, direction)
     -- https://quikluacsharp.ru/quik-qlua/prostoj-ma-robot-qlua-s-vystavleniem-tejk-profit-i-stop-limit/
 
     -- http://luaq.ru/sendTransaction.html
-
-    setTransDefault();
+ 
     Transaction.TYPE = 'L';
 
     Transaction.trans_id = tostring(trans_id);
     Transaction.ACTION = 'NEW_ORDER';
-    Transaction.OPERATION = operation; -- ???????? ("B" - buy, ??? "S" - sell)
+    Transaction.OPERATION = operation; --  ("B" - buy, ??? "S" - sell)
 
-    Transaction.QUANTITY = tostring(quantity); -- ?????????? 
-    Transaction.PRICE = tostring(price);
-    -- Transaction.COMMENT"]    = "??????"
+    Transaction.QUANTITY = tostring(quantity)
+    Transaction.PRICE = tostring(price)
 
     --	 if type == "TAKE_PROFIT_AND_STOP_LIMIT_ORDER" then 
     if type == "TAKE_PROFIT_STOP_ORDER" then
@@ -114,7 +119,7 @@ function delete(transId_del_order, stopOrder_num, type)
     end
 end
 
-local function sendStop(typeMarket, priceParam, quantity, direction)
+function sendStop(typeMarket, priceParam, quantity, direction)
 
     setTransDefault();
     local price = ""

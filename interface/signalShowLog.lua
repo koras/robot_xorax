@@ -22,36 +22,47 @@ local wordTitleTableLog = {
     ['log_signal'] = 'Log signals'
 };
 
-local function addSignal(datetime, event, status, number)
-    -- CreateNewTableLogEvent();
+local function setLabelTableLog(_arr) if createTableLog == false then return; end end
 
-    local time = '';
-    local txt = ' event :' .. event;
+--- simple create a table
+local function CreateNewTableLogEvent()
+    --	if createTableLog  then return; end;
+    createTableLog = true;
 
-    loger.saveSignal(txt);
+    t_id_TableLog = AllocTable();
 
-    if (datetime == nul) then
-    else
-        loger.saveSignal('time time ');
-        time = datetime.hour .. ':' .. datetime.min .. ':' .. datetime.sec;
+    AddColumn(t_id_TableLog, 0, wordTitleTableLog.number, true,
+              QTABLE_STRING_TYPE, 5);
+    AddColumn(t_id_TableLog, 1, wordTitleTableLog.time, true,
+              QTABLE_STRING_TYPE, 10);
+    AddColumn(t_id_TableLog, 2, wordTitleTableLog.event, true,
+              QTABLE_STRING_TYPE, 5);
+    AddColumn(t_id_TableLog, 3, wordTitleTableLog.price, true,
+              QTABLE_STRING_TYPE, 10);
+    AddColumn(t_id_TableLog, 4, wordTitleTableLog.description, true,
+              QTABLE_STRING_TYPE, 60);
+
+    t = CreateWindow(t_id_TableLog);
+    SetWindowCaption(t_id_TableLog, wordTitleTableLog.log_signal);
+
+    SetWindowPos(t_id_TableLog, 0, 150, 520, 640);
+
+    for i = 1, 35 do InsertRow(t_id_TableLog, -1); end
+    for i = 0, 3 do
+        Blue(4, i);
+        Blue(8, i);
+        Gray(10, i);
+        Gray(12, i);
+        Gray(14, i);
+        Gray(16, i);
+        Gray(18, i);
     end
 
-    local arr = {
-        ['dt'] = datetime,
-        ['dtime'] = time,
-        ['event'] = event,
-        ['status'] = status,
-        ['price'] = number,
-        ['description'] = words.wSignal(event),
-        ['number'] = (#arrTableLog + 1)
-    };
-
-    arrTableLog[#arrTableLog + 1] = arr;
-    updateLogSignal(arr);
-    -- table.insert(arrTableLog, (#arrTableLog+1),arr);   
 end
 
-function updateLogSignal(_arr)
+
+
+local function updateLogSignal(_arr)
     if #arrTableLog == 0 then return; end
 
     itter = 1
@@ -69,24 +80,24 @@ function updateLogSignal(_arr)
         end
 
         if (_arr.event == 21) then
-            label.set('SELL', _arr.price, _arr.dt, 1, 'sell contract ' .. 1);
+       --     label.set('SELL', _arr.price, _arr.dt, 1, 'sell contract ' .. 1);
         end
         if (_arr.event == 24) then
-            label.set("BUY", _arr.price, _arr.dt, 0);
+        --    label.set("BUY", _arr.price, _arr.dt, 0);
         end
 
         if (_arr.event == 8) then
-            label.set('sell', _arr.price, _arr.dt, 1, _arr.description);
+         --   label.set('sell', _arr.price, _arr.dt, 1, _arr.description);
         end
 
         if (_arr.event == 22) then
-            label.set('red', _arr.price, _arr.dt, 1, _arr.description);
+         --   label.set('red', _arr.price, _arr.dt, 1, _arr.description);
         end
 
         if (showLabelPrice) then
 
             if (_arr.event == 1) then
-                label.set('red', _arr.price, _arr.dt, 1, _arr.description);
+             --   label.set('red', _arr.price, _arr.dt, 1, _arr.description);
             end
         end
     end
@@ -151,45 +162,39 @@ function updateLogSignal(_arr)
     setLabelTableLog(_arr);
 end
 
-function setLabelTableLog(_arr) if createTableLog == false then return; end end
 
---- simple create a table
-function CreateNewTableLogEvent()
-    --	if createTableLog  then return; end;
-    createTableLog = true;
+local function addSignal(datetime, event, status, number)
+    -- CreateNewTableLogEvent();
 
-    t_id_TableLog = AllocTable();
+    local time = '';
+    local txt = ' event :' .. event;
 
-    AddColumn(t_id_TableLog, 0, wordTitleTableLog.number, true,
-              QTABLE_STRING_TYPE, 5);
-    AddColumn(t_id_TableLog, 1, wordTitleTableLog.time, true,
-              QTABLE_STRING_TYPE, 10);
-    AddColumn(t_id_TableLog, 2, wordTitleTableLog.event, true,
-              QTABLE_STRING_TYPE, 5);
-    AddColumn(t_id_TableLog, 3, wordTitleTableLog.price, true,
-              QTABLE_STRING_TYPE, 10);
-    AddColumn(t_id_TableLog, 4, wordTitleTableLog.description, true,
-              QTABLE_STRING_TYPE, 60);
+    loger.saveSignal(txt);
 
-    t = CreateWindow(t_id_TableLog);
-    SetWindowCaption(t_id_TableLog, wordTitleTableLog.log_signal);
-
-    SetWindowPos(t_id_TableLog, 0, 150, 520, 640);
-
-    for i = 1, 35 do InsertRow(t_id_TableLog, -1); end
-    for i = 0, 3 do
-        Blue(4, i);
-        Blue(8, i);
-        Gray(10, i);
-        Gray(12, i);
-        Gray(14, i);
-        Gray(16, i);
-        Gray(18, i);
+    if (datetime == nul) then
+    else
+        loger.saveSignal('time time ');
+        time = datetime.hour .. ':' .. datetime.min .. ':' .. datetime.sec;
     end
 
-end
+    local arr = {
+        ['dt'] = datetime,
+        ['dtime'] = time,
+        ['event'] = event,
+        ['status'] = status,
+        ['price'] = number,
+        ['description'] = words.wSignal(event),
+        ['number'] = (#arrTableLog + 1)
+    };
 
-function deleteTable(Line, Col) DestroyTable(t_id_TableLog) end
+    arrTableLog[#arrTableLog + 1] = arr;
+    updateLogSignal(arr);
+    -- table.insert(arrTableLog, (#arrTableLog+1),arr);   
+end
+ 
+ 
+ 
+local function deleteTable(Line, Col) DestroyTable(t_id_TableLog) end
 
 M.addSignal = addSignal;
 M.stats = stats;

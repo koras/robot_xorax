@@ -167,7 +167,7 @@ end
 function not_buy_high(price, datetime)
 
     local checkRange = true;
-    if price >= (setting.not_buy_high - setting.profit_range) then
+    if price >= setting.not_buy_high then
         signalShowLog.addSignal(datetime, 19, true, price);
         checkRange = false;
     end
