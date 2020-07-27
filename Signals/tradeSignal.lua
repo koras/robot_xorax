@@ -13,7 +13,7 @@ local collbackFunc;
 
 -- как должна ходить цена для сигнала
 -- здесь мы не учитываем ничего
-local rangeLocal = 0.0
+local rangeLocal = 0
 
 local signalStrength = 0;
 -- старая цена

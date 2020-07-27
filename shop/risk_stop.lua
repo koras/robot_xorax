@@ -42,7 +42,7 @@ end
 function calculateMaxStopStart()
     if usestop == false then return; end
     -- зависимость контрактов
-    stopClass.spred = 0.5;
+    stopClass.spred = stopClass.spred_default;
     --  stopClass.spred = setting.LIMIT_BID / setting.use_contract * setting.profit_range ;
     --  stopClass.spred = setting.LIMIT_BID * setting.SPRED_LONG_TREND_DOWN / setting.use_contract  + stopClass.spred + stopClass.spred_range ;
 end
@@ -51,7 +51,7 @@ function setStopDefault()
     if usestop == false then return; end
 
     stopClass.price_min = 10000000;
-    stopClass.spred = 0.01;
+    stopClass.spred = stopClass.spred_default;
     --  stopClass.spred_range = 0.1;
     stopClass.contract_work = 0;
 end

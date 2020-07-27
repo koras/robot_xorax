@@ -537,15 +537,15 @@ function event_callback_message_control(t_control, msg, par1, par2)
     if par1 == 17 and par2 == 2 and msg == 1 then
         if stopClass.show_panel_bue_sell == false then return end
 
-        setting.profit_range = setting.profit_range + 0.01;
+        setting.profit_range = setting.profit_range + setting.profit_range_panel;
         use_contract_limit();
         return;
     end
 
     if par1 == 17 and par2 == 3 and msg == 1 then
         if stopClass.show_panel_bue_sell == false then return end
-        if setting.profit_range > 0.01 then
-            setting.profit_range = setting.profit_range - 0.01;
+        if setting.profit_range > setting.profit_range_panel then
+            setting.profit_range = setting.profit_range - setting.profit_range_panel;
             use_contract_limit();
         end
         return;
@@ -553,15 +553,15 @@ function event_callback_message_control(t_control, msg, par1, par2)
 
     if par1 == 19 and par2 == 2 and msg == 1 then
         if stopClass.show_panel_bue_sell == false then return end
-        setting.take_profit_offset = setting.take_profit_offset + 0.01;
+        setting.take_profit_offset = setting.take_profit_offset + setting.profit_range_panel;
         use_contract_limit();
         return;
     end
 
     if par1 == 19 and par2 == 3 and msg == 1 then
         if stopClass.show_panel_bue_sell == false then return end
-        if setting.take_profit_offset > 0.01 then
-            setting.take_profit_offset = setting.take_profit_offset - 0.01;
+        if setting.take_profit_offset > setting.profit_range_panel then
+            setting.take_profit_offset = setting.take_profit_offset - setting.profit_range_panel;
             use_contract_limit();
         end
         return;
@@ -569,15 +569,15 @@ function event_callback_message_control(t_control, msg, par1, par2)
 
     if par1 == 20 and par2 == 2 and msg == 1 then
         if stopClass.show_panel_bue_sell == false then return end
-        setting.take_profit_spread = setting.take_profit_spread + 0.01;
+        setting.take_profit_spread = setting.take_profit_spread + setting.profit_range_panel;
         use_contract_limit();
         return;
     end
 
     if par1 == 20 and par2 == 3 and msg == 1 then
         if stopClass.show_panel_bue_sell == false then return end
-        if setting.take_profit_spread > 0.01 then
-            setting.take_profit_spread = setting.take_profit_spread - 0.01;
+        if setting.take_profit_spread > setting.profit_range_panel then
+            setting.take_profit_spread = setting.take_profit_spread - setting.profit_range_panel;
             use_contract_limit();
         end
         return;
@@ -599,13 +599,13 @@ function event_callback_message_control(t_control, msg, par1, par2)
 
     -- рынок падает, увеличиваем растояние между покупками
     if par1 == 26 and par2 == 2 and msg == 1 then
-        setting.SPRED_LONG_TREND_DOWN = setting.SPRED_LONG_TREND_DOWN + 0.01;
+        setting.SPRED_LONG_TREND_DOWN = setting.SPRED_LONG_TREND_DOWN + setting.profit_range_panel;
         use_contract_limit();
         return;
     end
     if par1 == 26 and par2 == 3 and msg == 1 then
-        if setting.SPRED_LONG_TREND_DOWN > 0.00 then
-            setting.SPRED_LONG_TREND_DOWN = setting.SPRED_LONG_TREND_DOWN - 0.01;
+        if setting.SPRED_LONG_TREND_DOWN > 0 then
+            setting.SPRED_LONG_TREND_DOWN = setting.SPRED_LONG_TREND_DOWN - setting.profit_range_panel;
             use_contract_limit();
         end
         return;
@@ -614,14 +614,14 @@ function event_callback_message_control(t_control, msg, par1, par2)
     -- на сколько увеличиваем растояние при падении рынка между покупками
     if par1 == 27 and par2 == 2 and msg == 1 then
         setting.SPRED_LONG_TREND_DOWN_SPRED =
-            setting.SPRED_LONG_TREND_DOWN_SPRED + 0.01;
+            setting.SPRED_LONG_TREND_DOWN_SPRED + setting.profit_range_panel;
         use_contract_limit();
         return;
     end
     if par1 == 27 and par2 == 3 and msg == 1 then
-        if setting.SPRED_LONG_TREND_DOWN_SPRED > 0.01 then
+        if setting.SPRED_LONG_TREND_DOWN_SPRED > setting.profit_range_panel then
             setting.SPRED_LONG_TREND_DOWN_SPRED =
-                setting.SPRED_LONG_TREND_DOWN_SPRED - 0.01;
+                setting.SPRED_LONG_TREND_DOWN_SPRED - setting.profit_range_panel;
             use_contract_limit();
         end
         return;
