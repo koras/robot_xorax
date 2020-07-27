@@ -185,7 +185,7 @@ function commonBUY(_price, datetime)
     setting.candles_buy_last = setting.number_of_candles;
 
     if setting.emulation then
-        signalShowLog.addSignal(datetime, 20, false, price);
+        signalShowLog.addSignal(datetime, 20, false, tostring(price));
         setting.count_buyin_a_row_emulation =
             setting.count_buyin_a_row_emulation + 1;
     else

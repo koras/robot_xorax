@@ -22,7 +22,7 @@ setting.tag = "my_si";
 setting.type_instrument = 3;
 
 -- минимальная прибыль
-setting.profit_range = 10;
+setting.profit_range = 25;
 
 -- минимальная прибыль при больших заявках, не используется 
 setting.profit_range_array = 3;
@@ -85,9 +85,9 @@ setting.limit_count_buy = 0; -- лимит на покупку ( сколько 
 setting.SPRED_LONG_BUY_UP = 2; -- условия; не покупаем если здесь ранее мы купили | вверх диапозон;
 setting.SPRED_LONG_BUY_down = 1; -- условия; не покупаем если здесь ранее мы купили | вниз диапозон
 
-setting.not_buy_high_UP = 5; -- условия; цена входа при запуске скрипта
+setting.not_buy_high_UP = 400; -- условия; цена входа при запуске скрипта
 setting.not_buy_high = 0; -- условия; Выше какого диапазона не покупать(на хаях)
-setting.not_buy_high_change = 5; --  изменения в контрольеой панели
+setting.not_buy_high_change = 10; --  изменения в контрольеой панели
 
 setting.take_profit_offset = 1;
 setting.take_profit_spread = 1;
@@ -213,7 +213,7 @@ engine.candle_price_range = 5; -- для нефти например
 engine.candle_price_max_hight = 5;
 
 -- минутные свечи. используются для подсчёта 
-setting.count_of_candle = 5;
+setting.count_of_candle = 15;
 
 -- второй минимум
 setting.low_formacia = {};

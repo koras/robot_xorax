@@ -41,9 +41,11 @@ end
 
     Transaction.QUANTITY = tostring(quantity)
 
-    
-        price =  tostring(tonumber(price));
-
+    if setting.type_instrument  == 3 then 
+        price =  tostring(math.ceil(price));
+    else 
+        price =  tostring(price);
+    end;
     Transaction.PRICE = price;
 
     --	 if type == "TAKE_PROFIT_AND_STOP_LIMIT_ORDER" then 
@@ -137,6 +139,14 @@ function sendStop(typeMarket, priceParam, quantity, direction)
         price = tostring(priceParam - 1);
 
     end
+
+    
+    if setting.type_instrument  == 3 then 
+        price =  tostring(math.ceil(price));
+    else 
+        
+        price =  tostring(price);
+    end;
 
     local trans_id = random_max();
 

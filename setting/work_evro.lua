@@ -213,7 +213,7 @@ engine.candle_price_range = 0.0005; -- для нефти например
 engine.candle_price_max_hight = 0.005;
 
 -- минутные свечи. используются для подсчёта 
-setting.count_of_candle = 5;
+setting.count_of_candle = 15;
 
 -- второй минимум
 setting.low_formacia = {};
