@@ -128,8 +128,8 @@ setting.each_to_buy_status_block = false; -- сколько подряд раз 
 -- Последняя цена сделки по продаже констракта
 setting.SPRED_LONG_LOST_SELL = 0;
 -- рынок падает, увеличиваем растояние между покупками
-setting.SPRED_LONG_TREND_DOWN = 1;
-setting.SPRED_LONG_TREND_DOWN_SPRED = 2; -- на сколько увеличиваем растояние
+setting.SPRED_LONG_TREND_DOWN = 10;
+setting.SPRED_LONG_TREND_DOWN_SPRED = 20; -- на сколько увеличиваем растояние
 
 -- рынок падает, увеличиваем растояние между покупками(минимальное число)
 setting.SPRED_LONG_TREND_DOWN_minimal = 1;
@@ -150,7 +150,7 @@ setting.profit_add_candle = 0;
 setting.comment_quik = 'Robot XoraX';
 
 -- Использовать стопы или нет, по умолчанию да
-stopClass.use_stop = true;
+stopClass.use_stop = false;
 -- Показывать или скрывать панель стопов, по умолчинию скрыта
 stopClass.show_panel = false;
 

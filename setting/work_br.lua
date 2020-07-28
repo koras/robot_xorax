@@ -147,7 +147,7 @@ setting.profit_add_candle = 0.0;
 setting.comment_quik = 'Robot XoraX';
 
 -- Использовать стопы или нет, по умолчанию да
-stopClass.use_stop = true;
+stopClass.use_stop = false;
 -- Показывать или скрывать панель стопов, по умолчинию скрыта
 stopClass.show_panel = false;
 
