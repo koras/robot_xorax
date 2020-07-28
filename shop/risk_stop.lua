@@ -190,10 +190,13 @@ end
 -- countPrice - стоимость контракта
 
 function sendTransStop(countContract, countPrice)
-
-    stopClass.array_stop.order_type = "SIMPLE_STOP_ORDER";
+     
+ 
 
     if usestop == false then return; end
+
+    stopClass.array_stop.order_type = "SIMPLE_STOP_ORDER";
+    stopClass.array_stop.trans_id = getRand();
 
     loger.save("sendTransStop: order_num=" .. stopClass.array_stop.order_num ..
                    " trans_id =  " .. stopClass.array_stop.trans_id)
