@@ -232,7 +232,7 @@ setting.last_buy_candle = 0;
 stopClass.show_panel_bue_sell = false;
 
 -- версия продукта 
-setting.version = "0.1.132";
+setting.version = "0.1.135";
 
 setting.use_windows = false;
 
