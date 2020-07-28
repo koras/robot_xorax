@@ -206,10 +206,10 @@ function OnTrade(trade)
 
     if bit.band(trade.flags, 2) == 0 then
 
-        loger.save('OnTrade end 222  --  ' .. tostring(trade.trans_id) ..
-                       "   == " .. tostring(trade.order_num))
+        -- loger.save('OnTrade end 222  --  ' .. tostring(trade.trans_id) ..
+        --                "   == " .. tostring(trade.order_num))
     else
-        loger.save('OnTrade end 111  ')
+     --   loger.save('OnTrade end 111  ')
 
     end
 
@@ -270,7 +270,7 @@ function OnStopOrder(trade)
     end
 
     if not bit.test(trade.flags, 0) and not bit.test(trade.flags, 1) then
-        loger.save('������ 11111 �' .. trade.order_num ..
+    --    loger.save('������ 11111 �' .. trade.order_num ..
                        ' appruve')
     end
 

@@ -96,13 +96,13 @@ function getRandCandle(price, datetime)
         signalShowLog.addSignal(datetime, 13, false, range_candle);
     else
 
-        signalShowLog.addSignal(datetime, 15, false, 111);
+   --     signalShowLog.addSignal(datetime, 15, false, 111);
     end
 
     local priceMinimum = setting.candle_current_high - setting.profit_range;
 
     if checkRange == true and priceMinimum > price + setting.profit_infelicity then
-        signalShowLog.addSignal(datetime, 15, false, 222);
+     --   signalShowLog.addSignal(datetime, 15, false, 222);
 
     else
         -- свечка меньше текущего профита  
