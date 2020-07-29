@@ -24,8 +24,10 @@ setting.type_instrument = 1;
 -- минимальная прибыль
 setting.profit_range = 0.05;
 
--- минимальная прибыль при больших заявках, не используется 
-setting.profit_range_array = 0.03;
+-- минимальная прибыль при больших заявках при торговле веерной продажей
+setting.profit_range_array = 0.04;
+-- для веерной продажи. Какой промежуток между заявками
+setting.profit_range_array_panel = 0.01;
 
 -- изменение  минимальной прибыли в панели
 setting.profit_range_panel = 0.01;
@@ -43,7 +45,7 @@ setting.datetime = 0;
 setting.developer = false;
 
 -- лимит количества заявок на сессию работы робота.
-setting.LIMIT_BID = 10;
+setting.LIMIT_BID = 6;
 
 -- сколько использовать контрактов по умолчанию в режиме скальпинга
 setting.use_contract = 1;
@@ -242,6 +244,5 @@ setting.timeWork = {{'10:00', '14:00'}, {'14:05', '18:45'}, {'19:00', '23:50'}};
 setting.closed_buy = {
     {'13:00', '14:00'}, {'18:00', '19:02'}, {'22:55', '23:55'}
 };
-
 
 -- https://open-broker.ru/pricing-plans/

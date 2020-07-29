@@ -96,9 +96,9 @@ end
 
 function sell_take_or_limit()
     if setting.sell_take_or_limit then
-        SetCell(t_control, 18, 1, words.word('sell_set_take_profit'));
+        SetCell(t_control, 19, 1, words.word('sell_set_take_profit'));
     else
-        SetCell(t_control, 18, 1, words.word('sell_set_limit'));
+        SetCell(t_control, 19, 1, words.word('sell_set_limit'));
     end
 end
 
@@ -135,11 +135,9 @@ end
 function show_panel_bue_sell()
     if stopClass.show_panel_bue_sell then
         SetCell(t_control, 16, 0, words.word('show_stop_no'));
-        --	show_info_stop ();  
         show_panel_buy();
     else
         SetCell(t_control, 16, 0, words.word('show_panel_bue_sell_yes'));
-        --	hide_info_stop ();  
         hide_panel_buy();
     end
 end
@@ -147,38 +145,45 @@ end
 function show_panel_buy()
     if stopClass.show_panel_bue_sell == false then return end
     SetCell(t_control, 17, 3, word.current_limit_minus);
-    SetCell(t_control, 19, 3, word.current_limit_minus);
+    SetCell(t_control, 18, 3, word.current_limit_minus);
     SetCell(t_control, 20, 3, word.current_limit_minus);
+    SetCell(t_control, 21, 3, word.current_limit_minus);
 
     Red(t_control, 17, 3);
-    Red(t_control, 19, 3);
+    Red(t_control, 18, 3);
     Red(t_control, 20, 3);
+    Red(t_control, 21, 3);
 
     SetCell(t_control, 17, 2, word.current_limit_plus);
+    SetCell(t_control, 18, 2, word.current_limit_plus);
 
-    SetCell(t_control, 18, 2, words.word('sell_set_take_or_limit_change'));
-    SetCell(t_control, 19, 2, word.current_limit_plus);
+    SetCell(t_control, 19, 2, words.word('sell_set_take_or_limit_change'));
     SetCell(t_control, 20, 2, word.current_limit_plus);
+    SetCell(t_control, 21, 2, word.current_limit_plus);
     Green(t_control, 17, 2);
-    Green(t_control, 19, 2);
+    Green(t_control, 18, 2);
     Green(t_control, 20, 2);
+    Green(t_control, 21, 2);
 
     SetCell(t_control, 17, 0, words.word('profit_range'));
-    SetCell(t_control, 18, 0, words.word('sell_set_take_or_limit'));
-    SetCell(t_control, 19, 0, words.word('profit_take_max_range'));
-    SetCell(t_control, 20, 0, words.word('profit_take_protected'));
+    SetCell(t_control, 18, 0, words.word('profit_range_array'));
+    SetCell(t_control, 19, 0, words.word('sell_set_take_or_limit'));
+    SetCell(t_control, 20, 0, words.word('profit_take_max_range'));
+    SetCell(t_control, 21, 0, words.word('profit_take_protected'));
 
-    SetCell(t_control, 17, 1, tostring(setting.profit_range) .. " (" ..
-                tostring(setting.profit) .. ") ");
-    SetCell(t_control, 19, 1, tostring(setting.take_profit_offset));
-    SetCell(t_control, 20, 1, tostring(setting.take_profit_spread));
+    SetCell(t_control, 17, 1, tostring(setting.profit_range) .. " (" ..  tostring(setting.profit) .. ") ");
+    SetCell(t_control, 18, 1, tostring(setting.profit_range_array) );
+
+
+    SetCell(t_control, 20, 1, tostring(setting.take_profit_offset));
+    SetCell(t_control, 21, 1, tostring(setting.take_profit_spread));
 
     sell_take_or_limit();
 end
 
 function hide_panel_buy()
 
-    for i = 17, 20 do
+    for i = 17, 22 do
         for s = 0, 3 do
             SetCell(t_control, i, s, tostring(""));
             White(t_control, i, s);
@@ -431,8 +436,8 @@ function CreateNewTable()
 
     AddColumn(t_control, 0, word.status, true, QTABLE_STRING_TYPE, 35);
     AddColumn(t_control, 1, word.buy, true, QTABLE_STRING_TYPE, 30);
-    AddColumn(t_control, 2, word.sell, true, QTABLE_STRING_TYPE, 20);
-    AddColumn(t_control, 3, word.close_positions, true, QTABLE_STRING_TYPE, 20);
+    AddColumn(t_control, 2, word.sell, true, QTABLE_STRING_TYPE, 21);
+    AddColumn(t_control, 3, word.close_positions, true, QTABLE_STRING_TYPE, 21);
 
     t = CreateWindow(t_control);
     SetWindowCaption(t_control, word.Trading_Bot_Control_Panel);
@@ -551,14 +556,39 @@ function event_callback_message_control(t_control, msg, par1, par2)
         return;
     end
 
-    if par1 == 19 and par2 == 2 and msg == 1 then
+
+     
+
+
+    if par1 == 18 and par2 == 2 and msg == 1 then
+        if stopClass.show_panel_bue_sell == false then return end
+
+        setting.profit_range_array = setting.profit_range_array + setting.profit_range_array_panel;
+        use_contract_limit();
+        return;
+    end
+
+    if par1 == 18 and par2 == 3 and msg == 1 then
+        if stopClass.show_panel_bue_sell == false then return end
+        if setting.profit_range > setting.profit_range_array_panel then
+            setting.profit_range_array = setting.profit_range_array - setting.profit_range_array_panel;
+            use_contract_limit();
+        end
+        return;
+    end
+
+
+
+
+
+    if par1 == 20 and par2 == 2 and msg == 1 then
         if stopClass.show_panel_bue_sell == false then return end
         setting.take_profit_offset = setting.take_profit_offset + setting.profit_range_panel;
         use_contract_limit();
         return;
     end
 
-    if par1 == 19 and par2 == 3 and msg == 1 then
+    if par1 == 20 and par2 == 3 and msg == 1 then
         if stopClass.show_panel_bue_sell == false then return end
         if setting.take_profit_offset > setting.profit_range_panel then
             setting.take_profit_offset = setting.take_profit_offset - setting.profit_range_panel;
@@ -567,14 +597,14 @@ function event_callback_message_control(t_control, msg, par1, par2)
         return;
     end
 
-    if par1 == 20 and par2 == 2 and msg == 1 then
+    if par1 == 21 and par2 == 2 and msg == 1 then
         if stopClass.show_panel_bue_sell == false then return end
         setting.take_profit_spread = setting.take_profit_spread + setting.profit_range_panel;
         use_contract_limit();
         return;
     end
 
-    if par1 == 20 and par2 == 3 and msg == 1 then
+    if par1 == 21 and par2 == 3 and msg == 1 then
         if stopClass.show_panel_bue_sell == false then return end
         if setting.take_profit_spread > setting.profit_range_panel then
             setting.take_profit_spread = setting.take_profit_spread - setting.profit_range_panel;
@@ -646,7 +676,7 @@ function event_callback_message_control(t_control, msg, par1, par2)
 
     --	['sell_set_take_or_limit_change'] = "Изменить",
     -- установка тейкпрофита или лимитки на продажу
-    if par1 == 18 and par2 == 2 and msg == 1 then
+    if par1 == 19 and par2 == 2 and msg == 1 then
         if stopClass.show_panel_bue_sell == false then return end
         if setting.sell_take_or_limit then
             setting.sell_take_or_limit = false;

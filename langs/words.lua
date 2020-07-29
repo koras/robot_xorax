@@ -84,6 +84,7 @@ function word(key)
 		['profit_take_max_range'] = "Тэйк: Отступ от max",
 		['profit_take_protected'] = "Тэйк: Защитный спред",
 		['profit_range'] = "Объём профита",
+		['profit_range_array'] = "Веерная продажа",
 		['sell_set_take_or_limit'] = "Продажа (тейк или лимит)",
 		['sell_set_take_profit'] = "тейк профит",
 		['sell_set_limit'] = "лимит",

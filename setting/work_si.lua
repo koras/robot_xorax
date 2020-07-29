@@ -24,11 +24,10 @@ setting.type_instrument = 3;
 -- минимальная прибыль
 setting.profit_range = 25;
 
--- минимальная прибыль при больших заявках, не используется 
-setting.profit_range_array = 3;
-
--- минимальная прибыль при больших заявках, не используется 
-setting.profit_range_array = 2;
+-- минимальная прибыль при больших заявках при торговле веерной продажей
+setting.profit_range_array = 20;
+-- для веерной продажи. Какой промежуток между заявками
+setting.profit_range_array_panel = 5;
 
 -- изменение  минимальной прибыли в панели
 setting.profit_range_panel = 1;
@@ -245,6 +244,5 @@ setting.timeWork = {{'10:00', '14:00'}, {'14:05', '18:45'}, {'19:00', '23:50'}};
 setting.closed_buy = {
     {'13:00', '14:00'}, {'18:00', '19:02'}, {'22:55', '23:55'}
 };
-
 
 -- https://open-broker.ru/pricing-plans/
