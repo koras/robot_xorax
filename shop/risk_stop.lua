@@ -332,7 +332,7 @@ function removeOldOrderSell()
 
                 -- удаляем контракт  
                 setting.sellTable[i].work = false;
-                signalShowLog.addSignal(setting.datetime, 34, false,
+                signalShowLog.addSignal(34, false,
                                         setting.sellTable[i].price);
                 loger.save(
                     " помечаем заявку как неактивную sell," ..
@@ -381,7 +381,7 @@ function appruveOrderStopEmulation(order)
             stopClass.array_stop.price and stopClass.array_stop.work == 2 then
 
             stopClass.array_stop.work = 3;
-            signalShowLog.addSignal(setting.datetime, 31, false,
+            signalShowLog.addSignal(31, false,
                                     stopClass.array_stop.price);
 
             -- снимаем стоп

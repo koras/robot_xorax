@@ -214,27 +214,12 @@ engine.candle_price_max_hight = 5;
 -- минутные свечи. используются для подсчёта 
 setting.count_of_candle = 15;
 
--- второй минимум
-setting.low_formacia = {};
 
-setting.candle_test = 0;
 
-setting.candle_current_high = 0; -- верхняя граница свечи; для промежутка покупки
-setting.candle_current_low = 0; -- верхняя граница свечи; для промежутка покупки
 
-setting.old_candle_price_high = 0; -- верхняя граница свечи; для промежутка покупки
-setting.old_candle_price_low = 0; -- верхняя граница свечи; для промежутка покупки
-
--- На какой свече была оследняя покупка
--- это надо для понимания роботом, что покупка была давно
--- Если покупка была давно, то робот начнёт уменьшать спред последней покупки
-setting.last_buy_candle = 0;
 
 -- открыта, закрыта панель покупок
 stopClass.show_panel_bue_sell = false;
-
--- версия продукта 
-setting.version = "0.1.135";
 
 setting.use_windows = false;
 

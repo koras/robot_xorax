@@ -51,7 +51,7 @@ function callSELL_emulation(result)
                         setting.count_sell =  setting.count_sell + 1; 
                         setting.profit =  setting.sellTable[sellT].price - setting.sellTable[sellT].buy_contract + setting.profit;
     
-                        signalShowLog.addSignal(result.datetime, 21 , false, price); 
+                        signalShowLog.addSignal(21 , false, price); 
                         -- надо удалить контракт по которому мы покупали
                         buyContractSell = setting.sellTable[sellT].buy_contract; 
                         deleteKeySell = sellT; 

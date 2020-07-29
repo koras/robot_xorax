@@ -36,7 +36,7 @@ setting.profit_range_panel = 0.01;
 setting.profit_infelicity = 0.01;
 
 -- подсчёт прибыли, считается после каждой продажи
-setting.profit = 0.00;
+setting.profit = 0;
 
 -- текущее время в свече, для внетреннего использования в роботе
 setting.datetime = 0;
@@ -214,28 +214,11 @@ engine.candle_price_max_hight = 0.5;
 -- минутные свечи. используются для подсчёта 
 setting.count_of_candle = 5;
 
--- второй минимум
-setting.low_formacia = {};
-
-setting.candle_test = 0;
-
-setting.candle_current_high = 0.00; -- верхняя граница свечи; для промежутка покупки
-setting.candle_current_low = 0.00; -- верхняя граница свечи; для промежутка покупки
-
-setting.old_candle_price_high = 0.00; -- верхняя граница свечи; для промежутка покупки
-setting.old_candle_price_low = 0.00; -- верхняя граница свечи; для промежутка покупки
-
--- На какой свече была оследняя покупка
--- это надо для понимания роботом, что покупка была давно
--- Если покупка была давно, то робот начнёт уменьшать спред последней покупки
-setting.last_buy_candle = 0;
+ 
 
 -- открыта, закрыта панель покупок
 stopClass.show_panel_bue_sell = false;
-
--- версия продукта 
-setting.version = "0.1.135";
-
+ 
 setting.use_windows = false;
 
 -- примерное время работы, пока не используется

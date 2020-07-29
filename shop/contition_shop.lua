@@ -27,9 +27,7 @@ function getRandBuy(price)
                     setting.profit_infelicity and price >=
                     setting.sellTable[j_checkRangBuy].price -
                     setting.SPRED_LONG_BUY_down then
-                    signalShowLog.addSignal(
-                        setting.sellTable[j_checkRangBuy].datetime, 11, false,
-                        price);
+                    signalShowLog.addSignal( 11, false, price);
                     checkRange = false;
                 end
             end
@@ -52,9 +50,7 @@ function getRandSell(price)
                     price and price >= setting.sellTable[j_checkRange].price -
                     setting.profit_range then
                     checkRange = false;
-                    signalShowLog.addSignal(
-                        setting.sellTable[j_checkRange].datetime, 12, false,
-                        price);
+                    signalShowLog.addSignal( 12, false, price);
                 end
             end
         end
@@ -69,12 +65,12 @@ function getLimitBuy(datetime)
 
     if setting.emulation == false and setting.LIMIT_BID <=
         setting.limit_count_buy then
-        signalShowLog.addSignal(datetime, 16, false, setting.limit_count_buy);
+        signalShowLog.addSignal(16, false, setting.limit_count_buy);
         checkRange = false;
     end
 
     if setting.emulation and setting.LIMIT_BID <= setting.limit_count_buy then
-        signalShowLog.addSignal(datetime, 25, false, setting.limit_count_buy);
+        signalShowLog.addSignal(25, false, setting.limit_count_buy);
         checkRange = false;
     end
 
@@ -91,25 +87,21 @@ function getRandCandle(price, datetime)
         -- свечка меньше текущего профита 
         --	[13] = 'Текущая свеча меньше преполагаемого профита, низкая волатильность',   
         checkRange = false;
-        signalShowLog.addSignal(datetime, 19, false, setting.candle_current_high);
-        signalShowLog.addSignal(datetime, 19, false, setting.candle_current_low);
-        signalShowLog.addSignal(datetime, 13, false, range_candle);
+        signalShowLog.addSignal(19, false, setting.candle_current_high);
+        signalShowLog.addSignal(19, false, setting.candle_current_low);
     else
 
-   --     signalShowLog.addSignal(datetime, 15, false, 111);
     end
 
     local priceMinimum = setting.candle_current_high - setting.profit_range;
 
     if checkRange == true and priceMinimum > price + setting.profit_infelicity then
-     --   signalShowLog.addSignal(datetime, 15, false, 222);
 
     else
         -- свечка меньше текущего профита  
         --	[14] = 'Цена на свече выше профита, покупка на верху невозможна',   
         checkRange = false;
-        signalShowLog.addSignal(datetime, 15, false, setting.candle_current_high);
-        signalShowLog.addSignal(datetime, 14, false, priceMinimum);
+        signalShowLog.addSignal(14, false, priceMinimum);
     end
     return checkRange;
 end
@@ -132,7 +124,7 @@ function getFailMarket(price, datetime)
 
         checkRange = false;
         -- setting.SPRED_LONG_TREND_DOWN_NEXT_BUY =  setting.SPRED_LONG_TREND_DOWN_LAST_PRICE - nextPrice;
-        signalShowLog.addSignal(datetime, 3, true,
+        signalShowLog.addSignal(3, true,
                                 setting.SPRED_LONG_TREND_DOWN_NEXT_BUY);
 
     end
@@ -144,7 +136,7 @@ function getFailBuy(price, datetime)
     local checkRange = true;
     if setting.each_to_buy_step >= setting.each_to_buy_to_block then
         -- активация кнопки блокировки покупки
-        signalShowLog.addSignal(datetime, 18, true, price);
+        signalShowLog.addSignal(18, true, price);
         setting.each_to_buy_status_block = true;
         control.buy_stop_auto();
         checkRange = false;
@@ -157,7 +149,7 @@ function buyButtonBlock(price, datetime)
 
     local checkRange = true;
     if setting.buy == false then
-        signalShowLog.addSignal(datetime, 4, true, price);
+        signalShowLog.addSignal(4, true, price);
         checkRange = false;
     end
     return checkRange;
@@ -168,7 +160,7 @@ function not_buy_high(price, datetime)
 
     local checkRange = true;
     if price >= setting.not_buy_high then
-        signalShowLog.addSignal(datetime, 19, true, price);
+        signalShowLog.addSignal(19, true, price);
         checkRange = false;
     end
     return checkRange;

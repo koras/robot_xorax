@@ -163,9 +163,9 @@ local function updateLogSignal(_arr)
 end
 
 
-local function addSignal(datetime, event, status, number)
+local function addSignal(event, status, number)
     -- CreateNewTableLogEvent();
-
+    local datetime = setting.datetime;
     local time = '';
     local txt = ' event :' .. event;
 
