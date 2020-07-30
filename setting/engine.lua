@@ -49,6 +49,30 @@ stopClass.array_stop.stop_number = 0;
 -- обновление стопов
 stopClass.update = true;
 
+-- минимальная и максимальная цена покупки
+stopClass.price_min_buy = 0;
+stopClass.price_max_buy = 0;
 
 -- обновили максимальную цену, передвигаем стоп, сбрасываем тригер на обновление
 stopClass.triger_update_up = true;
+
+
+
+setting.comment_quik = 'Robot XoraX';
+
+-- Использовать стопы или нет, по умолчанию да
+stopClass.use_stop = false;
+-- Показывать или скрывать панель стопов, по умолчинию скрыта
+stopClass.show_panel = false;
+
+-- максимальная цена в заявке
+stopClass.price_max = 0;
+-- минимальная цена в  заявке
+stopClass.price_min = 10000000;
+
+-- количество контрактов в работе
+stopClass.contract_work = 0;
+
+-- количество контрактов добавленных трейдером
+stopClass.contract_add = 0;
+

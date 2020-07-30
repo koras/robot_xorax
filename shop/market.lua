@@ -58,7 +58,31 @@ end
 
 -- надо отсортировать все контракты и найти с самой низкой ценой
 function getLastBuy()
-    return 0;
+
+    stopClass.price_mim_buy = 0
+    stopClass.price_max_buy = 0
+
+    if #setting.sellTable == 0 then return; end;
+    
+    for contractStop = 1 ,  #setting.sellTable do 
+            -- берём все заявки которые куплены
+
+        if  setting.sellTable[contractStop].type == 'buy' and  setting.sellTable[contractStop].work then
+            -- если стоп сработал хотя бы раз, то больше максимальную цену не обновляем
+            if setting.sellTable[contractStop].price > stopClass.price_max then 
+                -- максимальная цена покупки
+                stopClass.price_max_buy = setting.sellTable[contractStop].price ;
+                        
+            end 
+     
+            
+            if setting.sellTable[contractStop].price < stopClass.price_min then 
+                -- минимальная цена покупки
+                stopClass.price_mim_buy = setting.sellTable[contractStop].price ;
+            end 
+        end;
+    end;
+ 
 end;
 
 
@@ -70,8 +94,8 @@ function execution_sell(contract)
 
     -- setting.each_to_buy_step
     -- увеличивает лимит используемых контрактов 
-
-    setting.SPRED_LONG_TREND_DOWN_LAST_PRICE = getLastBuy();
+    getLastBuy();
+    setting.SPRED_LONG_TREND_DOWN_LAST_PRICE =  stopClass.price_mim_buy;
 
     if contract.contract > 0 and setting.limit_count_buy >= contract.contract then
         setting.limit_count_buy = setting.limit_count_buy - contract.contract;

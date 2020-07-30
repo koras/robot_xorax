@@ -145,24 +145,7 @@ setting.instrument_measurement = 1;
 -- На сколько прибавить к свече чтобы закупится ниже профита
 setting.profit_add_candle = 0;
 -- открыта или закрыта панель покупок
-
-setting.comment_quik = 'Robot XoraX';
-
--- Использовать стопы или нет, по умолчанию да
-stopClass.use_stop = false;
--- Показывать или скрывать панель стопов, по умолчинию скрыта
-stopClass.show_panel = false;
-
--- максимальная цена в заявке
-stopClass.price_max = 0;
--- минимальная цена в  заявке
-stopClass.price_min = 10000000;
-
--- количество контрактов в работе
-stopClass.contract_work = 0;
-
--- количество контрактов добавленных трейдером
-stopClass.contract_add = 0;
+ 
 
 -- расстояние от максимальной покупки
 -- зависимость от используемых контрактов

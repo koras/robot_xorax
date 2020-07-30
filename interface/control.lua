@@ -39,7 +39,7 @@ local word = {
     ['on'] = "          ON      ",
     ['off'] = "          OFF     ",
     ['off_auto'] = "        OFF AUTO     ",
-    ['Trading_Bot_Control_Panel'] = "Trading Bot Control Panel (free " ..
+    ['Trading_Bot_Control_Panel'] = "("..setting.SEC_CODE..") / XoraX Control Panel (free " ..
         setting.version .. ")",
 
     ['block_buy'] = "buy / block",
