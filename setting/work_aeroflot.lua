@@ -211,20 +211,7 @@ stopClass.spred_range_limit = 0.01;
 -- если сработал стоп, то другие стопы не передигаем
 -- число отвечающее на сколько отодвинуты стопы от первоначальной версии
 stopClass.triger_stop = 0;
-
--- обновили максимальную цену, передвигаем стоп, сбрасываем тригер на обновление
-stopClass.triger_update_up = true;
-
--- стоп заявки
-stopClass.array_stop = {};
-stopClass.array_stop.work = 0;
-stopClass.array_stop.order_num = 0;
-stopClass.array_stop.trans_id = 0;
-stopClass.array_stop.price = 0;
-stopClass.array_stop.stop_number = 0;
--- обновление стопов
-stopClass.update = true;
-
+ 
 
 
 -- отвечает за расчёты в свечах
@@ -249,28 +236,7 @@ setting.count_of_candle = 45;
  
  
 
-
--- открыта, закрыта панель покупок
-stopClass.show_panel_bue_sell = false;
-
-
-setting.use_windows = false;
  
-
- 
-
-   -- примерное время работы, пока не используется
-   setting.timeWork =  {
-    { '10:00', '14:00'};
-    { '14:05', '18:45'}; 
-    { '19:00', '23:50'}
- };   
- 
-setting.closed_buy =  {
-    { '13:00', '14:00'};
-    { '18:00', '19:02'}; 
-    { '22:55', '23:55'}
- };
 
 
 -- https://open-broker.ru/pricing-plans/

@@ -44,8 +44,7 @@ function buyContract(result)
                 setting.sellTable[contract].executed == false and
                 setting.sellTable[contract].trans_id == result.trans_id then
 
-                signalShowLog.addSignal(27, false,
-                                        setting.sellTable[contract].price);
+                signalShowLog.addSignal(27, false, setting.sellTable[contract].price);
                 setting.sellTable[contract].executed = true;
                 -- выставляем на продажу контракт.
                 sellTransaction(result, setting.sellTable[contract]);
@@ -56,6 +55,14 @@ function buyContract(result)
     end
 end
 
+
+-- надо отсортировать все контракты и найти с самой низкой ценой
+function getLastBuy()
+    return 0;
+end;
+
+
+
 -- исполнение продажи по контракту
 -- contract - контракт который продали
 -- общие расчёты 
@@ -64,7 +71,7 @@ function execution_sell(contract)
     -- setting.each_to_buy_step
     -- увеличивает лимит используемых контрактов 
 
-    setting.SPRED_LONG_TREND_DOWN_LAST_PRICE = 0;
+    setting.SPRED_LONG_TREND_DOWN_LAST_PRICE = getLastBuy();
 
     if contract.contract > 0 and setting.limit_count_buy >= contract.contract then
         setting.limit_count_buy = setting.limit_count_buy - contract.contract;
@@ -187,10 +194,9 @@ function sellContract(result)
                 setting.sellTable[contract].work = false;
 
                 -- выставляем на продажу контракт.
-                setting.sellTable[contract].price_take = result.price,
+                setting.sellTable[contract].price_take = result.price;
 
-                                                         execution_sell(
-                                                             setting.sellTable[contract]);
+                execution_sell(setting.sellTable[contract]);
 
                 signalShowLog.addSignal(26, false, result.price);
                 deleteBuyCost(result, setting.sellTable[contract])
@@ -437,6 +443,11 @@ function deleteBuyCost(result, saleContract)
                 if setting.limit_count_buy > 0 then
                     setting.limit_count_buy =
                         setting.limit_count_buy - local_contract.use_contract;
+                end
+
+
+                if setting.limit_count_buy == 0 then
+                    setting.sellTable[sellT].work = false;
                 end
 
                 setting.count_contract_sell =
