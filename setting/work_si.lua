@@ -22,10 +22,10 @@ setting.tag = "my_si";
 setting.type_instrument = 3;
 
 -- минимальная прибыль
-setting.profit_range = 50;
+setting.profit_range = 69;
 
 -- минимальная прибыль при больших заявках при торговле веерной продажей
-setting.profit_range_array = 35;
+setting.profit_range_array = 47;
 -- для веерной продажи. Какой промежуток между заявками
 setting.profit_range_array_panel = 5;
 
