@@ -55,34 +55,34 @@ function buyContract(result)
     end
 end
 
+ 
 
 -- надо отсортировать все контракты и найти с самой низкой ценой
 function getLastBuy()
 
-    stopClass.price_mim_buy = 0
-    stopClass.price_max_buy = 0
-
-    if #setting.sellTable == 0 then return; end;
+    setting.price_min_buy = 1000000
+    setting.price_max_buy = 0
+    stopClass.price_min = 0
+    stopClass.price_max = 0
     
+    if #setting.sellTable == 0 then return; end;
     for contractStop = 1 ,  #setting.sellTable do 
             -- берём все заявки которые куплены
-
         if  setting.sellTable[contractStop].type == 'buy' and  setting.sellTable[contractStop].work then
             -- если стоп сработал хотя бы раз, то больше максимальную цену не обновляем
-            if setting.sellTable[contractStop].price > stopClass.price_max then 
+            if setting.sellTable[contractStop].price > setting.price_max_buy then
                 -- максимальная цена покупки
-                stopClass.price_max_buy = setting.sellTable[contractStop].price ;
-                        
+                setting.price_max_buy = setting.sellTable[contractStop].price ;
+                stopClass.price_max = setting.price_max_buy 
             end 
-     
-            
-            if setting.sellTable[contractStop].price < stopClass.price_min then 
+      
+            if setting.sellTable[contractStop].price < setting.price_min_buy then
                 -- минимальная цена покупки
-                stopClass.price_mim_buy = setting.sellTable[contractStop].price ;
+                setting.price_min_buy = setting.sellTable[contractStop].price ;
+                stopClass.price_min = setting.price_min_buy
             end 
         end;
     end;
- 
 end;
 
 
@@ -94,8 +94,9 @@ function execution_sell(contract)
 
     -- setting.each_to_buy_step
     -- увеличивает лимит используемых контрактов 
-    getLastBuy();
-    setting.SPRED_LONG_TREND_DOWN_LAST_PRICE =  stopClass.price_mim_buy;
+    getLastBuy()
+
+    setting.SPRED_LONG_TREND_DOWN_LAST_PRICE =  setting.price_min_buy;
 
     if contract.contract > 0 and setting.limit_count_buy >= contract.contract then
         setting.limit_count_buy = setting.limit_count_buy - contract.contract;
@@ -238,29 +239,123 @@ function sellContract(result)
     risk_stop.update_stop();
 end
 
--- выставление заявки на покупку 
+
+ 
+
+-- надо отсортировать все контракты на продажу и найти с самой низкой ценой
+function getLastSell()
+
+    local price_min_sell = 1000000
+    setting.price_min_sell = price_min_sell
+    setting.price_max_sell = 0
+
+    if #setting.sellTable == 0 then return 0; end;
+
+    for contractStop = 1 ,  #setting.sellTable do 
+            -- берём все заявки которые выставлены на продажу
+        if  setting.sellTable[contractStop].type == 'sell' and  setting.sellTable[contractStop].work then
+            -- если стоп сработал хотя бы раз, то больше максимальную цену не обновляем
+            if setting.sellTable[contractStop].price > setting.price_max_sell then
+                -- максимальная цена продажи
+                setting.price_max_sell = setting.sellTable[contractStop].price ;
+                        
+            end 
+      
+            if setting.sellTable[contractStop].price < setting.price_min_sell then
+                -- минимальная цена продажи
+                setting.price_min_sell = setting.sellTable[contractStop].price ;
+            end 
+        end;
+    end;
+
+    if price_min_sell ~= setting.price_min_sell then 
+        return setting.price_min_sell;
+    end;
+
+    -- не стоит заявок на продажу, всё продали
+    return 0;
+end;
+
+ 
+-- здесь подсчитываем сколько контрактов можем купить
+-- range_sell_buy - растояние между продажей и покупкой
+function getPullBuy(range_sell_buy)
+    local use_contract = 0;
+    local price_left = 0;
+
+    if range_sell_buy > setting.profit_range then 
+        -- есть место для одного контракта
+        use_contract = use_contract + 1;
+    end;
+
+    setting.profit_range = 0.05;
+
+    -- минимальная прибыль при больших заявках при торговле веерной продажей
+    setting.profit_range_array = 0.04;
+
+end;
+
+
+
+-- здесь мы вычисляем, сколько контрактов необходимо купить
+-- Всё зависит от количество проданых контрактов
+function getUseContract(price)
+
+    
+    if setting.use_contract == 1 then
+        -- если 1 контракт
+        return setting.use_contract;
+    end 
+    -- если контрактов больше, то надо расчитать сколько покупать, в зависимости от количества проданых контрактов
+    -- минимальная прибыль
+    --setting.profit_range = 0.05;
+    -- минимальная прибыль при больших заявках при торговле веерной продажей
+    -- setting.profit_range_array = 0.04;
+    if setting.profit_range_array == 0 then 
+      --  не используется веерная продажа
+        return setting.use_contract
+    else 
+        -- расчет - надо узнать где стоит ближайшая заявка на продажу по минимальной цене в работе
+        local price_min_sell = getLastSell();
+
+        if price_min_sell == 0 then 
+            -- у нас не стоит контракты на продажу
+            return setting.use_contract;
+        else
+            -- стоит контракт на продажу
+            local range_sell_buy = price - setting.price_min_sell
+            -- как далеко от цены покупки?
+            -- здесь подсчитываем сколько контрактов можем купить
+           return getPullBuy(range_sell_buy);
+        end 
+         
+        return setting.use_contract;
+    end 
+end
+
+-- выставление заявки на покупку
 -- вызывается для эмуляции и не только
 function callBUY(price_callBUY, datetime)
 
+    local  use_contract =  getUseContract(price_callBUY);
+
     local price_callBUYl = commonBUY(price_callBUY, datetime);
-    local trans_id_buy = transaction.send("BUY", price_callBUYl,
-                                          setting.use_contract, type, 0);
-    setting.count_contract_buy = setting.count_contract_buy +
-                                     setting.use_contract
+    local trans_id_buy = transaction.send("BUY", price_callBUYl, use_contract, type, 0);
+    setting.count_contract_buy = setting.count_contract_buy + use_contract;
 
     local data = {};
     data.price = price_callBUYl;
     data.datetime = datetime;
     data.trans_id = trans_id_buy;
     -- сколько контрактов исполнилось 
-    data.use_contract = setting.use_contract;
+    data.use_contract = use_contract;
     data.trans_id_buy = trans_id_buy;
 
     data.work = true;
     data.executed = false;
     data.type = 'buy';
     data.emulation = setting.emulation;
-    data.contract = setting.use_contract;
+    data.contract = use_contract;
     data.buy_contract = price_callBUYl; -- стоимость продажи
 
     setting.sellTable[(#setting.sellTable + 1)] = data;
@@ -269,6 +364,8 @@ function callBUY(price_callBUY, datetime)
     panelBids.show();
     control.use_contract_limit();
 end
+
+
 
 -- выставляем заявку на продажу в режиме эмуляции
 function sellTransaction(order, contractBuy)

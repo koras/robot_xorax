@@ -571,7 +571,11 @@ function event_callback_message_control(t_control, msg, par1, par2)
     if par1 == 18 and par2 == 3 and msg == 1 then
         if stopClass.show_panel_bue_sell == false then return end
         if setting.profit_range > 0 then
+
             setting.profit_range_array = setting.profit_range_array - setting.profit_range_array_panel;
+            if setting.profit_range_array < 0 then 
+                setting.profit_range_array = 0
+            end 
             use_contract_limit();
         end
         return;
