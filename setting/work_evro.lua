@@ -61,13 +61,9 @@ setting.take_profit_offset = 0.0001;
 setting.take_profit_spread = 0.0001;
 
  
-
--- на какой свече была последняя покупка
-setting.candles_buy_last = 0;
+ 
 setting.candle_buy_number_down_price = 6; -- сколько свечей должно пройти чтобы отпустить продажу 
-setting.range_down_price_candles = 0;
-
-setting.fractals_collection = {};
+  
 setting.fractal_up = 0;
 setting.fractal_down = 0;
 setting.fractal_down_range = 0.0005; -- если цена ниже; значит здесб был уровень; а под уровнем не покупаем.

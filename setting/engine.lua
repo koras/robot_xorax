@@ -175,3 +175,12 @@ setting.buy = true;
 setting.sell = true;
 -- таблица заявок, здесь все заявки используемые в работе робота
 setting.sellTable = {};
+
+
+
+setting.fractals_collection = {};
+setting.fractal_up = 0;
+setting.fractal_down = 0;
+-- на какой свече была последняя покупка
+setting.candles_buy_last = 0;
+setting.range_down_price_candles = 0;
