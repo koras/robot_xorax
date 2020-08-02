@@ -109,6 +109,8 @@ end
 
 function main()
 
+ 
+
     candles.getSignal(updateTick);
     candles.getSignal(market.callSELL_emulation);
 
@@ -264,7 +266,7 @@ function OnStopOrder(trade)
             else
                 --     loger.save('вызываем  riskStop.appruveOrderStop false '.. trade.trans_id );
             end
-            if trade.stop_order_type == 1 and CheckBit(trade.flags, 8) then
+            if trade.stop_order_type == 1 and bit.band(trade.flags, 8) then
                 --     loger.save('вызываем  222 riskStop.appruveOrderStop '.. trade.trans_id );
                 --  riskStop.appruveOrderStop(trade)
             end
@@ -275,7 +277,7 @@ function OnStopOrder(trade)
         -- заявка на покупку 
     end
 
-    if not CheckBit(trade.flags, 0) and not CheckBit(trade.flags, 1) then
+    if not bit.band(trade.flags, 0) and not bit.band(trade.flags, 1) then
         --   loger.save(' -- riskStop.updateOrderNumber изменения по стоп заявке, исполнелись наверное  ' )
         --   riskStop.updateOrderNumber(trade)
     end

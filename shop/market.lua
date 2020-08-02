@@ -286,12 +286,17 @@ function getPullBuy(range_sell_buy)
     if range_sell_buy > setting.profit_range then 
         -- есть место для одного контракта
         use_contract = use_contract + 1;
+        range_sell_buy = range_sell_buy - setting.profit_range;
     end;
-
-    setting.profit_range = 0.05;
-
-    -- минимальная прибыль при больших заявках при торговле веерной продажей
-    setting.profit_range_array = 0.04;
+    
+    if range_sell_buy > setting.profit_range_array then 
+      local contract_add =  math.ceil(range_sell_buy / setting.profit_range_array) - 1
+        if contract_add > 0 then 
+            use_contract =   use_contract + contract_add;
+        end;
+    end;
+    
+    return use_contract;
 
 end;
 
@@ -337,7 +342,7 @@ end
 -- вызывается для эмуляции и не только
 function callBUY(price_callBUY, datetime)
 
-    local  use_contract =  getUseContract(price_callBUY);
+    local use_contract =  getUseContract(price_callBUY);
 
     local price_callBUYl = commonBUY(price_callBUY, datetime);
     local trans_id_buy = transaction.send("BUY", price_callBUYl, use_contract, type, 0);
@@ -369,14 +374,18 @@ end
 
 -- выставляем заявку на продажу в режиме эмуляции
 function sellTransaction(order, contractBuy)
+    if contractBuy.use_contract == 0 then
+        loger.save("нет контрактов " .. contractBuy.use_contract);
+    end
+
     loger.save("sellTransaction");
 
     local type = "TAKE_PROFIT_STOP_ORDER";
     if setting.sell_take_or_limit == false then type = "NEW_ORDER"; end
 
     local price = setting.profit_range + contractBuy.price;
-
-    for sell_use_contract = 1, setting.use_contract do
+     
+    for sell_use_contract = 1, contractBuy.use_contract do
 
         local data = {};
         data.number = 0
@@ -418,11 +427,12 @@ end
 function callBUY_emulation(price, datetime)
     local trans_id_buy = getRand()
 
+    local use_contract =  getUseContract(price);
+
     loger.save("OnOrder work order_num = " .. price);
-    price = commonBUY(price, datetime);
-    --  setting.emulation_count_contract_buy = setting.emulation_count_contract_buy + setting.use_contract;
-    setting.count_contract_buy = setting.count_contract_buy +
-                                     setting.use_contract;
+    price = commonBUY(price, datetime)
+
+    setting.count_contract_buy = setting.count_contract_buy + use_contract;
     local data = {};
 
     data.price = price;
@@ -436,8 +446,8 @@ function callBUY_emulation(price, datetime)
     data.executed = true; -- покупка исполнилась
     data.type = "buy";
     data.emulation = setting.emulation;
-    data.contract = setting.use_contract;
-    data.use_contract = setting.use_contract;
+    data.contract = use_contract;
+    data.use_contract = use_contract;
     data.buy_contract = price; -- стоимость продажи
     data.trans_id_buy = trans_id_buy;
     data.order_num = trans_id_buy;
