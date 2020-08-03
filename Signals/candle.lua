@@ -5,7 +5,8 @@ local M = {}
 local start_init = true;
 
 local loger = dofile(getScriptPath() .. "\\modules\\loger.lua")
-
+local lineBuyHigh = dofile(getScriptPath() .. "\\modules\\lineBuyHigh.lua")
+ 
 local signalShowLog =
     dofile(getScriptPath() .. "\\interface\\signalShowLog.lua");
 local candleGraff = dofile(getScriptPath() .. "\\interface\\candleGraff.lua");
@@ -29,6 +30,11 @@ bigCandle = 0;
 local function initCandle(barCandleLocal)
     if start_init then
         setting.not_buy_high = setting.not_buy_high_UP + barCandleLocal.close;
+        setting.datetime = barCandleLocal.datetime;
+        lineBuyHigh.updateBuyHigh()
+
+        setting.not_buy_low = barCandleLocal.close - setting.not_buy_low_UP;
+        lineBuyHigh.updateBuyLow()
         start_init = false;
     end
 end

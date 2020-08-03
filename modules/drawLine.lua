@@ -5,6 +5,8 @@ local Labels = {};
 
 local minute = '';
 local hour = '';
+ 
+local purchase_height = getScriptPath() .. '\\images\\purchase_height.bmp';
 
 local PicPathSell = getScriptPath() .. '\\images\\myDeals_sell';
 local PicPathBuy = getScriptPath() .. '\\images\\myDeals_buy';
@@ -50,7 +52,7 @@ local function set(Price, count, textInfo)
     label_params.Color = RGB(255, 0, 0);
     label_params.Width = 3;
 
-    AddLabel('test', label_params);
+    return AddLabel('test', label_params);
 end
 
 local function delete(text) end

@@ -287,15 +287,20 @@ function getPullBuy(range_sell_buy)
         -- есть место для одного контракта
         use_contract = use_contract + 1;
         range_sell_buy = range_sell_buy - setting.profit_range;
+        loger.save('getPullBuy |0|  use_contract=' .. use_contract );
     end;
     
     if range_sell_buy > setting.profit_range_array then 
       local contract_add =  math.ceil(range_sell_buy / setting.profit_range_array) - 1
+      
+      loger.save('getPullBuy |1|  contract_add=' .. contract_add.." range_sell_buy="..range_sell_buy );
         if contract_add > 0 then 
             use_contract =   use_contract + contract_add;
+            loger.save('getPullBuy |2| ' .. use_contract .. ' contract_add=' .. contract_add );
         end;
     end;
     
+    loger.save('getPullBuy |3| ' .. use_contract );
     return use_contract;
 
 end;
@@ -306,6 +311,7 @@ end;
 -- Всё зависит от количество проданых контрактов
 function getUseContract(price)
 
+    loger.save('getUseContract  price = ' .. price.. " setting.use_contract="..setting.use_contract );
     
     if setting.use_contract == 1 then
         -- если 1 контракт
@@ -318,19 +324,27 @@ function getUseContract(price)
     -- setting.profit_range_array = 0.04;
     if setting.profit_range_array == 0 then 
       --  не используется веерная продажа
+      
+      loger.save('getUseContract 1 setting.use_contract = ' .. setting.use_contract );
         return setting.use_contract
     else 
+        
+        loger.save('getUseContract 2 setting.use_contract = '  .. setting.use_contract  );
         -- расчет - надо узнать где стоит ближайшая заявка на продажу по минимальной цене в работе
         local price_min_sell = getLastSell();
 
         if price_min_sell == 0 then 
             -- у нас не стоит контракты на продажу
+            loger.save('getUseContract 2 setting.use_contract = ' .. setting.use_contract );
             return setting.use_contract;
         else
             -- стоит контракт на продажу
-            local range_sell_buy = price - setting.price_min_sell
+            local range_sell_buy = setting.price_min_sell - price
             -- как далеко от цены покупки?
             -- здесь подсчитываем сколько контрактов можем купить
+            
+            loger.save('getUseContract |5| setting.price_min_sell = '  .. setting.price_min_sell );
+            loger.save('getUseContract |5| range_sell_buy = '  .. range_sell_buy );
            return getPullBuy(range_sell_buy);
         end 
          
@@ -409,6 +423,7 @@ function sellTransaction(order, contractBuy)
         if setting.emulation then
             data.trans_id = getRand();
             signalShowLog.addSignal(22, false, price);
+            label.set("redCircle", price, contractBuy.datetime, 1, "sell");
         else
             data.order_num = order.order_num;
             data.trans_id = transaction.send("SELL", price,1, type, order.order_num);
@@ -587,7 +602,7 @@ function deleteBuyCost(result, saleContract)
                 signalShowLog.addSignal(8, false, result.price);
 
                 if setting.emulation then
-                    label.set('sell', result.price,
+                    label.set('SELL', result.price,
                               setting.sellTable[sellT].datetime, 1, "");
                 end
                 -- надо удалить контракт по которому мы покупали
@@ -607,20 +622,22 @@ function long(price, datetime, levelLocal, event) -- решение
     -- Не покупать, если стоит ли продажа в этом промежутке, не продали контракт
     local checkRangeSell = contitionMarket.getRandSell(price, setting.sellTable);
     --  Не покупать, если свечной анализ показывает низкий уровень промежутка продаж/покупок 
-    local randCandle = contitionMarket.getRandCandle(price, datetime);
+    local randCandle = contitionMarket.getRandCandle(price);
     -- Не покупать, если рынок падает а мы раньше купили, но не продали согласно правилам
-    local failMarket = contitionMarket.getFailMarket(price, datetime);
+    local failMarket = contitionMarket.getFailMarket(price);
     -- Не покупать, если лимит по заявкам выделеным на покупку исчерпан
-    local limitBuy = contitionMarket.getLimitBuy(datetime);
+    local limitBuy = contitionMarket.getLimitBuy();
     -- Не покупать, если сработала блокировка покупки при падении рынка
-    local getFailBuy = contitionMarket.getFailBuy(price, datetime);
+    local getFailBuy = contitionMarket.getFailBuy(price);
     -- Не покупать, если кнопка покупки заблокирована  (блокируется кнопкой)
-    local buyButtonBlock = contitionMarket.buyButtonBlock(price, datetime);
+    local buyButtonBlock = contitionMarket.buyButtonBlock(price);
     -- Не покупать, если цена выше коридора покупок
-    local not_buy_high = contitionMarket.not_buy_high(price, datetime);
+    local not_buy_high = contitionMarket.not_buy_high(price);
+    -- Не покупать, если цена выше коридора покупок
+    local not_buy_low = contitionMarket.not_buy_low(price);
 
     if limitBuy and checkRangeBuy and checkRangeSell and randCandle and
-        failMarket and getFailBuy and buyButtonBlock and not_buy_high then
+        failMarket and getFailBuy and buyButtonBlock and not_buy_high and not_buy_low then
         setting.SPRED_LONG_TREND_DOWN = setting.SPRED_LONG_TREND_DOWN +
                                             setting.SPRED_LONG_TREND_DOWN_SPRED;
         setting.SPRED_LONG_TREND_DOWN_LAST_PRICE = price; -- записываем последнюю покупку

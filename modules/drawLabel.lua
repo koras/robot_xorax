@@ -6,6 +6,11 @@ local Labels = {};
 local minute = '';
 local hour = '';
 
+local purchase_height = getScriptPath() .. '\\images\\purchase_height.jpg';
+local purchase_low = getScriptPath() .. '\\images\\purchase_low.jpg';
+
+ 
+local PicPathRed = getScriptPath() .. '\\images\\myDeals_red.bmp';
 local PicPathSell = getScriptPath() .. '\\images\\myDeals_sell';
 local PicPathBuy = getScriptPath() .. '\\images\\myDeals_buy';
 local PicPathEvent = getScriptPath() .. '\\images\\myDeals_';
@@ -17,8 +22,7 @@ local function set(Operation, Price, datetime, count, textInfo)
     
     loger.save( "set  ");
 
-    count = 1;
-    loger.save(Operation .. 'Operation  ' .. '  Price ' .. Price);
+    count = 1; 
 
     if (textInfo == nul) then textInfo = ''; end
 
@@ -36,29 +40,33 @@ local function set(Operation, Price, datetime, count, textInfo)
 
         label_params['ALIGNMENT'] = 'BOTTOM';
     else
-        if NumberInTriangles == -1 then
-
-        else
-            label_params['IMAGE_PATH'] = PicPathSell
-        end
         label_params['ALIGNMENT'] = 'TOP';
     end
+
+
+
+
+
 
     label_params['ALIGNMENT'] = 'BOTTOM';
 
     if Operation == 'BUY' then
-        label_params['IMAGE_PATH'] = PicPathBuy .. count .. '.bmp';
-    else
+        label_params['IMAGE_PATH'] = PicPathBuy .. count .. '.bmp'; 
+    end
+
+    if Operation == 'SELL' then 
         label_params['IMAGE_PATH'] = PicPathSell .. count .. '.bmp';
     end
 
-    if Operation == 'red' or Operation == 'green' then
-        label_params['IMAGE_PATH'] = PicPathEvent .. Operation .. '.bmp';
-    else
-        --    label_params['IMAGE_PATH'] = PicPathSell..count..'.bmp'; 
-    end
+    if Operation == 'redCircle' then    label_params['IMAGE_PATH'] = PicPathRed;  end
 
     if Operation == 'stop' then label_params['IMAGE_PATH'] = PicPathSTOP; end
+
+    if Operation == 'purchase_height' then label_params['IMAGE_PATH'] = purchase_height; end
+    if Operation == 'purchase_low' then label_params['IMAGE_PATH'] = purchase_low; end
+
+     
+
 
     local day = datetime.day;
     if datetime.day < 10 then day = '0' .. datetime.day; end
@@ -69,6 +77,7 @@ local function set(Operation, Price, datetime, count, textInfo)
     label_params['YVALUE'] = Price;
     label_params['DATE'] = datetime.year .. month .. day;
     label_params['TIME'] = hour .. minute .. '00';
+     
     label_params['R'] = 255;
     label_params['G'] = 255;
     label_params['B'] = 0;
@@ -77,6 +86,13 @@ local function set(Operation, Price, datetime, count, textInfo)
     label_params['FONT_FACE_NAME'] = "Webdings";
     label_params['FONT_HEIGHT'] = 14;
     label_params['HINT'] = 'Price ' .. Price .. " \n " .. textInfo
+
+    loger.save(Operation .. 'Operation  ' .. '  Price ' .. Price.. '  label_params.TIME' ..   label_params.TIME..
+    " label_params['IMAGE_PATH'] "..label_params['IMAGE_PATH']..
+    " label_params['DATE'] "..label_params['DATE']
+    
+    
+    );
 
     return AddLabel(setting.tag, label_params);
 end

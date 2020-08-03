@@ -59,7 +59,7 @@ function getRandSell(price)
 end
 
 -- Лимит заявок на покупку 
-function getLimitBuy(datetime)
+function getLimitBuy()
 
     local checkRange = true;
 
@@ -78,7 +78,7 @@ function getLimitBuy(datetime)
 end
 
 -- Не покупаем если промежуток на свече соответствуют высокой цене
-function getRandCandle(price, datetime)
+function getRandCandle(price)
 
     local range_candle = setting.candle_current_high -
                              setting.candle_current_low;
@@ -107,7 +107,7 @@ function getRandCandle(price, datetime)
 end
 
 -- Падение рынка
-function getFailMarket(price, datetime)
+function getFailMarket(price)
     local checkRange = true;
     local localPrice = price - setting.profit_infelicity;
 
@@ -132,7 +132,7 @@ function getFailMarket(price, datetime)
 end
 
 -- Запрет на покупку
-function getFailBuy(price, datetime)
+function getFailBuy(price)
     local checkRange = true;
     if setting.each_to_buy_step >= setting.each_to_buy_to_block then
         -- активация кнопки блокировки покупки
@@ -145,7 +145,7 @@ function getFailBuy(price, datetime)
 end
 
 -- проверка на блокировку кнопки покупок
-function buyButtonBlock(price, datetime)
+function buyButtonBlock(price)
 
     local checkRange = true;
     if setting.buy == false then
@@ -156,7 +156,7 @@ function buyButtonBlock(price, datetime)
 end
 
 -- верхний диапазон, выше которого покупка запрещена
-function not_buy_high(price, datetime)
+function not_buy_high(price)
 
     local checkRange = true;
     if price >= setting.not_buy_high then
@@ -166,6 +166,20 @@ function not_buy_high(price, datetime)
     return checkRange;
 end
 
+-- нижний диапазон, ниже которого покупка запрещена
+function not_buy_low(price)
+    local checkRange = true;
+    if price <= setting.not_buy_low then
+        signalShowLog.addSignal(38, true, price);
+        checkRange = false;
+    end
+    return checkRange;
+end
+
+ 
+
+
+M.not_buy_low = not_buy_low;
 M.not_buy_high = not_buy_high;
 M.buyButtonBlock = buyButtonBlock;
 M.getFailBuy = getFailBuy;

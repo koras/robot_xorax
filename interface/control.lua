@@ -8,6 +8,7 @@ local loger = dofile(getScriptPath() .. "\\modules\\loger.lua");
 local words = dofile(getScriptPath() .. "\\langs\\words.lua");
 local riskStop = dofile(getScriptPath() .. "\\shop\\risk_stop.lua");
 local panelBids = dofile(getScriptPath() .. "\\interface\\bids.lua");
+local lineBuyHigh = dofile(getScriptPath() .. "\\modules\\lineBuyHigh.lua")
 local signalShowLog =
     dofile(getScriptPath() .. "\\interface\\signalShowLog.lua");
 
@@ -52,7 +53,7 @@ local word = {
 
 local function show()
     CreateNewTable();
-    for i = 1, 35 do InsertRow(t_control, -1); end
+    for i = 1, 37 do InsertRow(t_control, -1); end
     for i = 0, 3 do
         Blue(t_control, 4, i);
         Gray(t_control, 10, i);
@@ -198,7 +199,8 @@ function current_limit()
     SetCell(t_control, 25, 0, words.word('buy_block'));
     SetCell(t_control, 26, 0, words.word('SPRED_LONG_TREND_DOWN'));
     SetCell(t_control, 27, 0, words.word('SPRED_LONG_TREND_DOWN_SPRED'));
-    SetCell(t_control, 28, 0, words.word('not_buy_high'));
+    SetCell(t_control, 35, 0, words.word('not_buy_high'));
+    SetCell(t_control, 36, 0, words.word('not_buy_low'));
     SetCell(t_control, 29, 0, words.word('count_calculate_candle'));
 end
 
@@ -210,7 +212,8 @@ function current_limit_plus()
     SetCell(t_control, 25, 2, word.current_limit_plus);
     SetCell(t_control, 26, 2, word.current_limit_plus);
     SetCell(t_control, 27, 2, word.current_limit_plus);
-    SetCell(t_control, 28, 2, word.current_limit_plus);
+    SetCell(t_control, 35, 2, word.current_limit_plus);
+    SetCell(t_control, 36, 2, word.current_limit_plus);
     SetCell(t_control, 29, 2, word.current_limit_plus);
 
     Green(t_control, 11, 2);
@@ -219,7 +222,8 @@ function current_limit_plus()
     Green(t_control, 25, 2);
     Green(t_control, 26, 2);
     Green(t_control, 27, 2);
-    Green(t_control, 28, 2);
+    Green(t_control, 35, 2);
+    Green(t_control, 36, 2);
     Green(t_control, 29, 2);
 
 end
@@ -229,7 +233,8 @@ function current_limit_minus()
     SetCell(t_control, 25, 3, word.current_limit_minus);
     SetCell(t_control, 26, 3, word.current_limit_minus);
     SetCell(t_control, 27, 3, word.current_limit_minus);
-    SetCell(t_control, 28, 3, word.current_limit_minus);
+    SetCell(t_control, 35, 3, word.current_limit_minus);
+    SetCell(t_control, 36, 3, word.current_limit_minus);
     SetCell(t_control, 29, 3, word.current_limit_minus);
     Red(t_control, 11, 3);
     Red(t_control, 13, 3);
@@ -237,7 +242,8 @@ function current_limit_minus()
     Red(t_control, 25, 3);
     Red(t_control, 26, 3);
     Red(t_control, 27, 3);
-    Red(t_control, 28, 3);
+    Red(t_control, 35, 3);
+    Red(t_control, 36, 3);
     Red(t_control, 29, 3);
 end
 
@@ -273,7 +279,8 @@ function use_contract_limit()
                                            setting.SPRED_LONG_TREND_DOWN_NEXT_BUY ..
                                            ")"));
     SetCell(t_control, 27, 1, tostring(setting.SPRED_LONG_TREND_DOWN_SPRED));
-    SetCell(t_control, 28, 1, tostring(setting.not_buy_high));
+    SetCell(t_control, 35, 1, tostring(setting.not_buy_high));
+    SetCell(t_control, 36, 1, tostring(setting.not_buy_low));
 
     SetCell(t_control, 29, 1, tostring(setting.count_of_candle .. " (" ..
                                            setting.candle_current_high .. "/" ..
@@ -423,8 +430,8 @@ end
 
 local function stats() end
 
-wt_control = 582;
-ht_control = 600;
+wt_control = 588;
+ht_control = 630;
 fuck_windows = true;
 
 --- simple create a table
@@ -662,18 +669,41 @@ function event_callback_message_control(t_control, msg, par1, par2)
     end
 
     -- на сколько увеличиваем растояние при падении рынка между покупками
-    if par1 == 28 and par2 == 2 and msg == 1 then
+    if par1 == 35 and par2 == 2 and msg == 1 then
         setting.not_buy_high = setting.not_buy_high + setting.not_buy_high_change;
+        lineBuyHigh.updateBuyHigh()
         use_contract_limit();
         return;
     end
-    if par1 == 28 and par2 == 3 and msg == 1 then
+    if par1 == 35 and par2 == 3 and msg == 1 then
         if setting.not_buy_high > setting.not_buy_high_change then
             setting.not_buy_high = setting.not_buy_high - setting.not_buy_high_change;
+            lineBuyHigh.updateBuyHigh()
             use_contract_limit();
         end
         return;
     end
+
+
+
+    -- на сколько увеличиваем растояние при падении рынка между покупками
+    if par1 == 36 and par2 == 2 and msg == 1 then
+        setting.not_buy_low = setting.not_buy_low + setting.not_buy_low_change;
+        lineBuyHigh.updateBuyLow()
+        use_contract_limit();
+        return;
+    end
+    if par1 == 36 and par2 == 3 and msg == 1 then
+        if setting.not_buy_low > setting.not_buy_low_change then
+            setting.not_buy_low = setting.not_buy_low - setting.not_buy_low_change;
+            lineBuyHigh.updateBuyLow()
+            use_contract_limit();
+        end
+        return;
+    end
+
+
+
 
     --	['sell_set_take_profit'] = "тейк профит",
     --	['sell_set_limit'] = "тейк профит",

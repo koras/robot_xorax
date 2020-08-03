@@ -57,6 +57,10 @@ setting.SPRED_LONG_BUY_down = 0.001; -- условия; не покупаем е
 setting.not_buy_high_UP = 0.005; -- условия; цена входа при запуске скрипта 
 setting.not_buy_high_change = 0.0005; --  изменения в контрольеой панели
 
+setting.not_buy_low_UP = 0.015; -- условия; цена входа при запуске скрипта 
+setting.not_buy_low_change = 0.0005; --  изменения в контрольеой панели
+
+
 setting.take_profit_offset = 0.0001;
 setting.take_profit_spread = 0.0001;
 
