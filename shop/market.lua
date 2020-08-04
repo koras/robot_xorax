@@ -300,6 +300,12 @@ function getPullBuy(range_sell_buy)
         end;
     end;
     
+    if setting.use_contract < use_contract then 
+        use_contract = setting.use_contract;
+    end
+
+
+
     loger.save('getPullBuy |3| ' .. use_contract );
     return use_contract;
 
