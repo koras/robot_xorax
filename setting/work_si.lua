@@ -22,12 +22,12 @@ setting.tag = "my_si";
 setting.type_instrument = 3;
 
 -- минимальная прибыль
-setting.profit_range = 69;
+setting.profit_range = 300;
 
 -- минимальная прибыль при больших заявках при торговле веерной продажей
-setting.profit_range_array = 47;
+setting.profit_range_array = 150;
 -- для веерной продажи. Какой промежуток между заявками
-setting.profit_range_array_panel = 5;
+setting.profit_range_array_panel = 20;
 
 -- изменение  минимальной прибыли в панели
 setting.profit_range_panel = 1;
@@ -40,27 +40,27 @@ setting.LIMIT_BID = 10;
 
 -- сколько использовать контрактов по умолчанию в режиме скальпинга
 setting.use_contract = 1;
- 
+
 -- включён или выключен режим эмуляции по умолчанию
 setting.emulation = false;
 
 -- Выставлять контракт на продажу через тейки или лимитки
 -- Если рыно слабо ходит то выгоднее лимитки. Так как при выставлении тейков, продаваться будет ниже, что не выгодно.
 -- по умолчанию стоят тейки
-setting.sell_take_or_limit = false;
+setting.sell_take_or_limit = true;
 
 
 setting.SPRED_LONG_BUY_UP = 2; -- условия; не покупаем если здесь ранее мы купили | вверх диапозон;
 setting.SPRED_LONG_BUY_down = 1; -- условия; не покупаем если здесь ранее мы купили | вниз диапозон
 
 setting.not_buy_high_UP = 400; -- условия; цена входа при запуске скрипта 
-setting.not_buy_high_change = 10; --  изменения в контрольеой панели
+setting.not_buy_high_change = 30; --  изменения в контрольеой панели
 
 setting.not_buy_low_UP = 1500; -- условия; цена входа при запуске скрипта 
 setting.not_buy_low_change = 10; --  изменения в контрольеой панели
 
-setting.take_profit_offset = 1;
-setting.take_profit_spread = 1;
+setting.take_profit_offset = 10;
+setting.take_profit_spread = 10;
 
  
 setting.candle_buy_number_down_price = 6; -- сколько свечей должно пройти чтобы отпустить продажу  
@@ -76,11 +76,11 @@ setting.each_to_buy_to_block = 3; -- потом только решение за
 
 
 -- рынок падает, увеличиваем растояние между покупками
-setting.SPRED_LONG_TREND_DOWN = 10;
-setting.SPRED_LONG_TREND_DOWN_SPRED = 20; -- на сколько увеличиваем растояние
+setting.SPRED_LONG_TREND_DOWN = 30;
+setting.SPRED_LONG_TREND_DOWN_SPRED = 40; -- на сколько увеличиваем растояние
 
 -- рынок падает, увеличиваем растояние между покупками(минимальное число)
-setting.SPRED_LONG_TREND_DOWN_minimal = 1;
+setting.SPRED_LONG_TREND_DOWN_minimal = 10;
 
 
 -- минимильное измерение в инструменте 
@@ -111,4 +111,4 @@ engine.candle_price_range = 5; -- для нефти например
 engine.candle_price_max_hight = 5;
 
 -- минутные свечи. используются для подсчёта 
-setting.count_of_candle = 15;
+setting.count_of_candle = 50;
