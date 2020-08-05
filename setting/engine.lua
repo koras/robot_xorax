@@ -179,6 +179,9 @@ setting.sell = true;
 -- таблица заявок, здесь все заявки используемые в работе робота
 setting.sellTable = {};
 
+-- long = true
+-- long = false
+setting.mode = true
 
 
 setting.fractals_collection = {};

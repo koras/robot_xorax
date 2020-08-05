@@ -621,26 +621,26 @@ function deleteBuyCost(result, saleContract)
 end
 
 -- автоматическая торговля
-function long(price, datetime, levelLocal, event) -- решение
+function long(price, datetime)
     -- подсчитаем скольк заявок у нас на продажу
     -- Не покупать, если была покупка по текущей цене или в промежутке
-    local checkRangeBuy = contitionMarket.getRandBuy(price, setting.sellTable);
+    local checkRangeBuy = contitionMarket.getRand(price, setting.sellTable);
     -- Не покупать, если стоит ли продажа в этом промежутке, не продали контракт
-    local checkRangeSell = contitionMarket.getRandSell(price, setting.sellTable);
+    local checkRangeSell = contitionMarket.getRandSell_LONG(price, setting.sellTable);
     --  Не покупать, если свечной анализ показывает низкий уровень промежутка продаж/покупок 
-    local randCandle = contitionMarket.getRandCandle(price);
+    local randCandle = contitionMarket.getRandCandle_LONG(price);
     -- Не покупать, если рынок падает а мы раньше купили, но не продали согласно правилам
-    local failMarket = contitionMarket.getFailMarket(price);
+    local failMarket = contitionMarket.getFailMarket_LONG(price);
     -- Не покупать, если лимит по заявкам выделеным на покупку исчерпан
-    local limitBuy = contitionMarket.getLimitBuy();
+    local limitBuy = contitionMarket.getLimitBuy_LONG();
     -- Не покупать, если сработала блокировка покупки при падении рынка
-    local getFailBuy = contitionMarket.getFailBuy(price);
+    local getFailBuy = contitionMarket.getFailBuy_LONG(price);
     -- Не покупать, если кнопка покупки заблокирована  (блокируется кнопкой)
-    local buyButtonBlock = contitionMarket.buyButtonBlock(price);
+    local buyButtonBlock = contitionMarket.buyButtonBlock_LONG(price);
     -- Не покупать, если цена выше коридора покупок
-    local not_buy_high = contitionMarket.not_buy_high(price);
+    local not_buy_high = contitionMarket.not_buy_high_LONG(price);
     -- Не покупать, если цена выше коридора покупок
-    local not_buy_low = contitionMarket.not_buy_low(price);
+    local not_buy_low = contitionMarket.not_buy_low_LONG(price);
 
     if limitBuy and checkRangeBuy and checkRangeSell and randCandle and
         failMarket and getFailBuy and buyButtonBlock and not_buy_high and not_buy_low then
@@ -658,8 +658,57 @@ function long(price, datetime, levelLocal, event) -- решение
     end
 end
 
+
+
+
+
+-- автоматическая торговля
+function short(price, datetime)
+    -- подсчитаем скольк заявок у нас на продажу
+    -- Не покупать, если была покупка по текущей цене или в промежутке
+    local checkRangeBuy = contitionMarket.getRand(price, setting.sellTable);
+    -- Не покупать, если стоит ли продажа в этом промежутке, не продали контракт
+    local checkRangeSell = contitionMarket.getRandSellShort_short(price, setting.sellTable);
+    --  Не покупать, если свечной анализ показывает низкий уровень промежутка продаж/покупок 
+    local randCandle = contitionMarket.getRandCandle_short(price);
+    -- Не покупать, если рынок падает а мы раньше купили, но не продали согласно правилам
+    local failMarket = contitionMarket.getFailMarket_short(price);
+    -- Не покупать, если лимит по заявкам выделеным на покупку исчерпан
+    local limitBuy = contitionMarket.getLimitBuy_short();
+    -- Не покупать, если сработала блокировка покупки при падении рынка
+    local getFailBuy = contitionMarket.getFailBuy_short(price);
+    -- Не покупать, если кнопка покупки заблокирована  (блокируется кнопкой)
+    local buyButtonBlock = contitionMarket.buyButtonBlock_short(price);
+    -- Не покупать, если цена выше коридора покупок
+    local not_buy_high = contitionMarket.not_buy_high_short(price);
+    -- Не покупать, если цена выше коридора покупок
+    local not_buy_low = contitionMarket.not_buy_low_short(price);
+
+    if limitBuy and checkRangeBuy and checkRangeSell and randCandle and
+        failMarket and getFailBuy and buyButtonBlock and not_buy_high and not_buy_low then
+        setting.SPRED_LONG_TREND_DOWN = setting.SPRED_LONG_TREND_DOWN +
+                                            setting.SPRED_LONG_TREND_DOWN_SPRED;
+        setting.SPRED_LONG_TREND_DOWN_LAST_PRICE = price; -- записываем последнюю покупку
+
+        if setting.emulation then
+            -- в режиме эмуляции контракт на покупку исполнен в полном объёме
+            callBUYShort_emulation_short(price, datetime);
+        else
+            callBUY_short(price, datetime);
+        end
+        -- обновляем изменения в панели управления
+    end
+end
+
+
+
 function decision(price, datetime, levelLocal, event) -- решение
-    long(price, datetime, levelLocal, event);
+    
+    if setting.mode then 
+        long(price, datetime, levelLocal, event);
+    else 
+        short(price, datetime, levelLocal, event);
+    end
 end
 
 local M = {};

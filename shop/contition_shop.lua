@@ -11,33 +11,57 @@ local control = dofile(getScriptPath() .. "\\interface\\control.lua");
 M = {};
 
 -- не покупаем если купили в текущем состоянии
-function getRandBuy(price)
-
-    -- ['SPRED_LONG_BUY_UP -- условия, не покупаем если здесь ранее мы купили | вверх диапозон,
-    -- ['SPRED_LONG_BUY_down, -- условия, не покупаем если здесь ранее мы купили | вниз диапозон
+function getRand(price)
     local checkRange = true;
     if #setting.sellTable > 0 then
         for j_checkRangBuy = 1, #setting.sellTable do
-            if setting.sellTable[j_checkRangBuy].type == 'buy' and
-                setting.sellTable[j_checkRangBuy].work then
-                -- здесь узнаю, была ли покупка в этом диапозоне
 
-                if setting.profit_range +
-                    setting.sellTable[j_checkRangBuy].price >= price +
-                    setting.profit_infelicity and price >=
-                    setting.sellTable[j_checkRangBuy].price -
-                    setting.SPRED_LONG_BUY_down then
-                    signalShowLog.addSignal( 11, false, price);
-                    checkRange = false;
+
+            if setting.mode then 
+                  -- long
+                if setting.sellTable[j_checkRangBuy].type == 'buy' and setting.sellTable[j_checkRangBuy].work then
+                    -- здесь узнаю, была ли покупка в этом диапозоне
+                    if setting.profit_range +
+                        setting.sellTable[j_checkRangBuy].price >= price +
+                        setting.profit_infelicity and price >=
+                        setting.sellTable[j_checkRangBuy].price - setting.SPRED_LONG_BUY_down then
+
+                        signalShowLog.addSignal( 11, false, price);
+
+                        checkRange = false;
+                    end
                 end
+
+            else 
+                -- short
+                if setting.sellTable[j_checkRangBuy].type == 'sell' and setting.sellTable[j_checkRangBuy].work then
+                    -- здесь узнаю, была ли покупка в этом диапозоне
+                    if setting.profit_range +
+                        setting.sellTable[j_checkRangBuy].price >= price +
+                        setting.profit_infelicity and price >=
+                        setting.sellTable[j_checkRangBuy].price - setting.SPRED_LONG_BUY_down then
+    
+                        signalShowLog.addSignal( 11, false, price);
+    
+                        checkRange = false;
+                    end
+                end
+                
             end
+
+
+
+
         end
     end
     return checkRange;
 end
 
+
+
+
 -- висит ли заявка на продажу в этом промежутке
-function getRandSell(price)
+function getRandSell_LONG(price)
 
     local checkRange = true;
     if #setting.sellTable > 0 then
@@ -59,7 +83,7 @@ function getRandSell(price)
 end
 
 -- Лимит заявок на покупку 
-function getLimitBuy()
+function getLimitBuy_LONG()
 
     local checkRange = true;
 
@@ -78,7 +102,7 @@ function getLimitBuy()
 end
 
 -- Не покупаем если промежуток на свече соответствуют высокой цене
-function getRandCandle(price)
+function getRandCandle_LONG(price)
 
     local range_candle = setting.candle_current_high -
                              setting.candle_current_low;
@@ -107,7 +131,7 @@ function getRandCandle(price)
 end
 
 -- Падение рынка
-function getFailMarket(price)
+function getFailMarket_LONG(price)
     local checkRange = true;
     local localPrice = price - setting.profit_infelicity;
 
@@ -132,7 +156,7 @@ function getFailMarket(price)
 end
 
 -- Запрет на покупку
-function getFailBuy(price)
+function getFailBuy_LONG(price)
     local checkRange = true;
     if setting.each_to_buy_step >= setting.each_to_buy_to_block then
         -- активация кнопки блокировки покупки
@@ -145,7 +169,7 @@ function getFailBuy(price)
 end
 
 -- проверка на блокировку кнопки покупок
-function buyButtonBlock(price)
+function buyButtonBlock_LONG(price)
 
     local checkRange = true;
     if setting.buy == false then
@@ -156,7 +180,7 @@ function buyButtonBlock(price)
 end
 
 -- верхний диапазон, выше которого покупка запрещена
-function not_buy_high(price)
+function not_buy_high_LONG(price)
 
     local checkRange = true;
     if price >= setting.not_buy_high then
@@ -167,7 +191,7 @@ function not_buy_high(price)
 end
 
 -- нижний диапазон, ниже которого покупка запрещена
-function not_buy_low(price)
+function not_buy_low_LONG(price)
     local checkRange = true;
     if price <= setting.not_buy_low then
         signalShowLog.addSignal(38, true, price);
@@ -179,14 +203,29 @@ end
  
 
 
-M.not_buy_low = not_buy_low;
-M.not_buy_high = not_buy_high;
-M.buyButtonBlock = buyButtonBlock;
-M.getFailBuy = getFailBuy;
-M.getLimitBuy = getLimitBuy;
-M.getFailMarket = getFailMarket;
-M.getRandCandle = getRandCandle;
-M.getRandSell = getRandSell;
-M.getRandBuy = getRandBuy;
+M.not_buy_low_LONG_LONG = not_buy_low_LONG;
+M.not_buy_high_LONG = not_buy_high_LONG;
+M.buyButtonBlock_LONG = buyButtonBlock_LONG;
+M.getFailBuy_LONG = getFailBuy_LONG;
+M.getLimitBuy_LONG = getLimitBuy_LONG;
+M.getFailMarket_LONG = getFailMarket_LONG;
+M.getRandCandle_LONG = getRandCandle_LONG;
+M.getRandSell_LONG = getRandSell_LONG;
+M.getRand = getRand;
+
+
+
+M.not_buy_low_short = not_buy_low_short;
+M.not_buy_high_short = not_buy_high_short;
+M.buyButtonBlock_short = buyButtonBlock_short;
+M.getFailBuy_short = getFailBuy_short;
+M.getLimitBuy_short = getLimitBuy_short;
+M.getFailMarket_short = getFailMarket_short;
+M.getRandCandle_short = getRandCandle_short;
+
+
+
+ 
+
 
 return M
