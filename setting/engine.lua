@@ -1,7 +1,7 @@
 -- сюда перенесены настройки которые необходимы во всём роботе но для каждого инструмента они разные
 -- но от инструмента к инструменту они не меняются
 -- версия продукта 
-setting.version = "0.1.141";
+setting.version = "0.2.10";
 
 -- второй минимум
 setting.low_formacia = {};
@@ -179,9 +179,9 @@ setting.sell = true;
 -- таблица заявок, здесь все заявки используемые в работе робота
 setting.sellTable = {};
 
--- long = true
--- long = false
-setting.mode = true
+-- long = 'buy'
+-- long = 'sell'
+setting.mode = 'buy'
 
 
 setting.fractals_collection = {};

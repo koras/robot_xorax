@@ -626,21 +626,21 @@ function long(price, datetime)
     -- Не покупать, если была покупка по текущей цене или в промежутке
     local checkRangeBuy = contitionMarket.getRand(price, setting.sellTable);
     -- Не покупать, если стоит ли продажа в этом промежутке, не продали контракт
-    local checkRangeSell = contitionMarket.getRandSell_LONG(price, setting.sellTable);
+    local checkRangeSell = contitionMarket.getRandSell(price, setting.sellTable);
     --  Не покупать, если свечной анализ показывает низкий уровень промежутка продаж/покупок 
-    local randCandle = contitionMarket.getRandCandle_LONG(price);
+    local randCandle = contitionMarket.getRandCandle(price);
     -- Не покупать, если рынок падает а мы раньше купили, но не продали согласно правилам
-    local failMarket = contitionMarket.getFailMarket_LONG(price);
+    local failMarket = contitionMarket.getFailMarket(price);
     -- Не покупать, если лимит по заявкам выделеным на покупку исчерпан
-    local limitBuy = contitionMarket.getLimitBuy_LONG();
+    local limitBuy = contitionMarket.getLimitBuy();
     -- Не покупать, если сработала блокировка покупки при падении рынка
-    local getFailBuy = contitionMarket.getFailBuy_LONG(price);
+    local getFailBuy = contitionMarket.getFailBuy(price);
     -- Не покупать, если кнопка покупки заблокирована  (блокируется кнопкой)
-    local buyButtonBlock = contitionMarket.buyButtonBlock_LONG(price);
+    local buyButtonBlock = contitionMarket.buyButtonBlock(price);
     -- Не покупать, если цена выше коридора покупок
-    local not_buy_high = contitionMarket.not_buy_high_LONG(price);
+    local not_buy_high = contitionMarket.not_buy_high(price);
     -- Не покупать, если цена выше коридора покупок
-    local not_buy_low = contitionMarket.not_buy_low_LONG(price);
+    local not_buy_low = contitionMarket.not_buy_low(price);
 
     if limitBuy and checkRangeBuy and checkRangeSell and randCandle and
         failMarket and getFailBuy and buyButtonBlock and not_buy_high and not_buy_low then
@@ -668,13 +668,13 @@ function short(price, datetime)
     -- Не покупать, если была покупка по текущей цене или в промежутке
     local checkRangeBuy = contitionMarket.getRand(price, setting.sellTable);
     -- Не покупать, если стоит ли продажа в этом промежутке, не продали контракт
-    local checkRangeSell = contitionMarket.getRandSellShort_short(price, setting.sellTable);
+    local checkRangeSell = contitionMarket.getRandSell(price, setting.sellTable);
     --  Не покупать, если свечной анализ показывает низкий уровень промежутка продаж/покупок 
-    local randCandle = contitionMarket.getRandCandle_short(price);
+    local randCandle = contitionMarket.getRandCandle(price);
     -- Не покупать, если рынок падает а мы раньше купили, но не продали согласно правилам
     local failMarket = contitionMarket.getFailMarket_short(price);
     -- Не покупать, если лимит по заявкам выделеным на покупку исчерпан
-    local limitBuy = contitionMarket.getLimitBuy_short();
+    local limitBuy = contitionMarket.getLimitBuy();
     -- Не покупать, если сработала блокировка покупки при падении рынка
     local getFailBuy = contitionMarket.getFailBuy_short(price);
     -- Не покупать, если кнопка покупки заблокирована  (блокируется кнопкой)

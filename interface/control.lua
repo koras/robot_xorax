@@ -114,7 +114,7 @@ end;
 
 function mode_long()
     SetCell(t_control, 2, 3, word.long);
-    setting.mode = true;
+    setting.mode = 'buy';
     Green(t_control, 1, 3);
     Green(t_control, 2, 3);
     Green(t_control, 3, 3);
@@ -122,7 +122,7 @@ end
 
 function mode_short()
     SetCell(t_control, 2, 3, word.short);
-    setting.mode = false
+    setting.mode = 'sell'
     Red(t_control, 1, 3);
     Red(t_control, 2, 3);
     Red(t_control, 3, 3);
@@ -498,8 +498,7 @@ function event_callback_message_control(t_control, msg, par1, par2)
         end
     end
 
-    if par1 == 1 and par2 == 0 or par1 == 2 and par2 == 0 or par1 == 3 and par2 ==
-        0 then
+    if par1 == 1 and par2 == 0 or par1 == 2 and par2 == 0 or par1 == 3 and par2 == 0 then
         if msg == 1 and setting.status == false then
             button_start();
             return;
@@ -514,12 +513,13 @@ function event_callback_message_control(t_control, msg, par1, par2)
 
  
     if par1 == 1 and par2 == 3 or par1 == 2 and par2 == 3 or par1 == 3 and par2 ==  3 then
-    if msg == 1 and setting.mode then
+
+    if msg == 1 and setting.mode == 'buy' then
         mode_short()
         return;
     end
 
-    if msg == 1 and  setting.mode == false then
+    if msg == 1 and  setting.mode == 'sell' then
         mode_long()
         return;
     end
