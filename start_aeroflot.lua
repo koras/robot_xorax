@@ -120,7 +120,7 @@ function main()
     tradeSignal.getSignal(setting.tag, eventTranc);
     --  signalShowLog.CreateNewTableLogEvent();
 
-    loger.save("start log");
+    loger.save("start");
 
     -- statsPanel.show();
     panelBids.show();

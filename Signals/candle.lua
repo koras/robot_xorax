@@ -40,95 +40,66 @@ local function initCandle(barCandleLocal)
 end
 
 
-
+--    local O = t[i].open; -- Получить значение Open для указанной свечи (цена открытия свечи)
+--    local H = t[i].high; -- Получить значение High для указанной свечи (наибольшая цена свечи)
+--    local L = t[i].low; -- Получить значение Low для указанной свечи (наименьшая цена свечи)
+--    local C = t[i].close; -- Получить значение Close для указанной свечи (цена закрытия свечи)
+--    local V = t[i].volume; -- Получить значение Volume для указанной свечи (объем сделок в свече)
 
 -- вызывается для сигналов
-local function initCandles(candles,len)
-    loger.save("-- setting.number_of_candlesetting.number_of_candle ".. setting.number_of_candle - 2 * len - shift);
-    loger.save("-- setti 333  ".. setting.number_of_candle );
+local function initCandles(candles)
 
+    
+
+    local first_candle = setting.number_of_candle - 2 * len - shift;
+
+    local len = 10
     local i = len
     local j = 2 * len
+
     while i >= 1 do
 
         if candles[j - 1].datetime.hour ~= nul then
 
             if candles[j - 1].datetime.hour >= 10 then
-
+ 
+                
                 local bar = candles[j - 1];
-                initCandle(bar);
-
-                if bigCandle <= i then
-                    bigCandle = i;
+                
+            
+                    first_candle= first_candle +1;
                     -- чтобы всегда был доступ к текущему времени
-                    setBarCandleInit(bar);
-                end
+                    bar.numberCandle = first_candle;
+                    setting.array_candle[#setting.array_candle + 1] = bar;
                 i = i - 1
             end
             j = j - 1
         end
         t = len + 1
     end
+    candleGraff.addSignal(setting.array_candle)
 end 
 
-
--- первоначальное обновление свечей
-function setBarCandleInit(bar )
-
-    loger.save("-- setting.number_of_candle 2 ".. setting.number_of_candle);
-    bar.numberCandle = setting.number_of_candle;
-
  
-    if setting.old_number_of_candle ~= setting.number_of_candle then
-
-        setting.array_candle[#setting.array_candle + 1] = bar;
-        setting.old_number_of_candle = setting.number_of_candle;
-
-    else
-        -- обновляем бар в таблице
-        setting.array_candle[#setting.array_candle] = bar;
-    end
-
-   -- setArrayCandles(bar, setting.number_of_candle);
-
-    local localCandle = bar;
-    localCandle.numberCandle = bar.numberCandle;
-    setting.array_candle[#setting.array_candle + 1] = localCandle;
-
-
-    setting.current_price = bar.close;
-    setting.datetime = bar.datetime;
-
-    candleGraff.addSignal(setting.array_candle); 
-       
-  
-end
-
-
-
-
-
-
 
 -- вызывается для сигналов
 local function getSignal(collbackFunc)
 
     shift = 0;
-    len = 100
+    len = 10
 
     -- seconds = os.time(datetime); -- в seconds 
 
     setting.number_of_candle = getNumCandles(setting.tag);
 
-    loger.save("-- setting.number_of_candle ".. setting.number_of_candle);
-    
     bars_temp, res, legend = getCandlesByIndex(setting.tag, 0,
                                                setting.number_of_candle - 2 *
                                                    len - shift, 2 * len)
     
     -- analyse candles 
    if setting.number_of_candle_init then 
-    initCandles(bars_temp, len);
+    
+    initCandles(bars_temp);
     
     setting.number_of_candle_init = false
     return;
@@ -143,6 +114,8 @@ local function getSignal(collbackFunc)
         if bars_temp[j - 1].datetime.hour ~= nul then
 
             if bars_temp[j - 1].datetime.hour >= 10 then
+
+                
 
                 local bar = bars_temp[j - 1];
                 initCandle(bar);
@@ -210,8 +183,7 @@ function setArrayCandles(barCandle, numberCandle)
 
             if setting.array_candle[candle].numberCandle +
                 setting.count_of_candle >= numberCandle then
-                --    loger.save( "-- записываем данные по свече " );
-                --   loger.save("numberCandle numberCandle ".. numberCandle ); 
+                    
 
                 -- обновляем высокую цену на текущей свече
 
@@ -281,7 +253,7 @@ function setArrayCandles(barCandle, numberCandle)
 
     else
 
-        loger.save("-- записываем данные по свече ");
+        
         if setting.candle_current_high < localCandle.high then 
             setting.candle_current_high = localCandle.high;
         end
