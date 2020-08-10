@@ -39,6 +39,77 @@ local function initCandle(barCandleLocal)
     end
 end
 
+
+
+
+-- вызывается для сигналов
+local function initCandles(candles,len)
+    loger.save("-- setting.number_of_candlesetting.number_of_candle ".. setting.number_of_candle - 2 * len - shift);
+    loger.save("-- setti 333  ".. setting.number_of_candle );
+
+    local i = len
+    local j = 2 * len
+    while i >= 1 do
+
+        if candles[j - 1].datetime.hour ~= nul then
+
+            if candles[j - 1].datetime.hour >= 10 then
+
+                local bar = candles[j - 1];
+                initCandle(bar);
+
+                if bigCandle <= i then
+                    bigCandle = i;
+                    -- чтобы всегда был доступ к текущему времени
+                    setBarCandleInit(bar);
+                end
+                i = i - 1
+            end
+            j = j - 1
+        end
+        t = len + 1
+    end
+end 
+
+
+-- первоначальное обновление свечей
+function setBarCandleInit(bar )
+
+    loger.save("-- setting.number_of_candle 2 ".. setting.number_of_candle);
+    bar.numberCandle = setting.number_of_candle;
+
+ 
+    if setting.old_number_of_candle ~= setting.number_of_candle then
+
+        setting.array_candle[#setting.array_candle + 1] = bar;
+        setting.old_number_of_candle = setting.number_of_candle;
+
+    else
+        -- обновляем бар в таблице
+        setting.array_candle[#setting.array_candle] = bar;
+    end
+
+   -- setArrayCandles(bar, setting.number_of_candle);
+
+    local localCandle = bar;
+    localCandle.numberCandle = bar.numberCandle;
+    setting.array_candle[#setting.array_candle + 1] = localCandle;
+
+
+    setting.current_price = bar.close;
+    setting.datetime = bar.datetime;
+
+    candleGraff.addSignal(setting.array_candle); 
+       
+  
+end
+
+
+
+
+
+
+
 -- вызывается для сигналов
 local function getSignal(collbackFunc)
 
@@ -49,9 +120,22 @@ local function getSignal(collbackFunc)
 
     setting.number_of_candle = getNumCandles(setting.tag);
 
+    loger.save("-- setting.number_of_candle ".. setting.number_of_candle);
+    
     bars_temp, res, legend = getCandlesByIndex(setting.tag, 0,
                                                setting.number_of_candle - 2 *
                                                    len - shift, 2 * len)
+    
+    -- analyse candles 
+   if setting.number_of_candle_init then 
+    initCandles(bars_temp, len);
+    
+    setting.number_of_candle_init = false
+    return;
+   end;
+
+ 
+
     i = len
     j = 2 * len
     while i >= 1 do
@@ -82,6 +166,7 @@ function setBarCandle(bar, collbackFunc)
 
     bar.numberCandle = setting.number_of_candle;
 
+ 
     if setting.old_number_of_candle ~= setting.number_of_candle then
 
         setting.array_candle[#setting.array_candle + 1] = bar;
@@ -97,7 +182,9 @@ function setBarCandle(bar, collbackFunc)
     setting.datetime = bar.datetime;
 
     calculateSignal(bar);
-    collbackFunc(bar);
+    if nil ~= collbackFunc then 
+        collbackFunc(bar);
+    end
 end
 
 --    local O = t[i].open; -- Получить значение Open для указанной свечи (цена открытия свечи)
@@ -195,15 +282,13 @@ function setArrayCandles(barCandle, numberCandle)
     else
 
         loger.save("-- записываем данные по свече ");
-        if setting.candle_current_high < localCandle.high then
-            loger.save("update high " .. localCandle.high);
+        if setting.candle_current_high < localCandle.high then 
             setting.candle_current_high = localCandle.high;
         end
 
         setting.datetime = localCandle.datetime;
 
-        if setting.candle_current_low > localCandle.low then
-            loger.save("update low " .. localCandle.low);
+        if setting.candle_current_low > localCandle.low then 
             setting.candle_current_low = localCandle.low;
         end
 
@@ -211,7 +296,7 @@ function setArrayCandles(barCandle, numberCandle)
 
     end
 
-    --   candleGraff.addSignal(setting.array_candle); 
+     candleGraff.addSignal(setting.array_candle); 
 end
 
 M.getSignal = getSignal
