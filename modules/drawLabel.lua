@@ -87,19 +87,16 @@ local function set(Operation, Price, datetime, count, textInfo)
     label_params['FONT_HEIGHT'] = 14;
     label_params['HINT'] = 'Price ' .. Price .. " \n " .. textInfo
 
-    loger.save(Operation .. 'Operation  ' .. '  Price ' .. Price.. '  label_params.TIME' ..   label_params.TIME..
-    " label_params['IMAGE_PATH'] "..label_params['IMAGE_PATH']..
-    " label_params['DATE'] "..label_params['DATE']
-    
-    
-    );
+   -- loger.save(Operation .. 'Operation  ' .. '  Price ' .. Price.. '  label_params.TIME' ..   label_params.TIME..
+   -- " label_params['IMAGE_PATH'] "..label_params['IMAGE_PATH']..
+   -- " label_params['DATE'] "..label_params['DATE'] );
 
     return AddLabel(setting.tag, label_params);
 end
 
 local function delete(text) end
 
-local function init(tag) loger.save(tag .. '   tag ') end
+local function init(tag) loger.save(tag .. ' tag ') end
 
 M.set = set
 M.delete = delete

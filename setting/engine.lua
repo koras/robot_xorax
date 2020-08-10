@@ -108,8 +108,7 @@ setting.INTERVAL = INTERVAL_M1;
 setting.number_of_candles = 0; -- current a candle
 setting.old_number_of_candles = 0; -- old current candle
 
-setting.number_of_candle = 0; -- current a candle
-setting.old_number_of_candle = 0; -- old current candle
+setting.number_of_candle_init = true
 
 -- сработал стоп или нет
 -- если сработал стоп, то другие стопы не передигаем
