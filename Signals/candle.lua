@@ -47,35 +47,33 @@ end
 --    local V = t[i].volume; -- Получить значение Volume для указанной свечи (объем сделок в свече)
 
 -- вызывается для сигналов
-local function initCandles(candles)
+local function initCandles()
 
+    local lenInit = 120
+    local Initshift = 0
+    local currentCandle = getNumCandles(setting.tag);
+    candlesArray, res, legend = getCandlesByIndex(setting.tag, 0, currentCandle - 2 * lenInit - Initshift, 2 * lenInit)
     
-
-    local first_candle = setting.number_of_candle - 2 * len - shift;
-
-    local len = 10
-    local i = len
-    local j = 2 * len
+    local i = lenInit
+    local j = 2 * lenInit
+    
+    local first_candle = currentCandle - j  - Initshift
 
     while i >= 1 do
-
-        if candles[j - 1].datetime.hour ~= nul then
-
-            if candles[j - 1].datetime.hour >= 10 then
- 
-                
-                local bar = candles[j - 1];
-                
+        if candlesArray[j - 1].datetime.hour ~= nul then
             
-                    first_candle= first_candle +1;
-                    -- чтобы всегда был доступ к текущему времени
-                    bar.numberCandle = first_candle;
+            if candlesArray[j - 1].datetime.hour >= 10 then
+                local bar = candlesArray[j - 1];
+
+                  --  first_candle = first_candle + 1;
+
+                    bar.numberCandle =  first_candle  + j - 1;
                     setting.array_candle[#setting.array_candle + 1] = bar;
                 i = i - 1
             end
             j = j - 1
         end
-        t = len + 1
+        t = lenInit + 1
     end
     candleGraff.addSignal(setting.array_candle)
 end 
@@ -84,6 +82,15 @@ end
 
 -- вызывается для сигналов
 local function getSignal(collbackFunc)
+
+    if setting.number_of_candle_init then 
+    
+        initCandles();
+        
+        setting.number_of_candle_init = false
+        return;
+    end;
+
 
     shift = 0;
     len = 10
@@ -97,13 +104,7 @@ local function getSignal(collbackFunc)
                                                    len - shift, 2 * len)
     
     -- analyse candles 
-   if setting.number_of_candle_init then 
-    
-    initCandles(bars_temp);
-    
-    setting.number_of_candle_init = false
-    return;
-   end;
+ 
 
  
 
@@ -268,7 +269,7 @@ function setArrayCandles(barCandle, numberCandle)
 
     end
 
-     candleGraff.addSignal(setting.array_candle); 
+   --  candleGraff.addSignal(setting.array_candle); 
 end
 
 M.getSignal = getSignal
