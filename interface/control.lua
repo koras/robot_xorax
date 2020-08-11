@@ -523,8 +523,7 @@ function event_callback_message_control(t_control, msg, par1, par2)
             -- return
             SetWindowCaption(t_control, word.Trading_Bot_Control_Panel ..
                                  tostring(setting.LIMIT_BID));
-
-            --	use_contract_limit();
+ 
             return;
         end
         return;
@@ -799,11 +798,11 @@ function event_callback_message_control(t_control, msg, par1, par2)
         end
         return;
     end
-
+ 
     -- растояние до максимальной покупки, меняется только при максимальной покупке
     if par1 == 29 and par2 == 2 and msg == 1 then
         setting.count_of_candle = setting.count_of_candle + 1;
-
+        lineBuyHigh.updateLineCandleMinMax()
         use_contract_limit();
         return;
     end
@@ -811,6 +810,7 @@ function event_callback_message_control(t_control, msg, par1, par2)
         message(setting.count_of_candle);
         if setting.count_of_candle > 0 then
             setting.count_of_candle = setting.count_of_candle - 1;
+            lineBuyHigh.updateLineCandleMinMax()
             use_contract_limit();
         end
         return;

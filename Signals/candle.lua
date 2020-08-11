@@ -240,6 +240,15 @@ function setArrayCandles(barCandle, numberCandle)
             control.use_contract_limit();
         end
 
+        
+        if setting.candle_current_high ~= setting.line_candle_height_old then
+            -- обновляем положение максимума
+            -- меняем местоположение полоски
+            setting.line_candle_height_old = setting.candle_current_high;
+            lineBuyHigh.updateLineCandleMinMax()
+        end
+  
+
         if setting.candle_current_low == 0 then
             setting.candle_current_low = barCandle.close;
         end
@@ -249,9 +258,15 @@ function setArrayCandles(barCandle, numberCandle)
             control.use_contract_limit();
         end
 
+        if  setting.candle_current_low ~= setting.line_candle_min_old then
+            -- обновляем положение минимума
+            -- меняем местоположение полоски
+            setting.line_candle_min_old = setting.candle_current_low;
+            lineBuyHigh.updateLineCandleMinMax()
+        end
     else
 
-        
+ 
         if setting.candle_current_high < localCandle.high then 
             setting.candle_current_high = localCandle.high;
         end
@@ -260,6 +275,7 @@ function setArrayCandles(barCandle, numberCandle)
 
         if setting.candle_current_low > localCandle.low then 
             setting.candle_current_low = localCandle.low;
+            lineBuyHigh.updateLineCandleMinMax()
         end
 
         setting.array_candle[#setting.array_candle + 1] = localCandle;
