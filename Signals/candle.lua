@@ -64,9 +64,6 @@ local function initCandles()
             
             if candlesArray[j - 1].datetime.hour >= 10 then
                 local bar = candlesArray[j - 1];
-
-                  --  first_candle = first_candle + 1;
-
                     bar.numberCandle =  first_candle  + j - 1;
                     setting.array_candle[#setting.array_candle + 1] = bar;
                 i = i - 1
