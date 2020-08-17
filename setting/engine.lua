@@ -108,8 +108,7 @@ setting.INTERVAL = INTERVAL_M1;
 setting.number_of_candles = 0; -- current a candle
 setting.old_number_of_candles = 0; -- old current candle
 
-setting.number_of_candle = 0; -- current a candle
-setting.old_number_of_candle = 0; -- old current candle
+setting.number_of_candle_init = true
 
 -- сработал стоп или нет
 -- если сработал стоп, то другие стопы не передигаем
@@ -179,11 +178,23 @@ setting.sell = true;
 -- таблица заявок, здесь все заявки используемые в работе робота
 setting.sellTable = {};
 
-
-
 setting.fractals_collection = {};
 setting.fractal_up = 0;
 setting.fractal_down = 0;
 -- на какой свече была последняя покупка
 setting.candles_buy_last = 0;
 setting.range_down_price_candles = 0;
+
+-- id линии высокой свечки на графике
+setting.line_candle_height_label_id = 0;
+
+-- id линии низкой свечки на графике
+setting.line_candle_min_label_id = 0;
+
+-- старые данные на свечке, для сравнения, максимум
+setting.line_candle_height_old = 0;
+
+-- старые данные на свечке, для сравнения, минимум
+setting.line_candle_min_old = 0;
+-- рисовать полоски максимума и минимума свечей
+setting.line_candle_min_max_show = true;
