@@ -5,8 +5,7 @@ local Labels = {};
 
 local minute = '';
 local hour = '';
- 
-local purchase_height = getScriptPath() .. '\\images\\purchase_height.bmp';
+  
 
 local PicPathSell = getScriptPath() .. '\\images\\myDeals_sell';
 local PicPathBuy = getScriptPath() .. '\\images\\myDeals_buy';

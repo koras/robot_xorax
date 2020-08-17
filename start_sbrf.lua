@@ -13,11 +13,11 @@ package.path = package.path .. ";./?.lua;" .. lua51path .. "lua/?.lua;" ..
 
 require("table")
 
-local setting = {};
-local stopClass = {};
-local engine = {};
+setting = {};
+stopClass = {};
+engine = {};
 
-dofile(getScriptPath() .. "\\setting\\work_aeroflot.lua");
+dofile(getScriptPath() .. "\\setting\\work_sbrf.lua");
 dofile(getScriptPath() .. "\\setting\\engine.lua");
 
 local uTransaction = dofile(getScriptPath() .. "\\shop\\transaction.lua");
@@ -52,24 +52,20 @@ function init()
     --   control.show();
 
 end
+ 
 
-shift = 0;
-len = 100
-basis = 9
-
-Size = 0;
+--Size = 0;
 function OnInit()
     riskStop.calculateMaxStopStart();
     panelBids.CreateNewTableBids();
     signalShowLog.CreateNewTableLogEvent();
 
     local Error = '';
-    ds, Error = CreateDataSource(setting.CLASS_CODE, setting.SEC_CODE,
-                                 setting.INTERVAL);
-    --  while (Error == "" or Error == nil) and DS:Size() == 0 do sleep(1) end
+    local ds, Error = CreateDataSource(setting.CLASS_CODE, setting.SEC_CODE,
+                                 setting.INTERVAL); 
 
     if Error ~= "" and Error ~= nil then
-        message("1111111111111111111111 : " .. Error)
+        message("Error : " .. Error)
         return
     end
     -- GET_GRAFFIC
@@ -77,21 +73,20 @@ function OnInit()
     GET_GRAFFIC = ds:SetEmptyCallback();
     --  ds:SetUpdateCallback(MyFuncName);
 
-    Size = ds:Size();
+  --  Size = ds:Size();
 
-    p = tostring(
-            getParamEx(setting.CLASS_CODE, setting.SEC_CODE, "offer").param_value +
-                10 *
-                getParamEx(setting.CLASS_CODE, setting.SEC_CODE,
-                           "SEC_PRICE_STEP").param_value);
-    SEC_PRICE_STEP = tostring(getParamEx2(setting.CLASS_CODE, setting.SEC_CODE,
-                                          "SEC_PRICE_STEP").param_value);
+    -- local p = tostring(
+    --         getParamEx(setting:CLASS_CODE, setting:SEC_CODE, "offer").param_value +
+    --             10 *
+    --             getParamEx(setting.CLASS_CODE, setting.SEC_CODE,
+    --                        "SEC_PRICE_STEP").param_value);
+    -- SEC_PRICE_STEP = tostring(getParamEx2(setting.CLASS_CODE, setting.SEC_CODE,
+    --                                       "SEC_PRICE_STEP").param_value);
 end
 
 function getPrice()
 
-    SEC_PRICE_STEP = tostring(getParamEx2(setting.CLASS_CODE, setting.SEC_CODE,
-                                          "SEC_PRICE_STEP").param_value);
+    SEC_PRICE_STEP = tostring(getParamEx2(setting.CLASS_CODE, setting.SEC_CODE,       "SEC_PRICE_STEP").param_value);
     if GET_GRAFFIC then
     else
         Run = false;
@@ -120,7 +115,7 @@ function main()
     tradeSignal.getSignal(setting.tag, eventTranc);
     --  signalShowLog.CreateNewTableLogEvent();
 
-    loger.save("start");
+    loger.save("start log");
 
     -- statsPanel.show();
     panelBids.show();
@@ -164,7 +159,7 @@ end
 -- Функция вызывается терминалом когда с сервера приходит информация по заявке 
 function OnOrder(order)
     -- только для лимитных заявок
-
+    if order.trans_id == 0 then return end
     loger.save(
         "OnOrder work order_num = " .. order.order_num .. "  trans_id = " ..
             order.trans_id)
@@ -184,8 +179,11 @@ function OnOrder(order)
     end
 
     if bit.band(order.flags, 1) + bit.band(order.flags, 2) == 0 then
-        loger.save(
-            'OnOrder sellContract  присваиваем номера заявкам 1')
+        loger.save('  ')
+        loger.save('  ')
+        loger.save('  ')
+        loger.save('  ')
+        loger.save('OnOrder sellContract   ')
         market.sellContract(order);
     end
 
@@ -248,7 +246,7 @@ end
 function OnStopOrder(trade)
     -- заявку выставили и приходит коллбек выставленой заявки 
     -- это просто заявка а не лимитка
-    market.saleExecution(trade);
+    market.saleExecutionStopOrder(trade);
 
     -- обновляем номера стоп заявок при выставлении
     --  loger.save(' OnStopOrder -- обновляем номера стоп заявок при выставлении   '.. trade.trans_id   )
@@ -282,18 +280,13 @@ function OnStopOrder(trade)
         --   riskStop.updateOrderNumber(trade)
     end
 
-    if not bit.test(trade.flags, 15) then
-        loger.save(' calculation 2 ' .. trade.order_num .. ' trans_id ' ..
-                       tostring(trade.trans_id))
-        loger.save(' calculation 2 ' .. trade.order_num .. ' .condition' ..
-                       tostring(trade.condition))
-        loger.save(
-            ' calculation 2 .condition_price ' .. trade.condition_price ..
-                ' .condition' .. tostring(trade.linkedorder))
-        riskStop.updateStopNumber(trade);
-
+    if bit.test(trade.flags, 15) then
     else
 
+        loger.save(
+            'OnStopOrder->updateStopNumber order_num=' .. trade.order_num ..
+                ' trans_id ' .. tostring(trade.trans_id));
+        riskStop.updateStopNumber(trade);
     end
 end
 

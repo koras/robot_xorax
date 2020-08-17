@@ -6,6 +6,7 @@ local Labels = {};
 local minute = '';
 local hour = '';
 
+local line_candle_min_max = getScriptPath() .. '\\images\\line_candle_height.jpg';
 local purchase_height = getScriptPath() .. '\\images\\purchase_height.jpg';
 local purchase_low = getScriptPath() .. '\\images\\purchase_low.jpg';
 
@@ -63,6 +64,9 @@ local function set(Operation, Price, datetime, count, textInfo)
     if Operation == 'stop' then label_params['IMAGE_PATH'] = PicPathSTOP; end
 
     if Operation == 'purchase_height' then label_params['IMAGE_PATH'] = purchase_height; end
+
+    if Operation == 'line_candle_min_max' then label_params['IMAGE_PATH'] = line_candle_min_max; end
+
     if Operation == 'purchase_low' then label_params['IMAGE_PATH'] = purchase_low; end
 
      
@@ -87,19 +91,16 @@ local function set(Operation, Price, datetime, count, textInfo)
     label_params['FONT_HEIGHT'] = 14;
     label_params['HINT'] = 'Price ' .. Price .. " \n " .. textInfo
 
-    loger.save(Operation .. 'Operation  ' .. '  Price ' .. Price.. '  label_params.TIME' ..   label_params.TIME..
-    " label_params['IMAGE_PATH'] "..label_params['IMAGE_PATH']..
-    " label_params['DATE'] "..label_params['DATE']
-    
-    
-    );
+   -- loger.save(Operation .. 'Operation  ' .. '  Price ' .. Price.. '  label_params.TIME' ..   label_params.TIME..
+   -- " label_params['IMAGE_PATH'] "..label_params['IMAGE_PATH']..
+   -- " label_params['DATE'] "..label_params['DATE'] );
 
     return AddLabel(setting.tag, label_params);
 end
 
 local function delete(text) end
 
-local function init(tag) loger.save(tag .. '   tag ') end
+local function init(tag) loger.save(tag .. ' tag ') end
 
 M.set = set
 M.delete = delete

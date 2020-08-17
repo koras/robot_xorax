@@ -17,13 +17,27 @@ end
 
 
 function updateBuyLow()
-
     DelLabel(setting.tag,  labelIdLow);
 --- lineBuyHigh.lua
     labelIdLow = tonumber(label.set('purchase_low', setting.not_buy_low, setting.datetime, 0,'Buy high '))
 end
 
- 
+
+-- обновление максимальной свечи
+-- обновление минимальной свечи
+function updateLineCandleMinMax()
+    if setting.line_candle_min_max_show then 
+        DelLabel(setting.tag,  setting.line_candle_height_label_id);
+    --- lineBuyHigh.lua
+        setting.line_candle_height_label_id = tonumber(label.set('line_candle_min_max', setting.candle_current_high, setting.datetime, 0,'Buy high '))
+
+        DelLabel(setting.tag,  setting.line_candle_min_label_id);
+    --- lineBuyHigh.lua
+        setting.line_candle_min_label_id = tonumber(label.set('line_candle_min_max', setting.candle_current_low, setting.datetime, 0,'minimum price'))
+    end
+end
+
+bh.updateLineCandleMinMax = updateLineCandleMinMax
 bh.updateBuyLow = updateBuyLow
 bh.updateBuyHigh = updateBuyHigh
 return bh

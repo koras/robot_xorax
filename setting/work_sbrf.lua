@@ -10,11 +10,11 @@ setting.ACCOUNT = '4105F8Y';
 setting.CLASS_CODE = "SPBFUT";
 
 -- код бумаги. Название бумаги разная от месяца к месяцу 
-setting.SEC_CODE = "SiU0";
+setting.SEC_CODE = "SRU0";
 
 -- тег графика, необходимо указывать в том графике из которого робот будет получать данные. 
 -- график нужен в минутном таймфрейме(обязательно)
-setting.tag = "my_si";
+setting.tag = "sbrf";
 
 -- тип инструмента, каждый тип имеет свои настройки
 -- 1 фьючерс
@@ -22,15 +22,15 @@ setting.tag = "my_si";
 setting.type_instrument = 3;
 
 -- минимальная прибыль
-setting.profit_range = 150;
+setting.profit_range = 100;
 
 -- минимальная прибыль при больших заявках при торговле веерной продажей
-setting.profit_range_array = 100;
+setting.profit_range_array = 90;
 -- для веерной продажи. Какой промежуток между заявками
 setting.profit_range_array_panel = 20;
 
 -- изменение  минимальной прибыли в панели
-setting.profit_range_panel = 10;
+setting.profit_range_panel = 5;
 
 -- погрешность, необходимо для предотвращения проскальзывания при активной торговле
 setting.profit_infelicity = 1;
