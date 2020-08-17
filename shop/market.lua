@@ -93,7 +93,7 @@ end;
 function execution_sell(contract)
 
     -- setting.each_to_buy_step
-    -- увеличивает лимит используемых контрактов 
+    -- увеличивает лимит используемых контрактов
     getLastBuy()
 
     setting.SPRED_LONG_TREND_DOWN_LAST_PRICE =  setting.price_min_buy;
@@ -207,9 +207,8 @@ function sellContract(result)
                     setting.count_contract_sell +
                         setting.sellTable[contract].use_contract;
 
-                -- подсчёт профита
-                local sell = setting.sellTable[contract].use_contract *
-                                 setting.sellTable[contract].price;
+                -- подсчёт профита, от фактической стоимости
+                local sell = setting.sellTable[contract].use_contract * result.price;
                 local buy = setting.sellTable[contract].use_contract *
                                 setting.sellTable[contract].buy_contract;
                 setting.profit = sell - buy + setting.profit;
