@@ -11,6 +11,8 @@ local signalShowLog =
     dofile(getScriptPath() .. "\\interface\\signalShowLog.lua");
 local candleGraff = dofile(getScriptPath() .. "\\interface\\candleGraff.lua");
 local control = dofile(getScriptPath() .. "\\interface\\control.lua");
+local words = dofile(getScriptPath() .. "\\langs\\words.lua");
+
 
 local function calculateVolume(volume) end
 
@@ -60,7 +62,14 @@ local function initCandles()
     local first_candle = currentCandle - j  - Initshift
 
     while i >= 1 do
-        if candlesArray[j - 1].datetime.hour ~= nul then
+
+        if candlesArray[j - 1] == nil then
+            message(words.word('not_found_tag'));
+            Run = false;
+            return;
+        end
+
+        if candlesArray[j - 1].datetime.hour ~= nil then
             
             if candlesArray[j - 1].datetime.hour >= 10 then
                 local bar = candlesArray[j - 1];
@@ -109,7 +118,13 @@ local function getSignal(collbackFunc)
     j = 2 * len
     while i >= 1 do
 
-        if bars_temp[j - 1].datetime.hour ~= nul then
+        if candlesArray[j - 1] == nil then
+            message(words.word('not_found_tag'));
+            Run = false
+            return;
+        end
+
+        if bars_temp[j - 1].datetime.hour ~= nil then
 
             if bars_temp[j - 1].datetime.hour >= 10 then
 

@@ -92,7 +92,7 @@ end;
 -- общие расчёты 
 function execution_sell(contract)
 
-    -- setting.each_to_buy_step
+
     -- увеличивает лимит используемых контрактов
     getLastBuy()
 
@@ -107,7 +107,9 @@ function execution_sell(contract)
     -- цена последней продажи контракта
     setting.SPRED_LONG_LOST_SELL = contract.price;
 
+
     setting.each_to_buy_step = 0;
+
     -- сколько исполнилось продаж
     setting.count_sell = setting.count_sell + 1;
 
@@ -119,7 +121,7 @@ function execution_sell(contract)
         setting.SPRED_LONG_TREND_DOWN = setting.SPRED_LONG_TREND_DOWN_minimal;
     end
 
-    check_buy_status_block();
+    check_buy_status_block(contract);
 end
 
 -- присваиваем номер заявке на продажу
@@ -163,7 +165,15 @@ end
 
 function commonBUY(_price, datetime)
     -- сколько подряд покупок было
-    setting.each_to_buy_step = setting.each_to_buy_step + 1;
+
+
+    if setting.each_to_buy_step <= setting.each_to_buy_to_block then 
+        setting.each_to_buy_step = setting.each_to_buy_step + 1;
+        -- увеличиваем число контрактов которые надо продать до разблокировки
+        setting.each_to_buy_to_block_contract = setting.use_contract + setting.each_to_buy_to_block_contract
+    end 
+
+
     -- текущаая свеча
     -- ставим заявку на покупку выше на 0.01
     local price = 0;
@@ -550,18 +560,19 @@ function deleteBuy_emulation(contract_sell)
     end
 end
 
-function check_buy_status_block()
-    --   loger.save("-- если кнопка покупки заблокирована автоматически по причине падение"  );
+function check_buy_status_block(contract)
     -- если кнопка покупки заблокирована автоматически по причине падение
     if setting.each_to_buy_status_block then
-        setting.each_to_sell_step = setting.each_to_sell_step + 1;
-        if setting.each_to_sell_step >= setting.each_to_buy_to_block then
+    
+        setting.each_to_buy_to_block_contract = setting.each_to_buy_to_block_contract - contract.use_contract
+
+        if 0 >= setting.each_to_buy_to_block_contract then 
+
             -- разблокируем кнопку покупки, потому что всё продали что должны были
-            setting.each_to_buy_status_block = false;
-            setting.each_to_sell_step = 0;
+            setting.each_to_buy_status_block = false
+            setting.each_to_buy_to_block_contract = 0;
             setting.each_to_buy_step = 0; -- сколько подряд раз уже купили 
             control.buy_process();
-
         end
     end
 end

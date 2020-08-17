@@ -272,8 +272,8 @@ function use_contract_limit()
     SetCell(t_control, 13, 1, tostring(setting.use_contract));
     -- потом только решение за человеком / сколько подряд раз уже купили
     SetCell(t_control, 25, 1,
-            tostring(setting.each_to_buy_to_block) .. " ( " ..
-                setting.each_to_sell_step .. ') /' .. setting.each_to_buy_step);
+            tostring(setting.each_to_buy_to_block) .. " ( " ..  setting.each_to_buy_to_block_contract .. ') /' .. setting.each_to_buy_step);
+
     SetCell(t_control, 26, 1, tostring(setting.SPRED_LONG_TREND_DOWN .. " - " ..
                                            setting.profit_range .. " (" ..
                                            setting.SPRED_LONG_TREND_DOWN_NEXT_BUY ..
