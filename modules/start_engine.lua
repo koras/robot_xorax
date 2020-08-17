@@ -130,7 +130,7 @@ function EngineOrder(order)
     end
 end
 
-
+ 
 
 
 
@@ -264,9 +264,7 @@ function EngineStopOrder(trade)
     if bit.test(trade.flags, 15) then
     else
 
-        loger.save(
-            'OnStopOrder->updateStopNumber order_num=' .. trade.order_num ..
-                ' trans_id ' .. tostring(trade.trans_id));
+        loger.save('OnStopOrder->updateStopNumber order_num=' .. trade.order_num .. ' trans_id ' .. tostring(trade.trans_id));
         riskStop.updateStopNumber(trade);
     end
 end
