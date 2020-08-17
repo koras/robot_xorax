@@ -265,9 +265,11 @@ function use_contract_limit()
     local sell_session = "s:" .. tostring(setting.count_sell) .. "/" ..
                              tostring(setting.count_contract_sell) .. "";
 
-    SetCell(t_control, 11, 1,
-            tostring(setting.LIMIT_BID .. ' / ' .. setting.limit_count_buy ..
-                         ' / ' .. setting.use_contract));
+
+    -- используемые контракты setting.use_contract
+
+    SetCell(t_control, 11, 1, tostring(setting.LIMIT_BID .. ' / ' .. setting.limit_count_buy .. ' / ' .. setting.use_contract));
+
     SetCell(t_control, 12, 1, buy_session .. " | " .. sell_session);
     SetCell(t_control, 13, 1, tostring(setting.use_contract));
     -- потом только решение за человеком / сколько подряд раз уже купили

@@ -64,8 +64,8 @@ local function initCandles()
     while i >= 1 do
 
         if candlesArray[j - 1] == nil then
-            message(words.word('not_found_tag'));
-            Run = false;
+        --    message(words.word('not_found_tag'));
+          --  Run = false;
             return;
         end
 
@@ -119,17 +119,15 @@ local function getSignal(collbackFunc)
     while i >= 1 do
 
         if candlesArray[j - 1] == nil then
-            message(words.word('not_found_tag'));
-            Run = false
+        --    message(words.word('not_found_tag'));
+        --    Run = false
             return;
         end
 
         if bars_temp[j - 1].datetime.hour ~= nil then
 
             if bars_temp[j - 1].datetime.hour >= 10 then
-
-                
-
+ 
                 local bar = bars_temp[j - 1];
                 initCandle(bar);
 

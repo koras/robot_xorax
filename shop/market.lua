@@ -202,7 +202,8 @@ end
 
 -- исполнение продажи контракта
 function sellContract(result)
-    --  loger.save("sellContract  " );
+    
+     loger.save("-- исполнение продажи контракта " );
     -- сперва находим контракт который купили и ставим статус что мы купили контракт
     if #setting.sellTable > 0 then
         for contract = 1, #setting.sellTable do
@@ -424,8 +425,6 @@ function sellTransaction(order, contractBuy)
         data.work = true;
         data.executed = false; -- покупка исполнилась
         data.emulation = setting.emulation;
-        --  data.contract = setting.use_contract;
-        --  data.use_contract = setting.use_contract;
         data.contract = 1;
         data.use_contract = 1;
         data.buy_contract = contractBuy.price; -- стоимость продажи
@@ -519,9 +518,7 @@ function callSELL_emulation(result)
                                      setting.profit;
 
                 if setting.limit_count_buy >= setting.sellTable[sellT].contract then
-                    setting.limit_count_buy =
-                        setting.limit_count_buy -
-                            setting.sellTable[sellT].contract;
+                    setting.limit_count_buy = setting.limit_count_buy - setting.sellTable[sellT].contract;
                 end
 
                 signalShowLog.addSignal(21, false, result.close);
@@ -532,8 +529,7 @@ function callSELL_emulation(result)
                 -- надо удалить контракт по которому мы покупали 
                 --   panelBids.show(); 
                 control.use_contract_limit();
-                deleteBuy_emulation(setting.sellTable[sellT]);
-                --  loger.save("вызов update_stop 4 "  .. setting.limit_count_buy .. " setting.limit_count_buy " .. setting.sellTable[sellT].contract );
+                deleteBuy_emulation(setting.sellTable[sellT]); 
                 risk_stop.update_stop();
 
             end
@@ -584,6 +580,8 @@ function deleteBuyCost(result, saleContract)
             if setting.sellTable[sellT].type == 'buy' and
                 setting.sellTable[sellT].executed == true and
                 setting.sellTable[sellT].trans_id == saleContract.trans_id_buy then
+
+
                 local local_contract = setting.sellTable[sellT];
 
                 setting.sellTable[sellT].use_contract =
@@ -603,8 +601,8 @@ function deleteBuyCost(result, saleContract)
                 setting.sellTable[sellT].work = false;
 
                 if setting.limit_count_buy > 0 then
-                    setting.limit_count_buy =
-                        setting.limit_count_buy - local_contract.use_contract;
+                    setting.limit_count_buy = setting.limit_count_buy - result.qty
+                ---    setting.limit_count_buy =   setting.limit_count_buy - local_contract.use_contract;
                 end
 
 

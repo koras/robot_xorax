@@ -147,7 +147,8 @@ local function getSignal(tg, callback)
 
         if bars_temp[j - 1] == nil then
             message(words.word('not_found_tag'));
-            Run = false;
+            OnStop();
+            Run = false; 
             return
         end
         if bars_temp[j - 1].datetime.hour >= 10 then
