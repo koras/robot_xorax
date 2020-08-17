@@ -30,10 +30,10 @@ setting.profit_range_array = 150;
 setting.profit_range_array_panel = 20;
 
 -- изменение  минимальной прибыли в панели
-setting.profit_range_panel = 1;
+setting.profit_range_panel = 10;
 
 -- погрешность, необходимо для предотвращения проскальзывания при активной торговле
-setting.profit_infelicity = 1;
+setting.profit_infelicity = 2;
 
 -- лимит количества заявок на сессию работы робота.
 setting.LIMIT_BID = 10;

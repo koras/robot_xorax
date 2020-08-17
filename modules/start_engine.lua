@@ -59,75 +59,40 @@ end
 
 function EngineOrder(order)
     
-    loger.save("OnOrder NUMBER   = " .. tostring(order.order_num)); -- NUMBER 
-
-    if bit.band(order.flags, 0) and bit.band(order.flags, 1) then
-
-        loger.save("OnOrder 0  stop order.order_num " .. order.order_num)
-        loger.save("OnOrder 0 stop trans_id " .. order.trans_id)
-    end
-
-    if bit.band(order.flags, 0) then
-
-        loger.save("OnOrder 1 stop order.order_num " .. order.order_num)
-    end
-
-    if bit.band(order.flags, 1) then
-        loger.save("OnOrder 3 stop order.order_num " .. order.order_num)
-    end
-
-    if not bit.band(order.flags, 0) and not bit.band(order.flags, 1) then
-        loger.save("OnOrder stop 5 order.price " .. order.order_num)
-    end
-
-    if bit.test(order.flags, 0) then
-
-        if del and order.trans_id ~= 0 then
-            stopOrder_num = order.order_num
-            type = "KILL_ORDER";
-            transId_del_order = order.trans_id
-            --  transaction.delete(transId_del_order,stopOrder_num, type)
-            loger.save('  order.order_num ' .. order.order_num ..
-                           '  order.trans_id ' .. order.trans_id)
-
-            del = false;
-        end
-
-    else
-        loger.save(' return OnStopOrder ')
-        return;
-        --  riskStop.appruveOrderStop(trade)
-    end
-
-    -- пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ Buy, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-    if order.trans_id == BuyUniqTransID and BuyOrderNum == 0 then
-        BuyOrderNum = order.order_num;
-    end
-    -- пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ Sell, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-    if order.trans_id == SellUniqTransID and SellOrderNum == 0 then
-        SellOrderNum = order.order_num;
-    end
-
-    loger.save("OnOrder");
-
-    if bit.band(order.flags, 3) == 0 then
-
-        if bit.band(order.flags, 2) == 0 then
-
-        else
-            loger.save("SELL SELL SELL SELL SELL ");
-
-        end
-
-        -- trans_id
-    end
-
-    if bit.band(order.flags, 1) + bit.band(order.flags, 2) == 0 then
-
-        loger.save("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ loger.save(  order.price " ..
-                       order.price)
-
-    end
+     -- только для лимитных заявок
+     if order.trans_id == 0 then return end
+     loger.save(
+         "OnOrder work order_num = " .. order.order_num .. "  trans_id = " ..
+             order.trans_id)
+ 
+     -- присваиваем номера заявкам
+     market.saleExecution(order);
+     --  riskStop.updateOrderNumber(order); 
+ 
+     if bit.band(order.flags, 3) == 0 then
+         if bit.band(order.flags, 2) == 0 then
+         else
+ 
+             deleteBids.transCallback(order);
+         end
+ 
+         -- trans_id
+     end
+ 
+     if bit.band(order.flags, 1) + bit.band(order.flags, 2) == 0 then
+         loger.save('  ')
+         loger.save('  ')
+         loger.save('  ')
+         loger.save('  ')
+         loger.save('OnOrder sellContract   ')
+         market.sellContract(order);
+     end
+ 
+     if not CheckBit(order.flags, 0) and not CheckBit(order.flags, 1) then
+         loger.save("OnOrder stop 1  сработал стоп order_num = " ..
+                        order.order_num .. "  trans_id = " .. order.trans_id)
+         riskStop.appruveOrderStop(order);
+     end
 end
 
  
@@ -140,31 +105,31 @@ function EngineTrade(trade)
 
     riskStop.updateOrderNumber(trade);
 
-    local sell = bit.band(trade.flags, 1);
+    local sell = CheckBit(trade.flags, 1);
 
     if (sell == 0) then end
 
     if bit.band(trade.flags, 2) == 0 then
-        -- РёСЃРїРѕР»РЅСЏРµС‚СЃСЏ РїРѕРєСѓРїРєР° РєРѕРЅС‚СЂР°РєС‚Р° 
+        -- исполняется покупка контракта 
         market.buyContract(trade);
     else
 
         loger.save(
-            'OnTrade РёСЃРїРѕР»РЅСЏРµС‚СЃСЏ РїРѕРєСѓРїРєР° РєРѕРЅС‚СЂР°РєС‚Р° 1')
+            'OnTrade исполняется покупка контракта 1')
         market.sellContract(trade);
     end
 
-    if not bit.band(trade.flags, 0) and not bit.band(trade.flags, 1) then
+    if not CheckBit(trade.flags, 0) and not CheckBit(trade.flags, 1) then
 
         if bit.band(trade.flags, 2) == 0 then
-            -- РёСЃРїРѕР»РЅСЏРµС‚СЃСЏ РїРѕРєСѓРїРєР° РєРѕРЅС‚СЂР°РєС‚Р° 
+            -- исполняется покупка контракта 
             market.buyContract(trade);
         else
-            loger.save('OnTrade РёСЃРїРѕР»РЅСЏРµС‚СЃСЏ РїРѕРєСѓРїРєР° РєРѕРЅС‚СЂР°РєС‚Р° 2')
+            loger.save(
+                'OnTrade исполняется покупка контракта 2')
             market.sellContract(trade);
         end
     end
-
 end
  
 
@@ -180,6 +145,16 @@ function updateTick(result)
 
 end
 
+-- Функция возвращает true, если бит с номером index флагов flags установлен в 1
+function bit_set(flags, index)
+    local n = 1;
+    n = bit.lshift(1, index);
+    if bit.band(flags, n) ~= 0 then
+        return true;
+    else
+        return false;
+    end
+end
 
 function getPrice()
     SEC_PRICE_STEP = tostring(getParamEx2(setting.CLASS_CODE, setting.SEC_CODE,       "SEC_PRICE_STEP").param_value);
@@ -225,46 +200,48 @@ end
 
 -- Р¤СѓРЅРєС†РёСЏ РІС‹Р·С‹РІР°РµС‚СЃСЏ С‚РµСЂРјРёРЅР°Р»РѕРј РєРѕРіРґР° СЃ СЃРµСЂРІРµСЂР° РїСЂРёС…РѕРґРёС‚ РёРЅС„РѕСЂРјР°С†РёСЏ РїРѕ СЃРґРµР»РєРµ
 function EngineStopOrder(trade)
-    -- Р·Р°СЏРІРєСѓ РІС‹СЃС‚Р°РІРёР»Рё Рё РїСЂРёС…РѕРґРёС‚ РєРѕР»Р»Р±РµРє РІС‹СЃС‚Р°РІР»РµРЅРѕР№ Р·Р°СЏРІРєРё 
-    -- СЌС‚Рѕ РїСЂРѕСЃС‚Рѕ Р·Р°СЏРІРєР° Р° РЅРµ Р»РёРјРёС‚РєР°
+    -- заявку выставили и приходит коллбек выставленой заявки 
+    -- это просто заявка а не лимитка
     market.saleExecutionStopOrder(trade);
 
-    -- РѕР±РЅРѕРІР»СЏРµРј РЅРѕРјРµСЂР° СЃС‚РѕРї Р·Р°СЏРІРѕРє РїСЂРё РІС‹СЃС‚Р°РІР»РµРЅРёРё
-    --  loger.save(' OnStopOrder -- РѕР±РЅРѕРІР»СЏРµРј РЅРѕРјРµСЂР° СЃС‚РѕРї Р·Р°СЏРІРѕРє РїСЂРё РІС‹СЃС‚Р°РІР»РµРЅРёРё   '.. trade.trans_id   )
+    -- обновляем номера стоп заявок при выставлении
+    --  loger.save(' OnStopOrder -- обновляем номера стоп заявок при выставлении   '.. trade.trans_id   )
 
     -- http://luaq.ru/OnStopOrder.html
     --   riskStop.updateOrderNumber(trade);
 
     if bit.band(trade.flags, 4) > 0 then
-        if not bit.band(trade.flags, 0) and not bit.band(trade.flags, 1) then
-            --    loger.save('РІС‹Р·С‹РІР°РµРј 11 riskStop.appruveOrderStop '.. trade.trans_id );
+        if not CheckBit(trade.flags, 0) and not CheckBit(trade.flags, 1) then
+            --    loger.save('вызываем 11 riskStop.appruveOrderStop '.. trade.trans_id );
 
-            if bit.band(trade.flags, 8) then
-                --      loger.save('РІС‹Р·С‹РІР°РµРј  bit.band(trade.flags, 8 '.. trade.trans_id );
+            if CheckBit(trade.flags, 8) then
+                --      loger.save('вызываем  CheckBit(trade.flags, 8 '.. trade.trans_id );
 
             else
-                --     loger.save('РІС‹Р·С‹РІР°РµРј  riskStop.appruveOrderStop false '.. trade.trans_id );
+                --     loger.save('вызываем  riskStop.appruveOrderStop false '.. trade.trans_id );
             end
-            if trade.stop_order_type == 1 and bit.band(trade.flags, 8) then
-                --     loger.save('РІС‹Р·С‹РІР°РµРј  222 riskStop.appruveOrderStop '.. trade.trans_id );
+            if trade.stop_order_type == 1 and CheckBit(trade.flags, 8) then
+                --     loger.save('вызываем  222 riskStop.appruveOrderStop '.. trade.trans_id );
                 --  riskStop.appruveOrderStop(trade)
             end
 
         end
 
     else
-        -- Р·Р°СЏРІРєР° РЅР° РїРѕРєСѓРїРєСѓ 
+        -- заявка на покупку 
     end
 
-    if not bit.band(trade.flags, 0) and not bit.band(trade.flags, 1) then
-        --   loger.save(' -- riskStop.updateOrderNumber РёР·РјРµРЅРµРЅРёСЏ РїРѕ СЃС‚РѕРї Р·Р°СЏРІРєРµ, РёСЃРїРѕР»РЅРµР»РёСЃСЊ РЅР°РІРµСЂРЅРѕРµ  ' )
+    if not CheckBit(trade.flags, 0) and not CheckBit(trade.flags, 1) then
+        --   loger.save(' -- riskStop.updateOrderNumber изменения по стоп заявке, исполнелись наверное  ' )
         --   riskStop.updateOrderNumber(trade)
     end
 
     if bit.test(trade.flags, 15) then
     else
 
-        loger.save('OnStopOrder->updateStopNumber order_num=' .. trade.order_num .. ' trans_id ' .. tostring(trade.trans_id));
+        loger.save(
+            'OnStopOrder->updateStopNumber order_num=' .. trade.order_num ..
+                ' trans_id ' .. tostring(trade.trans_id));
         riskStop.updateStopNumber(trade);
     end
 end
@@ -306,4 +283,69 @@ end
 function EngineTransReply(trans_reply)
 
 
+end
+
+
+
+-- Функция проверяет установлен бит, или нет (возвращает true, или false)
+function CheckBit(flags, _bit)
+    -- Проверяет, что переданные аргументы являются числами
+    if type(flags) ~= "number" then
+        loger.save(
+            "Ошибка!!! Checkbit: 1-й аргумент не число!")
+    end
+    if type(_bit) ~= "number" then
+        loger.save(
+            "Ошибка!!! Checkbit: 2-й аргумент не число!")
+    end
+
+    if _bit == 0 then
+        _bit = 0x1
+    elseif _bit == 1 then
+        _bit = 0x2
+    elseif _bit == 2 then
+        _bit = 0x4
+    elseif _bit == 3 then
+        _bit = 0x8
+    elseif _bit == 4 then
+        _bit = 0x10
+    elseif _bit == 5 then
+        _bit = 0x20
+    elseif _bit == 6 then
+        _bit = 0x40
+    elseif _bit == 7 then
+        _bit = 0x80
+    elseif _bit == 8 then
+        _bit = 0x100
+    elseif _bit == 9 then
+        _bit = 0x200
+    elseif _bit == 10 then
+        _bit = 0x400
+    elseif _bit == 11 then
+        _bit = 0x800
+    elseif _bit == 12 then
+        _bit = 0x1000
+    elseif _bit == 13 then
+        _bit = 0x2000
+    elseif _bit == 14 then
+        _bit = 0x4000
+    elseif _bit == 15 then
+        _bit = 0x8000
+    elseif _bit == 16 then
+        _bit = 0x10000
+    elseif _bit == 17 then
+        _bit = 0x20000
+    elseif _bit == 18 then
+        _bit = 0x40000
+    elseif _bit == 19 then
+        _bit = 0x80000
+    elseif _bit == 20 then
+        _bit = 0x100000
+    end
+
+    if bit.band(flags, _bit) == _bit then
+        return true
+    else
+        return false
+    end
 end
