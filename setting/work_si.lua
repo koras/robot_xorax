@@ -22,10 +22,10 @@ setting.tag = "my_si";
 setting.type_instrument = 3;
 
 -- минимальная прибыль
-setting.profit_range = 10;
+setting.profit_range = 100;
 
 -- минимальная прибыль при больших заявках при торговле веерной продажей
-setting.profit_range_array = 150;
+setting.profit_range_array = 80;
 -- для веерной продажи. Какой промежуток между заявками
 setting.profit_range_array_panel = 20;
 
@@ -47,7 +47,7 @@ setting.emulation = false;
 -- Выставлять контракт на продажу через тейки или лимитки
 -- Если рыно слабо ходит то выгоднее лимитки. Так как при выставлении тейков, продаваться будет ниже, что не выгодно.
 -- по умолчанию стоят тейки
-setting.sell_take_or_limit = false;
+setting.sell_take_or_limit = true;
 
 
 setting.SPRED_LONG_BUY_UP = 2; -- условия; не покупаем если здесь ранее мы купили | вверх диапозон;
