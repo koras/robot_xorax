@@ -24,12 +24,9 @@ function getRand(price)
                     setting.profit_infelicity and price >=
                     setting.sellTable[j_checkRangBuy].price -
                     setting.SPRED_LONG_BUY_down then
-
                     signalShowLog.addSignal(11, false, price);
-
                     checkRange = false;
                 end
-
             elseif setting.sellTable[j_checkRangBuy].type == setting.mode and
                 setting.sellTable[j_checkRangBuy].work then
                 -- short
@@ -47,31 +44,30 @@ function getRand(price)
     return checkRange;
 end
 
+
 -- висит ли заявка на продажу в этом промежутке
 function getRandSell(price)
-
     local checkRange = true;
     if #setting.sellTable > 0 then
         for j_checkRange = 1, #setting.sellTable do
 
-            -- здесь узнаю, была ли покупка в этом диапозоне
-            if setting.sellTable[j_checkRange].type ~= setting.mode and
-                setting.sellTable[j_checkRange].work then
-                -- long 
-                if setting.profit_range + setting.sellTable[j_checkRange].price >=
-                    price and price >= setting.sellTable[j_checkRange].price -
-                    setting.profit_range then
-                    checkRange = false;
-                    signalShowLog.addSignal(12, false, price);
-                end
-            elseif setting.sellTable[j_checkRange].type ~= setting.mode and
-                setting.sellTable[j_checkRange].work then
-                -- short
-                if setting.sellTable[j_checkRange].price - setting.profit_range <=
-                    price and price <= setting.sellTable[j_checkRange].price +
-                    setting.profit_range then
-                    checkRange = false;
-                    signalShowLog.addSignal(12, false, price);
+            if setting.sellTable[j_checkRange].work then
+
+                -- здесь узнаю, была ли покупка в этом диапозоне
+                if setting.sellTable[j_checkRange].type ~= setting.mode then
+                    -- long 
+                    if setting.profit_range + setting.sellTable[j_checkRange].price >= price and price >= setting.sellTable[j_checkRange].price - setting.profit_range then
+                        checkRange = false;
+                        signalShowLog.addSignal(12, false, price);
+                    end
+
+                elseif setting.sellTable[j_checkRange].type ~= setting.mode then
+                    -- short
+                    if setting.sellTable[j_checkRange].price - setting.profit_range <= price and price <= setting.sellTable[j_checkRange].price + setting.profit_range then
+                        checkRange = false;
+                        signalShowLog.addSignal(12, false, price);
+                    end
+
                 end
             end
         end
@@ -95,36 +91,62 @@ end
 -- Не покупаем если промежуток на свече соответствуют высокой цене
 function getRandCandle(price)
 
-    local range_candle = setting.candle_current_high -
-                             setting.candle_current_low;
+    -- высота свечи, не важно, к шорту или к лонгу относится
+    local range_candle = setting.candle_current_high - setting.candle_current_low;
     local checkRange = true;
+
     if range_candle < setting.profit_range then
         -- свечка меньше текущего профита 
         --	[13] = 'Текущая свеча меньше преполагаемого профита, низкая волатильность',   
         checkRange = false;
         signalShowLog.addSignal(19, false, setting.candle_current_high);
-        signalShowLog.addSignal(19, false, setting.candle_current_low);
+    end
+
+    return checkRange;
+end
+
+
+-- Определяем, цена удовлетворяет тому чтобы купить или продать
+function getRandCandleProfit(price)
+ 
+    local checkRange = false;
+
+    if setting.mode == 'buy' then
+        -- если лонг, смотрим цену и возможность покупки
+        local priceSizeForLong = setting.candle_current_high - setting.profit_range;
+         
+        if price > priceSizeForLong + setting.profit_infelicity  then
+            -- свечка меньше текущего профита  
+            --	[14] = 'Цена на свече выше профита, покупка на верху невозможна',   
+            checkRange = true; 
+        end
     else
+        -- short
+        local priceSizeForShort = setting.candle_current_low + setting.profit_range;
+        if priceSizeForLong + setting.profit_infelicity < price then
+            -- свечка меньше текущего профита  
+            --	[14] = 'Цена на свече выше профита, продажа  невозможна',   
+            checkRange = true;
+        end
 
     end
 
-    local priceMinimum = setting.candle_current_high - setting.profit_range;
-
-    if checkRange == true and priceMinimum > price + setting.profit_infelicity then
-
-    else
-        -- свечка меньше текущего профита  
-        --	[14] = 'Цена на свече выше профита, покупка на верху невозможна',   
-        checkRange = false;
+    if !checkRange then
         signalShowLog.addSignal(14, false, priceMinimum);
     end
+
     return checkRange;
 end
 
 
 
 
--- Падение рынка
+
+
+
+-- Падение рынка при лонге
+-- рост рынка при шортах
+
 function getFailMarket(price)
     local checkRange = true;
     local localPrice = price - setting.profit_infelicity;
@@ -147,6 +169,7 @@ function getFailMarket(price)
     end
     return checkRange;
 end
+
 
 -- Запрет на покупку
 function getFailBuy(price)
@@ -200,6 +223,9 @@ M.getFailBuy = getFailBuy;
 M.getLimitBuy = getLimitBuy;
 M.getFailMarket = getFailMarket;
 M.getRandCandle = getRandCandle;
+M.getRandCandleProfit = getRandCandleProfit;
+
+ 
 M.getRandSell = getRandSell;
 M.getRand = getRand;
 
