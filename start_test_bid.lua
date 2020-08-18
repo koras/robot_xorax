@@ -1,19 +1,6 @@
 -- ������ ��� ������������
-local lua51path = "C:\\Program Files (x86)\\Lua\\5.1\\" -- ����, ���� ���������� ����������� Lua 5.1 for Windows
 
-package.cpath = "./?.dll;./?51.dll;" .. lua51path .. "?.dll;" .. lua51path ..
-                    "?51.dll;" .. lua51path .. "clibs/?.dll;" .. lua51path ..
-                    "clibs/?51.dll;" .. lua51path .. "loadall.dll;" .. lua51path ..
-                    "clibs/loadall.dll;" .. package.cpath
-package.path = package.path .. ";./?.lua;" .. lua51path .. "lua/?.lua;" ..
-                   lua51path .. "lua/?/init.lua;" .. lua51path .. "?.lua;" ..
-                   lua51path .. "?/init.lua;" .. lua51path .. "lua/?.luac;"
-
-require("table")
-
-setting = {};
-stopClass = {};
-engine = {};
+dofile(getScriptPath() .. "\\setting\\path.lua");
 
 dofile(getScriptPath() .. "\\setting\\engine.lua");
 dofile(getScriptPath() .. "\\setting\\work_br.lua")
@@ -54,10 +41,7 @@ end
 
 local Size = 0;
 function OnInit() end
-
-function getPrice() end
-
-function eventTranc(priceLocal, levelLocal, datetime, event) end
+  
 
 function main()
 
@@ -80,94 +64,14 @@ function main()
     end
     while Run do end
 end
-
--- ����������� ��� ���������� �����
-function updateTick(result)
-    if setting.emulation then
-        -- ��������� �� ����� ��������
-        --   market.callSELL_emulation(result);
-        -- �������� ���� � ������ ��������
-        --   riskStop.appruveOrderStop(result)
-    end
-
-end
+ 
 
 del = true;
 
 -- https://quikluacsharp.ru/quik-qlua/primer-prostogo-torgovogo-dvizhka-simple-engine-qlua-lua/
 
 function OnOrder(order)
-
-    loger.save("OnOrder NUMBER   = " .. tostring(order.order_num)); -- NUMBER 
-
-    if bit.band(order.flags, 0) and bit.band(order.flags, 1) then
-
-        loger.save("OnOrder 0  stop order.order_num " .. order.order_num)
-        loger.save("OnOrder 0 stop trans_id " .. order.trans_id)
-    end
-
-    if bit.band(order.flags, 0) then
-
-        loger.save("OnOrder 1 stop order.order_num " .. order.order_num)
-    end
-
-    if bit.band(order.flags, 1) then
-
-        loger.save("OnOrder 3 stop order.order_num " .. order.order_num)
-    end
-
-    if not bit.band(order.flags, 0) and not bit.band(order.flags, 1) then
-        loger.save("OnOrder stop 5 order.price " .. order.order_num)
-    end
-
-    if bit.test(order.flags, 0) then
-
-        if del and order.trans_id ~= 0 then
-            stopOrder_num = order.order_num
-            type = "KILL_ORDER";
-            transId_del_order = order.trans_id
-            --  transaction.delete(transId_del_order,stopOrder_num, type)
-            loger.save('  order.order_num ' .. order.order_num ..
-                           '  order.trans_id ' .. order.trans_id)
-
-            del = false;
-        end
-
-    else
-        loger.save(' return OnStopOrder ')
-        return;
-        --  riskStop.appruveOrderStop(trade)
-    end
-
-    -- ���� ��������� Buy, ���������� ����� ������ � �������� �������
-    if order.trans_id == BuyUniqTransID and BuyOrderNum == 0 then
-        BuyOrderNum = order.order_num;
-    end
-    -- ���� ��������� Sell, ���������� ����� ������ � �������� �������
-    if order.trans_id == SellUniqTransID and SellOrderNum == 0 then
-        SellOrderNum = order.order_num;
-    end
-
-    loger.save("OnOrder");
-
-    if bit.band(order.flags, 3) == 0 then
-
-        if bit.band(order.flags, 2) == 0 then
-
-        else
-            loger.save("SELL SELL SELL SELL SELL ");
-
-        end
-
-        -- trans_id
-    end
-
-    if bit.band(order.flags, 1) + bit.band(order.flags, 2) == 0 then
-
-        loger.save("��������� loger.save(  order.price " ..
-                       order.price)
-
-    end
+    EngineOrder(order)
 end
 
 function OnTrade(trade)
@@ -224,17 +128,7 @@ function OnTrade(trade)
     end
 
 end
-
--- ������� ���������� true, ���� ��� � ������� index ������ flags ���������� � 1
-function bit_set(flags, index)
-    local n = 1;
-    n = bit.lshift(1, index);
-    if bit.band(flags, n) ~= 0 then
-        return true;
-    else
-        return false;
-    end
-end
+ 
 
 -- ������� ���������� ���������� ����� � ������� �������� ���������� �� ������
 function OnStopOrder(trade)
@@ -296,27 +190,7 @@ function OnStopOrder(trade)
     end
 end
 
--- ���������� ������� ��� ������, ��� ��������� ���������� ������
-function SE_OnExecutionOrder(order)
-    -- ����� ��� ��� ��� �������� ��� ������, ��� ��������� ���������� ������
-    -- ...
-    -- ������� ���������
-    loger.save(
-        'SE_OnExecutionOrder() ������ ������ �' ..
-            order.order_num .. ' ��������� � ' ..
-            (order.qty - (order.last_execution_count or 0)) .. ' �� ' ..
-            order.balance)
-end
-
--- �������� ���������� ����������
-function SE_OnTransOK(trans)
-    -- ����� ��� ��� ��� �������� ��� �������� ���������� ����������
-    -- ...
-    -- ������� ���������
-    loger.save('SE_OnTransOK() ���������� �' ..
-                   trans.trans_id ..
-                   ' ������� ���������')
-end
+ 
 
 function OnTransReply(trans_reply)
     loger.save('OnTransReply  ' .. trans_reply.order_num);

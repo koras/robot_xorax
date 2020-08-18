@@ -140,17 +140,12 @@ setting.SPRED_LONG_TREND_DOWN_LAST_PRICE = 0; --
 setting.SPRED_LONG_TREND_DOWN_NEXT_BUY = 0;
 
 setting.each_to_buy_step = 0; -- сколько подряд раз уже купили
-
-setting.each_to_sell_step = 0; -- сколько подряд раз продали если кнопка была заблокирована автоматом.
+ 
 setting.each_to_buy_status_block = false; -- сколько подряд раз уже купили
 
 -- Последняя цена сделки по продаже констракта
 setting.SPRED_LONG_LOST_SELL = 0;
-
-setting.each_to_buy_step = 0; -- сколько подряд раз уже купили
-
-setting.each_to_sell_step = 0; -- сколько подряд раз продали если кнопка была заблокирована автоматом.
-setting.each_to_buy_status_block = false; -- сколько подряд раз уже купили
+ 
 
 -- Последняя цена сделки по продаже констракта
 setting.SPRED_LONG_LOST_SELL = 0.00;
@@ -198,3 +193,10 @@ setting.line_candle_height_old = 0;
 setting.line_candle_min_old = 0;
 -- рисовать полоски максимума и минимума свечей
 setting.line_candle_min_max_show = true;
+
+-- сколько контрактов для разблокировки надо продать
+setting.each_to_buy_to_block_contract = 0;
+
+-- сколько продано 
+setting.each_to_sell_to_block_contract = 0
+
