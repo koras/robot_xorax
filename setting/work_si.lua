@@ -22,10 +22,10 @@ setting.tag = "my_si";
 setting.type_instrument = 3;
 
 -- минимальная прибыль
-setting.profit_range = 150;
+setting.profit_range = 100;
 
 -- минимальная прибыль при больших заявках при торговле веерной продажей
-setting.profit_range_array = 100;
+setting.profit_range_array = 80;
 -- для веерной продажи. Какой промежуток между заявками
 setting.profit_range_array_panel = 20;
 
@@ -33,7 +33,7 @@ setting.profit_range_array_panel = 20;
 setting.profit_range_panel = 10;
 
 -- погрешность, необходимо для предотвращения проскальзывания при активной торговле
-setting.profit_infelicity = 1;
+setting.profit_infelicity = 2;
 
 -- лимит количества заявок на сессию работы робота.
 setting.LIMIT_BID = 10;
@@ -72,7 +72,7 @@ setting.fractal_under_up = 6; -- под вверхом не покупаем; м
  -- сколько нужно подряд купить контрактов при падении рынка
 -- что-бы заблокировать кнопку покупки
 -- +1 покупка, блокировка покупок
-setting.each_to_buy_to_block = 3; -- потом только решение за человеком или пока не будут проданы все позиции
+setting.each_to_buy_to_block = 2; -- потом только решение за человеком или пока не будут проданы все позиции
 
 
 -- рынок падает, увеличиваем растояние между покупками
