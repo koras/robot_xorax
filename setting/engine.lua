@@ -91,7 +91,6 @@ setting.developer = false;
 setting.close_positions = false;
 
 setting.count_buyin_a_row = 0; -- покупок сколько было за торговую сессию
-setting.count_buyin_a_row_emulation = 0; -- покупок сколько было за торговую сессию
 setting.current_price = 0; -- текщая цена
 
 -- сколько куплено раз
@@ -181,8 +180,8 @@ setting.mode = 'buy'
 setting.fractals_collection = {};
 setting.fractal_up = 0;
 setting.fractal_down = 0;
--- на какой свече была последняя покупка
-setting.candles_buy_last = 0;
+-- на какой свече была последняя операция по входу в рынок
+setting.candles_operation_last = 0;
 setting.range_down_price_candles = 0;
 
 -- id линии высокой свечки на графике

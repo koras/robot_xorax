@@ -15,6 +15,11 @@ local contitionMarket = dofile(getScriptPath() .. "\\shop\\contition_shop.lua");
 local control = dofile(getScriptPath() .. "\\interface\\control.lua");
 local risk_stop = dofile(getScriptPath() .. "\\shop\\risk_stop.lua");
 
+-- сервис, общие математические операции
+ dofile(getScriptPath() .. "\\shop\\market_service.lua");
+
+
+ 
 -- SHORT  = FALSE
 -- LONG = true
 
@@ -164,9 +169,10 @@ function saleExecutionStopOrder(result)
 end
 
 
-function commonBUY(_price, datetime)
-    -- сколько подряд покупок было
+function commonOperation(_price, datetime)
 
+    -- сколько подряд покупок было
+    -- не влияет на тип операции шорт или лонг
     if setting.each_to_buy_step <= setting.each_to_buy_to_block then 
         setting.each_to_buy_step = setting.each_to_buy_step + 1;
         -- увеличиваем число контрактов которые надо продать до разблокировки
@@ -175,19 +181,30 @@ function commonBUY(_price, datetime)
 
 
     -- текущаая свеча
-    -- ставим заявку на покупку выше на 0.01
-    local price = 0;
-    if setting.type_instrument == 3 then
-        price = tonumber(_price + setting.profit_infelicity); -- и надо снять заявку если не отработал
-    else
-        price = _price + setting.profit_infelicity; -- и надо снять заявку если не отработал
-    end
+    -- ставим заявку на с отклонением на 0.01
 
-    setting.candles_buy_last = setting.number_of_candles;
+    local price = 0;
+    
+     
+    if setting.type_instrument == 3 then
+        if setting.mode == 'buy' then
+            price = tonumber(_price + setting.profit_infelicity); -- и надо снять заявку если не отработал
+        else
+            price = tonumber(_price - setting.profit_infelicity); -- и надо снять заявку если не отработал
+        end
+    else
+        if setting.mode == 'buy' then
+            price = _price + setting.profit_infelicity; -- и надо снять заявку если не отработал
+        else
+            price = _price - setting.profit_infelicity; -- и надо снять заявку если не отработал
+        end
+    end
+    
+
+
+    setting.candles_operation_last = setting.number_of_candles;
     if setting.emulation then
         signalShowLog.addSignal(20, false, tostring(price));
-        setting.count_buyin_a_row_emulation =
-            setting.count_buyin_a_row_emulation + 1;
     else
         signalShowLog.addSignal(7, false, price);
     end
@@ -195,7 +212,6 @@ function commonBUY(_price, datetime)
     setting.count_buy = setting.count_buy + 1;
     setting.count_buyin_a_row = setting.count_buyin_a_row + 1; -- сколько раз подряд купили и не продали
     setting.limit_count_buy = setting.limit_count_buy + setting.use_contract; -- отметка для лимита
-
     return price;
 end
 
@@ -251,42 +267,11 @@ function sellContract(result)
     risk_stop.update_stop();
 end
 
-
  
 
--- надо отсортировать все контракты на продажу и найти с самой низкой ценой
-function getLastSell()
 
-    local price_min_sell = 1000000
-    setting.price_min_sell = price_min_sell
-    setting.price_max_sell = 0
 
-    if #setting.sellTable == 0 then return 0; end;
 
-    for contractStop = 1 ,  #setting.sellTable do 
-            -- берём все заявки которые выставлены на продажу
-        if  setting.sellTable[contractStop].type == 'sell' and  setting.sellTable[contractStop].work then
-            -- если стоп сработал хотя бы раз, то больше максимальную цену не обновляем
-            if setting.sellTable[contractStop].price > setting.price_max_sell then
-                -- максимальная цена продажи
-                setting.price_max_sell = setting.sellTable[contractStop].price ;
-                        
-            end 
-      
-            if setting.sellTable[contractStop].price < setting.price_min_sell then
-                -- минимальная цена продажи
-                setting.price_min_sell = setting.sellTable[contractStop].price ;
-            end 
-        end;
-    end;
-
-    if price_min_sell ~= setting.price_min_sell then 
-        return setting.price_min_sell;
-    end;
-
-    -- не стоит заявок на продажу, всё продали
-    return 0;
-end;
 
  
 -- здесь подсчитываем сколько контрактов можем купить
@@ -373,20 +358,24 @@ end
 -- выставление заявки на покупку/продажу
 -- вызывается для эмуляции и не только
 function callBUY(price, datetime)
+    -- генерация trans_id для эмуляции 
+    local trans_id = getRand()
 
     local use_contract =  getUseContract(price);
-
-    price = commonBUY(price, datetime);
-    local trans_id_buy = transaction.send(setting.mode, price, use_contract, type, 0);
     setting.count_contract_buy = setting.count_contract_buy + use_contract;
+
+    price = commonOperation(price, datetime);
+    if setting.emulation == false then 
+        trans_id = transaction.send(setting.mode, price, use_contract, type, 0);
+    end  
 
     local data = {};
     data.price = price;
     data.datetime = datetime;
-    data.trans_id = trans_id_buy;
+    data.trans_id = trans_id;
     -- сколько контрактов исполнилось 
     data.use_contract = use_contract;
-    data.trans_id_buy = trans_id_buy;
+    data.trans_id_buy = trans_id;
 
     data.work = true;
     data.executed = false;
@@ -394,6 +383,17 @@ function callBUY(price, datetime)
     data.emulation = setting.emulation;
     data.contract = use_contract;
     data.buy_contract = price; -- стоимость продажи
+
+    
+    if setting.emulation then
+        if setting.mode == 'buy' then
+            -- long
+            label.set("BUY", price, data.datetime, use_contract);
+        else
+            -- short 
+            label.set("SELL", price, data.datetime, use_contract);
+        end 
+    end
 
     setting.sellTable[(#setting.sellTable + 1)] = data;
     -- Выставили контракт на покупку
@@ -461,7 +461,7 @@ function callBUY_emulation(price, datetime)
     local use_contract =  getUseContract(price);
 
     loger.save("OnOrder work order_num = " .. price);
-    price = commonBUY(price, datetime)
+    price = commonOperation(price, datetime)
 
     setting.count_contract_buy = setting.count_contract_buy + use_contract;
     local data = {};
