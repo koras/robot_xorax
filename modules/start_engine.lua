@@ -59,13 +59,13 @@ end
 
 function EngineOrder(order)
     
-     -- только для лимитных заявок
+     -- пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
      if order.trans_id == 0 then return end
      loger.save(
          "OnOrder work order_num = " .. order.order_num .. "  trans_id = " ..
              order.trans_id)
  
-     -- присваиваем номера заявкам
+     -- пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
      market.saleExecution(order);
      --  riskStop.updateOrderNumber(order); 
  
@@ -89,7 +89,7 @@ function EngineOrder(order)
      end
  
      if not CheckBit(order.flags, 0) and not CheckBit(order.flags, 1) then
-         loger.save("OnOrder stop 1  сработал стоп order_num = " ..
+         loger.save("OnOrder stop 1  пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ order_num = " ..
                         order.order_num .. "  trans_id = " .. order.trans_id)
          riskStop.appruveOrderStop(order);
      end
@@ -109,27 +109,33 @@ function EngineTrade(trade)
 
     if (sell == 0) then end
 
-    if bit.band(trade.flags, 2) == 0 then
-        -- исполняется покупка контракта 
-        market.buyContract(trade);
-    else
 
-        loger.save(
-            'OnTrade исполняется покупка контракта 1')
+
+    if bit.band(trade.flags, 2) == 0 then
+        -- direction
+        market.startContractt(trade);
+    else
+        loger.save('OnTrade пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 1')
         market.sellContract(trade);
     end
+
+
+
 
     if not CheckBit(trade.flags, 0) and not CheckBit(trade.flags, 1) then
 
         if bit.band(trade.flags, 2) == 0 then
-            -- исполняется покупка контракта 
-            market.buyContract(trade);
+            -- пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 
+            market.startContract(trade);
         else
             loger.save(
-                'OnTrade исполняется покупка контракта 2')
+                'OnTrade пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 2')
             market.sellContract(trade);
         end
     end
+
+
+
 end
  
 
@@ -145,7 +151,7 @@ function updateTick(result)
 
 end
 
--- Функция возвращает true, если бит с номером index флагов flags установлен в 1
+-- пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ true, пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ index пїЅпїЅпїЅпїЅпїЅпїЅ flags пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ 1
 function bit_set(flags, index)
     local n = 1;
     n = bit.lshift(1, index);
@@ -200,39 +206,39 @@ end
 
 -- Р¤СѓРЅРєС†РёСЏ РІС‹Р·С‹РІР°РµС‚СЃСЏ С‚РµСЂРјРёРЅР°Р»РѕРј РєРѕРіРґР° СЃ СЃРµСЂРІРµСЂР° РїСЂРёС…РѕРґРёС‚ РёРЅС„РѕСЂРјР°С†РёСЏ РїРѕ СЃРґРµР»РєРµ
 function EngineStopOrder(trade)
-    -- заявку выставили и приходит коллбек выставленой заявки 
-    -- это просто заявка а не лимитка
+    -- пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ 
+    -- пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     market.saleExecutionStopOrder(trade);
 
-    -- обновляем номера стоп заявок при выставлении
-    --  loger.save(' OnStopOrder -- обновляем номера стоп заявок при выставлении   '.. trade.trans_id   )
+    -- пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+    --  loger.save(' OnStopOrder -- пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ   '.. trade.trans_id   )
 
     -- http://luaq.ru/OnStopOrder.html
     --   riskStop.updateOrderNumber(trade);
 
     if bit.band(trade.flags, 4) > 0 then
         if not CheckBit(trade.flags, 0) and not CheckBit(trade.flags, 1) then
-            --    loger.save('вызываем 11 riskStop.appruveOrderStop '.. trade.trans_id );
+            --    loger.save('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 11 riskStop.appruveOrderStop '.. trade.trans_id );
 
             if CheckBit(trade.flags, 8) then
-                --      loger.save('вызываем  CheckBit(trade.flags, 8 '.. trade.trans_id );
+                --      loger.save('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ  CheckBit(trade.flags, 8 '.. trade.trans_id );
 
             else
-                --     loger.save('вызываем  riskStop.appruveOrderStop false '.. trade.trans_id );
+                --     loger.save('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ  riskStop.appruveOrderStop false '.. trade.trans_id );
             end
             if trade.stop_order_type == 1 and CheckBit(trade.flags, 8) then
-                --     loger.save('вызываем  222 riskStop.appruveOrderStop '.. trade.trans_id );
+                --     loger.save('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ  222 riskStop.appruveOrderStop '.. trade.trans_id );
                 --  riskStop.appruveOrderStop(trade)
             end
 
         end
 
     else
-        -- заявка на покупку 
+        -- пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ 
     end
 
     if not CheckBit(trade.flags, 0) and not CheckBit(trade.flags, 1) then
-        --   loger.save(' -- riskStop.updateOrderNumber изменения по стоп заявке, исполнелись наверное  ' )
+        --   loger.save(' -- riskStop.updateOrderNumber пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ  ' )
         --   riskStop.updateOrderNumber(trade)
     end
 
@@ -287,16 +293,16 @@ end
 
 
 
--- Функция проверяет установлен бит, или нет (возвращает true, или false)
+-- пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ, пїЅпїЅпїЅ пїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ true, пїЅпїЅпїЅ false)
 function CheckBit(flags, _bit)
-    -- Проверяет, что переданные аргументы являются числами
+    -- пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     if type(flags) ~= "number" then
         loger.save(
-            "Ошибка!!! Checkbit: 1-й аргумент не число!")
+            "пїЅпїЅпїЅпїЅпїЅпїЅ!!! Checkbit: 1-пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ!")
     end
     if type(_bit) ~= "number" then
         loger.save(
-            "Ошибка!!! Checkbit: 2-й аргумент не число!")
+            "пїЅпїЅпїЅпїЅпїЅпїЅ!!! Checkbit: 2-пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ!")
     end
 
     if _bit == 0 then

@@ -39,21 +39,23 @@ local level = 1;
 -- обновляем транкзакцию для того чтобы при тестировании не отправлялись заросы
 function updateTransaction(_transaction) transaction = _transaction; end
 
--- исполнение покупки контракта
-function buyContract(result)
+
+
+-- исполнение покупки(продажи контракта) контракта
+-- first operation
+-- the market entry
+function startContract(result)
     -- сперва находим контракт который купили и ставим статус что мы купили контракт
     if #setting.sellTable > 0 then
         for contract = 1, #setting.sellTable do
             -- loger.save(setting.sellTable[contract].type);  
-            if setting.sellTable[contract].type == 'buy' and
-                setting.sellTable[contract].executed == false and
+            if setting.sellTable[contract].executed == false and
                 setting.sellTable[contract].trans_id == result.trans_id then
 
                 signalShowLog.addSignal(27, false, setting.sellTable[contract].price);
                 setting.sellTable[contract].executed = true;
                 -- выставляем на продажу контракт.
-                sellTransaction(result, setting.sellTable[contract]);
-
+                secondOperation(result, setting.sellTable[contract]);
                 return;
             end
         end
@@ -267,96 +269,10 @@ function sellContract(result)
     risk_stop.update_stop();
 end
 
- 
-
-
-
-
-
- 
--- здесь подсчитываем сколько контрактов можем купить
--- range_sell_buy - растояние между продажей и покупкой
-function getPullBuy(range_sell_buy)
-    local use_contract = 0;
-    local price_left = 0;
-
-    if range_sell_buy > setting.profit_range then 
-        -- есть место для одного контракта
-        use_contract = use_contract + 1;
-        range_sell_buy = range_sell_buy - setting.profit_range;
-        loger.save('getPullBuy |0|  use_contract=' .. use_contract );
-    end;
-    
-    if range_sell_buy > setting.profit_range_array then 
-      local contract_add =  math.ceil(range_sell_buy / setting.profit_range_array) - 1
-      
-      loger.save('getPullBuy |1|  contract_add=' .. contract_add.." range_sell_buy="..range_sell_buy );
-        if contract_add > 0 then 
-            use_contract =   use_contract + contract_add;
-            loger.save('getPullBuy |2| ' .. use_contract .. ' contract_add=' .. contract_add );
-        end;
-    end;
-    
-    if setting.use_contract < use_contract then 
-        use_contract = setting.use_contract;
-    end
-
-
-
-    loger.save('getPullBuy |3| ' .. use_contract );
-    return use_contract;
-
-end;
-
-
-
--- здесь мы вычисляем, сколько контрактов необходимо купить
--- Всё зависит от количество проданых контрактов
-function getUseContract(price)
-
-    loger.save('getUseContract  price = ' .. price.. " setting.use_contract="..setting.use_contract );
-    
-    if setting.use_contract == 1 then
-        -- если 1 контракт
-        return setting.use_contract;
-    end 
-    -- если контрактов больше, то надо расчитать сколько покупать, в зависимости от количества проданых контрактов
-    -- минимальная прибыль
-    --setting.profit_range = 0.05;
-    -- минимальная прибыль при больших заявках при торговле веерной продажей
-    -- setting.profit_range_array = 0.04;
-    if setting.profit_range_array == 0 then 
-      --  не используется веерная продажа
-      
-      loger.save('getUseContract 1 setting.use_contract = ' .. setting.use_contract );
-        return setting.use_contract
-    else 
-        
-        loger.save('getUseContract 2 setting.use_contract = '  .. setting.use_contract  );
-        -- расчет - надо узнать где стоит ближайшая заявка на продажу по минимальной цене в работе
-        local price_min_sell = getLastSell();
-
-        if price_min_sell == 0 then 
-            -- у нас не стоит контракты на продажу
-            loger.save('getUseContract 2 setting.use_contract = ' .. setting.use_contract );
-            return setting.use_contract;
-        else
-            -- стоит контракт на продажу
-            local range_sell_buy = setting.price_min_sell - price
-            -- как далеко от цены покупки?
-            -- здесь подсчитываем сколько контрактов можем купить
-            
-            loger.save('getUseContract |5| setting.price_min_sell = '  .. setting.price_min_sell );
-            loger.save('getUseContract |5| range_sell_buy = '  .. range_sell_buy );
-           return getPullBuy(range_sell_buy);
-        end 
-         
-        return setting.use_contract;
-    end 
-end
 
 -- выставление заявки на покупку/продажу
 -- вызывается для эмуляции и не только
+-- solve
 function callBUY(price, datetime)
     -- генерация trans_id для эмуляции 
     local trans_id = getRand()
@@ -384,7 +300,6 @@ function callBUY(price, datetime)
     data.contract = use_contract;
     data.buy_contract = price; -- стоимость продажи
 
-    
     if setting.emulation then
         if setting.mode == 'buy' then
             -- long
@@ -404,13 +319,16 @@ end
 
 
 
--- выставляем заявку на продажу в режиме эмуляции
-function sellTransaction(order, contractBuy)
+-- второй этап регистрации события
+-- если шорт, то здесь выставляем заявку на покупку, после продажи
+-- лонг, выставляем заявку на продажу, если купили контракт
+function secondOperation(order, contractBuy)
+
     if contractBuy.use_contract == 0 then
         loger.save("нет контрактов " .. contractBuy.use_contract);
     end
 
-    loger.save("sellTransaction");
+    loger.save("secondOperation");
 
     local type = "TAKE_PROFIT_STOP_ORDER";
     if setting.sell_take_or_limit == false then type = "NEW_ORDER"; end
@@ -421,7 +339,15 @@ function sellTransaction(order, contractBuy)
 
         local data = {};
         data.number = 0
-        data.type = 'sell'
+
+        if setting.mode == 'buy' then
+        -- long 
+            data.type = 'sell'
+        else 
+            -- short
+            data.type = 'buy'
+        end 
+
         data.datetime = order.datetime
         data.order_type = type;
         data.work = true;
@@ -431,21 +357,36 @@ function sellTransaction(order, contractBuy)
         data.use_contract = 1;
         data.buy_contract = contractBuy.price; -- стоимость продажи
         data.trans_id_buy = contractBuy.trans_id_buy
-        loger.save("sellTransaction 1");
+        loger.save("secondOperation 1");
         signalShowLog.addSignal(23, false, price);
 
-        loger.save("sellTransaction 3 " .. sell_use_contract);
+        loger.save("secondOperation 3 " .. sell_use_contract);
         data.price = price;
         if setting.emulation then
+            
+            
             data.trans_id = getRand();
             signalShowLog.addSignal(22, false, price);
-            label.set("redCircle", price, contractBuy.datetime, 1, "sell");
+            
+             
+            
+            if setting.mode == 'buy' then
+                label.set("redCircle", price, contractBuy.datetime, 1, "sell");
+            else
+                label.set("greenCircle", price, contractBuy.datetime, 1, "buy");
+            end
+
         else
             data.order_num = order.order_num;
-            data.trans_id = transaction.send("SELL", price,1, type, order.order_num);
+            
+            if setting.mode == 'buy' then
+                data.trans_id = transaction.send("SELL", price,1, type, order.order_num);
+            else
+                data.trans_id = transaction.send("BUY", price,1, type, order.order_num);
+            end
             signalShowLog.addSignal(9, false, price);
         end
-        loger.save("sellTransaction 5 " .. sell_use_contract);
+        loger.save("secondOperation 5 " .. sell_use_contract);
         setting.sellTable[#setting.sellTable + 1] = data;
         -- обязательно в конце цикла
         price = price + setting.profit_range_array;
@@ -454,47 +395,6 @@ function sellTransaction(order, contractBuy)
     panelBids.show();
 end
 
--- выставление заявки на покупку в эмуляции
-function callBUY_emulation(price, datetime)
-    local trans_id_buy = getRand()
-
-    local use_contract =  getUseContract(price);
-
-    loger.save("OnOrder work order_num = " .. price);
-    price = commonOperation(price, datetime)
-
-    setting.count_contract_buy = setting.count_contract_buy + use_contract;
-    local data = {};
-
-    data.price = price;
-    data.datetime = datetime;
-    data.trans_id = trans_id_buy;
-    -- сколько контрактов исполнилось  
-
-    data.work = true;
-    data.number = 0;
-
-    data.executed = true; -- покупка исполнилась
-    data.type = "buy";
-    data.emulation = setting.emulation;
-    data.contract = use_contract;
-    data.use_contract = use_contract;
-    data.buy_contract = price; -- стоимость продажи
-    data.trans_id_buy = trans_id_buy;
-    data.order_num = trans_id_buy;
-
-    signalShowLog.addSignal(24, false, price);
-
-    if setting.emulation then label.set("BUY", price, data.datetime, 0); end
-    setting.sellTable[(#setting.sellTable + 1)] = data;
-
-    loger.save("OnOrder work order_num =  ")
-    sellTransaction(data, data)
-    panelBids.show();
-    loger.save("вызов update_stop 3");
-    risk_stop.update_stop();
-    control.use_contract_limit();
-end
 
 -- исполнение продажи контракта в режиме эмуляции
 function callSELL_emulation(result)
@@ -663,12 +563,7 @@ function decision_market(price, datetime)
         setting.SPRED_LONG_TREND_DOWN_LAST_PRICE = price; -- записываем последнюю покупку
 
 
-        if setting.emulation then
-            -- в режиме эмуляции контракт на покупку исполнен в полном объёме
-            callBUY_emulation(price, datetime);
-        else
-            callBUY(price, datetime);
-        end
+        callBUY(price, datetime);
         -- обновляем изменения в панели управления
     end
 end
@@ -684,9 +579,8 @@ M.saleExecutionStopOrder = saleExecutionStopOrder;
 M.saleExecution = saleExecution;
 M.updateTransaction = updateTransaction;
 M.callSELL_emulation = callSELL_emulation;
-M.buyContract = buyContract;
+M.startContract = startContract;
 M.sellContract = sellContract;
-M.sellTransaction = sellTransaction;
 M.decision = decision;
 M.setDirect = setDirect;
 M.setLitmitBid = setLitmitBid;
