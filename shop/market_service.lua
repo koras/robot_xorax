@@ -1,40 +1,7 @@
 
 local loger = dofile(getScriptPath() .. "\\modules\\loger.lua");
 
--- надо отсортировать все контракты на продажу и найти с самой низкой ценой
-function getLastSell()
-
-    local price_min_sell = 1000000
-    setting.price_min_sell = price_min_sell
-    setting.price_max_sell = 0
-
-    if #setting.sellTable == 0 then return 0; end
-
-    for contractStop = 1, #setting.sellTable do
-        -- берём все заявки которые выставлены на продажу
-        if setting.sellTable[contractStop].type == 'sell' and
-            setting.sellTable[contractStop].work then
-            -- если стоп сработал хотя бы раз, то больше максимальную цену не обновляем
-            if setting.sellTable[contractStop].price > setting.price_max_sell then
-                -- максимальная цена продажи
-                setting.price_max_sell = setting.sellTable[contractStop].price;
-
-            end
-
-            if setting.sellTable[contractStop].price < setting.price_min_sell then
-                -- минимальная цена продажи
-                setting.price_min_sell = setting.sellTable[contractStop].price;
-            end
-        end
-    end
-
-    if price_min_sell ~= setting.price_min_sell then
-        return setting.price_min_sell;
-    end
-
-    -- не стоит заявок на продажу, всё продали
-    return 0;
-end
+ 
 
 -- надо отсортировать все контракты на покупку и найти с самой высокой ценой
 function getLastSell()
@@ -139,31 +106,56 @@ end;
 
 -- надо отсортировать все контракты и найти с самой низкой/высокой ценой
 function getLastMinMax()
+    
+    local price_min_sell = 1000000
+    local price_max_sell = 0
 
-    setting.price_min_buy = 1000000
-    setting.price_max_buy = 0
-    stopClass.price_min = 0
-    stopClass.price_max = 0
+    local price_min_buy = 1000000
+    local price_max_buy  = 0  
 
     if #setting.sellTable == 0 then return; end
     for contractStop = 1, #setting.sellTable do
         -- берём все заявки которые куплены
-        if setting.sellTable[contractStop].type == 'buy' and
-            setting.sellTable[contractStop].work then
-            -- если стоп сработал хотя бы раз, то больше максимальную цену не обновляем
-            if setting.sellTable[contractStop].price > setting.price_max_buy then
-                -- максимальная цена покупки
-                setting.price_max_buy = setting.sellTable[contractStop].price;
-                stopClass.price_max = setting.price_max_buy
-            end
+        if  setting.sellTable[contractStop].work then 
 
-            if setting.sellTable[contractStop].price < setting.price_min_buy then
-                -- минимальная цена покупки
-                setting.price_min_buy = setting.sellTable[contractStop].price;
-                stopClass.price_min = setting.price_min_buy
+            if setting.sellTable[contractStop].type == 'buy' then
+                -- больше для лонга
+
+                -- если стоп сработал хотя бы раз, то больше максимальную цену не обновляем
+                if setting.sellTable[contractStop].price > price_max_buy  then
+                    -- максимальная цена покупки
+                    price_max_buy  = setting.sellTable[contractStop].price
+                end
+
+                if setting.sellTable[contractStop].price < price_min_buy then
+                    -- минимальная цена покупки
+                    price_min_buy = setting.sellTable[contractStop].price; 
+                end
+
+            else 
+                -- если стоп сработал хотя бы раз, то больше максимальную цену не обновляем
+                if setting.sellTable[contractStop].price > price_max_sell then
+                    -- максимальная цена покупки
+                    price_max_sell = setting.sellTable[contractStop].price;
+                end
+
+                if setting.sellTable[contractStop].price < price_min_sell then
+                    -- минимальная цена покупки
+                    price_min_sell = setting.sellTable[contractStop].price;
+                end
+
             end
         end
     end
+
+    
+    setting.price_min_sell = price_min_sell
+    setting.price_max_sell = price_max_sell
+    
+    setting.price_min_buy = price_min_buy
+    stopClass.price_min = price_min_buy
+    setting.price_max_buy = price_max_buy 
+    stopClass.price_max = price_max_buy 
 end
 
 -- здесь мы вычисляем, сколько контрактов необходимо купить
