@@ -3,40 +3,40 @@ local loger = dofile(getScriptPath() .. "\\modules\\loger.lua");
 
  
 
--- надо отсортировать все контракты на покупку и найти с самой высокой ценой
-function getLastSell()
+-- -- надо отсортировать все контракты на покупку и найти с самой высокой ценой
+-- function getLastSell()
 
-    local price_min_sell = 1000000
-    setting.price_min_sell = price_min_sell
-    setting.price_max_sell = 0
+--     local price_min_sell = 1000000
+--     setting.price_min_sell = price_min_sell
+--     setting.price_max_sell = 0
 
-    if #setting.sellTable == 0 then return 0; end
+--     if #setting.sellTable == 0 then return 0; end
 
-    for contractStop = 1, #setting.sellTable do
-        -- берём все заявки которые выставлены на продажу
-        if setting.sellTable[contractStop].type == 'sell' and
-            setting.sellTable[contractStop].work then
-            -- если стоп сработал хотя бы раз, то больше максимальную цену не обновляем
-            if setting.sellTable[contractStop].price > setting.price_max_sell then
-                -- максимальная цена продажи
-                setting.price_max_sell = setting.sellTable[contractStop].price;
+--     for contractStop = 1, #setting.sellTable do
+--         -- берём все заявки которые выставлены на продажу
+--         if setting.sellTable[contractStop].type == 'sell' and
+--             setting.sellTable[contractStop].work then
+--             -- если стоп сработал хотя бы раз, то больше максимальную цену не обновляем
+--             if setting.sellTable[contractStop].price > setting.price_max_sell then
+--                 -- максимальная цена продажи
+--                 setting.price_max_sell = setting.sellTable[contractStop].price;
 
-            end
+--             end
 
-            if setting.sellTable[contractStop].price < setting.price_min_sell then
-                -- минимальная цена продажи
-                setting.price_min_sell = setting.sellTable[contractStop].price;
-            end
-        end
-    end
+--             if setting.sellTable[contractStop].price < setting.price_min_sell then
+--                 -- минимальная цена продажи
+--                 setting.price_min_sell = setting.sellTable[contractStop].price;
+--             end
+--         end
+--     end
 
-    if price_min_sell ~= setting.price_min_sell then
-        return setting.price_min_sell;
-    end
+--     if price_min_sell ~= setting.price_min_sell then
+--         return setting.price_min_sell;
+--     end
 
-    -- не стоит заявок на продажу, всё продали
-    return 0;
-end
+--     -- не стоит заявок на продажу, всё продали
+--     return 0;
+-- end
 
 
 
@@ -184,13 +184,13 @@ function getUseContract(price)
         -- расчет - надо узнать где стоит ближайшая заявка на продажу по минимальной цене в работе
  
 
-
+        getLastMinMax();
 
         
         if setting.mode == 'buy' then
                 -- only  long 
-                local price_min_sell = getLastSell();
-            if price_min_sell == 0 then 
+              --  getLastSell();
+            if setting.price_min_sell == 0 then 
                 -- у нас не стоит контракты на продажу
                 loger.save('getUseContract 2 setting.use_contract = ' .. setting.use_contract );
                 return setting.use_contract;
@@ -204,10 +204,9 @@ function getUseContract(price)
             return getPullBuy(range_sell_buy);
             end 
         else 
-            -- only short
-           -- only  long 
-           local price_min_buy = getLastMinMax();
-           if price_min_buy == 0 then 
+
+            -- only short 
+           if setting.price_max_buy == 0 then 
                -- у нас не стоит контракты на продажу
                loger.save('getUseContract 2 setting.use_contract = ' .. setting.use_contract );
                return setting.use_contract;

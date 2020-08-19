@@ -128,7 +128,7 @@ function getRandCandleProfit(price)
 
     end
 
-    if !checkRange then
+    if checkRange == false then
         signalShowLog.addSignal(14, false, priceMinimum);
     end
 
