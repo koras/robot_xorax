@@ -77,15 +77,12 @@ end
 
 -- Лимит заявок на покупку 
 function getLimitBuy()
-
-    local checkRange = true;
-
     if setting.LIMIT_BID <= setting.limit_count_buy then
         signalShowLog.addSignal(25, false, setting.limit_count_buy);
-        checkRange = false;
+        return  false;
     end
 
-    return checkRange;
+    return true;
 end
 
 -- Не покупаем если промежуток на свече соответствуют высокой цене
@@ -148,30 +145,40 @@ end
 -- рост рынка при шортах
 
 function getFailMarket(price)
-    local checkRange = true;
-    local localPrice = price - setting.profit_infelicity;
+ 
+    -- setting.SPRED_LONG_TREND_DOWN_LAST_PRICE - последняя покупка
+    -- setting.SPRED_LONG_TREND_DOWN - увеличиваем растояние между покупками
+    if setting.SPRED_LONG_TREND_DOWN_LAST_PRICE == 0 then 
+        return true;
+    end;
 
-    -- профит и 
-    if setting.SPRED_LONG_TREND_DOWN_LAST_PRICE ~= 0 then
-        setting.SPRED_LONG_TREND_DOWN_NEXT_BUY =
-            setting.SPRED_LONG_TREND_DOWN_LAST_PRICE - setting.profit_range -
-                setting.SPRED_LONG_TREND_DOWN
-    end
+    if setting.mode == 'buy' then
+        -- только лонг
+        price = price - setting.profit_infelicity;
+        setting.SPRED_LONG_TREND_DOWN_NEXT_BUY = setting.SPRED_LONG_TREND_DOWN_LAST_PRICE - setting.profit_range - setting.SPRED_LONG_TREND_DOWN
 
-    if setting.SPRED_LONG_TREND_DOWN_LAST_PRICE == 0 or
-        setting.SPRED_LONG_TREND_DOWN_NEXT_BUY > localPrice then
+        if price < setting.SPRED_LONG_TREND_DOWN_NEXT_BUY  then
+            return true;
+        end
     else
+        -- short
+        price = price + setting.profit_infelicity;
+        setting.SPRED_LONG_TREND_DOWN_NEXT_BUY = setting.SPRED_LONG_TREND_DOWN_LAST_PRICE + setting.profit_range + setting.SPRED_LONG_TREND_DOWN
 
-        checkRange = false;
-        -- setting.SPRED_LONG_TREND_DOWN_NEXT_BUY =  setting.SPRED_LONG_TREND_DOWN_LAST_PRICE - nextPrice;
-        signalShowLog.addSignal(3, true, setting.SPRED_LONG_TREND_DOWN_NEXT_BUY);
-
+        if price > setting.SPRED_LONG_TREND_DOWN_NEXT_BUY  then
+            return true;
+        end
     end
-    return checkRange;
+
+    signalShowLog.addSignal(3, true, setting.SPRED_LONG_TREND_DOWN_NEXT_BUY);
+    return false;
 end
 
 
--- Запрет на покупку
+
+
+
+-- Prohibition of buying and selling
 function getFailBuy(price)
     local checkRange = true;
     if setting.each_to_buy_step >= setting.each_to_buy_to_block then
@@ -187,37 +194,37 @@ end
 -- проверка на блокировку кнопки покупок
 function buyButtonBlock(price)
 
-    local checkRange = true;
-    if setting.buy == false then
-        signalShowLog.addSignal(4, true, price);
-        checkRange = false;
+    if setting.buy  then 
+        return true
     end
-    return checkRange;
+    
+    signalShowLog.addSignal(4, true, price);
+    return false;
 end
 
--- верхний диапазон, выше которого покупка запрещена
-function not_buy_high(price)
 
-    local checkRange = true;
+-- верхний диапазон
+function not_high(price)
+ 
     if price >= setting.not_buy_high then
         signalShowLog.addSignal(19, true, price);
-        checkRange = false;
+        return  false;
     end
-    return checkRange;
+    return true;
 end
 
--- нижний диапазон, ниже которого покупка запрещена
+-- нижний диапазон
 function not_buy_low(price)
-    local checkRange = true;
+
     if price <= setting.not_buy_low then
         signalShowLog.addSignal(38, true, price);
-        checkRange = false;
+        return  false
     end
-    return checkRange;
+    return false
 end
 
-M.not_buy_low = not_buy_low;
-M.not_buy_high = not_buy_high;
+M.not_low = not_low;
+M.not_high = not_high;
 M.buyButtonBlock = buyButtonBlock;
 M.getFailBuy = getFailBuy;
 M.getLimitBuy = getLimitBuy;
