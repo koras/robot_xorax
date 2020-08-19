@@ -85,7 +85,7 @@ function EngineOrder(order)
          loger.save('  ')
          loger.save('  ')
          loger.save('OnOrder sellContract   ')
-         market.sellContract(order);
+         market.takeExecutedContract(order);
      end
  
      if not CheckBit(order.flags, 0) and not CheckBit(order.flags, 1) then
@@ -116,7 +116,7 @@ function EngineTrade(trade)
         market.startContractt(trade);
     else
         loger.save('OnTrade ����������� ������� ��������� 1')
-        market.sellContract(trade);
+        market.takeExecutedContract(trade);
     end
 
 
@@ -130,7 +130,7 @@ function EngineTrade(trade)
         else
             loger.save(
                 'OnTrade ����������� ������� ��������� 2')
-            market.sellContract(trade);
+            market.takeExecutedContract(trade);
         end
     end
 
@@ -208,7 +208,7 @@ end
 function EngineStopOrder(trade)
     -- ������ ��������� � �������� ������� ����������� ������ 
     -- ��� ������ ������ � �� �������
-    market.saleExecutionStopOrder(trade);
+    market.saleExecution(trade);
 
     -- ��������� ������ ���� ������ ��� �����������
     --  loger.save(' OnStopOrder -- ��������� ������ ���� ������ ��� �����������   '.. trade.trans_id   )
