@@ -137,7 +137,34 @@ function getPullsell(range_price)
 end;
 
 
+-- надо отсортировать все контракты и найти с самой низкой/высокой ценой
+function getLastMinMax()
 
+    setting.price_min_buy = 1000000
+    setting.price_max_buy = 0
+    stopClass.price_min = 0
+    stopClass.price_max = 0
+
+    if #setting.sellTable == 0 then return; end
+    for contractStop = 1, #setting.sellTable do
+        -- берём все заявки которые куплены
+        if setting.sellTable[contractStop].type == 'buy' and
+            setting.sellTable[contractStop].work then
+            -- если стоп сработал хотя бы раз, то больше максимальную цену не обновляем
+            if setting.sellTable[contractStop].price > setting.price_max_buy then
+                -- максимальная цена покупки
+                setting.price_max_buy = setting.sellTable[contractStop].price;
+                stopClass.price_max = setting.price_max_buy
+            end
+
+            if setting.sellTable[contractStop].price < setting.price_min_buy then
+                -- минимальная цена покупки
+                setting.price_min_buy = setting.sellTable[contractStop].price;
+                stopClass.price_min = setting.price_min_buy
+            end
+        end
+    end
+end
 
 -- здесь мы вычисляем, сколько контрактов необходимо купить
 -- Всё зависит от количество проданых контрактов
@@ -187,7 +214,7 @@ function getUseContract(price)
         else 
             -- only short
            -- only  long 
-           local price_min_buy = getLastBuy();
+           local price_min_buy = getLastMinMax();
            if price_min_buy == 0 then 
                -- у нас не стоит контракты на продажу
                loger.save('getUseContract 2 setting.use_contract = ' .. setting.use_contract );
@@ -208,4 +235,43 @@ function getUseContract(price)
 
         return setting.use_contract;
     end 
+end
+
+
+
+
+-- finish, general function
+-- исполнение продажи по контракту
+-- contract - контракт который продали
+-- общие расчёты 
+function executionContractFinish(contract)
+
+    -- увеличивает лимит используемых контрактов
+    getLastMinMax()
+
+    setting.SPRED_LONG_TREND_DOWN_LAST_PRICE = setting.price_min_buy;
+
+    if contract.contract > 0 and setting.limit_count_buy >= contract.contract then
+        setting.limit_count_buy = setting.limit_count_buy - contract.contract;
+    end
+
+    setting.count_buyin_a_row = 0;
+
+    -- цена последней продажи контракта
+    setting.SPRED_LONG_LOST_SELL = contract.price;
+
+    setting.each_to_buy_step = 0;
+
+    -- сколько исполнилось продаж
+    setting.count_sell = setting.count_sell + 1;
+
+    -- падение цены прекратилось
+    setting.SPRED_LONG_TREND_DOWN = setting.SPRED_LONG_TREND_DOWN -
+                                        setting.SPRED_LONG_TREND_DOWN_SPRED;
+
+    if setting.SPRED_LONG_TREND_DOWN < 0 then
+        setting.SPRED_LONG_TREND_DOWN = setting.SPRED_LONG_TREND_DOWN_minimal;
+    end
+
+    check_buy_status_block(contract);
 end
