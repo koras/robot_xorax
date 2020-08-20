@@ -40,19 +40,19 @@ function updateTransaction(_transaction) transaction = _transaction; end
 -- исполнение покупки(продажи контракта) контракта
 -- first operation
 -- the market entry
+-- done
 function startContract(result)
     -- сперва находим контракт который купили и ставим статус что мы купили контракт
     if #setting.sellTable > 0 then
         for contract = 1, #setting.sellTable do
             -- loger.save(setting.sellTable[contract].type);  
             if setting.sellTable[contract].executed == false and
-                setting.sellTable[contract].trans_id == result.trans_id then
+                    setting.sellTable[contract].trans_id == result.trans_id then
 
-                signalShowLog.addSignal(27, false,
-                                        setting.sellTable[contract].price);
-                setting.sellTable[contract].executed = true;
-                -- выставляем на продажу контракт.
-                secondOperation(result, setting.sellTable[contract]);
+                    signalShowLog.addSignal(27, false, setting.sellTable[contract].price);
+                    setting.sellTable[contract].executed = true;
+                    -- выставляем на продажу контракт.
+                    secondOperation(result, setting.sellTable[contract]);
                 return;
             end
         end
@@ -390,7 +390,7 @@ end
 
 -- надо отметить в контркте на покупку что заявка исполнена
 -- finish - помечаем контракт
-
+-- done
 function deleteBuyCost(result, saleContract)
     if #setting.sellTable > 0 then
         for sellT = 1, #setting.sellTable do
@@ -403,35 +403,33 @@ function deleteBuyCost(result, saleContract)
 
                 setting.count_buyin_a_row = 0;
                 setting.SPRED_LONG_LOST_SELL = result.price;
-                setting.SPRED_LONG_TREND_DOWN =
-                    setting.SPRED_LONG_TREND_DOWN -
-                        setting.SPRED_LONG_TREND_DOWN_SPRED;
+
+                
+           
+                setting.SPRED_LONG_TREND_DOWN = setting.SPRED_LONG_TREND_DOWN - setting.SPRED_LONG_TREND_DOWN_SPRED;
+          
+
 
                 if setting.SPRED_LONG_TREND_DOWN < 0 then
-                    setting.SPRED_LONG_TREND_DOWN =
-                        setting.SPRED_LONG_TREND_DOWN_minimal;
+                    setting.SPRED_LONG_TREND_DOWN = setting.SPRED_LONG_TREND_DOWN_minimal;
                 end
 
                 setting.sellTable[sellT].work = false;
 
                 if setting.limit_count_buy > 0 then
-                    setting.limit_count_buy =
-                        setting.limit_count_buy - result.qty
-                    ---    setting.limit_count_buy =   setting.limit_count_buy - local_contract.use_contract;
+                    setting.limit_count_buy = setting.limit_count_buy - result.qty
                 end
 
                 if setting.limit_count_buy == 0 then
                     setting.sellTable[sellT].work = false;
                 end
 
-                setting.count_contract_sell =
-                    setting.count_contract_sell + saleContract.contract;
-                -- calculateProfit(setting.sellTable[sellT]);
+                setting.count_contract_sell =  setting.count_contract_sell + saleContract.contract;
+
                 signalShowLog.addSignal(8, false, result.price);
 
                 if setting.emulation then
-                    label.set('SELL', result.price,
-                              setting.sellTable[sellT].datetime, 1, "");
+                    label.set('SELL', result.price, setting.sellTable[sellT].datetime, 1, "");
                 end
                 -- надо удалить контракт по которому мы покупали
                 loger.save("вызов update_stop 2 ");
