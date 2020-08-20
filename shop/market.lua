@@ -389,17 +389,17 @@ function check_buy_status_block(contract)
 end
 
 -- надо отметить в контркте на покупку что заявка исполнена
+-- finish - помечаем контракт
+
 function deleteBuyCost(result, saleContract)
     if #setting.sellTable > 0 then
         for sellT = 1, #setting.sellTable do
-            if setting.sellTable[sellT].type == 'buy' and
-                setting.sellTable[sellT].executed == true and
+            if setting.sellTable[sellT].executed == true and
                 setting.sellTable[sellT].trans_id == saleContract.trans_id_buy then
 
                 local local_contract = setting.sellTable[sellT];
 
-                setting.sellTable[sellT].use_contract =
-                    local_contract.use_contract - saleContract.contract;
+                setting.sellTable[sellT].use_contract = local_contract.use_contract - saleContract.contract;
 
                 setting.count_buyin_a_row = 0;
                 setting.SPRED_LONG_LOST_SELL = result.price;
@@ -443,6 +443,7 @@ function deleteBuyCost(result, saleContract)
 end
 
 -- автоматическая торговля
+-- done
 function decision_market(price, datetime)
     -- подсчитаем скольк заявок у нас на продажу
     -- Не покупать, если была покупка по текущей цене или в промежутке
