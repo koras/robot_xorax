@@ -1,3 +1,7 @@
+
+-- Евро/доллар
+
+
 -- https://www.lua.org/ftp/
 -- Бесплатный робот торгующий в боковике "robot XoraX"
 -- https://t.me/robots_xorax 

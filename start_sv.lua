@@ -1,30 +1,26 @@
 
 
--- Доллар/рубль
-
+-- серебро
 
 -- https://www.lua.org/ftp/
 -- Бесплатный робот торгующий в боковике "robot XoraX"
 -- https://t.me/robots_xorax 
 
-
 dofile(getScriptPath() .. "\\setting\\path.lua");
-dofile(getScriptPath() .. "\\setting\\work_si.lua");
+
+dofile(getScriptPath() .. "\\setting\\work_sv.lua");
 dofile(getScriptPath() .. "\\setting\\engine.lua");
 dofile(getScriptPath() .. "\\modules\\start_engine.lua");
+
 
 function OnInit()
     EngineInit()
 end
- 
- 
+
 
 function main()
     EngineMain()
 end
- 
-
--- https://quikluacsharp.ru/quik-qlua/primer-prostogo-torgovogo-dvizhka-simple-engine-qlua-lua/
 
 -- OnTrade показывает статусы сделок.
 -- Функция вызывается терминалом когда с сервера приходит информация по заявке 
@@ -43,12 +39,13 @@ end
 function OnStopOrder(trade)
     EngineStopOrder(trade)
 end
-
  
 function OnTransReply(trans_reply) 
     EngineTransReply(trans_reply)
 end
 
+
 function OnStop()
     EngineStop()
 end
+ 
