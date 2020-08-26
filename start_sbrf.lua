@@ -2,6 +2,10 @@
 -- Бесплатный робот торгующий в боковике "robot XoraX"
 -- https://t.me/robots_xorax 
 
+
+-- Сбербанк
+
+
 dofile(getScriptPath() .. "\\setting\\path.lua");
 
 dofile(getScriptPath() .. "\\setting\\work_sbrf.lua");
