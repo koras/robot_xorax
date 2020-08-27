@@ -351,19 +351,17 @@ function callSELL_emulation(result)
     end
 end
 
--- здесь ищем контракт который мы купили ранее 
+-- здесь ищем контракт который мы купили / продали  ранее 
 -- после продажи контракта надо его пометить, что мы больше не используем
 -- режим эмуляции
+-- no done
 function deleteBuy_emulation(contract_sell)
     if #setting.sellTable > 0 then
         for contract_buy_tr = 1, #setting.sellTable do
 
-            if contract_sell.trans_id_buy ==
-                setting.sellTable[contract_buy_tr].trans_id then
+            if contract_sell.trans_id_buy == setting.sellTable[contract_buy_tr].trans_id then
                 setting.sellTable[contract_buy_tr].work = false;
-                setting.sellTable[contract_buy_tr].use_contract =
-                    setting.sellTable[contract_buy_tr].contract -
-                        contract_sell.use_contract;
+                setting.sellTable[contract_buy_tr].use_contract = setting.sellTable[contract_buy_tr].contract - contract_sell.use_contract;
                 panelBids.show();
             end
         end
