@@ -120,7 +120,7 @@ function getRandCandleProfit(price)
     else
         -- short
         local priceSizeForShort = setting.candle_current_low + setting.profit_range;
-        if priceSizeForLong + setting.profit_infelicity < price then
+        if priceSizeForShort + setting.profit_infelicity < price then
             -- свечка меньше текущего профита  
             --	[14] = 'Цена на свече выше профита, продажа  невозможна',   
             checkRange = true;
