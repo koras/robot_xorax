@@ -464,11 +464,12 @@ function decision_market(price, datetime)
     -- Не покупать, если цена выше коридора покупок
     local not_high = contitionMarket.not_high(price);
     -- Не покупать, если цена выше коридора покупок
-    local not_low = contitionMarket.not_low(price);
+   -- local not_low = contitionMarket.not_low(price);
 
     if limitBuy and checkRangeBuy and checkRangeSell and randCandleProfit and
-        randCandle and failMarket and getFailBuy and buyButtonBlock and not_high and
-        not_low then
+        randCandle and failMarket and getFailBuy and buyButtonBlock and not_high 
+       -- and not_low
+         then
         setting.SPRED_LONG_TREND_DOWN = setting.SPRED_LONG_TREND_DOWN +
                                             setting.SPRED_LONG_TREND_DOWN_SPRED;
         setting.SPRED_LONG_TREND_DOWN_LAST_PRICE = price; -- записываем последнюю покупку

@@ -113,7 +113,7 @@ function EngineTrade(trade)
 
     if bit.band(trade.flags, 2) == 0 then
         -- direction
-        market.startContractt(trade);
+        market.startContract(trade);
     else
         loger.save('OnTrade ����������� ������� ��������� 1')
         market.takeExecutedContract(trade);
