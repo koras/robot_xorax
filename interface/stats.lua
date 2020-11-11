@@ -102,7 +102,7 @@ end
 	SetCell(t_stat, 15, 1,  tostring(setting.SPRED_LONG_LOST_SELL));  
 	
 
-	SetCell(t_stat, 21, 1, tostring(setting.candles_buy_last)); 
+	SetCell(t_stat, 21, 1, tostring(setting.candles_operation_last)); 
 
 	SetCell(t_stat, 22, 1, tostring(setting.number_of_candle)); 
 	SetCell(t_stat, 23, 1, tostring(setting.old_number_of_candle)); 

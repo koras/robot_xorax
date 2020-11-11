@@ -17,6 +17,7 @@ init.create = false;
 local word = {
     ['status'] = "Status",
     ['long'] = "         LONG",
+    ['short'] = "         SHORT",
     ['buy'] = "Buy",
     ['Buyplus'] = "Buy",
     ['sell'] = "",
@@ -27,16 +28,14 @@ local word = {
     ['Use_contract_limit'] = "Use contract:",
     ['current_limit_minus'] = "          Minus",
     ['current_limit_plus'] = "          Add",
-    ['finish'] = "           PAUSE",
-    ['pause'] = "          CONTINUE",
+    ['finish'] = "           IN WORK...",
+    ['pause'] = "          PAUSE",
     ['pause2'] = "           PAUSE",
     ['emulation'] = "     Emulation",
     ['buy_by_hand'] = "        BUY (now)",
     ['sell_by_hand'] = "        MODE",
     ['take_profit_offset'] = "take profit offset:",
-    ['take_profit_spread'] = "take profit spread:",
-    ['on'] = "          ON      ",
-
+    ['take_profit_spread'] = "take profit spread:", 
     ['on'] = "          ON      ",
     ['off'] = "          OFF     ",
     ['off_auto'] = "        OFF AUTO     ",
@@ -83,7 +82,8 @@ local function show()
         mode_emulation_off()
     end
 
-    mode_long();
+    
+    mode_update()
 
     current_limit();
     current_limit_plus();
@@ -103,11 +103,29 @@ function sell_take_or_limit()
     end
 end
 
+function mode_update()
+    if setting.mode then 
+        mode_long()
+    else 
+        mode_short()
+    end 
+end;
+
+
 function mode_long()
     SetCell(t_control, 2, 3, word.long);
+    setting.mode = 'buy';
     Green(t_control, 1, 3);
     Green(t_control, 2, 3);
     Green(t_control, 3, 3);
+end
+
+function mode_short()
+    SetCell(t_control, 2, 3, word.short);
+    setting.mode = 'sell'
+    Red(t_control, 1, 3);
+    Red(t_control, 2, 3);
+    Red(t_control, 3, 3);
 end
 
 -- функция использования и отображения стопов
@@ -482,8 +500,7 @@ function event_callback_message_control(t_control, msg, par1, par2)
         end
     end
 
-    if par1 == 1 and par2 == 0 or par1 == 2 and par2 == 0 or par1 == 3 and par2 ==
-        0 then
+    if par1 == 1 and par2 == 0 or par1 == 2 and par2 == 0 or par1 == 3 and par2 == 0 then
         if msg == 1 and setting.status == false then
             button_start();
             return;
@@ -495,6 +512,23 @@ function event_callback_message_control(t_control, msg, par1, par2)
             return;
         end
     end
+
+ 
+    if par1 == 1 and par2 == 3 or par1 == 2 and par2 == 3 or par1 == 3 and par2 ==  3 then
+
+    if msg == 1 and setting.mode == 'buy' then
+        mode_short()
+        return;
+    end
+
+    if msg == 1 and  setting.mode == 'sell' then
+        mode_long()
+        return;
+    end
+end
+ 
+
+
 
     if par1 == 1 and par2 == 1 or par1 == 2 and par2 == 1 or par1 == 3 and par2 ==
         1 then

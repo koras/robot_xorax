@@ -12,6 +12,8 @@ local purchase_low = getScriptPath() .. '\\images\\purchase_low.jpg';
 
  
 local PicPathRed = getScriptPath() .. '\\images\\myDeals_red.bmp';
+local PicPathGreenCircle = getScriptPath() .. '\\images\\myDeals_green.bmp';
+
 local PicPathSell = getScriptPath() .. '\\images\\myDeals_sell';
 local PicPathBuy = getScriptPath() .. '\\images\\myDeals_buy';
 local PicPathEvent = getScriptPath() .. '\\images\\myDeals_';
@@ -60,6 +62,9 @@ local function set(Operation, Price, datetime, count, textInfo)
     end
 
     if Operation == 'redCircle' then    label_params['IMAGE_PATH'] = PicPathRed;  end
+    if Operation == 'greenCircle' then    label_params['IMAGE_PATH'] = PicPathGreenCircle;  end
+
+     
 
     if Operation == 'stop' then label_params['IMAGE_PATH'] = PicPathSTOP; end
 

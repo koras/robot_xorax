@@ -25,7 +25,7 @@ end
     loger.save("send = " .. tostring(setting.SEC_CODE));
 
     local operation = "S"
-    if typeMarket == "BUY" then operation = "B" end
+    if typeMarket == "buy" then operation = "B" end
 
     local trans_id = random_max();
 
