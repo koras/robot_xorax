@@ -58,9 +58,6 @@ function getRandSell(price)
     end
     return checkRange;
 end
--- test 1
--- test 34
-
 
 -- Лимит заявок на покупку
 function getLimitBuy(datetime)
