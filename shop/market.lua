@@ -441,6 +441,11 @@ end
 -- автоматическая торговля
 -- done
 function decision_market(price, datetime)
+
+    -- Надо прочекать открытие рынка
+     contitionMarket.getGetOpenMarket(price, setting.sellTable);
+
+
     -- подсчитаем скольк заявок у нас на продажу
     -- Не покупать, если была покупка по текущей цене или в промежутке
     local checkRangeBuy = contitionMarket.getRand(price, setting.sellTable);
