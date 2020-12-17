@@ -160,8 +160,7 @@ end
 
 -- здесь мы вычисляем, сколько контрактов необходимо купить
 -- Всё зависит от количество проданых контрактов
-function getUseContract(price)
-
+function getUseContract(setting, price)
     loger.save('getUseContract  price = ' .. price.. " setting.use_contract="..setting.use_contract );
     
     if setting.use_contract == 1 then
@@ -220,10 +219,6 @@ function getUseContract(price)
            return getPullsell(range_sell_buy);
            end 
         end
-
-
-
-
         return setting.use_contract;
     end 
 end

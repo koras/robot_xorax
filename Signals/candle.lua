@@ -24,8 +24,7 @@ local function calculateSignal(object)
 end
 
 local function setRange(range) rangeLocal = rangegetNumCandle end
-
-local function getRange() return rangeLocal; end
+ 
 
 bigCandle = 0;
 
@@ -299,8 +298,7 @@ function setArrayCandles(barCandle, numberCandle)
 end
 
 M.getSignal = getSignal
-M.setRange = setRange
-M.getRange = getRange
+M.setRange = setRange 
 return M
 
 -- setting.not_buy_high

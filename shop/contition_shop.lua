@@ -228,25 +228,11 @@ function not_buy_low(price)
 end
     
 
-function getGetOpenMarket()
+
+ 
 
 
-local datetime = os.date("!*t",os.time())
-
-loger.save( tostring(datetime.year) .. " datetime " )
-
-loger.save( tostring(datetime.day) .. " " ..
-          tostring(datetime.hour) .. " " ..
-          tostring(datetime.min) .. " " ..
-          tostring(datetime.sec)
-        )
-
-
-end
-
-
-
-M.getGetOpenMarket = getGetOpenMarket;
+ 
 M.not_low = not_low;
 M.not_high = not_high;
 M.buyButtonBlock = buyButtonBlock;

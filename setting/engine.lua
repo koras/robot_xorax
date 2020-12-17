@@ -1,7 +1,7 @@
 -- сюда перенесены настройки которые необходимы во всём роботе но для каждого инструмента они разные
 -- но от инструмента к инструменту они не меняются
 -- версия продукта 
-setting.version = "0.2.12";
+setting.version = "1.0.01";
 
 -- второй минимум
 setting.low_formacia = {};
@@ -158,15 +158,12 @@ setting.not_buy_low = 0
 -- лимит на покупку ( сколько контрактов купили на текущий момент )
 setting.limit_count_buy = 0
 
--- текущее время в свече, для внетреннего использования в роботе
-setting.datetime = 0;
-
--- режим разработки, используется только для тестирования нового функционала
-setting.developer = false;
-
 setting.candles = {}; -- свечи
 
+
+-- start or stop
 setting.status = false;
+
 setting.buy = true;
 setting.sell = true;
 -- таблица заявок, здесь все заявки используемые в работе робота
@@ -175,6 +172,25 @@ setting.sellTable = {};
 -- long = 'buy'
 -- long = 'sell'
 setting.mode = 'buy'
+
+-- current date
+setting.currentDatetime = {};
+-- max old price
+setting.lastDayPrice = 0;
+-- current price
+setting.openDayPrice = 0;
+-- max old price
+setting.singleGetOldPrice = true;
+
+-- выставили заявку при гэпе, статус
+setting.gapSendOrderStatus = false;
+
+-- long = 'buy'
+-- long = 'short'
+setting.gap_direction = '';
+
+setting.autoStartEngine = true;
+
 
 
 setting.fractals_collection = {};
@@ -203,4 +219,13 @@ setting.each_to_buy_to_block_contract = 0;
 
 -- сколько продано 
 setting.each_to_sell_to_block_contract = 0
+
+
+-- была ли покупка или продажа
+setting.gap_is_decision = false;
+-- old price
+setting.gap_old_price = 0;
+
+-- short long
+setting.gap_direction = '';
 

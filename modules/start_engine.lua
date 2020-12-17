@@ -171,6 +171,8 @@ function getPrice()
 end
 
 function EngineMain()
+    -- 
+    setting.currentDatetime = os.date("!*t",os.time())
 
     candles.getSignal(updateTick);
     candles.getSignal(market.callSELL_emulation);

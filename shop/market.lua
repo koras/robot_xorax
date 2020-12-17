@@ -17,6 +17,10 @@ local risk_stop = dofile(getScriptPath() .. "\\shop\\risk_stop.lua");
 
 -- сервис, общие математические операции
 dofile(getScriptPath() .. "\\shop\\market_service.lua");
+local market_gap = dofile(getScriptPath() .. "\\shop\\market_gap.lua");
+
+
+ 
 
 -- SHORT  = FALSE
 -- LONG = true
@@ -133,7 +137,7 @@ end
 -- исполнение тейка или лимита в профите
 -- done
 function takeExecutedContract(result)
-
+    
     loger.save("-- исполнение продажи контракта ");
     -- сперва находим контракт который купили и ставим статус что мы купили контракт
     if #setting.sellTable > 0 then
@@ -194,7 +198,7 @@ function callBUY(price, datetime)
     -- генерация trans_id для эмуляции 
     local trans_id = getRand()
 
-    local use_contract = getUseContract(price);
+    local use_contract = getUseContract(price, setting)
     setting.count_contract_buy = setting.count_contract_buy + use_contract;
 
     price = commonOperation(price, datetime);
@@ -442,8 +446,15 @@ end
 -- done
 function decision_market(price, datetime)
 
+    market_gap.getOldPrice(setting);
+
+    market_gap.autoStart(setting);
+
+    market_gap.pushMarket(setting,price, datetime);
+
+
     -- Надо прочекать открытие рынка
-     contitionMarket.getGetOpenMarket(price, setting.sellTable);
+   --  contitionMarket.getGetOpenMarket(price, setting.sellTable);
 
 
     -- подсчитаем скольк заявок у нас на продажу
@@ -451,8 +462,10 @@ function decision_market(price, datetime)
     local checkRangeBuy = contitionMarket.getRand(price, setting.sellTable);
     -- Не покупать, если стоит ли продажа в этом промежутке, не продали контракт
     local checkRangeSell = contitionMarket.getRandSell(price, setting.sellTable);
+
+
     --  Не покупать, если свечной анализ показывает низкий уровень промежутка продаж/покупок 
-    local randCandle = contitionMarket.getRandCandle(price);
+     local randCandle = contitionMarket.getRandCandle(price);
 
     -- Определяем, цена удовлетворяет тому чтобы купить или продать
     local randCandleProfit = contitionMarket.getRandCandleProfit(price)
@@ -469,18 +482,29 @@ function decision_market(price, datetime)
     -- Не покупать, если цена выше коридора покупок
     local not_high = contitionMarket.not_high(price);
     -- Не покупать, если цена выше коридора покупок
-   -- local not_low = contitionMarket.not_low(price);
-
-    if limitBuy and checkRangeBuy and checkRangeSell and randCandleProfit and
-        randCandle and failMarket and getFailBuy and buyButtonBlock and not_high 
-       -- and not_low
+   --  local not_low = contitionMarket.not_low(price);
+ 
+    if limitBuy 
+    and checkRangeBuy 
+    and checkRangeSell 
+  --  and randCandleProfit 
+    -- and randCandle 
+   -- and failMarket 
+    and getFailBuy 
+   and buyButtonBlock 
+   and not_high  
+    -- and not_low
          then
         setting.SPRED_LONG_TREND_DOWN = setting.SPRED_LONG_TREND_DOWN +
                                             setting.SPRED_LONG_TREND_DOWN_SPRED;
         setting.SPRED_LONG_TREND_DOWN_LAST_PRICE = price; -- записываем последнюю покупку
-
-        callBUY(price, datetime);
-        -- обновляем изменения в панели управления
+ 
+   
+        if  setting.status   then 
+            market_gap.autoStart(setting);
+        --  callBUY(price, datetime);
+            -- обновляем изменения в панели управления
+        end
     end
 end
 
