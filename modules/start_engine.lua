@@ -18,6 +18,7 @@ local signalShowLog =
     dofile(getScriptPath() .. "\\interface\\signalShowLog.lua");
 -- local FRACTALS = dofile(getScriptPath() .. "\\LuaIndicators\\FRACTALS.lua"); 
 local market = dofile(getScriptPath() .. "\\shop\\market.lua");
+local gap = dofile(getScriptPath() .. "\\shop\\market_gap.lua");
 local deleteBids = dofile(getScriptPath() .. "\\shop\\deleteBids.lua");
 local panelBids = dofile(getScriptPath() .. "\\interface\\bids.lua");
 
@@ -30,13 +31,13 @@ local riskStop = dofile(getScriptPath() .. "\\shop\\risk_stop.lua");
 Run = true;
 
 
-function update()
-    control.stats();
-    market.setLitmitBid();
+local function update()
+    control.stats(setting);
+    market.setLitmitBid(setting);
 end
 
 
-function EngineStop()
+local function EngineStop(setting)
     Run = false;
     control.deleteTable();
     signalShowLog.deleteTable();
@@ -50,23 +51,23 @@ function EngineStop()
 end 
 
  
-function eventTranc(price, datetime, levelLocal, event)
+local function eventTranc(setting, price, datetime, levelLocal, event)
     -- buy or sell
-    -- long(price_long, datetime, levelLocal , event)
-    -- collbackFunc( price, countingTicsVolume, datetime, 'buy');
-    market.decision(price, datetime, levelLocal, event);
+    -- long(price_long, datetime, levelLocal , event) 
+    loger.save( "decision_market " .. setting.SEC_CODE)
+    market.decision(setting, price, datetime, levelLocal, event);
 end
 
-function EngineOrder(order)
+local function EngineOrder(setting, order)  
     
      -- ������ ��� �������� ������
      if order.trans_id == 0 then return end
-     loger.save(
-         "OnOrder work order_num = " .. order.order_num .. "  trans_id = " ..
-             order.trans_id)
+ 
  
      -- ����������� ������ �������
-     market.saleExecution(order);
+   --  market.saleExecution(order);
+
+     gap.gapSaleExecution(order,setting);
      --  riskStop.updateOrderNumber(order); 
  
      if bit.band(order.flags, 3) == 0 then
@@ -81,11 +82,9 @@ function EngineOrder(order)
  
      if bit.band(order.flags, 1) + bit.band(order.flags, 2) == 0 then
          loger.save('  ')
-         loger.save('  ')
-         loger.save('  ')
-         loger.save('  ')
          loger.save('OnOrder sellContract   ')
-         market.takeExecutedContract(order);
+      --   market.takeExecutedContract(order);
+         gap.takeExecutedContractGap(setting, order);
      end
  
      if not CheckBit(order.flags, 0) and not CheckBit(order.flags, 1) then
@@ -99,7 +98,7 @@ end
 
 
 
-function EngineTrade(trade)
+local function EngineTrade(setting, trade)
 
     loger.save('OnTrade ' .. trade.order_num)
 
@@ -113,10 +112,12 @@ function EngineTrade(trade)
 
     if bit.band(trade.flags, 2) == 0 then
         -- direction
-        market.startContract(trade);
+      --  market.startContract(trade);
+        gap.GapStartContract(setting, trade);
     else
         loger.save('OnTrade ����������� ������� ��������� 1')
-        market.takeExecutedContract(trade);
+      --  market.takeExecutedContract(trade);
+        gap.takeExecutedContractGap(setting, order);
     end
 
 
@@ -126,43 +127,34 @@ function EngineTrade(trade)
 
         if bit.band(trade.flags, 2) == 0 then
             -- ����������� ������� ��������� 
-            market.startContract(trade);
+         --   market.startContract(trade);
+            gap.GapStartContract(setting, trade);
         else
             loger.save(
                 'OnTrade ����������� ������� ��������� 2')
-            market.takeExecutedContract(trade);
+          --  market.takeExecutedContract(trade);
+            gap.takeExecutedContractGap(setting, order);
         end
     end
-
-
-
 end
  
 
 -- срабатывает при обновлении свечи
-function updateTick(result)
+local function updateTick(result)
 
     if setting.emulation then
         -- обработка во время эмуляции
-        market.callSELL_emulation(result);
+       -- market.callSELL_emulation(result);
+
+        gap.gapTickEmulation(setting,result);
         -- сработал стоп в режиме эмуляции
         riskStop.appruveOrderStopEmulation(result)
     end
 
 end
+ 
 
--- ������� ���������� true, ���� ��� � ������� index ������ flags ���������� � 1
-function bit_set(flags, index)
-    local n = 1;
-    n = bit.lshift(1, index);
-    if bit.band(flags, n) ~= 0 then
-        return true;
-    else
-        return false;
-    end
-end
-
-function getPrice()
+local function getPrice()
     SEC_PRICE_STEP = tostring(getParamEx2(setting.CLASS_CODE, setting.SEC_CODE,       "SEC_PRICE_STEP").param_value);
     if GET_GRAFFIC then
     else
@@ -170,14 +162,15 @@ function getPrice()
     end
 end
 
-function EngineMain()
+local function EngineMain(setting)
     -- 
     setting.currentDatetime = os.date("!*t",os.time())
 
-    candles.getSignal(updateTick);
-    candles.getSignal(market.callSELL_emulation);
+    candles.getSignal(setting, updateTick);
+  --  candles.getSignal(market.callSELL_emulation)
+    candles.getSignal(setting,  gap.gap_callSELL_emulation)
 
-    tradeSignal.getSignal(setting.tag, eventTranc);
+    tradeSignal.getSignal(setting, setting.tag, eventTranc);
     --  signalShowLog.CreateNewTableLogEvent();
 
     loger.save("start");
@@ -196,21 +189,23 @@ function EngineMain()
         -- сработал стоп, проверка 
 
         update();
-        --  statsPanel.stats();
+        --  statsPanel.stats(setting);
         fractalSignal.last();
 
         if setting.status then
-            tradeSignal.getSignal(setting.tag, eventTranc);
+            tradeSignal.getSignal(setting, setting.tag, eventTranc);
             candles.getSignal(updateTick);
         end
     end
 end
 
 -- Функция вызывается терминалом когда с сервера приходит информация по сделке
-function EngineStopOrder(trade)
+local function EngineStopOrder(setting, trade) 
     -- ������ ��������� � �������� ������� ����������� ������ 
     -- ��� ������ ������ � �� �������
-    market.saleExecution(trade);
+   -- market.saleExecution(trade);
+    
+    gap.gapSaleExecution(trade,setting);
 
     -- ��������� ������ ���� ������ ��� �����������
     --  loger.save(' OnStopOrder -- ��������� ������ ���� ������ ��� �����������   '.. trade.trans_id   )
@@ -257,7 +252,7 @@ end
 
 
 -- Функция возвращает true, если бит с номером index флагов flags установлен в 1
-function bit_set(flags, index)
+local function bit_set(flags, index)
     local n = 1;
     n = bit.lshift(1, index);
     if bit.band(flags, n) ~= 0 then
@@ -268,14 +263,29 @@ function bit_set(flags, index)
 end
 
 
-function EngineInit()
-    riskStop.calculateMaxStopStart();
+
+
+local function EngineInit(setting, settingEngine)
+
+ 
+      for key, val in pairs(settingEngine) do
+
+        loger.save( 'key ' .. key);
+    --    loger.save( 'val ' .. settingEngine[key]);
+        setting[key] = settingEngine[key];
+     
+     end
+
+    -- setting, settingEngine
+    
+
+    riskStop.calculateMaxStopStart(setting);
     panelBids.CreateNewTableBids();
     signalShowLog.CreateNewTableLogEvent();
 
     local Error = '';
     local ds, Error = CreateDataSource(setting.CLASS_CODE, setting.SEC_CODE,
-                                 setting.INTERVAL); 
+                                 setting.INTERVAL)
 
     if Error ~= "" and Error ~= nil then
         message("Error : " .. Error)
@@ -288,7 +298,7 @@ function EngineInit()
 end
 
 
-function EngineTransReply(trans_reply)
+local function EngineTransReply(trans_reply)
 
 
 end
@@ -296,7 +306,7 @@ end
 
 
 -- ������� ��������� ���������� ���, ��� ��� (���������� true, ��� false)
-function CheckBit(flags, _bit)
+local function CheckBit(flags, _bit)
     -- ���������, ��� ���������� ��������� �������� �������
     if type(flags) ~= "number" then
         loger.save(
@@ -357,3 +367,22 @@ function CheckBit(flags, _bit)
         return false
     end
 end
+
+
+
+local E = {}
+
+E.EngineStopOrder = EngineStopOrder
+E.EngineMain = EngineMain
+E.getPrice = getPrice
+E.bit_set = bit_set
+E.updateTick =updateTick
+E.EngineTrade  = EngineTrade
+E.EngineOrder = EngineOrder
+E.eventTranc = eventTranc
+E.CheckBit= CheckBit
+E.EngineInit = EngineInit
+E.EngineStop  = EngineStop
+E.EngineTransReply = EngineTransReply
+E.update  = update
+return E

@@ -12,7 +12,7 @@ local PicPathBuy = getScriptPath() .. '\\images\\myDeals_buy';
 local PicPathEvent = getScriptPath() .. '\\images\\myDeals_';
 local loger = dofile(getScriptPath() .. "\\modules\\loger.lua")
 
-local function set(Price, count, textInfo)
+local function set(setting,Price, count, textInfo)
 
     Price = 36.5;
 

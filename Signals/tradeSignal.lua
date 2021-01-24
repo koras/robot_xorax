@@ -13,7 +13,7 @@ local collbackFunc;
 
 -- как должна ходить цена для сигнала
  
-local function getSignal(tg, callback)
+local function getSignal(setting, tg, callback)
 
     -- сколько свечей в работе с права
     local len = 1;
@@ -23,7 +23,7 @@ local function getSignal(tg, callback)
     collbackFunc = callback; 
 
     setting.number_of_candles = getNumCandles(setting.tag);
-    bars_temp, res, legend = getCandlesByIndex(setting.tag, 0,
+    local bars_temp, res, legend = getCandlesByIndex(setting.tag, 0,
                                                setting.number_of_candles - 2 *
                                                    len - shift, 2 * len)
     local bars = {}
@@ -39,7 +39,7 @@ local function getSignal(tg, callback)
                 bars[i] = bars_temp[j - 1]
            --     loger.save( "bars[i] : ".. bars[i] .close )
              -- просто отправляем текущую цену
-                collbackFunc(bars[i].close, bars[i].datetime, 0, 'buy');
+                collbackFunc(setting, bars[i].close, bars[i].datetime, 0, 'buy');
                 i = i - 1
         j = j - 1
     end

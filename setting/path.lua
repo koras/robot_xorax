@@ -10,6 +10,4 @@ package.path = package.path .. ";./?.lua;" .. lua51path .. "lua/?.lua;" ..
 
 require("table")
 
-setting = {};
-stopClass = {};
-engine = {};
+ 

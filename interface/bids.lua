@@ -7,9 +7,7 @@ arrTableLog = {};
 
 local showLabel = false;
 
-local color = dofile(getScriptPath() .. "\\interface\\color.lua");
 local loger = dofile(getScriptPath() .. "\\modules\\loger.lua");
-local label = dofile(getScriptPath() .. "\\modules\\drawLabel.lua");
 
 createTableBids = false;
 

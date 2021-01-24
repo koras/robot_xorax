@@ -78,7 +78,7 @@ local function stats()
 
 end
 
-local function show()  
+local function show(setting)  
 	CreateNewTable(); 
 	for i = 1, 18 do
 		InsertRow(t_information, -1);

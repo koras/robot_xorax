@@ -66,12 +66,12 @@ function testLabelBids()
         for lab = 1, #setting.sellTable do
 
             if setting.sellTable[lab].type == "buy" then
-                label.set("BUY", setting.sellTable[lab].price,
+                label.set(setting, "BUY", setting.sellTable[lab].price,
                           setting.sellTable[lab].datetime,
                           setting.sellTable[lab].contract);
             else
 
-                label.set("SELL", setting.sellTable[lab].price,
+                label.set(setting, "SELL", setting.sellTable[lab].price,
                           setting.sellTable[lab].datetime,
                           setting.sellTable[lab].contract);
             end

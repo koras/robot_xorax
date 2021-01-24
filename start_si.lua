@@ -7,20 +7,29 @@
 -- Бесплатный робот торгующий в боковике "robot XoraX"
 -- https://t.me/robots_xorax 
 
+ 
+-- stopClass = {};
+-- engine = {};
+local path = getScriptPath();
 
-dofile(getScriptPath() .. "\\setting\\path.lua");
-dofile(getScriptPath() .. "\\setting\\work_si.lua");
-dofile(getScriptPath() .. "\\setting\\engine.lua");
-dofile(getScriptPath() .. "\\modules\\start_engine.lua");
+
+dofile(path .. "\\setting\\path.lua");
+
+
+local setting  = dofile(path .. "\\setting\\work_si.lua");
+--local settingEngine = dofile(getScriptPath() .. "\\setting\\work_si.lua");
+
+local engineData = dofile(path .. "\\setting\\engine.lua");
+local engineModule = dofile(path .. "\\modules\\start_engine.lua");
 
 function OnInit()
-    EngineInit()
+    engineModule.EngineInit(setting, engineData);
 end
  
  
 
 function main()
-    EngineMain()
+    engineModule.EngineMain(setting)
 end
  
 
@@ -28,27 +37,27 @@ end
 
 -- OnTrade показывает статусы сделок.
 -- Функция вызывается терминалом когда с сервера приходит информация по заявке 
-function OnOrder(order)
-    EngineOrder(order)
+local function OnOrder(order)
+    engineModule.EngineOrder(setting, order)
 end
 
 -- OnTransReply -> OnTrade -> OnOrder 
 -- Функция вызывается терминалом когда с сервера приходит информация по сделке
-function OnTrade(trade)
-    EngineTrade(trade)
+local function OnTrade(trade)
+    engineModule.EngineTrade(setting, trade)
 end
  
 
 -- Функция вызывается терминалом когда с сервера приходит информация по сделке
-function OnStopOrder(trade)
-    EngineStopOrder(trade)
+local function OnStopOrder(trade)
+    engineModule.EngineStopOrder(setting, trade)
 end
 
  
-function OnTransReply(trans_reply) 
-    EngineTransReply(trans_reply)
+local function OnTransReply(trans_reply) 
+    engineModule.EngineTransReply(setting, trans_reply)
 end
 
-function OnStop()
-    EngineStop()
+local function OnStop()
+    engineModule.EngineStop(setting )
 end

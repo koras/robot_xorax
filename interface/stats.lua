@@ -2,21 +2,19 @@
 local M = {}
   
 local init = {}
-  
+    
+local word = {}
+
 local color = dofile(getScriptPath() .. "\\interface\\color.lua");
 local loger = dofile(getScriptPath() .. "\\modules\\loger.lua");
 
 
 init.create = false;
 
-
-
   
+local function getWord(setting)
 
-
-
-  
-local word = {
+return {
 	['title'] = "title",
 	['info'] = "info",    
 	['LIMIT_BID'] = "LIMIT_BID", 
@@ -45,10 +43,7 @@ local word = {
 
 
 	['timeWork'] = "    time work:",  -- сколько свечей должно пройти чтобы отпустить продажу 
- 
 
-
-	
 	['fractal_up'] = 'fractal up',
 	['fractal_down'] = 'fractal down',
 
@@ -70,16 +65,12 @@ local word = {
 	},
 
 };
- 
- 
- 
-local function show()  
-	CreateNewTableStats(); 
-	stats()  
 end
+ 
+ 
   
  
-  function stats()    
+local  function stats(setting)    
 	--  return; 
   
 	  
@@ -127,9 +118,12 @@ end
 
 end;
 
+ 
 --- simple create a table
-function CreateNewTableStats() 
+local  function CreateNewTable(setting) 
 if createTable  then return; end;
+
+word = getWord(setting) ;
 
 init.create = true; 
 	t_stat = AllocTable();	 
@@ -217,17 +211,22 @@ init.create = true;
 
 end;
 
- 
+local function show(setting) 
+	CreateNewTable(setting);
+	stats(setting); 
+end
+  
 
- function deleteTableStats(Line, Col)   
+local  function deleteTable(Line, Col)   
 	DestroyTable(t_stat)
  end;
 
  
- M.deleteTableStats = deleteTableStats;
- M.stats =  stats;
+--M.deleteTableStats = deleteTableStats;
+M.stats =  stats;
 M.deleteTable = deleteTable;
 M.CreateTable = CreateTable;
+M.CreateNewTable = CreateNewTable
 M.show = show;
 
 return M

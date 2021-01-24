@@ -6,7 +6,7 @@ local arrTableLog = {}
 local showLabel = false;
 local showLabelPrice = true;
 
-local color = dofile(getScriptPath() .. "\\interface\\color.lua");
+
 local words = dofile(getScriptPath() .. "\\langs\\words.lua");
 local loger = dofile(getScriptPath() .. "\\modules\\loger.lua");
 local label = dofile(getScriptPath() .. "\\modules\\drawLabel.lua");
@@ -73,31 +73,31 @@ local function updateLogSignal(_arr)
 
         if (showLabel) then
             if (_arr.status) then
-                label.set('green', _arr.price, _arr.dt, 1, _arr.description);
+                label.set(setting,'green', _arr.price, _arr.dt, 1, _arr.description);
             else
-                label.set('red', _arr.price, _arr.dt, 1, _arr.description);
+                label.set(setting,'red', _arr.price, _arr.dt, 1, _arr.description);
             end
         end
 
         if (_arr.event == 21) then
-       --     label.set('SELL', _arr.price, _arr.dt, 1, 'sell contract ' .. 1);
+       --     label.set(setting,'SELL', _arr.price, _arr.dt, 1, 'sell contract ' .. 1);
         end
         if (_arr.event == 24) then
-        --    label.set("BUY", _arr.price, _arr.dt, 0);
+        --    label.set(setting,"BUY", _arr.price, _arr.dt, 0);
         end
 
         if (_arr.event == 8) then
-         --   label.set('sell', _arr.price, _arr.dt, 1, _arr.description);
+         --   label.set(setting,'sell', _arr.price, _arr.dt, 1, _arr.description);
         end
 
         if (_arr.event == 22) then
-         --   label.set('red', _arr.price, _arr.dt, 1, _arr.description);
+         --   label.set(setting,'red', _arr.price, _arr.dt, 1, _arr.description);
         end
 
         if (showLabelPrice) then
 
             if (_arr.event == 1) then
-             --   label.set('red', _arr.price, _arr.dt, 1, _arr.description);
+             --   label.set(setting,'red', _arr.price, _arr.dt, 1, _arr.description);
             end
         end
     end

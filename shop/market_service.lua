@@ -105,7 +105,7 @@ end;
 
 
 -- надо отсортировать все контракты и найти с самой низкой/высокой ценой
-function getLastMinMax()
+local function getLastMinMax(setting)
     
     local price_min_sell = 1000000
     local price_max_sell = 0
@@ -153,9 +153,9 @@ function getLastMinMax()
     setting.price_max_sell = price_max_sell
     
     setting.price_min_buy = price_min_buy
-    stopClass.price_min = price_min_buy
+    settingData.price_min = price_min_buy
     setting.price_max_buy = price_max_buy 
-    stopClass.price_max = price_max_buy 
+    settingData.price_max = price_max_buy 
 end
 
 -- здесь мы вычисляем, сколько контрактов необходимо купить
@@ -183,7 +183,7 @@ function getUseContract(setting, price)
         -- расчет - надо узнать где стоит ближайшая заявка на продажу по минимальной цене в работе
  
 
-        getLastMinMax();
+        getLastMinMax(setting);
 
         
         if setting.mode == 'buy' then
@@ -261,3 +261,13 @@ function executionContractFinish(contract)
 
     check_buy_status_block(contract);
 end
+
+
+local S = {}
+
+S.getPullsell = getPullsell
+S.getPullBuy = getPullBuy
+S.getLastMinMax = getLastMinMax
+S.getUseContract=getUseContract
+S.executionContractFinish = executionContractFinish
+return S

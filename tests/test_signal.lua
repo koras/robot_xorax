@@ -1,78 +1,78 @@
--- файл для тестирования заявок 
--- послать сигнал на покупку, тестирования ответа и реакции на различные ситуации
-local market = dofile(getScriptPath() .. "\\shop\\market.lua");
+-- -- файл для тестирования заявок 
+-- -- послать сигнал на покупку, тестирования ответа и реакции на различные ситуации
+-- local market = dofile(getScriptPath() .. "\\shop\\market.lua");
 
-local loger = dofile(getScriptPath() .. "\\modules\\loger.lua");
+-- local loger = dofile(getScriptPath() .. "\\modules\\loger.lua");
 
-local S = {};
+-- local S = {};
 
-S.base = {};
+-- S.base = {};
 
--- инициализация свечи
-local function testInit()
-    local base = {};
+-- -- инициализация свечи
+-- local function testInit()
+--     local base = {};
 
-    local testDatetime = {};
+--     local testDatetime = {};
 
-    testDatetime.hour = 21;
-    testDatetime.min = 33;
-    testDatetime.sec = 21;
+--     testDatetime.hour = 21;
+--     testDatetime.min = 33;
+--     testDatetime.sec = 21;
 
-    base.open = 42.46; -- Получить значение Open для указанной свечи (цена открытия свечи)
-    base.high = 42.48; -- Получить значение High для указанной свечи (наибольшая цена свечи)
-    base.low = 42.45; -- Получить значение Low для указанной свечи (наименьшая цена свечи)
-    base.close = 42.46; -- Получить значение Close для указанной свечи (цена закрытия свечи)
-    base.volume = 100; -- Получить значение Volume для указанной свечи (объем сделок в свече)
-    base.datetime = testDatetime; -- Получить значение datetime для указанной свечи
-    S.base[#S.base + 1] = base;
-end
+--     base.open = 42.46; -- Получить значение Open для указанной свечи (цена открытия свечи)
+--     base.high = 42.48; -- Получить значение High для указанной свечи (наибольшая цена свечи)
+--     base.low = 42.45; -- Получить значение Low для указанной свечи (наименьшая цена свечи)
+--     base.close = 42.46; -- Получить значение Close для указанной свечи (цена закрытия свечи)
+--     base.volume = 100; -- Получить значение Volume для указанной свечи (объем сделок в свече)
+--     base.datetime = testDatetime; -- Получить значение datetime для указанной свечи
+--     S.base[#S.base + 1] = base;
+-- end
 
-local function testbaseCreate()
-    local base = {};
+-- local function testbaseCreate()
+--     local base = {};
 
-    local testDatetime = {};
+--     local testDatetime = {};
 
-    testDatetime.hour = 21;
-    testDatetime.min = 33;
-    testDatetime.sec = 21;
+--     testDatetime.hour = 21;
+--     testDatetime.min = 33;
+--     testDatetime.sec = 21;
 
-    base.open = 42.46; -- Получить значение Open для указанной свечи (цена открытия свечи)
-    base.high = 42.48; -- Получить значение High для указанной свечи (наибольшая цена свечи)
-    base.low = 42.45; -- Получить значение Low для указанной свечи (наименьшая цена свечи)
-    base.close = 42.46; -- Получить значение Close для указанной свечи (цена закрытия свечи)
-    base.volume = 100; -- Получить значение Volume для указанной свечи (объем сделок в свече)
-    base.datetime = testDatetime; -- Получить значение datetime для указанной свечи
-    S.base[#S.base + 1] = base;
-end
+--     base.open = 42.46; -- Получить значение Open для указанной свечи (цена открытия свечи)
+--     base.high = 42.48; -- Получить значение High для указанной свечи (наибольшая цена свечи)
+--     base.low = 42.45; -- Получить значение Low для указанной свечи (наименьшая цена свечи)
+--     base.close = 42.46; -- Получить значение Close для указанной свечи (цена закрытия свечи)
+--     base.volume = 100; -- Получить значение Volume для указанной свечи (объем сделок в свече)
+--     base.datetime = testDatetime; -- Получить значение datetime для указанной свечи
+--     S.base[#S.base + 1] = base;
+-- end
 
-local function tSend(data) loger.save('отравляем транкзакцию'); end
+-- local function tSend(data) loger.save('отравляем транкзакцию'); end
 
-local test_transaction = {};
-test_transaction.send = tSend;
+-- local test_transaction = {};
+-- test_transaction.send = tSend;
 
--- отправка сигнала на покупку
--- с каждым вызовом отправляется новый сигнал отличный от текущего
-local function testSendSignalBue()
-    if setting.developer then
-        market.updateTransaction(test_transaction);
+-- -- отправка сигнала на покупку
+-- -- с каждым вызовом отправляется новый сигнал отличный от текущего
+-- local function testSendSignalBue()
+--     if setting.developer then
+--         market.updateTransaction(test_transaction);
 
 
-        testbaseCreate();
+--         testbaseCreate();
 
-        -- покупка
-        if #S.base > 0 then
-            for testItter = 1, #S.base do
-                market.decision(S.base[testItter].close,
-                                S.base[testItter].datetime)
-            end
-        end
-        --- market.decision( priceLocal, datetime, levelLocal, event) ;
+--         -- покупка
+--         if #S.base > 0 then
+--             for testItter = 1, #S.base do
+--                 market.decision(setting, S.base[testItter].close,
+--                                 S.base[testItter].datetime)
+--             end
+--         end
+--         --- market.decision( priceLocal, datetime, levelLocal, event) ;
 
-        setting.developer = false;
-    end
+--         setting.developer = false;
+--     end
 
-end
+-- end
 
-S.testSendSignalBue = testSendSignalBue;
+-- S.testSendSignalBue = testSendSignalBue;
 
-return S;
+-- return S;
